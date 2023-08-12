@@ -1,0 +1,47 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+@import url("https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&family=Sora:wght@600;700;800&display=swap");
+
+@layer base {
+    html {
+        font-size: 90%;
+    }
+    ::-webkit-scrollbar {
+        display: none;
+    }
+}
+* {
+    padding: 0;
+    box-sizing: border-box;
+    margin: 0;
+    font-family: "Montserrat", sans-serif;
+}
+
+body {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: auto;
+    padding: 0;
+}
+
+@layer components {
+    img {
+        width: 100%;
+        height: auto;
+    }
+    .icon {
+        font-size: var(--h2FontSize);
+        cursor: pointer;
+    }
+    .button {
+        @apply cursor-pointer flex items-center text-h3FontSize font-semibold bg-inputColor rounded-lg px-2 py-1 border-none;
+    }
+    .button .icon{
+        @apply ml-2;
+    }
+    .button:hover {
+        @apply text-PrimaryColor bg-paleBlue;
+    }
+}

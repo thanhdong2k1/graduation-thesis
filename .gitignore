@@ -1,0 +1,9 @@
+/node_modules
+/vendor
+/.idea
+.idea/
+.env
+package-lock.js
+/material-tailwind-dashboard-react
+/plantdashboard
+/React-Admin-Dashboard
