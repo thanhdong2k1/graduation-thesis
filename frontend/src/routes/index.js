@@ -3,6 +3,7 @@ import Class from "../pages/admin/class/Class";
 import ClassDetail from "../pages/admin/class/ClassDetail";
 import LecturerHomePage from "../pages/lecturer/LecturerHomePage";
 import Topic from "../pages/lecturer/topic/Topic";
+import StudentHomePage from "../pages/student/StudentHomePage";
 
 const icon = {
     className: "w-5 h-5 text-inherit",
@@ -15,7 +16,7 @@ export const routes = [
             {
                 //   icon: <HomeIcon {...icon} />,
                 name: "Home",
-                path: "",
+                path: "home",
                 element: <AdminHomePage />,
             },
             {
@@ -33,13 +34,30 @@ export const routes = [
         ],
     },
     {
-        role: "R2",
+        role: "R3",
         pages: [
             {
                 //   icon: <HomeIcon {...icon} />,
                 name: "Home",
-                path: "",
+                path: "home",
                 element: <LecturerHomePage />,
+            },
+            {
+                //   icon: <HomeIcon {...icon} />,
+                name: "Topic",
+                path: "topic",
+                element: <Topic />,
+            },
+        ],
+    },
+    {
+        role: "R4",
+        pages: [
+            {
+                //   icon: <HomeIcon {...icon} />,
+                name: "Home",
+                path: "home",
+                element: <StudentHomePage />,
             },
             {
                 //   icon: <HomeIcon {...icon} />,

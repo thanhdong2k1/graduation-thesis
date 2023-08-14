@@ -1,9 +1,13 @@
-import { Navigate, Route, Routes, createBrowserRouter } from "react-router-dom";
+import {
+    Navigate,
+    Route,
+    Routes,
+    createBrowserRouter,
+    useNavigate,
+} from "react-router-dom";
 import "./App.css";
-import Home from "./pages/Home";
 import AdminHomePage from "./pages/admin/AdminHomePage";
 import AdminLayout from "./components/layouts/admin/AdminLayout";
-import StudentLayout from "./components/layouts/student/StudentLayout";
 import Login from "./pages/Login";
 import Class from "./pages/admin/class/Class";
 import ClassDetail from "./pages/admin/class/ClassDetail";
@@ -12,6 +16,9 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import { useDispatch, useSelector } from "react-redux";
 import { logginSuccess } from "./redux/authSlice";
+import HomeLayout from "./components/layouts/HomeLayout";
+import HomePage from "./pages/HomePage";
+import ListTopic from "./pages/ListTopic";
 // export const routers = createBrowserRouter([
 //     {
 //         path: "",
@@ -33,6 +40,7 @@ import { logginSuccess } from "./redux/authSlice";
 //     },
 // ]);
 function App() {
+    const navigate = useNavigate();
     const userData = useSelector((state) => state.auth.login.currentUser);
     const rolePath =
         userData?.roleId == "R1"
@@ -41,26 +49,43 @@ function App() {
             ? "secretary"
             : userData?.roleId == "R3"
             ? "lecturer"
-            : "";
-    const route = routes.filter((route) => route.role == rolePath)[0]
-        ? routes.filter((route) => route.role == rolePath)[0]
+            : userData?.roleId == "R4"
+            ? "student"
+            : null;
+    const route = routes.filter((route) => route.role == userData?.roleId)[0]
+        ? routes.filter((route) => route.role == userData?.roleId)[0]
         : "";
-
     useEffect(() => {
-        console.log(userData);
+        // console.log(route, rolePath);
+
+        if (rolePath == "") {
+            navigate("");
+        }
     }, [userData]);
     return (
-        // <RouterProvider router={routers} />;
         <Routes>
-            <Route path="" element={<Home />} />
-            <Route path={`${rolePath}/*`} element={<AdminLayout />}>
+            <Route path="" element={<HomeLayout />}>
+                <Route path="" element={<HomePage />} />
+                <Route path="list-topic" element={<ListTopic />} />
+            </Route>
+            <Route
+                path={`${rolePath}/*`}
+                element={
+                    // rolePath == "student" ? <StudentLayout /> :
+                    <AdminLayout />
+                }
+            >
                 {route &&
-                    route.pages.map((route, index) => (
-                        <Route path={route.path} element={route.element} />
-                        // <Route path="class" element={<Class />} />
-                        // <Route path="class/:id" element={<ClassDetail />} />
+                    route?.pages &&
+                    route?.pages?.map((route, index) => (
+                        <Route
+                            key={index}
+                            path={route.path}
+                            element={route.element}
+                        />
                     ))}
-                <Route path="*" element={<Navigate to="" replace />} />
+                {/* <Route path="" element={<Navigate to="home" replace />} /> */}
+                <Route path="*" element={<Navigate to="home" replace />} />
             </Route>
             <Route path="login" element={<Login />} />
             <Route path="*" element={<Navigate to="" replace />} />

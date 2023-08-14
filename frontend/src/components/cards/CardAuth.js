@@ -1,16 +1,19 @@
-import { FaUserShield } from "react-icons/fa6";
+import { FaEye, FaEyeSlash, FaUserShield } from "react-icons/fa6";
 import backgroundImage from "../../assets/background.png";
 import logoMini from "../../assets/logo_Mini.png";
 import { BsFillShieldLockFill } from "react-icons/bs";
 import { AiOutlineSwapRight } from "react-icons/ai";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import axios from "axios";
 import { logginSuccess } from "../../redux/authSlice";
 import { useDispatch, useSelector } from "react-redux";
+import { MdKeyboardBackspace } from "react-icons/md";
 const CardAuth = () => {
     const dispatch = useDispatch();
 
+    const [showMessage, setShowMessage] = useState("");
+    const [showPassword, setShowPassword] = useState(false);
     const userData = useSelector((state) => state.auth.login.currentUser);
     const rolePath =
         userData?.roleId == "R1"
@@ -19,35 +22,62 @@ const CardAuth = () => {
             ? "secretary"
             : userData?.roleId == "R3"
             ? "lecturer"
+            : userData?.roleId == "R4"
+            ? "student"
             : "";
-    console.log(rolePath);
-    const [email, setEmail] = useState(null);
-    const [password, setPassword] = useState(null);
+    // console.log(rolePath);
+    const [email, setEmail] = useState("");
+    const [password, setPassword] = useState("");
 
     const navigate = useNavigate();
-    // useEffect(() => {
-    //     console.log(rolePath);
-    //     if (rolePath == "") {
-    //         console.log("Đã vào");
-    //         // navigate(rolePath);
-    //     } else {
-    //         navigate(`/${rolePath}`);
-    //     }
-    // }, [userData]);
+    useEffect(() => {
+        // console.log("Đã useffect");
+        if (rolePath == "") {
+            // console.log("Đã vào");
+            navigate("/login");
+        } else {
+            navigate(`/${rolePath}`);
+        }
+    }, []);
     const onSubmit = (e) => {
         e.preventDefault();
-        console.log(email, password);
-        axios
-            .post("http://localhost:8000/api/auth/login", {
-                email: email,
-                password: password,
-            })
-            .then((response) => {
-                dispatch(logginSuccess(response.data.user));
-                setInterval(() => {
-                    navigate(`/${rolePath}`);
-                }, 1000);
-            });
+        // console.log(email, password);
+        if (email == "" || password == "") {
+            setShowMessage("Vui lòng nhập thông tin tài khoản");
+        } else {
+            // console.log("đã vào đây");
+            axios
+                .post("/api/auth/login", {
+                    email: email,
+                    password: password,
+                })
+                .then((response) => {
+                    // console.log(response.data);
+                    if (response.data.errCode == 0) {
+                        setShowMessage(response.data.errMessage);
+                        dispatch(logginSuccess(response.data.user));
+                        navigate(
+                            `/${
+                                response.data?.user?.roleId == "R1"
+                                    ? "admin"
+                                    : response.data?.user?.roleId == "R2"
+                                    ? "secretary"
+                                    : response.data?.user?.roleId == "R3"
+                                    ? "lecturer"
+                                    : response.data?.user?.roleId == "R4"
+                                    ? "student"
+                                    : ""
+                            }`
+                        );
+                    } else {
+                        setShowMessage(response?.data?.errMessage);
+                    }
+                })
+                .catch((response) => {
+                    // console.log(response.response.data.errMessage)
+                    setShowMessage(response?.response?.data?.errMessage);
+                });
+        }
     };
     return (
         <div className="cardAuth h-[75vh] w-[60%] flex justify-between rounded-lg shadow-lg bg-bgColor overflow-auto media-max-md:h-full media-max-md:w-full media-max-md:flex-col media-max-md:p-6">
@@ -75,9 +105,11 @@ const CardAuth = () => {
                     </h3>
                 </div>
                 <form onSubmit={onSubmit} className="form grid gap-4">
-                    <span className="showMessage block text-whiteColor p-3 bg-red-600 rounded-lg text-center">
-                        Login Status will go here
-                    </span>
+                    {showMessage && (
+                        <span className="showMessage block text-whiteColor p-3 bg-red-600 rounded-lg text-center w-[250px]">
+                            {showMessage}
+                        </span>
+                    )}
                     <div className="inputDiv">
                         <label
                             htmlFor="username"
@@ -108,7 +140,7 @@ const CardAuth = () => {
                         <div className="input flex gap-2 p-4 bg-inputColor rounded-lg items-center">
                             <BsFillShieldLockFill className="icon" />
                             <input
-                                type="text"
+                                type={`${showPassword ? "text" : "password"}`}
                                 id="password"
                                 placeholder="Enter Password or Email"
                                 onChange={(e) => {
@@ -116,6 +148,21 @@ const CardAuth = () => {
                                 }}
                                 className="bg-transparent outline-none border-none w-[200px] media-max-md:w-full"
                             />
+                            {showPassword ? (
+                                <FaEye
+                                    className="icon"
+                                    onClick={() => {
+                                        setShowPassword(false);
+                                    }}
+                                />
+                            ) : (
+                                <FaEyeSlash
+                                    className="icon"
+                                    onClick={() => {
+                                        setShowPassword(true);
+                                    }}
+                                />
+                            )}
                         </div>
                     </div>
                     <button
@@ -126,6 +173,10 @@ const CardAuth = () => {
                         <AiOutlineSwapRight className="icon text-[25px] group-hover:translate-x-2" />
                     </button>
                 </form>
+                <Link to={"/"} className="backLink button">
+                    <MdKeyboardBackspace className="mr-2"/>
+                    <span className="title">Go Back!</span>
+                </Link>
             </div>
         </div>
     );

@@ -3,7 +3,7 @@
 /.idea
 .idea/
 .env
-package-lock.js
+/package-lock.json
 /material-tailwind-dashboard-react
 /plantdashboard
 /React-Admin-Dashboard

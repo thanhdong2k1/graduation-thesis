@@ -1,5 +1,5 @@
 import { Outlet } from "react-router-dom";
-import Top from "../top/Top";
+import TopAdmin from "../top/TopAdmin";
 import Sidebar from "../sidebar/Sidebar";
 
 const Body = ({ isShowSidebar, setIsShowSidebar }) => {
@@ -7,7 +7,7 @@ const Body = ({ isShowSidebar, setIsShowSidebar }) => {
         <div
             className={`mainContent relative w-[calc(100%-15rem)] media-max-lg:w-[calc(100%-1rem)] h-full p-4 overflow-auto`}
         >
-            <Top
+            <TopAdmin
                 isShowSidebar={isShowSidebar}
                 setIsShowSidebar={setIsShowSidebar}
             />
