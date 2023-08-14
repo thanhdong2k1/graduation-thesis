@@ -59,12 +59,7 @@ const authController = {
       user = user
         ? user
         : await db.Student.findOne({
-            attributes: [
-              "email",
-              "password",
-              "roleId",
-              "fullName",
-            ],
+            attributes: ["email", "password", "roleId", "fullName"],
             where: { email: req.body.email },
           });
       if (user) {
@@ -115,8 +110,9 @@ const authController = {
 
   requestRefreshToken: async (req, res) => {
     // Take refresh token from user
+    // console.log("req",req);
     const refreshToken = req.cookies.refreshToken;
-    console.log("check refresh refreshTokens:", refreshToken, refreshTokens);
+    // console.log("check refresh refreshTokens:", refreshToken, refreshTokens);
 
     if (!refreshToken) return res.status(401).json("You're not authenticated");
     if (!refreshTokens.includes(refreshToken)) {
