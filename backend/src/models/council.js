@@ -9,28 +9,39 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
-      Council.belongsTo(models.Allcode, {
-        foreignKey: "statusId",
-        targetKey: "code",
-      });
+      // Council.belongsTo(models.Allcode, {
+      //   foreignKey: "statusId",
+      //   targetKey: "code",
+      // });
+      // Council.belongsTo(models.ThesisSession, {
+      //   foreignKey: "thesisSessionId",
+      //   targetKey: "id",
+      // });
+      // Council.hasMany(models.Transcript, {
+      //   foreignKey: "councilId",
+      // });
+      // Council.belongsToMany(models.Lecturer, {
+      //   through: models.CouncilDetail,
+      //   foreignKey: "councilId",
+      // });
+
+      // Sau
       Council.belongsTo(models.ThesisSession, {
         foreignKey: "thesisSessionId",
         targetKey: "id",
       });
-      Council.hasMany(models.Transcript, {
+      Council.hasMany(models.Thesis, {
         foreignKey: "councilId",
       });
       Council.belongsToMany(models.Lecturer, {
         through: models.CouncilDetail,
         foreignKey: "councilId",
       });
-      // Council.hasMany(models.CouncilDetail, {
-      //   foreignKey: "councilId",
-      //   targetKey: "councilId",
-      // });
-      // Council.hasMany(models.CouncilDetail,{
-      //   foreignKey:"councilId"
-      // })
+
+      Council.belongsTo(models.Allcode, {
+        foreignKey: "statusId",
+        targetKey: "code",
+      });
     }
   }
   Council.init(

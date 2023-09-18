@@ -9,6 +9,55 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
+      // Lecturer.belongsTo(models.Allcode, {
+      //   foreignKey: "genderId",
+      //   targetKey: "code",
+      // });
+      // Lecturer.belongsTo(models.Allcode, {
+      //   foreignKey: "statusId",
+      //   targetKey: "code",
+      // });
+      // Lecturer.belongsTo(models.Allcode, {
+      //   foreignKey: "roleId",
+      //   targetKey: "code",
+      // });
+      // Lecturer.belongsTo(models.Class, {
+      //   foreignKey: "departmentId",
+      //   targetKey: "id",
+      // });
+      // Lecturer.hasMany(models.Transcript, {
+      //   foreignKey: "lecturerId",
+      // });
+      // Lecturer.hasMany(models.Comment, {
+      //   foreignKey: "lecturerId",
+      // });
+      // Lecturer.belongsToMany(models.Council, {
+      //   through: models.CouncilDetail,
+      //   foreignKey: "lecturerId",
+      // });
+
+      // Sau
+      Lecturer.belongsTo(models.Department, {
+        foreignKey: "departmentId",
+        targetKey: "id",
+      });
+      Lecturer.hasMany(models.Department, {
+        foreignKey: "deanId",
+      });
+
+      Lecturer.belongsToMany(models.Council, {
+        through: models.CouncilDetail,
+        foreignKey: "lecturerId",
+      });
+      
+      Lecturer.hasMany(models.Thesis, {
+        foreignKey: "thesisAdvisor",
+      });
+
+      Lecturer.hasMany(models.Comment, {
+        foreignKey: "lecturerId",
+      });
+
       Lecturer.belongsTo(models.Allcode, {
         foreignKey: "genderId",
         targetKey: "code",
@@ -20,20 +69,6 @@ module.exports = (sequelize, DataTypes) => {
       Lecturer.belongsTo(models.Allcode, {
         foreignKey: "roleId",
         targetKey: "code",
-      });
-      Lecturer.belongsTo(models.Class, {
-        foreignKey: "departmentId",
-        targetKey: "id",
-      });
-      Lecturer.hasMany(models.Transcript, {
-        foreignKey: "lecturerId",
-      });
-      Lecturer.hasMany(models.Comment, {
-        foreignKey: "lecturerId",
-      });
-      Lecturer.belongsToMany(models.Council, {
-        through: models.CouncilDetail,
-        foreignKey: "lecturerId",
       });
     }
   }

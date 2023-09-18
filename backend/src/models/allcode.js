@@ -17,6 +17,11 @@ module.exports = (sequelize, DataTypes) => {
         foreignKey: "statusId",
         // as: "genderData",
       });
+      Allcode.hasMany(models.Student, {
+        foreignKey: "roleId",
+        // as: "genderData",
+      });
+
       Allcode.hasMany(models.Lecturer, {
         foreignKey: "genderId",
         // as: "positionData",
@@ -29,20 +34,28 @@ module.exports = (sequelize, DataTypes) => {
         foreignKey: "roleId",
         // as: "genderData",
       });
-      Allcode.hasMany(models.Student, {
-        foreignKey: "roleId",
-        // as: "genderData",
-      });
+      
       Allcode.hasMany(models.Topic, {
         foreignKey: "statusId",
       });
+
+      Allcode.hasMany(models.Thesis, {
+        foreignKey: "result",
+      });
+      Allcode.hasMany(models.Thesis, {
+        foreignKey: "councilStatus",
+      });
+      Allcode.hasMany(models.Thesis, {
+        foreignKey: "thesisAdvisorStatus",
+      });
+      
       Allcode.hasMany(models.Council, {
         foreignKey: "statusId",
       });
-      Allcode.hasMany(models.Council, {
-        // through: models.CouncilDetail,
-        foreignKey: "positionId",
-      });
+      // Allcode.hasMany(models.Council, {
+      //   // through: models.CouncilDetail,
+      //   foreignKey: "positionId",
+      // });
     }
   }
   Allcode.init(

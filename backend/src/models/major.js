@@ -9,16 +9,25 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
+      // Major.belongsTo(models.Department, {
+      //   foreignKey: "departmentId",
+      //   targetKey: "id",
+      //   // as: "genderData",
+      // });
+      // Major.hasMany(models.Department, {
+      //   foreignKey: "majorId",
+      //   // as: "genderData",
+      // });
+      // Major.hasMany(models.Topic, {
+      //   foreignKey: "majorId",
+      // });
+
+      // Sauu
       Major.belongsTo(models.Department, {
         foreignKey: "departmentId",
         targetKey: "id",
-        // as: "genderData",
       });
-      Major.hasMany(models.Department, {
-        foreignKey: "majorId",
-        // as: "genderData",
-      });
-      Major.hasMany(models.Topic, {
+      Major.hasMany(models.Class, {
         foreignKey: "majorId",
       });
     }

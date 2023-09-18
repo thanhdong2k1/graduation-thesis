@@ -6,10 +6,10 @@ import { FaChevronRight } from "react-icons/fa6";
 import { MdLogout } from "react-icons/md";
 import { routes } from "../../routes";
 import { useDispatch, useSelector } from "react-redux";
-import { logginSuccess, logoutSuccess } from "../../redux/authSlice";
-import axios from "axios";
+import { logginSuccess } from "../../redux/authSlice";
 
-import jwt_decode from "jwt-decode";
+import { createAxios } from "../../utils/createInstance";
+import { logoutUser } from "../../redux/apiRequest";
 
 const TopAdmin = ({ isShowSidebar, setIsShowSidebar }) => {
     const currentUser = useSelector((state) => state.auth.login.currentUser);
@@ -17,62 +17,13 @@ const TopAdmin = ({ isShowSidebar, setIsShowSidebar }) => {
     const navigate = useNavigate();
     const path = useLocation();
     const arrPath = path.pathname.split("/").splice(1, 2);
-    let axiosJWT = axios.create();
+    let axiosJWT = createAxios(currentUser, dispatch, logginSuccess);
 
     // console.log(path, arrPath[2]);
-    const refreshToken = async () => {
-        try {
-            const res = await axios.post(
-                "/api/auth/refresh",
-                {
-                    withCredentials: true,
-                }
-            );
-            return res.data;
-        } catch (err) {
-            console.log(err);
-        }
-    };
-    axiosJWT.interceptors.request.use(
-        async (config) => {
-            const decodedToken = jwt_decode(currentUser.accessToken);
-            if (decodedToken.exp < new Date().getTime() / 1000) {
-                const data = await refreshToken();
-                const refreshUser = {
-                    ...currentUser.user,
-                    accessToken: data.accessToken,
-                };
-                console.log("refreshUser", refreshUser);
-                dispatch(logginSuccess(refreshUser));
-                config.headers["token"] = "Bearer " + data.accessToken;
-            }
-            return config;
-        },
-        (err) => {
-            return Promise.reject(err);
-        }
-    );
-
     const logoutHandle = async () => {
         if (currentUser.accessToken) {
-            axiosJWT
-                .post(
-                    "/api/auth/logout",
-                    {},
-                    {
-                        headers: {
-                            token: `Bearer ${currentUser.accessToken}`,
-                        },
-                    }
-                )
-                .then((res) => {
-                    console.log("res success", res);
-                    dispatch(logoutSuccess());
-                    navigate("/login");
-                })
-                .catch((res) => {
-                    console.log("res cacth", res);
-                });
+            // axiosJWT.post()
+            logoutUser(currentUser, dispatch, navigate, axiosJWT);
         }
     };
     // console.log(

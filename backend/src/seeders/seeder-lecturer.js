@@ -15,19 +15,23 @@ module.exports = {
         genderId: "M",
         statusId: "S1",
         roleId: "R1",
+        createdAt: new Date(),
+        updatedAt: new Date(),
       },
       {
         email: "thuky@e.tlu.edu.vn",
         password:
           "$2a$10$Us9Y1AnSyNrlj46qV6Bt4eL9bTgU7GFEAErub8jIVOGdU8t34dAG2",
         code: "thuky",
-        fullName: "Thư ký",
+        fullName: "Trưởng khoa",
         numberPhone: "0900000002",
         birthday: "01/02/1983",
-        address: "Địa chỉ của Thư ký",
+        address: "Địa chỉ của Trưởng khoa",
         genderId: "M",
         statusId: "S1",
         roleId: "R2",
+        createdAt: new Date(),
+        updatedAt: new Date(),
       },
       {
         email: "gv00001@e.tlu.edu.vn",
@@ -41,6 +45,8 @@ module.exports = {
         genderId: "M",
         statusId: "S1",
         roleId: "R3",
+        createdAt: new Date(),
+        updatedAt: new Date(),
       },
       {
         email: "gv00002@e.tlu.edu.vn",
@@ -54,6 +60,8 @@ module.exports = {
         genderId: "M",
         statusId: "S1",
         roleId: "R3",
+        createdAt: new Date(),
+        updatedAt: new Date(),
       },
       {
         email: "gv00003@e.tlu.edu.vn",
@@ -67,6 +75,8 @@ module.exports = {
         genderId: "M",
         statusId: "S1",
         roleId: "R3",
+        createdAt: new Date(),
+        updatedAt: new Date(),
       },
       {
         email: "gv00004@e.tlu.edu.vn",
@@ -80,6 +90,8 @@ module.exports = {
         genderId: "M",
         statusId: "S1",
         roleId: "R3",
+        createdAt: new Date(),
+        updatedAt: new Date(),
       },
       {
         email: "gv00005@e.tlu.edu.vn",
@@ -93,6 +105,8 @@ module.exports = {
         genderId: "M",
         statusId: "S1",
         roleId: "R3",
+        createdAt: new Date(),
+        updatedAt: new Date(),
       },
       {
         email: "gv00006@e.tlu.edu.vn",
@@ -106,6 +120,8 @@ module.exports = {
         genderId: "M",
         statusId: "S1",
         roleId: "R3",
+        createdAt: new Date(),
+        updatedAt: new Date(),
       },
       {
         email: "gv00007@e.tlu.edu.vn",
@@ -119,6 +135,8 @@ module.exports = {
         genderId: "M",
         statusId: "S1",
         roleId: "R3",
+        createdAt: new Date(),
+        updatedAt: new Date(),
       },
       {
         email: "gv00008@e.tlu.edu.vn",
@@ -132,6 +150,8 @@ module.exports = {
         genderId: "M",
         statusId: "S1",
         roleId: "R3",
+        createdAt: new Date(),
+        updatedAt: new Date(),
       },
       {
         email: "gv00009@e.tlu.edu.vn",
@@ -145,6 +165,8 @@ module.exports = {
         genderId: "F",
         statusId: "S1",
         roleId: "R3",
+        createdAt: new Date(),
+        updatedAt: new Date(),
       },
       {
         email: "gv00010@e.tlu.edu.vn",
@@ -158,6 +180,8 @@ module.exports = {
         genderId: "M",
         statusId: "S1",
         roleId: "R3",
+        createdAt: new Date(),
+        updatedAt: new Date(),
       },
       {
         email: "gv00011@e.tlu.edu.vn",
@@ -171,6 +195,8 @@ module.exports = {
         genderId: "M",
         statusId: "S1",
         roleId: "R3",
+        createdAt: new Date(),
+        updatedAt: new Date(),
       },
       {
         email: "gv00012@e.tlu.edu.vn",
@@ -184,6 +210,8 @@ module.exports = {
         genderId: "M",
         statusId: "S1",
         roleId: "R3",
+        createdAt: new Date(),
+        updatedAt: new Date(),
       },
       {
         email: "gv00013@e.tlu.edu.vn",
@@ -197,6 +225,8 @@ module.exports = {
         genderId: "M",
         statusId: "S1",
         roleId: "R3",
+        createdAt: new Date(),
+        updatedAt: new Date(),
       },
       {
         email: "gv00014@e.tlu.edu.vn",
@@ -210,6 +240,8 @@ module.exports = {
         genderId: "F",
         statusId: "S1",
         roleId: "R3",
+        createdAt: new Date(),
+        updatedAt: new Date(),
       },
       {
         email: "gv00015@e.tlu.edu.vn",
@@ -223,6 +255,8 @@ module.exports = {
         genderId: "M",
         statusId: "S1",
         roleId: "R3",
+        createdAt: new Date(),
+        updatedAt: new Date(),
       },
     ]);
   },

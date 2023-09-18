@@ -25,7 +25,7 @@ const sequelize = new Sequelize("graduation-thesis-full", "root", null, {
 
 const connectDB = async () => {
   try {
-    // db.sequelize.sync({ alter: true }).then(() => {
+    // db.sequelize.sync({ force: true }).then(() => {
     //   console.log("All models were synchronized successfully.");
     // });
     await sequelize.authenticate();

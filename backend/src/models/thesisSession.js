@@ -9,17 +9,31 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
-      ThesisSession.hasMany(models.Council,{
-        foreignKey:"thesisSessionId"
-      })
+      // ThesisSession.hasMany(models.Council,{
+      //   foreignKey:"thesisSessionId"
+      // })
+
+      // Sauu
+      ThesisSession.belongsTo(models.EvaluationMethod, {
+        foreignKey: "evaluationMethodId",
+        targetKey: "id",
+      });
+      ThesisSession.hasMany(models.Council, {
+        foreignKey: "thesisSessionId",
+      });
+      ThesisSession.hasMany(models.Thesis, {
+        foreignKey: "thesisSessionId",
+      });
     }
   }
   ThesisSession.init(
     {
       name: DataTypes.STRING,
       description: DataTypes.STRING,
+      validPoint: DataTypes.FLOAT,
       startDate: DataTypes.STRING,
       endDate: DataTypes.STRING,
+      evaluationMethodId: DataTypes.INTEGER,
     },
     {
       sequelize,

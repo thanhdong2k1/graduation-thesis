@@ -9,17 +9,27 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
+      // CouncilDetail.belongsTo(models.Allcode, {
+      //   foreignKey: "positionId",
+      //   targetKey: "code",
+      // });
+      // CouncilDetail.belongsTo(models.Council, {
+      //   foreignKey: "councilId",
+      //   targetKey: "id",
+      // });
+      // CouncilDetail.belongsTo(models.Lecturer, {
+      //   foreignKey: "lecturerId",
+      //   targetKey: "id",
+      // });
+
+      // Sauu
       CouncilDetail.belongsTo(models.Allcode, {
         foreignKey: "positionId",
         targetKey: "code",
       });
-      CouncilDetail.belongsTo(models.Council, {
-        foreignKey: "councilId",
-        targetKey: "id",
-      });
-      CouncilDetail.belongsTo(models.Lecturer, {
-        foreignKey: "lecturerId",
-        targetKey: "id",
+      CouncilDetail.belongsToMany(models.Thesis, {
+        through: models.Point,
+        foreignKey: "councilDetailId",
       });
     }
   }
@@ -31,6 +41,9 @@ module.exports = (sequelize, DataTypes) => {
         allowNull: false,
         autoIncrement: true,
       },
+      // councilId:DataTypes.INTEGER,
+      // lecturerId:DataTypes.INTEGER,
+      positionId: DataTypes.STRING,
     },
     {
       sequelize,

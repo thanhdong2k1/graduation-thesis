@@ -8,7 +8,13 @@
         font-size: 90%;
     }
     ::-webkit-scrollbar {
-        display: none;
+        /* display: none; */
+        width: 0px;
+        height: 8px;
+    }
+    ::-webkit-scrollbar-thumb{
+        
+        @apply bg-gradient-to-r from-HoverColor via-PrimaryColor to-HoverColor rounded-lg
     }
 }
 * {

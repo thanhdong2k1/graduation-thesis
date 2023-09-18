@@ -9,6 +9,31 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
+      // Student.belongsTo(models.Allcode, {
+      //   foreignKey: "genderId",
+      //   targetKey: "code",
+      // });
+      // Student.belongsTo(models.Allcode, {
+      //   foreignKey: "roleId",
+      //   targetKey: "code",
+      // });
+      // Student.belongsTo(models.Allcode, {
+      //   foreignKey: "statusId",
+      //   targetKey: "code",
+      // });
+
+      // Sauu
+      Student.belongsTo(models.Class, {
+        foreignKey: "classId",
+        targetKey: "id",
+      });
+      Student.hasMany(models.Thesis, {
+        foreignKey: "studentId",
+      });
+      Student.hasMany(models.Comment, {
+        foreignKey: "studentId",
+      });
+
       Student.belongsTo(models.Allcode, {
         foreignKey: "genderId",
         targetKey: "code",
@@ -20,13 +45,6 @@ module.exports = (sequelize, DataTypes) => {
       Student.belongsTo(models.Allcode, {
         foreignKey: "statusId",
         targetKey: "code",
-      });
-      Student.belongsTo(models.Class, {
-        foreignKey: "classId",
-        targetKey: "id",
-      });
-      Student.hasMany(models.Comment, {
-        foreignKey: "studentId",
       });
     }
   }

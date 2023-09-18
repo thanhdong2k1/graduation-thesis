@@ -1,0 +1,40 @@
+"use strict";
+const { Model } = require("sequelize");
+module.exports = (sequelize, DataTypes) => {
+  class EvaluationMethod extends Model {
+    /**
+     * Helper method for defining associations.
+     * This method is not a part of Sequelize lifecycle.
+     * The `models/index` file will call this method automatically.
+     */
+    static associate(models) {
+      // define association here
+      // EvaluationMethod.belongsTo(models.Thesis, {
+      //   foreignKey: "thesisId",
+      //   targetKey: "id",
+      // });
+      // EvaluationMethod.belongsTo(models.Lecturer, {
+      //   foreignKey: "lecturerId",
+      //   targetKey: "id",
+      // });
+      EvaluationMethod.hasMany(models.ThesisSession, {
+        foreignKey: "evaluationMethodId",
+      });
+      EvaluationMethod.hasMany(models.EvaluationCriteria, {
+        foreignKey: "evaluationMethodId",
+      });
+    }
+  }
+  EvaluationMethod.init(
+    {
+      name: DataTypes.STRING,
+    },
+    {
+      sequelize,
+      modelName: "EvaluationMethod",
+      tableName: "evaluation_method",
+
+    }
+  );
+  return EvaluationMethod;
+};

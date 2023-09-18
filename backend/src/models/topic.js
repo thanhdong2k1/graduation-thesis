@@ -9,13 +9,20 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
+
+      Topic.belongsTo(models.Department, {
+        foreignKey: "departmentId",
+        targetKey: "id",
+        as:"departmentData"
+      });
+
       Topic.belongsTo(models.Allcode, {
         foreignKey: "statusId",
         targetKey: "code",
       });
-      Topic.belongsTo(models.Major, {
-        foreignKey: "majorId",
-        targetKey: "id",
+
+      Topic.hasOne(models.Thesis, {
+        foreignKey: "topicId",
       });
     }
   }
@@ -24,7 +31,7 @@ module.exports = (sequelize, DataTypes) => {
       name: DataTypes.STRING,
       description: DataTypes.STRING,
       statusId: DataTypes.STRING,
-      majorId: DataTypes.INTEGER,
+      departmentId: DataTypes.INTEGER,
     },
     {
       sequelize,

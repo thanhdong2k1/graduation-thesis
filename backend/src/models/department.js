@@ -9,13 +9,32 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
+      // Department.hasMany(models.Major, {
+      //   foreignKey: "departmentId",
+      //   // as: "positionData",
+      // });
+      // Department.hasMany(models.Lecturer, {
+      //   foreignKey: "departmentId",
+      //   // as: "positionData",
+      // });
+      // // Department.belongsToMany(models.Lecturer, {
+      // //   foreignKey: "departmentId",
+      // //   // as: "deanId",
+      // // });
+
+      //// Sauuuuuuuuuuuuuuuuuuuu
       Department.hasMany(models.Major, {
         foreignKey: "departmentId",
-        // as: "positionData",
       });
       Department.hasMany(models.Lecturer, {
         foreignKey: "departmentId",
-        // as: "positionData",
+      });
+      Department.belongsTo(models.Lecturer, {
+        foreignKey: "deanId",
+        targetKey: "id",
+      });
+      Department.hasMany(models.Topic, {
+        foreignKey: "departmentId",
       });
     }
   }
@@ -24,6 +43,7 @@ module.exports = (sequelize, DataTypes) => {
       name: DataTypes.STRING,
       description: DataTypes.STRING,
       founding: DataTypes.STRING,
+      deanId: DataTypes.INTEGER,
     },
     {
       sequelize,

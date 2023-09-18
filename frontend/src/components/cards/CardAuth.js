@@ -9,6 +9,7 @@ import axios from "axios";
 import { logginSuccess } from "../../redux/authSlice";
 import { useDispatch, useSelector } from "react-redux";
 import { MdKeyboardBackspace } from "react-icons/md";
+import { logginUser } from "../../redux/apiRequest";
 const CardAuth = () => {
     const dispatch = useDispatch();
 
@@ -45,38 +46,7 @@ const CardAuth = () => {
         if (email == "" || password == "") {
             setShowMessage("Vui lòng nhập thông tin tài khoản");
         } else {
-            // console.log("đã vào đây");
-            axios
-                .post("/api/auth/login", {
-                    email: email,
-                    password: password,
-                })
-                .then((response) => {
-                    // console.log(response.data);
-                    if (response.data.errCode == 0) {
-                        setShowMessage(response.data.errMessage);
-                        dispatch(logginSuccess(response.data.user));
-                        navigate(
-                            `/${
-                                response.data?.user?.roleId == "R1"
-                                    ? "admin"
-                                    : response.data?.user?.roleId == "R2"
-                                    ? "secretary"
-                                    : response.data?.user?.roleId == "R3"
-                                    ? "lecturer"
-                                    : response.data?.user?.roleId == "R4"
-                                    ? "student"
-                                    : ""
-                            }`
-                        );
-                    } else {
-                        setShowMessage(response?.data?.errMessage);
-                    }
-                })
-                .catch((response) => {
-                    // console.log(response.response.data.errMessage)
-                    setShowMessage(response?.response?.data?.errMessage);
-                });
+            logginUser({ email, password }, dispatch, navigate);
         }
     };
     return (
@@ -174,7 +144,7 @@ const CardAuth = () => {
                     </button>
                 </form>
                 <Link to={"/"} className="backLink button">
-                    <MdKeyboardBackspace className="mr-2"/>
+                    <MdKeyboardBackspace className="mr-2" />
                     <span className="title">Go Back!</span>
                 </Link>
             </div>

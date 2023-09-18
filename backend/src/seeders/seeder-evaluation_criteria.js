@@ -2,46 +2,53 @@
 
 module.exports = {
   up: async (queryInterface, Sequelize) => {
-    return queryInterface.bulkInsert("Blocks", [
+    return queryInterface.bulkInsert("Evaluation_Criteria", [
       {
-        name: "59",
-        description: "Mô tả khối 59",
+        name: "Điểm trình bày ĐATN",
+        weight: "2",
+        order: "1",
         createdAt: new Date(),
         updatedAt: new Date(),
       },
       {
-        name: "60",
-        description: "Mô tả khối 60",
+        name: "Nội dung kỹ thuật ",
+        weight: null,
+        order: "2",
         createdAt: new Date(),
         updatedAt: new Date(),
       },
       {
-        name: "61",
-        description: "Mô tả khối 61",
+        name: "Tính ứng dụng",
+        weight: "1",
+        order: "3",
         createdAt: new Date(),
         updatedAt: new Date(),
       },
       {
-        name: "62",
-        description: "Mô tả khối 62",
+        name: "Giải pháp công nghệ",
+        weight: "1",
+        order: "4",
         createdAt: new Date(),
         updatedAt: new Date(),
       },
       {
-        name: "63",
-        description: "Mô tả khối 63",
+        name: "Tính đúng đắn và hợp lý",
+        weight: "1",
+        order: "5",
         createdAt: new Date(),
         updatedAt: new Date(),
       },
       {
-        name: "64",
-        description: "Mô tả khối 64",
+        name: "Khối lượng công việc hoàn thành",
+        weight: "3",
+        order: "6",
         createdAt: new Date(),
         updatedAt: new Date(),
       },
       {
-        name: "65",
-        description: "Mô tả khối 65",
+        name: "Tính sáng tạo, tính mới, áp dụng công nghệ và thuật toán tiên tiến vào đề tài",
+        weight: "2",
+        order: "7",
         createdAt: new Date(),
         updatedAt: new Date(),
       },

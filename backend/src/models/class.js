@@ -9,14 +9,21 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
-      Class.belongsTo(models.Major, {
-        foreignKey: "majorId",
-        targetKey: "id",
-      });
+      
       Class.belongsTo(models.Block, {
         foreignKey: "blockId",
         targetKey: "id",
       });
+
+      Class.belongsTo(models.Major, {
+        foreignKey: "majorId",
+        targetKey: "id",
+      });
+
+      Class.hasMany(models.Student, {
+        foreignKey: "classId",
+      });
+
     }
   }
   Class.init(

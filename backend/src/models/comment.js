@@ -14,7 +14,7 @@ module.exports = (sequelize, DataTypes) => {
         targetKey: "id",
       });
       Comment.belongsTo(models.Lecturer, {
-        foreignKey: "thesisId",
+        foreignKey: "lecturerId",
         targetKey: "id",
       });
       Comment.belongsTo(models.Student, {

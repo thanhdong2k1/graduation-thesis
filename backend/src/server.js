@@ -6,6 +6,7 @@ const dotenv = require("dotenv");
 // const mysql2 = require("mysql2");
 const connectDB = require("./config/connectDB");
 const authRoute = require("./routes/auth");
+const userRoute = require("./routes/user");
 
 dotenv.config();
 
@@ -24,7 +25,7 @@ app.use(express.json());
 connectDB();
 
 app.use("/api/auth", authRoute);
-app.use("/api/user", authRoute);
+app.use("/api/user", userRoute);
 
 const port = process.env.PORT || 8080;
 //port = undefined =? port = 8080
