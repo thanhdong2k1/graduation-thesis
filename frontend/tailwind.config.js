@@ -49,7 +49,7 @@ module.exports = {
                 paleBlue: "#b1dafb",
                 whiteColor: "#ffffff",
                 blackColor: "#2e2e2e",
-                textColor: "#79797c",
+                textColor: "#686868",
                 bgColor: "#eeeff1",
                 greyText: "#6b7280",
                 inputColor: "#f8f6f7",

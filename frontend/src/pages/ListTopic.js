@@ -1,10 +1,13 @@
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { getAllDepartments, getAllTopics } from "../redux/apiRequest";
+import { apiUser, getAllDepartments, getAllTopics } from "../redux/apiRequest";
 import Table from "../components/table/Table";
 import { FaPenAlt, FaTrashAlt } from "react-icons/fa";
 import Select from "react-select";
-import { customStyles } from "../utils/customStyleReactSelect";
+import {
+    customSelectStyles,
+    customStyles,
+} from "../utils/customStyleReactSelect";
 import { actionsEdit, actionsRemove } from "../utils/actionsTable";
 
 const ListTopic = () => {
@@ -23,12 +26,13 @@ const ListTopic = () => {
     const [defineTable, setDefineTable] = useState({
         inputSearch: "",
         isSearched: false,
+        filterSearch: "",
         offset: 0,
         limit: 5,
         pages: 0,
         currentPage: 1,
     });
-    console.log(topics, departments);
+    // console.log(topics, departments);
     const dispatch = useDispatch();
     // useEffect(() => {
     //     setDefineTable((prevState) => ({
@@ -60,50 +64,57 @@ const ListTopic = () => {
 
     // Sửa
     useEffect(() => {
+        // console.log("currentpage select")
+
         setDefineTable((prevState) => ({
             ...prevState,
             currentPage: 1,
             inputSearch: "",
             isSearched: false,
         }));
-        getAllDepartments(dispatch);
-        getAllTopics(
-            departmentSelect,
-            "",
-            (defineTable.currentPage - 1) * defineTable.limit,
-            defineTable.limit,
-            dispatch
-        );
+        apiUser.getAllDepartments(dispatch);
+        apiUser.getAllTopics({
+            departmentId: departmentSelect,
+            inputSearch: "",
+            filterSearch: defineTable.filterSearch,
+            dispatch: dispatch,
+        });
     }, [departmentSelect]);
     useEffect(() => {
-        console.log("inputSearch", defineTable.inputSearch);
+        // console.log("inputSearch", defineTable.inputSearch);
         setDefineTable((prevState) => ({
             ...prevState,
             isSearched: false,
             currentPage: 1,
         }));
-    }, [defineTable.isSearched == true]);
+        apiUser.getAllTopics({
+            departmentId: departmentSelect,
+            inputSearch: defineTable.inputSearch,
+            filterSearch: defineTable.filterSearch,
+            dispatch: dispatch,
+        });
+    }, [defineTable.isSearched == true, defineTable.filterSearch]);
     useEffect(() => {
+        // console.log("limit effect")
         setDefineTable((prevState) => ({
             ...prevState,
             currentPage: 1,
         }));
-        getAllTopics(
-            departmentSelect,
-            defineTable.inputSearch,
-            (defineTable.currentPage - 1) * defineTable.limit,
-            defineTable.limit,
-            dispatch
-        );
+        apiUser.getAllTopics({
+            departmentId: departmentSelect,
+            inputSearch: defineTable.inputSearch,
+            filterSearch: defineTable.filterSearch,
+            dispatch: dispatch,
+        });
     }, [defineTable.limit]);
     useEffect(() => {
-        getAllTopics(
-            departmentSelect,
-            defineTable.inputSearch,
-            (defineTable.currentPage - 1) * defineTable.limit,
-            defineTable.limit,
-            dispatch
-        );
+        // console.log("currentpage effect")
+        apiUser.getAllTopics({
+            departmentId: departmentSelect,
+            inputSearch: defineTable.inputSearch,
+            filterSearch: defineTable.filterSearch,
+            dispatch: dispatch,
+        });
     }, [defineTable.currentPage]);
     const handleEdit = (data) => {
         setAbc("handleEdit" + data.id);
@@ -127,6 +138,7 @@ const ListTopic = () => {
             width: "w-[250px]",
             maxWidth: "max-w-[250px]",
             column: "name",
+            tooltip: true,
         },
         {
             header: "Mô tả đề tài",
@@ -139,15 +151,15 @@ const ListTopic = () => {
 
             column: "statusId",
         },
-        {
-            header: "Hành động",
-            actions: [
-                actionsEdit(handleEdit),
-                actionsRemove(handleDelete),
-            ],
-        },
+        // {
+        //     header: "Hành động",
+        //     actions: [
+        //         actionsEdit(handleEdit),
+        //         actionsRemove(handleDelete),
+        //     ],
+        // },
     ];
-    console.log(tableData);
+    // console.log(tableData);
     return (
         <>
             <div className="notifyDiv relative flex px-8 py-8 bg-whiteColor rounded-lg shadow-lg w-[60%] media-max-lg:w-[90%]">
@@ -176,10 +188,10 @@ const ListTopic = () => {
                             ))}
                         </select>
                     </div> */}
-                    <div class="rounded-lg w-[50%] media-max-md:w-auto">
+                    <div class="rounded-lg w-auto">
                         <label htmlFor="example">Khoa</label>
                         <Select
-                            styles={customStyles}
+                            styles={customSelectStyles}
                             className="basic-single media-max-md:text-smallFontSize"
                             classNamePrefix="select"
                             // defaultValue={departments[0]}
@@ -204,6 +216,7 @@ const ListTopic = () => {
                         tableData={tableData}
                         datas={topics}
                         totalRecords={totalRecords}
+                        functionsModule={true}
                     />
                     {/* <ul class="inline-flex -space-x-px text-sm">
                         <li>

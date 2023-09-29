@@ -11,7 +11,8 @@ const Body = ({ isShowSidebar, setIsShowSidebar }) => {
                 isShowSidebar={isShowSidebar}
                 setIsShowSidebar={setIsShowSidebar}
             />
-            <div className="mt-8 gap-8 items-start h-full w-full">
+            {/* Bọc body h-[calc(100%-5rem)]*/}
+            <div className="mt-8 items-start h-[calc(100%-5rem)] w-full">
                 <Outlet />
             </div>
         </div>

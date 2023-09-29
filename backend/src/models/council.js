@@ -29,6 +29,7 @@ module.exports = (sequelize, DataTypes) => {
       Council.belongsTo(models.ThesisSession, {
         foreignKey: "thesisSessionId",
         targetKey: "id",
+        as: "thesisSessionData",
       });
       Council.hasMany(models.Thesis, {
         foreignKey: "councilId",
@@ -41,6 +42,7 @@ module.exports = (sequelize, DataTypes) => {
       Council.belongsTo(models.Allcode, {
         foreignKey: "statusId",
         targetKey: "code",
+        as: "statusData",
       });
     }
   }

@@ -41,7 +41,7 @@ import ListTopic from "./pages/ListTopic";
 // ]);
 function App() {
     const navigate = useNavigate();
-    const userData = useSelector((state) => state.auth.login.currentUser);
+    const userData = useSelector((state) => state.auth.currentUser);
     const rolePath =
         userData?.roleId == "R1"
             ? "admin"

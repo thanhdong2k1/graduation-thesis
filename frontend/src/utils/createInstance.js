@@ -1,6 +1,6 @@
 import axios from "axios";
 import jwt_decode from "jwt-decode";
-import { logginSuccess } from "../redux/authSlice";
+import { logginFailed, logginSuccess } from "../redux/authSlice";
 
 const refreshToken = async () => {
     try {
@@ -20,15 +20,22 @@ export const createAxios = (user, dispatch, stateSuccess) => {
             if (decodedToken.exp < new Date().getTime() / 1000) {
                 console.log("Đã kiểm tra token")
                 const data = await refreshToken();
-                const refreshUser = {
-                    ...user.user,
-                    accessToken: data.accessToken,
-                };
-                console.log("refreshUser", refreshUser);
-                dispatch(stateSuccess(refreshUser));
-                config.headers["token"] = "Bearer " + data.accessToken;
+                if(data){
+                    console.log("Token đã được reset")
+                    const refreshUser = {
+                        ...user.user,
+                        accessToken: data.accessToken,
+                    };
+                    dispatch(stateSuccess(refreshUser));
+                    config.headers["token"] = "Bearer " + data.accessToken;
+                }else{
+                    console.log("Server đã reset và mất refreshToken")
+                    dispatch(logginFailed("Token đã hết hiệu lực, vui lòng đăng nhập lại!"));
+                }
             }
-            console.log("Chưa kiểm tra token")
+            else{
+                console.log("Token chưa hết hạn")
+            }
             return config;
         },
         (err) => {

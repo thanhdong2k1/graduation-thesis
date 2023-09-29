@@ -12,9 +12,8 @@
         width: 0px;
         height: 8px;
     }
-    ::-webkit-scrollbar-thumb{
-        
-        @apply bg-gradient-to-r from-HoverColor via-PrimaryColor to-HoverColor rounded-lg
+    ::-webkit-scrollbar-thumb {
+        @apply bg-gradient-to-r from-HoverColor via-PrimaryColor to-HoverColor rounded-lg;
     }
 }
 * {
@@ -42,12 +41,30 @@ body {
         cursor: pointer;
     }
     .button {
-        @apply cursor-pointer flex items-center text-h3FontSize font-semibold bg-inputColor rounded-lg px-2 py-1 border-none;
+        @apply cursor-pointer flex items-center text-h3FontSize font-semibold bg-inputColor rounded-lg px-2 py-1 border-none shadow-sm;
     }
-    .button .icon{
+    .button .icon {
         @apply ml-2;
     }
     .button:hover {
         @apply text-PrimaryColor bg-paleBlue;
+    }
+    .buttonPrimary {
+        @apply bg-PrimaryColor text-white font-bold uppercase text-sm px-3 py-2 rounded-lg shadow-md;
+    }
+    .buttonPrimary:hover {
+        @apply bg-HoverColor  shadow-lg;
+    }
+    .buttonPrimary:active {
+        @apply bg-paleBlue text-PrimaryColor;
+    }
+    .labelInput {
+        @apply text-blackColor font-semibold;
+    }
+    .input {
+        @apply appearance-none border border-textColor rounded-lg w-full py-2 px-3 text-textColor font-medium leading-tight;
+    }
+    .input:focus {
+        @apply outline-none border-HoverColor shadow-md shadow-paleBlue;
     }
 }

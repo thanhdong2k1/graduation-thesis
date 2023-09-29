@@ -61,7 +61,7 @@ module.exports = (sequelize, DataTypes) => {
       statusId: DataTypes.STRING,
       classId: DataTypes.INTEGER,
       roleId: DataTypes.STRING,
-      image: DataTypes.STRING,
+      image: DataTypes.BLOB,
     },
     {
       sequelize,

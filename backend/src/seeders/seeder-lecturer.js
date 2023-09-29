@@ -19,10 +19,10 @@ module.exports = {
         updatedAt: new Date(),
       },
       {
-        email: "thuky@e.tlu.edu.vn",
+        email: "truongkhoa@e.tlu.edu.vn",
         password:
           "$2a$10$Us9Y1AnSyNrlj46qV6Bt4eL9bTgU7GFEAErub8jIVOGdU8t34dAG2",
-        code: "thuky",
+        code: "truongkhoa",
         fullName: "Trưởng khoa",
         numberPhone: "0900000002",
         birthday: "01/02/1983",

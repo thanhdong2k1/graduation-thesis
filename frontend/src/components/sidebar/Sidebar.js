@@ -4,8 +4,9 @@ import { IoMdSpeedometer } from "react-icons/io";
 import { FaXmark } from "react-icons/fa6";
 import { routes } from "../../routes";
 import { useSelector } from "react-redux";
+import pathRoutes from "../../utils/pathRoutes";
 const Sidebar = ({ isShowSidebar, setIsShowSidebar }) => {
-    const userData = useSelector((state) => state.auth.login.currentUser);
+    const userData = useSelector((state) => state.auth.currentUser);
     const rolePath =
         userData?.roleId == "R1"
             ? "admin"
@@ -18,7 +19,7 @@ const Sidebar = ({ isShowSidebar, setIsShowSidebar }) => {
     const navigate = useNavigate();
     const routesAdmin = routes
         .filter((route) => route.role == userData?.roleId)[0]
-        ?.pages?.filter((route) => !route.path.match(":"));
+        ?.pages?.filter((route) => !route.path.match(":")&&route.path!=pathRoutes.R1.changeInformation&&route.path!=pathRoutes.R1.changePassword);
     // console.log("routesAdmin", routesAdmin,path.pathname.split("/") );
     return (
         <div

@@ -6,5 +6,6 @@ const router = express.Router();
 
 router.post("/topics", userController.getTopics);
 router.post("/departments", userController.getDepartments);
+router.post("/councils", userController.getCouncils);
 
 module.exports = router;

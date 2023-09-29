@@ -4,28 +4,22 @@ const { Op } = require("sequelize");
 const userController = {
   getTopics: async (req, res) => {
     try {
+      console.log(req.body)
       const searchTerms = `%${
         req?.body?.inputSearch ? req?.body?.inputSearch : "".trim()
       }%`.replace(/\s/g, "%");
-      console.log(searchTerms);
-      const topics = await db.Topic.findAll({
-        where: {
-          departmentId: req?.body?.departmentId,
-          statusId: "H1",
-          [Op.or]: {
-            name: {
-              [Op.like]: searchTerms,
-            },
-            // description: {
-            //   [Op.like]: `%${req.body.inputSearch}%`,
-            // },
-            // first_name: Sequelize.where(Sequelize.col('User.first_name'), {
-            //   [Op.like]: '%elvis%'
-            // }),
-          },
-        },
-        offset: req?.body?.offset,
-        limit: req?.body?.limit,
+      const whereClause = {
+        departmentId: req?.body?.departmentId,
+        statusId: "H1",
+      };
+      if (req?.body?.filterSearch) {
+        whereClause[req?.body?.filterSearch] = {
+          [Op.like]: searchTerms,
+        };
+      }
+      console.log(whereClause)
+      const result = await db.Topic.findAndCountAll({
+        where: whereClause,
         include: [
           {
             model: db.Department,
@@ -36,18 +30,36 @@ const userController = {
         raw: true,
         nest: true,
       });
-      const totalRecords = await db.Topic.count({
-        where: {
-          departmentId: req?.body?.departmentId,
-          [Op.or]: {
-            name: {
-              [Op.like]: searchTerms,
-            },
-          },
-        },
-        raw: false,
-      });
+      console.log(result)
+      console.log(topics);
+      const { rows: topics, count: totalRecords } = result;
       return res.status(200).json({ errCode: 0, topics, totalRecords });
+    } catch (error) {
+      return res.status(500).json(error);
+    }
+  },
+  getCouncils: async (req, res) => {
+    try {
+      const searchTerms = `%${
+        req?.body?.inputSearch ? req?.body?.inputSearch.trim() : ""
+      }%`.replace(/\s/g, "%");
+      console.log(searchTerms);
+      const whereClause = {
+        statusId: "S1",
+      };
+      // if (req?.body?.filterSearch) {
+      //   whereClause[req.body.filterSearch] = {
+      //     [Op.like]: searchTerms,
+      //   };
+      // }
+      const result = await db.Council.findAndCountAll({
+        where: whereClause,
+        order: [["updatedAt", "DESC"]],
+        raw: true,
+        nest: true,
+      });
+      const { rows: councils, count: totalRecords } = result;
+      return res.status(200).json({ errCode: 0, councils, totalRecords });
     } catch (error) {
       return res.status(500).json(error);
     }

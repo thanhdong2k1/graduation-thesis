@@ -9,10 +9,11 @@ import { useDispatch, useSelector } from "react-redux";
 import { logginSuccess } from "../../redux/authSlice";
 
 import { createAxios } from "../../utils/createInstance";
-import { logoutUser } from "../../redux/apiRequest";
+import { apiAuth, logoutUser } from "../../redux/apiRequest";
+import pathRoutes from "../../utils/pathRoutes";
 
 const TopAdmin = ({ isShowSidebar, setIsShowSidebar }) => {
-    const currentUser = useSelector((state) => state.auth.login.currentUser);
+    const currentUser = useSelector((state) => state.auth.currentUser);
     const dispatch = useDispatch();
     const navigate = useNavigate();
     const path = useLocation();
@@ -23,7 +24,7 @@ const TopAdmin = ({ isShowSidebar, setIsShowSidebar }) => {
     const logoutHandle = async () => {
         if (currentUser.accessToken) {
             // axiosJWT.post()
-            logoutUser(currentUser, dispatch, navigate, axiosJWT);
+            apiAuth.logoutUser(currentUser, dispatch, navigate, axiosJWT);
         }
     };
     // console.log(
@@ -92,20 +93,20 @@ const TopAdmin = ({ isShowSidebar, setIsShowSidebar }) => {
                     </button>
                     <div
                         id="dropdown"
-                        class="z-10 hidden group-hover:inline-block absolute right-0 bg-white rounded-lg shadow w-44"
+                        class="z-10 hidden group-hover:inline-block absolute right-0 bg-white w-44 rounded-lg shadow whitespace-nowrap"
                     >
                         <ul class="py-2 text-sm text-gray-700 dark:text-gray-200">
                             <li>
                                 <Link
-                                    to={""}
+                                    to={pathRoutes.R1.changeInformation}
                                     class="block px-4 py-2 font-medium text-textColor hover:bg-gray-100"
                                 >
-                                    Update Information
+                                    Change Information
                                 </Link>
                             </li>
                             <li>
                                 <Link
-                                    to={""}
+                                    to={pathRoutes.R1.changePassword}
                                     class="block px-4 py-2 font-medium text-textColor hover:bg-gray-100"
                                 >
                                     Change Password
