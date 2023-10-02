@@ -495,8 +495,8 @@ const Table = ({
                             </div>
 
                             <div className="rightHeaderTableDiv functionsModuleDiv flex justify-end gap-2">
-                                {currentUser.roleId == "R1" ||
-                                currentUser.roleId == "R2" ? (
+                                {currentUser?.roleId == "R1" ||
+                                currentUser?.roleId == "R2" ? (
                                     <>
                                         <button
                                             className="importDiv button"
