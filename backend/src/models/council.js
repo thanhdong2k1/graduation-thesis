@@ -37,6 +37,7 @@ module.exports = (sequelize, DataTypes) => {
       Council.belongsToMany(models.Lecturer, {
         through: models.CouncilDetail,
         foreignKey: "councilId",
+        as: "councilData",
       });
 
       Council.belongsTo(models.Allcode, {

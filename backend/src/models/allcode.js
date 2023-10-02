@@ -40,13 +40,13 @@ module.exports = (sequelize, DataTypes) => {
       });
 
       Allcode.hasMany(models.Thesis, {
-        foreignKey: "result",
+        foreignKey: "resultId",
       });
       Allcode.hasMany(models.Thesis, {
-        foreignKey: "councilStatus",
+        foreignKey: "councilStatusId",
       });
       Allcode.hasMany(models.Thesis, {
-        foreignKey: "thesisAdvisorStatus",
+        foreignKey: "thesisAdvisorStatusId",
       });
       
       Allcode.hasMany(models.Council, {

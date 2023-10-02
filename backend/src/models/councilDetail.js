@@ -26,10 +26,12 @@ module.exports = (sequelize, DataTypes) => {
       CouncilDetail.belongsTo(models.Allcode, {
         foreignKey: "positionId",
         targetKey: "code",
+        as: "positionData",
       });
       CouncilDetail.belongsToMany(models.Thesis, {
         through: models.Point,
         foreignKey: "councilDetailId",
+        as: "councilDetailData",
       });
     }
   }

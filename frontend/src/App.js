@@ -9,8 +9,6 @@ import "./App.css";
 import AdminHomePage from "./pages/admin/AdminHomePage";
 import AdminLayout from "./components/layouts/admin/AdminLayout";
 import Login from "./pages/Login";
-import Class from "./pages/admin/class/Class";
-import ClassDetail from "./pages/admin/class/ClassDetail";
 import { routes } from "./routes";
 import { useEffect, useState } from "react";
 import axios from "axios";
@@ -46,7 +44,7 @@ function App() {
         userData?.roleId == "R1"
             ? "admin"
             : userData?.roleId == "R2"
-            ? "secretary"
+            ? "dean"
             : userData?.roleId == "R3"
             ? "lecturer"
             : userData?.roleId == "R4"
@@ -83,6 +81,7 @@ function App() {
                             path={route.path}
                             element={route.element}
                         />
+                        
                     ))}
                 {/* <Route path="" element={<Navigate to="home" replace />} /> */}
                 <Route path="*" element={<Navigate to="home" replace />} />

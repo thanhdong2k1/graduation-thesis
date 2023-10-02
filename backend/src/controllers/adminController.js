@@ -55,7 +55,7 @@ const adminController = {
       }
     } catch (error) {
       console.log(error);
-      return res.status(500).json(error);
+      return res.status(500).json({ errCode: -1, errMessage: error });
     }
   },
   changeInformation: async (req, res) => {
@@ -85,7 +85,7 @@ const adminController = {
           console.log("changeInformation", changeInformation);
           return res.status(200).json({
             errCode: 0,
-            errMessage: "Ok",
+            errMessage: "Information has been changed",
           });
         } else {
           return res.status(200).json({
@@ -100,54 +100,7 @@ const adminController = {
       }
     } catch (error) {
       console.log(error);
-      return res.status(500).json(error);
-    }
-  },
-  changeInformation: async (req, res) => {
-    try {
-      console.log(req.body);
-      const user = await db.Lecturer.findOne({
-        where: {
-          email: req?.body?.email,
-        },
-      });
-      if (user) {
-        const changeInformation = await db.Lecturer.update(
-          {
-            fullName: req?.body?.fullName,
-            numberPhone: req?.body?.numberPhone,
-            birthday: req?.body?.birthday,
-            address: req?.body?.address,
-            genderId: req?.body?.genderId,
-            image: req?.body?.image,
-          },
-          {
-            where: {
-              email: req?.body?.email,
-            },
-          }
-        );
-        console.log(changeInformation);
-        if (changeInformation) {
-          console.log("changeInformation", changeInformation);
-          return res.status(200).json({
-            errCode: 0,
-            errMessage: "Ok",
-          });
-        } else {
-          return res.status(200).json({
-            errCode: 3,
-            errMessage: "Plz try again late!",
-          });
-        }
-      } else {
-        return res
-          .status(200)
-          .json({ errCode: 1, errMessage: "User is not valid" });
-      }
-    } catch (error) {
-      console.log(error);
-      return res.status(500).json(error);
+      return res.status(500).json({ errCode: -1, errMessage: error });
     }
   },
   getInformation: async (req, res) => {
@@ -156,17 +109,66 @@ const adminController = {
       //   findOne
       let information = await db.Lecturer.findOne({
         where: { email: req.body.email },
+        include: [
+          //     genderId: DataTypes.STRING,
+          // roleId: DataTypes.STRING,
+          // statusId: DataTypes.STRING,
+          // departmentId: DataTypes.INTEGER,
+          {
+            model: db.Allcode,
+            as: "genderData",
+          },
+          {
+            model: db.Allcode,
+            as: "roleData",
+          },
+          {
+            model: db.Allcode,
+            as: "statusData",
+          },
+          {
+            model: db.Department,
+            as: "departmentData",
+          },
+        ],
+        raw: true,
+        nest: true,
       });
       information = information
         ? information
         : await db.Student.findOne({
             where: { email: req.body.email },
+            include: [
+              //     genderId: DataTypes.STRING,
+              // roleId: DataTypes.STRING,
+              // statusId: DataTypes.STRING,
+              // departmentId: DataTypes.INTEGER,
+              {
+                model: db.Allcode,
+                as: "genderData",
+              },
+              {
+                model: db.Allcode,
+                as: "roleData",
+              },
+              {
+                model: db.Allcode,
+                as: "statusData",
+              },
+              {
+                model: db.Department,
+                as: "departmentData",
+              },
+            ],
+            raw: true,
+            nest: true,
           });
+      console.log("information", information);
       if (information) {
         delete information.password;
         return res.status(200).json({
           errCode: 0,
-          errMessage: "Ok",
+          errMessage: "Retrieve information successfully",
           information,
         });
       } else {
@@ -176,7 +178,8 @@ const adminController = {
         });
       }
     } catch (error) {
-      return res.status(500).json(error);
+      console.log("error", error);
+      return res.status(500).json({ errCode: -1, errMessage: error });
     }
   },
   getAllcode: async (req, res) => {
@@ -188,7 +191,7 @@ const adminController = {
       if (code) {
         return res.status(200).json({
           errCode: 0,
-          errMessage: "Ok",
+          errMessage: "Retrieve code successfully",
           code,
         });
       } else {
@@ -198,7 +201,7 @@ const adminController = {
         });
       }
     } catch (error) {
-      return res.status(500).json(error);
+      return res.status(500).json({ errCode: -1, errMessage: error });
     }
   },
   getCouncils: async (req, res) => {
@@ -220,23 +223,34 @@ const adminController = {
           };
         }
       } else {
-        console.log(req?.body?.filterSearch);
-        if (req?.body?.filterSearch == "thesisSessionData") {
-          whereClause["$thesisSessionData.name$"] = {
-            // Thêm điều kiện tại đây
-            [Op.like]: searchTerms, // Thay đổi điều kiện tại đây nếu cần thiết
+        if (searchTerms.toLowerCase() != "%null%") {
+          console.log(req?.body?.filterSearch);
+          if (req?.body?.filterSearch == "thesisSessionData") {
+            whereClause["$thesisSessionData.name$"] = {
+              [Op.like]: searchTerms,
+            };
+          } else if (req?.body?.filterSearch == "statusData") {
+            whereClause["$statusData.valueVi$"] = {
+              [Op.like]: searchTerms,
+            };
+          }
+
+          // theo id
+          whereClause[req?.body?.filterSearch.replace("Data", "Id")] = {
+            [Op.like]: searchTerms,
           };
-        } else if (req?.body?.filterSearch == "statusData") {
-          whereClause["$statusData.valueVi$"] = {
-            // Thêm điều kiện tại đây
-            [Op.like]: searchTerms, // Thay đổi điều kiện tại đây nếu cần thiết
+        } else {
+          whereClause[req?.body?.filterSearch.replace("Data", "Id")] = {
+            [Op.is]: null,
           };
         }
       }
       console.log("whereClause", whereClause);
 
       const result = await db.Council.findAndCountAll({
-        where: whereClause,
+        where: {
+          [Op.or]: whereClause,
+        },
         include: [
           {
             model: db.Allcode,
@@ -255,7 +269,61 @@ const adminController = {
       const { rows: councils, count: totalRecords } = result;
       return res.status(200).json({ errCode: 0, councils, totalRecords });
     } catch (error) {
-      return res.status(500).json(error);
+      return res.status(500).json({ errCode: -1, errMessage: error });
+    }
+  },
+  importCouncils: async (req, res) => {
+    try {
+      if (req?.body?.data) {
+        console.log(req?.body?.data);
+        const result = await db.Council.bulkCreate(req?.body?.data);
+        if (result) {
+          return res
+            .status(200)
+            .json({ errCode: 0, errMessage: "Import dữ liệu thành công" });
+        } else {
+          return res.status(200).json({
+            errCode: 2,
+            errMessage:
+              "Đã xảy ra lỗi trong quá trình import, vui lòng thử lại sau",
+          });
+        }
+      } else {
+        return res
+          .status(404)
+          .json({ errCode: 1, errMessage: "Dữ liệu không được tìm thấy" });
+      }
+    } catch (error) {
+      return res.status(500).json({ errCode: -1, errMessage: error });
+    }
+  },
+  addCouncils: async (req, res) => {
+    try {
+      if (req?.body) {
+        const result = await db.Council.create({
+          name: req?.body?.name,
+          description: req?.body?.description,
+          statusId: req?.body?.statusId,
+          thesisSessionId: req?.body?.thesisSessionId,
+        });
+        if (result) {
+          return res
+            .status(200)
+            .json({ errCode: 0, errMessage: "Thêm dữ liệu thành công" });
+        } else {
+          return res.status(200).json({
+            errCode: 2,
+            errMessage:
+              "Đã xảy ra lỗi trong quá trình thêm, vui lòng thử lại sau",
+          });
+        }
+      } else {
+        return res
+          .status(404)
+          .json({ errCode: 1, errMessage: "Dữ liệu không được tìm thấy" });
+      }
+    } catch (error) {
+      return res.status(500).json({ errCode: -1, errMessage: error });
     }
   },
 };

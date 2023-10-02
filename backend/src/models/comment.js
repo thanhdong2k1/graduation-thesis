@@ -12,14 +12,17 @@ module.exports = (sequelize, DataTypes) => {
       Comment.belongsTo(models.Thesis, {
         foreignKey: "thesisId",
         targetKey: "id",
+        as: "thesisData",
       });
       Comment.belongsTo(models.Lecturer, {
         foreignKey: "lecturerId",
         targetKey: "id",
+        as: "lecturerData",
       });
       Comment.belongsTo(models.Student, {
         foreignKey: "studentId",
         targetKey: "id",
+        as: "studentData",
       });
     }
   }

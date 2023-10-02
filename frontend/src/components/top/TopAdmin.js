@@ -12,12 +12,13 @@ import { createAxios } from "../../utils/createInstance";
 import { apiAuth, logoutUser } from "../../redux/apiRequest";
 import pathRoutes from "../../utils/pathRoutes";
 
+
 const TopAdmin = ({ isShowSidebar, setIsShowSidebar }) => {
-    const currentUser = useSelector((state) => state.auth.currentUser);
-    const dispatch = useDispatch();
     const navigate = useNavigate();
     const path = useLocation();
     const arrPath = path.pathname.split("/").splice(1, 2);
+    const currentUser = useSelector((state) => state.auth.currentUser);
+    const dispatch = useDispatch();
     let axiosJWT = createAxios(currentUser, dispatch, logginSuccess);
 
     // console.log(path, arrPath[2]);
@@ -63,12 +64,13 @@ const TopAdmin = ({ isShowSidebar, setIsShowSidebar }) => {
                 </div>
             </div>
             <div className="rightDiv flex gap-2">
-                <button className="navDiv hidden media-max-lg:flex button">
-                    <IoMdMenu
-                        onClick={() => {
-                            setIsShowSidebar(!isShowSidebar);
-                        }}
-                    />
+                <button
+                    className="navDiv hidden media-max-lg:flex button"
+                    onClick={() => {
+                        setIsShowSidebar(!isShowSidebar);
+                    }}
+                >
+                    <IoMdMenu />
                 </button>
                 {/* <button className="signoutDiv button" onClick={logoutHandle}>
                     <span>SIGN OUT</span>

@@ -32,6 +32,7 @@ module.exports = (sequelize, DataTypes) => {
       Department.belongsTo(models.Lecturer, {
         foreignKey: "deanId",
         targetKey: "id",
+        as: "deanData",
       });
       Department.hasMany(models.Topic, {
         foreignKey: "departmentId",

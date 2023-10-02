@@ -4,14 +4,22 @@ import { Link } from "react-router-dom";
 import pathRoutes from "../utils/pathRoutes";
 import ButtonConfirm from "../components/button/ButtonConfirm";
 import { apiAdmin, apiChangePassword } from "../redux/apiRequest";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { toast } from "react-toastify";
 import { FaEye, FaEyeSlash } from "react-icons/fa6";
 import { useState } from "react";
+import { logginSuccess } from "../redux/authSlice";
+import { createAxios } from "../utils/createInstance";
 
 const ChangePassword = () => {
+
     const currentUser = useSelector((state) => state.auth.currentUser);
-    const [showPassword, setShowPassword] = useState(false);
+    const dispatch = useDispatch();
+    let axiosJWT = createAxios(currentUser, dispatch, logginSuccess);
+    
+    const [showPassword1, setShowPassword1] = useState(false);
+    const [showPassword2, setShowPassword2] = useState(false);
+    const [showPassword3, setShowPassword3] = useState(false);
 
     const {
         register,
@@ -26,7 +34,8 @@ const ChangePassword = () => {
             .apiChangePassword(
                 currentUser,
                 data.oldPassword,
-                data.confirmPassword
+                data.confirmPassword,
+                axiosJWT
             )
             .then((res) => {
                 if (res?.errCode > 0) {
@@ -133,7 +142,7 @@ const ChangePassword = () => {
                     <label className="labelInput">Old Password</label>
                     <div className="input flex justify-between p-2 bg-whiteColor rounded-lg items-center w-full">
                         <input
-                            type={`${showPassword ? "text" : "password"}`}
+                            type={`${showPassword1 ? "text" : "password"}`}
                             id="oldPassword"
                             placeholder=""
                             className="bg-transparent outline-none border-none w-full media-max-md:w-full"
@@ -141,18 +150,18 @@ const ChangePassword = () => {
                                 required: "Old Password is required",
                             })}
                         />
-                        {showPassword ? (
+                        {showPassword1 ? (
                             <FaEye
                                 className="icon"
                                 onClick={() => {
-                                    setShowPassword(false);
+                                    setShowPassword1(false);
                                 }}
                             />
                         ) : (
                             <FaEyeSlash
                                 className="icon"
                                 onClick={() => {
-                                    setShowPassword(true);
+                                    setShowPassword1(true);
                                 }}
                             />
                         )}
@@ -167,7 +176,7 @@ const ChangePassword = () => {
                     <label className="labelInput">New Password</label>
                     <div className="input flex justify-between p-2 bg-whiteColor rounded-lg items-center w-full">
                         <input
-                            type={`${showPassword ? "text" : "password"}`}
+                            type={`${showPassword2 ? "text" : "password"}`}
                             id="confirmPassword"
                             placeholder=""
                             className="bg-transparent outline-none border-none w-full media-max-md:w-full"
@@ -175,18 +184,18 @@ const ChangePassword = () => {
                                 required: "New Password is required",
                             })}
                         />
-                        {showPassword ? (
+                        {showPassword2 ? (
                             <FaEye
                                 className="icon"
                                 onClick={() => {
-                                    setShowPassword(false);
+                                    setShowPassword2(false);
                                 }}
                             />
                         ) : (
                             <FaEyeSlash
                                 className="icon"
                                 onClick={() => {
-                                    setShowPassword(true);
+                                    setShowPassword2(true);
                                 }}
                             />
                         )}
@@ -201,7 +210,7 @@ const ChangePassword = () => {
                     <label className="labelInput">Confirm Password</label>
                     <div className="input flex justify-between p-2 bg-whiteColor rounded-lg items-center w-full">
                         <input
-                            type={`${showPassword ? "text" : "password"}`}
+                            type={`${showPassword3 ? "text" : "password"}`}
                             id="confirmPassword"
                             placeholder=""
                             className="bg-transparent outline-none border-none w-full media-max-md:w-full"
@@ -209,18 +218,18 @@ const ChangePassword = () => {
                                 required: "Confirm Password is required",
                             })}
                         />
-                        {showPassword ? (
+                        {showPassword3 ? (
                             <FaEye
                                 className="icon"
                                 onClick={() => {
-                                    setShowPassword(false);
+                                    setShowPassword3(false);
                                 }}
                             />
                         ) : (
                             <FaEyeSlash
                                 className="icon"
                                 onClick={() => {
-                                    setShowPassword(true);
+                                    setShowPassword3(true);
                                 }}
                             />
                         )}

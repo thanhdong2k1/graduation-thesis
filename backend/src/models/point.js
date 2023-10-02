@@ -12,6 +12,7 @@ module.exports = (sequelize, DataTypes) => {
       Point.belongsToMany(models.EvaluationCriteria, {
         through: models.PointCriteria,
         foreignKey: "pointId",
+        as: "pointData",
       });
     }
   }

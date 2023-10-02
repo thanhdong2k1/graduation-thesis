@@ -13,11 +13,13 @@ module.exports = (sequelize, DataTypes) => {
       Class.belongsTo(models.Block, {
         foreignKey: "blockId",
         targetKey: "id",
+        as: "blockData",
       });
 
       Class.belongsTo(models.Major, {
         foreignKey: "majorId",
         targetKey: "id",
+        as: "majorData",
       });
 
       Class.hasMany(models.Student, {

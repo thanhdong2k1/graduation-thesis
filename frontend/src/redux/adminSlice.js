@@ -6,6 +6,8 @@ const adminSlice = createSlice({
         isFetching: false,
         error: false,
         information: [],
+        councils: [],
+        totalRecords: 0,
         gender: [],
         role: [],
         position: [],
@@ -98,6 +100,19 @@ const adminSlice = createSlice({
             state.isFetching = false;
             state.error = true;
         },
+        getAdminCouncilsSuccess: (state, action) => {
+            state.councils = action.payload.councils;
+            state.totalRecords = action.payload.totalRecords;
+            state.isFetching = false;
+            state.error = false;
+        },
+        getAdminCouncilsStart: (state) => {
+            state.isFetching = true;
+        },
+        getAdminCouncilsFailed: (state) => {
+            state.error = true;
+            state.isFetching = false;
+        },
     },
 });
 
@@ -123,6 +138,9 @@ export const {
     getStatusFailed,
     getStatusStart,
     getStatusSuccess,
+    getAdminCouncilsFailed,
+    getAdminCouncilsStart,
+    getAdminCouncilsSuccess,
 } = adminSlice.actions;
 
 export const adminReducer = adminSlice.reducer;

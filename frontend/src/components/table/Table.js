@@ -1,24 +1,13 @@
 import { useCallback, useEffect, useState } from "react";
-import {
-    FaAngleDoubleLeft,
-    FaAngleDoubleRight,
-    FaAngleLeft,
-    FaAngleRight,
-} from "react-icons/fa";
+import { FaAngleDoubleLeft, FaAngleDoubleRight } from "react-icons/fa";
 import Select from "react-select";
 import DetailTable from "./DetailTable";
-import { BiAddToQueue, BiSearchAlt } from "react-icons/bi";
-import { SiMicrosoftexcel } from "react-icons/si";
+import { BiSearchAlt } from "react-icons/bi";
 import { HiOutlineDotsHorizontal } from "react-icons/hi";
-import { getAllTopics } from "../../redux/apiRequest";
-import {
-    customSelectStyles,
-    customStyles,
-} from "../../utils/customStyleReactSelect";
-import { GrTableAdd } from "react-icons/gr";
+import { customSelectStyles } from "../../utils/customStyleReactSelect";
 import { TbTableExport, TbTableImport, TbTablePlus } from "react-icons/tb";
 
-import { read, readFile, utils, writeFile, writeFileXLSX } from "xlsx";
+import { readFile, utils, writeFileXLSX } from "xlsx";
 import ModalPopup from "../ModelPopup/ModalPopup";
 import { actionsRemove } from "../../utils/actionsTable";
 import { useLocation } from "react-router-dom";
@@ -38,37 +27,40 @@ const Table = ({
     handleAdd,
     handleImport,
     handleExport,
+    saveDataImport,
 }) => {
+    // redux
     const currentUser = useSelector((state) => state.auth.currentUser);
     const path = useLocation();
-    const arrPath = path.pathname
-        .split("/")
-        .splice(1, 2)
-        .filter(
-            (value) =>
-                value != pathRoutes.R1.changePassword &&
-                value != pathRoutes.R1.changeInformation
-        );
-    const nameTable = routes
-        .filter((route) => route?.role == currentUser?.roleId)[0]
-        ?.pages.filter((page) => page.path == arrPath[1])[0]?.name;
 
-    // excel
+    const orderedPermissions = [
+        "PERE", // Thứ tự ưu tiên PERE
+        "PERI", // Thứ tự ưu tiên PERI
+        "PERC", // Thứ tự ưu tiên PERC
+    ];
+    // state
+    // excelState
     const [importValid, setImportValid] = useState(true);
     const [dataImport, setDataImport] = useState([]);
-    const [dataShow, setDataShow] = useState([]);
     const [showModal, setShowModal] = useState(false);
-    const tableDataImport = tableData.filter((data) => !data.actions);
+    const [defineTableImport, setDefineTableImport] = useState({
+        inputSearch: "",
+        isSearched: false,
+        offset: 0,
+        limit: 5,
+        pages: 0,
+        currentPage: 1,
+    });
+    const [isRtl, setIsRtl] = useState(false);
+
+    // dataState
+    const [dataShow, setDataShow] = useState([]);
+
+    // Handle
     const handleDeleteImport = (dataDelete) => {
         setDataImport(dataImport.filter((data) => data != dataDelete));
     };
-    tableDataImport.push({
-        header: "Hành động",
-        actions: [actionsRemove(handleDeleteImport)],
-    });
-    useEffect(() => {
-        // console.log("dataImport", dataImport);
-    }, [dataImport]);
+
     const importFile = async (e) => {
         /* get data as an ArrayBuffer */
         let file = e?.target?.files[0];
@@ -101,6 +93,17 @@ const Table = ({
                             // const columnName = headerItem.column;
                             // const columnValue = item[headerItem.header];
                             // obj[columnName] = columnValue;
+
+                            // if (column === "id") {
+                            //     obj[column] = null;
+                            // } else {
+                            //     if(column.includes("Data")){
+                            //         obj[column.replace("Data","Id")] = item[header];
+                            //     }
+                            //     else{
+                            //         obj[column] = item[header];
+                            //     }
+                            // }
                         }
                     }
                 });
@@ -115,7 +118,7 @@ const Table = ({
             //     Object.keys(convertedItem)
             // );
             if (Object.keys(convertedItem)?.length != 0) {
-                // console.log("Có sự trùng", convertedItem);
+                console.log("Có sự trùng", convertedItem);
                 setDataImport(convertedItem);
                 setDefineTableImport((prevState) => ({
                     ...prevState,
@@ -187,66 +190,10 @@ const Table = ({
             )} ${new Date().toLocaleTimeString("vi-VN")}.xlsx`
         );
     }, [dataImport]);
-    const saveDataImport = (data) => {
-        console.log("saveDataImport", data);
-    };
+    // const saveDataImport = (data) => {
+    //     console.log("saveDataImport", data);
+    // };
 
-    const [defineTableImport, setDefineTableImport] = useState({
-        inputSearch: "",
-        isSearched: false,
-        offset: 0,
-        limit: 5,
-        pages: 0,
-        currentPage: 1,
-    });
-    useEffect(() => {
-        setDefineTableImport((prevState) => ({
-            ...prevState,
-            currentPage: 1,
-            inputSearch: "",
-            isSearched: false,
-        }));
-    }, []);
-    useEffect(() => {
-        setDefineTableImport((prevState) => ({
-            ...prevState,
-            isSearched: false,
-            currentPage: 1,
-        }));
-    }, [defineTable.isSearched == true]);
-    useEffect(() => {
-        setDefineTableImport((prevState) => ({
-            ...prevState,
-            currentPage: 1,
-        }));
-        // apiUser.getAllCouncils(
-        //     defineTable.inputSearch,
-        //     (defineTable.currentPage - 1) * defineTable.limit,
-        //     defineTable.limit,
-        //     dispatch
-        // );
-    }, [defineTable.limit]);
-    //
-
-    const [isRtl, setIsRtl] = useState(false);
-    // const filterSearch =
-
-    const limitRecord = [
-        { label: "5 rows", value: 5 },
-        { label: "10 rows", value: 10 },
-        { label: "20 rows", value: 20 },
-    ];
-    const filterSearch = [];
-    tableData.map((data) => {
-        const obj = {};
-        if (!data.actions) {
-            const { header, column } = data;
-            obj["label"] = header;
-            obj["value"] = column;
-        }
-        filterSearch.push(obj);
-    });
-    console.log("filterSearch", filterSearch, limitRecord);
     const handleChangePage = (page) => {
         setDefineTable((prevState) => ({
             ...prevState,
@@ -276,14 +223,6 @@ const Table = ({
             }));
         }
     };
-    useEffect(() => {
-        setDefineTable((prevState) => ({
-            ...prevState,
-            filterSearch: filterSearch[1].value,
-            offset: 0,
-            currentPage: 1,
-        }));
-    }, []);
     const handleSearch = () => {
         setDefineTable((prevState) => ({
             ...prevState,
@@ -298,41 +237,46 @@ const Table = ({
         }));
     };
 
-    useEffect(() => {
-        // console.log("totalRecords", totalRecords);
-        setDefineTable((prevState) => ({
-            ...prevState,
-            pages:
-                Math.round(totalRecords / defineTable?.limit) <
-                totalRecords / defineTable?.limit
-                    ? Math.round(totalRecords / defineTable?.limit) + 1
-                    : Math.round(totalRecords / defineTable?.limit),
-        }));
-        // offset:bỏ qua 5 10          0 0
-        // limit: số lượng lấy 5 10      5 10
-        // pages: số trang
-        // currentPage: trang hiện tại 2   1
-        // console.log(
-        //     "defineTable.offset",
-        //     defineTable?.offset,
-        //     defineTable?.limit * defineTable?.currentPage
-        // );
-        const dataFilter = [];
-        datas.map((data, index) => {
-            if (
-                index >= defineTable?.offset &&
-                index < defineTable?.limit * defineTable?.currentPage
-            ) {
-                dataFilter.push(data);
+    // fetch onLoad
+    const arrPath = path.pathname
+        .split("/")
+        .splice(1, 2)
+        .filter(
+            (value) =>
+                value != pathRoutes.R1.changePassword &&
+                value != pathRoutes.R1.changeInformation
+        );
+    const nameTable = routes
+        .filter((route) => route?.role == currentUser?.roleId)[0]
+        ?.pages.filter((page) => page.path == arrPath[1])[0]?.name;
+    const tableDataImport = tableData.filter((data) => !data.actions);
+    tableDataImport.push({
+        header: "Hành động",
+        actions: [actionsRemove(handleDeleteImport)],
+    });
+
+    const limitRecord = [
+        { label: "5 rows", value: 5 },
+        { label: "10 rows", value: 10 },
+        { label: "20 rows", value: 20 },
+    ];
+    const filterSearch = [];
+    tableData.map((data) => {
+        const obj = {};
+        if (!data.actions) {
+            const { header, column, columnData } = data;
+            if (columnData) {
+                obj["label"] = header;
+                obj["value"] = columnData;
+                filterSearch.push(obj);
+            } else {
+                obj["label"] = header;
+                obj["value"] = column;
+                filterSearch.push(obj);
             }
-        });
-        setDataShow(dataFilter);
-    }, [
-        datas,
-        defineTable?.currentPage,
-        defineTable?.isSearched,
-        defineTable?.limit,
-    ]);
+        }
+    });
+
     const pagination = [];
     if (defineTable?.pages > 3 && defineTable?.currentPage == 1) {
         // console.log("page > 3");
@@ -431,15 +375,88 @@ const Table = ({
             }
         }
     }
+
+    // Effect
+    useEffect(() => {
+        setDefineTable((prevState) => ({
+            ...prevState,
+            filterSearch: filterSearch[1].value,
+            offset: 0,
+            currentPage: 1,
+        }));
+    }, []);
+    useEffect(() => {
+        // console.log("totalRecords", totalRecords);
+        setDefineTable((prevState) => ({
+            ...prevState,
+            pages:
+                Math.round(totalRecords / defineTable?.limit) <
+                totalRecords / defineTable?.limit
+                    ? Math.round(totalRecords / defineTable?.limit) + 1
+                    : Math.round(totalRecords / defineTable?.limit),
+        }));
+        // offset:bỏ qua 5 10          0 0
+        // limit: số lượng lấy 5 10      5 10
+        // pages: số trang
+        // currentPage: trang hiện tại 2   1
+        // console.log(
+        //     "defineTable.offset",
+        //     defineTable?.offset,
+        //     defineTable?.limit * defineTable?.currentPage
+        // );
+        const dataFilter = [];
+        datas.map((data, index) => {
+            if (
+                index >= defineTable?.offset &&
+                index < defineTable?.limit * defineTable?.currentPage
+            ) {
+                dataFilter.push(data);
+            }
+        });
+        setDataShow(dataFilter);
+    }, [
+        datas,
+        defineTable?.currentPage,
+        defineTable?.isSearched,
+        defineTable?.limit,
+    ]);
+    useEffect(() => {
+        setDefineTableImport((prevState) => ({
+            ...prevState,
+            currentPage: 1,
+            inputSearch: "",
+            isSearched: false,
+        }));
+    }, []);
+    useEffect(() => {
+        setDefineTableImport((prevState) => ({
+            ...prevState,
+            isSearched: false,
+            currentPage: 1,
+        }));
+    }, [defineTable.isSearched == true]);
+    useEffect(() => {
+        setDefineTableImport((prevState) => ({
+            ...prevState,
+            currentPage: 1,
+        }));
+        // apiUser.getAllCouncils(
+        //     defineTable.inputSearch,
+        //     (defineTable.currentPage - 1) * defineTable.limit,
+        //     defineTable.limit,
+        //     dispatch
+        // );
+    }, [defineTable.limit]);
+
     return (
         <>
-            <div className="flex flex-col gap-2 bg-whiteColor rounded-lg shadow-md p-2">
+            <div className="tableDiv flex flex-col gap-2 bg-whiteColor rounded-lg shadow-md p-2">
                 <div
-                    className={`headerDiv media-min-md:flex media-min-md:justify-between media-max-md:flex media-max-md:flex-col-reverse gap-2`}
+                    className={`headerTableDiv media-min-md:flex media-min-md:justify-between media-max-md:flex media-max-md:flex-col-reverse gap-2`}
                 >
                     {functionsModule && (
                         <>
-                            <div className="leftDiv w-[50%] flex justify-start items-center gap-2 media-max-md:w-full">
+                            <div className="leftHeaderTableDiv w-[50%] flex justify-start items-center gap-2 media-max-md:w-full">
                                 <div className="searchDiv w-[65%] flex h-[35px] border rounded-lg items-center px-2 py-1">
                                     <input
                                         type="text"
@@ -477,8 +494,113 @@ const Table = ({
                                 </div>
                             </div>
 
-                            <div className="functionsModuleDiv flex justify-end gap-2">
-                                {functionsModule && handleExport && (
+                            <div className="rightHeaderTableDiv functionsModuleDiv flex justify-end gap-2">
+                                {currentUser.roleId == "R1" ||
+                                currentUser.roleId == "R2" ? (
+                                    <>
+                                        <button
+                                            className="importDiv button"
+                                            onClick={exportFile}
+                                        >
+                                            <span>Export</span>
+                                            <TbTableExport className="icon" />
+                                        </button>
+                                        <button
+                                            className="importDiv button"
+                                            onClick={() => {
+                                                setShowModal(true);
+                                            }}
+                                        >
+                                            <span>Import</span>
+                                            <TbTableImport className="icon" />
+                                        </button>
+                                        <button
+                                            className="addDiv button"
+                                            onClick={handleAdd}
+                                        >
+                                            <span>Add</span>
+                                            <TbTablePlus className="icon" />
+                                        </button>
+                                    </>
+                                ) : currentUser?.permissions ? (
+                                    currentUser?.permissions
+                                        .split(",")
+                                        .includes("PERF") ? (
+                                        <>
+                                            <button
+                                                className="importDiv button"
+                                                onClick={exportFile}
+                                            >
+                                                <span>Export</span>
+                                                <TbTableExport className="icon" />
+                                            </button>
+                                            <button
+                                                className="importDiv button"
+                                                onClick={() => {
+                                                    setShowModal(true);
+                                                }}
+                                            >
+                                                <span>Import</span>
+                                                <TbTableImport className="icon" />
+                                            </button>
+                                            <button
+                                                className="addDiv button"
+                                                onClick={handleAdd}
+                                            >
+                                                <span>Add</span>
+                                                <TbTablePlus className="icon" />
+                                            </button>
+                                        </>
+                                    ) : (
+                                        orderedPermissions.map((permission) => {
+                                            if (
+                                                currentUser?.permissions
+                                                    .split(",")
+                                                    .includes(permission)
+                                            ) {
+                                                if (permission === "PERE") {
+                                                    return (
+                                                        <button
+                                                            className="importDiv button"
+                                                            onClick={exportFile}
+                                                        >
+                                                            <span>Export</span>
+                                                            <TbTableExport className="icon" />
+                                                        </button>
+                                                    );
+                                                }
+                                                if (permission === "PERI") {
+                                                    return (
+                                                        <button
+                                                            className="importDiv button"
+                                                            onClick={() => {
+                                                                setShowModal(
+                                                                    true
+                                                                );
+                                                            }}
+                                                        >
+                                                            <span>Import</span>
+                                                            <TbTableImport className="icon" />
+                                                        </button>
+                                                    );
+                                                }
+                                                if (permission === "PERC") {
+                                                    return (
+                                                        <button
+                                                            className="addDiv button"
+                                                            onClick={handleAdd}
+                                                        >
+                                                            <span>Add</span>
+                                                            <TbTablePlus className="icon" />
+                                                        </button>
+                                                    );
+                                                }
+                                            }
+                                            return null;
+                                        })
+                                    )
+                                ) : null}
+                                {/* {functionsModule && handleExport && (
                                     <button
                                         className="importDiv button"
                                         onClick={exportFile}
@@ -506,12 +628,12 @@ const Table = ({
                                         <span>Add</span>
                                         <TbTablePlus className="icon" />
                                     </button>
-                                )}
+                                )} */}
                             </div>
                         </>
                     )}
                 </div>
-                <div className="tableDetail border rounded-lg overflow-x-auto relative">
+                <div className="tableDetailDiv border rounded-lg overflow-x-auto relative">
                     <div className="inline-block min-w-full relative">
                         {/* <table>
                         <tfoot>
@@ -526,7 +648,7 @@ const Table = ({
                         <DetailTable tableData={tableData} datas={dataShow} />
                     </div>
                 </div>
-                <div className="paginationTable">
+                <div className="paginationTableDiv">
                     <div class="flex justify-end text-sm gap-2">
                         <div className="divLimitRows">
                             <Select

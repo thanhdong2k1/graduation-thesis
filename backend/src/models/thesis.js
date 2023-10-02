@@ -18,39 +18,48 @@ module.exports = (sequelize, DataTypes) => {
       Thesis.belongsTo(models.Student, {
         foreignKey: "studentId",
         targetKey: "id",
+        as: "studentData",
       });
       Thesis.belongsTo(models.Lecturer, {
-        foreignKey: "thesisAdvisor",
+        foreignKey: "thesisAdvisorId",
         targetKey: "id",
+        as: "thesisAdvisorData",
       });
       Thesis.belongsToMany(models.CouncilDetail, {
         through: models.Point,
         foreignKey: "thesisId",
+        as: "thesisData",
       });
       Thesis.belongsTo(models.Topic, {
         foreignKey: "topicId",
         targetKey: "id",
+        as: "topicData",
       });
       Thesis.belongsTo(models.ThesisSession, {
         foreignKey: "thesisSessionId",
         targetKey: "id",
+        as: "thesisSessionData",
       });
       Thesis.belongsTo(models.Council, {
         foreignKey: "councilId",
         targetKey: "id",
+        as: "councilData",
       });
 
       Thesis.belongsTo(models.Allcode, {
-        foreignKey: "result",
+        foreignKey: "resultId",
         targetKey: "code",
+        as: "resultData",
       });
       Thesis.belongsTo(models.Allcode, {
-        foreignKey: "councilStatus",
+        foreignKey: "councilStatusId",
         targetKey: "code",
+        as: "councilStatusData",
       });
       Thesis.belongsTo(models.Allcode, {
-        foreignKey: "thesisAdvisorStatus",
+        foreignKey: "thesisAdvisorStatusId",
         targetKey: "code",
+        as: "thesisAdvisorStatusData",
       });
     }
   }
@@ -62,17 +71,17 @@ module.exports = (sequelize, DataTypes) => {
       thesisEndDate: DataTypes.STRING,
       reportFile: DataTypes.STRING,
       totalScore: DataTypes.STRING,
-      result: DataTypes.STRING,
+      resultId: DataTypes.STRING,
       topicId: {
         type: DataTypes.INTEGER,
         unique: true,
       },
       studentId: DataTypes.INTEGER,
-      thesisAdvisor: DataTypes.INTEGER,
-      thesisAdvisorStatus: DataTypes.STRING,
+      thesisAdvisorId: DataTypes.INTEGER,
+      thesisAdvisorStatusId: DataTypes.STRING,
       thesisSessionId: DataTypes.INTEGER,
       councilId: DataTypes.INTEGER,
-      councilStatus: DataTypes.STRING,
+      councilStatusId: DataTypes.STRING,
     },
     {
       sequelize,

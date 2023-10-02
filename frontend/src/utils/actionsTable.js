@@ -6,6 +6,7 @@ export const actionsEdit = (handle) => {
         handle: handle,
         icon: <FaPencil className="icon hover:text-PrimaryColor" />,
         type: "Edit",
+        permissions: "PERE",
     };
 };
 export const actionsDetail = (handle) => {
@@ -13,6 +14,7 @@ export const actionsDetail = (handle) => {
         handle: handle,
         icon: <FaRegEye className="icon hover:text-PrimaryColor" />,
         type: "Detail",
+        permissions: "PERR",
     };
 };
 export const actionsRemove = (handle) => {
@@ -20,5 +22,6 @@ export const actionsRemove = (handle) => {
         handle: handle,
         icon: <FaRegTrashAlt className="icon hover:text-PrimaryColor" />,
         type: "Remove",
+        permissions: "PERD",
     };
 };

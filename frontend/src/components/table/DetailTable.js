@@ -1,14 +1,140 @@
 import { useSelector } from "react-redux";
 
 const DetailTable = ({ tableData, datas }) => {
+    const currentUser = useSelector((state) => state.auth.currentUser);
     const isFetching = useSelector((state) => state.user.isFetching);
     const error = useSelector((state) => state.user.error);
-    console.log("datas", datas, isFetching, error);
-    datas.map((data) => {
+    // console.log("datas", datas, isFetching, error);
+    datas?.map((data) => {
         tableData?.map((table, indexTable) => {
-            console.log("data, table", data, typeof data[table?.column] === 'object'?data[table?.column]?.valueVi:data[table?.column]);
+            // console.log("data, table", data, typeof data[table?.column] === 'object'?data[table?.column]?.valueVi:data[table?.column]);
+            // console.log("data, table", data, table);
+            table?.actions?.map((action) => {
+                // console.log("data", data, table, action);
+                if (
+                    currentUser?.roleId == "R1" ||
+                    currentUser?.roleId == "R2"
+                ) {
+                    console.log("actions", action);
+                } else {
+                    if (currentUser?.permissions) {
+                        if (
+                            currentUser?.permissions.split(",").includes("PERF")
+                        ) {
+                            console.log("actions", action);
+                        } else {
+                            if (
+                                currentUser?.permissions
+                                    .split(",")
+                                    .includes(action?.permissions)
+                            ) {
+                                console.log("actions", action);
+                            } else {
+                                if (data[table?.isRowPer] == currentUser?.id) {
+                                    console.log("actions", action);
+                                }
+                            }
+                        }
+                    } else {
+                        if (data[table?.isRowPer] == currentUser?.id) {
+                            console.log("actions", action);
+                            if (table?.isPerR) {
+                                if (action?.permissions == "PERR") {
+                                    console.log("actions", action);
+                                }
+                            }
+                        }
+                    }
+                }
+            });
         });
     });
+
+    // datas?.map((data) => {
+    //     tableData?.map((table, indexTable) => {
+    //         // console.log("data, table", data, typeof data[table?.column] === 'object'?data[table?.column]?.valueVi:data[table?.column]);
+    //         // console.log("data, table", data, table);
+    //         table?.actions?.map((action) => {
+    //             // console.log("data", data, table, action);
+    //             if (
+    //                 currentUser?.roleId == "R1" ||
+    //                 currentUser?.roleId == "R2"
+    //             ) {
+    //                 <span
+    //                     onClick={() => {
+    //                         action?.handle(data);
+    //                     }}
+    //                     className="overflow-hidden group "
+    //                 >
+    //                     {action?.icon}
+    //                     <span
+    //                         className={`hidden no-underline group-hover:block group-hover:absolute -translate-x-[50%] -translate-y-[170%] text-whiteColor bg-textColor shadow-lg p-1 z-10 rounded-lg text-smallestFontSize`}
+    //                     >
+    //                         {action?.type}
+    //                     </span>
+    //                 </span>;
+    //             } else {
+    //                 if (currentUser?.permissions) {
+    //                     if (
+    //                         currentUser?.permissions.split(",").includes("PERF")
+    //                     ) {
+    //                         <span
+    //                             onClick={() => {
+    //                                 action?.handle(data);
+    //                             }}
+    //                             className="overflow-hidden group "
+    //                         >
+    //                             {action?.icon}
+    //                             <span
+    //                                 className={`hidden no-underline group-hover:block group-hover:absolute -translate-x-[50%] -translate-y-[170%] text-whiteColor bg-textColor shadow-lg p-1 z-10 rounded-lg text-smallestFontSize`}
+    //                             >
+    //                                 {action?.type}
+    //                             </span>
+    //                         </span>;
+    //                     } else {
+    //                         if (
+    //                             currentUser?.permissions
+    //                                 .split(",")
+    //                                 .includes(action?.permissions)
+    //                         ) {
+    //                             <span
+    //                                 onClick={() => {
+    //                                     action?.handle(data);
+    //                                 }}
+    //                                 className="overflow-hidden group "
+    //                             >
+    //                                 {action?.icon}
+    //                                 <span
+    //                                     className={`hidden no-underline group-hover:block group-hover:absolute -translate-x-[50%] -translate-y-[170%] text-whiteColor bg-textColor shadow-lg p-1 z-10 rounded-lg text-smallestFontSize`}
+    //                                 >
+    //                                     {action?.type}
+    //                                 </span>
+    //                             </span>;
+    //                         } else {
+    //                             if (
+    //                                 data[table?.isRowPer] == currentUser?.id
+    //                             ) {
+    //                                 <span
+    //                                     onClick={() => {
+    //                                         action?.handle(data);
+    //                                     }}
+    //                                     className="overflow-hidden group "
+    //                                 >
+    //                                     {action?.icon}
+    //                                     <span
+    //                                         className={`hidden no-underline group-hover:block group-hover:absolute -translate-x-[50%] -translate-y-[170%] text-whiteColor bg-textColor shadow-lg p-1 z-10 rounded-lg text-smallestFontSize`}
+    //                                     >
+    //                                         {action?.type}
+    //                                     </span>
+    //                                 </span>;
+    //                             }
+    //                         }
+    //                     }
+    //                 }
+    //             }
+    //         });
+    //     });
+    // });
     return (
         <div className="border rounded-lg relative min-w-full">
             <table className="min-w-full text-left text-normalFontSize media-max-md:text-smallFontSize font-medium relative">
@@ -32,11 +158,11 @@ const DetailTable = ({ tableData, datas }) => {
                     </tr>
                 </thead>
                 <tbody className="relative">
-                    {datas.length > 0 ? (
+                    {datas?.length > 0 ? (
                         datas?.map((data, indexData) => (
                             <tr
                                 className={`${
-                                    indexData != datas.length - 1
+                                    indexData != datas?.length - 1
                                         ? "border-b"
                                         : ""
                                 } relative transition duration-300 ease-in-out hover:bg-neutral-100`}
@@ -50,7 +176,7 @@ const DetailTable = ({ tableData, datas }) => {
                                         (!table?.actions ? (
                                             <td
                                                 className={`${
-                                                    indexData != datas.length
+                                                    indexData != datas?.length
                                                         ? "border-r"
                                                         : ""
                                                 } whitespace-nowrap px-2 py-1 ${
@@ -59,12 +185,31 @@ const DetailTable = ({ tableData, datas }) => {
                                                     table?.maxWidth
                                                 } overflow-hidden text-ellipsis group`}
                                             >
-                                                {typeof data[table?.column] === 'object'?data[table?.column]?.valueVi?data[table?.column]?.valueVi:data[table?.column]?.name:data[table?.column]}
+                                                {data[table?.columnData]
+                                                    ? data[table?.columnData]
+                                                          ?.valueVi
+                                                        ? data[
+                                                              table?.columnData
+                                                          ]?.valueVi
+                                                        : data[
+                                                              table?.columnData
+                                                          ]?.name
+                                                    : data[table?.column]}
+
+                                                {/* {typeof data[table?.column] ===
+                                                "object"
+                                                    ? data[table?.column]
+                                                          ?.valueVi
+                                                        ? data[table?.column]
+                                                              ?.valueVi
+                                                        : data[table?.column]
+                                                              ?.name
+                                                    : data[table?.column]} */}
                                                 {/* {typeof data[table?.column] === 'object'?data[table?.column]?.name:null}
                                                 {typeof data[table?.column] !== 'object'?data[table?.column]:null} */}
 
                                                 {/* {data[table?.column]} */}
-                                                {table.tooltip && (
+                                                {table?.tooltip && (
                                                     <span
                                                         className={`hidden no-underline group-hover:block group-hover:absolute -translate-y-[200%] text-whiteColor bg-textColor shadow-lg p-1 z-10 rounded-lg text-smallestFontSize whitespace-break-spaces`}
                                                     >
@@ -76,27 +221,221 @@ const DetailTable = ({ tableData, datas }) => {
                                             <td
                                                 className={`actions flex justify-evenly items-center whitespace-nowrap px-2 py-1 relative`}
                                             >
-                                                {table?.actions?.map(
-                                                    (action) => (
+                                                {table?.actions?.map((action) =>
+                                                    currentUser?.roleId ==
+                                                        "R1" ||
+                                                    currentUser?.roleId ==
+                                                        "R2" ? (
                                                         <span
                                                             onClick={() => {
-                                                                action.handle(
+                                                                action?.handle(
                                                                     data
                                                                 );
                                                             }}
                                                             className="overflow-hidden group "
                                                         >
-                                                            {action.icon}
-                                                            {/* {table.tooltip&&( */}
+                                                            {action?.icon}
                                                             <span
                                                                 className={`hidden no-underline group-hover:block group-hover:absolute -translate-x-[50%] -translate-y-[170%] text-whiteColor bg-textColor shadow-lg p-1 z-10 rounded-lg text-smallestFontSize`}
                                                             >
-                                                                {action.type}
+                                                                {action?.type}
                                                             </span>
-                                                            {/* )} */}
+                                                        </span>
+                                                    ) : currentUser?.permissions ? (
+                                                        currentUser?.permissions
+                                                            .split(",")
+                                                            .includes(
+                                                                "PERF"
+                                                            ) ? (
+                                                            <span
+                                                                onClick={() => {
+                                                                    action?.handle(
+                                                                        data
+                                                                    );
+                                                                }}
+                                                                className="overflow-hidden group "
+                                                            >
+                                                                {action?.icon}
+                                                                <span
+                                                                    className={`hidden no-underline group-hover:block group-hover:absolute -translate-x-[50%] -translate-y-[170%] text-whiteColor bg-textColor shadow-lg p-1 z-10 rounded-lg text-smallestFontSize`}
+                                                                >
+                                                                    {
+                                                                        action?.type
+                                                                    }
+                                                                </span>
+                                                            </span>
+                                                        ) : currentUser?.permissions
+                                                              .split(",")
+                                                              .includes(
+                                                                  action?.permissions
+                                                              ) ? (
+                                                            <span
+                                                                onClick={() => {
+                                                                    action?.handle(
+                                                                        data
+                                                                    );
+                                                                }}
+                                                                className="overflow-hidden group "
+                                                            >
+                                                                {action?.icon}
+                                                                <span
+                                                                    className={`hidden no-underline group-hover:block group-hover:absolute -translate-x-[50%] -translate-y-[170%] text-whiteColor bg-textColor shadow-lg p-1 z-10 rounded-lg text-smallestFontSize`}
+                                                                >
+                                                                    {
+                                                                        action?.type
+                                                                    }
+                                                                </span>
+                                                            </span>
+                                                        ) : data[
+                                                              table?.isRowPer
+                                                          ] ==
+                                                          currentUser?.id ? (
+                                                            <span
+                                                                onClick={() => {
+                                                                    action?.handle(
+                                                                        data
+                                                                    );
+                                                                }}
+                                                                className="overflow-hidden group "
+                                                            >
+                                                                {action?.icon}
+                                                                <span
+                                                                    className={`hidden no-underline group-hover:block group-hover:absolute -translate-x-[50%] -translate-y-[170%] text-whiteColor bg-textColor shadow-lg p-1 z-10 rounded-lg text-smallestFontSize`}
+                                                                >
+                                                                    {
+                                                                        action?.type
+                                                                    }
+                                                                </span>
+                                                            </span>
+                                                        ) : null
+                                                    ) : data[table?.isRowPer] ==
+                                                      currentUser?.id ? (
+                                                        <span
+                                                            onClick={() => {
+                                                                action?.handle(
+                                                                    data
+                                                                );
+                                                            }}
+                                                            className="overflow-hidden group "
+                                                        >
+                                                            {action?.icon}
+                                                            <span
+                                                                className={`hidden no-underline group-hover:block group-hover:absolute -translate-x-[50%] -translate-y-[170%] text-whiteColor bg-textColor shadow-lg p-1 z-10 rounded-lg text-smallestFontSize`}
+                                                            >
+                                                                {action?.type}
+                                                            </span>
+                                                        </span>
+                                                    ) : table?.isPerR ? (
+                                                        action?.permissions ==
+                                                        "PERR" ? (
+                                                            <span
+                                                                onClick={() => {
+                                                                    action?.handle(
+                                                                        data
+                                                                    );
+                                                                }}
+                                                                className="overflow-hidden group "
+                                                            >
+                                                                {action?.icon}
+                                                                <span
+                                                                    className={`hidden no-underline group-hover:block group-hover:absolute -translate-x-[50%] -translate-y-[170%] text-whiteColor bg-textColor shadow-lg p-1 z-10 rounded-lg text-smallestFontSize`}
+                                                                >
+                                                                    {
+                                                                        action?.type
+                                                                    }
+                                                                </span>
+                                                            </span>
+                                                        ) : null
+                                                    ) : null
+                                                )}
+                                                {/* {table?.actions?.map(
+                                                    (action) => (
+                                                        <span
+                                                            onClick={() => {
+                                                                action?.handle(
+                                                                    data
+                                                                );
+                                                            }}
+                                                            className="overflow-hidden group "
+                                                        >
+                                                            {action?.icon}
+                                                            <span
+                                                                className={`hidden no-underline group-hover:block group-hover:absolute -translate-x-[50%] -translate-y-[170%] text-whiteColor bg-textColor shadow-lg p-1 z-10 rounded-lg text-smallestFontSize`}
+                                                            >
+                                                                {action?.type}
+                                                            </span>
                                                         </span>
                                                     )
-                                                )}
+                                                )} */}
+                                                {/* {table?.actions?.map((action) =>
+                                                    action &&
+                                                    currentUser?.permissions !=
+                                                        "PERF" ? (
+                                                        table?.isRowPer ? (
+                                                            data[
+                                                                table
+                                                                    ?.isRowPer
+                                                            ] ==
+                                                            currentUser?.id ? (
+                                                                <span
+                                                                    onClick={() => {
+                                                                        action?.handle(
+                                                                            data
+                                                                        );
+                                                                    }}
+                                                                    className="overflow-hidden group "
+                                                                >
+                                                                    {
+                                                                        action?.icon
+                                                                    }
+                                                                    <span
+                                                                        className={`hidden no-underline group-hover:block group-hover:absolute -translate-x-[50%] -translate-y-[170%] text-whiteColor bg-textColor shadow-lg p-1 z-10 rounded-lg text-smallestFontSize`}
+                                                                    >
+                                                                        {
+                                                                            action?.type
+                                                                        }
+                                                                    </span>
+                                                                </span>
+                                                            ) : null
+                                                        ) : (
+                                                            <span
+                                                                onClick={() => {
+                                                                    action?.handle(
+                                                                        data
+                                                                    );
+                                                                }}
+                                                                className="overflow-hidden group "
+                                                            >
+                                                                {action?.icon}
+
+                                                                <span
+                                                                    className={`hidden no-underline group-hover:block group-hover:absolute -translate-x-[50%] -translate-y-[170%] text-whiteColor bg-textColor shadow-lg p-1 z-10 rounded-lg text-smallestFontSize`}
+                                                                >
+                                                                    {
+                                                                        action?.type
+                                                                    }
+                                                                </span>
+                                                            </span>
+                                                        )
+                                                    ) : (
+                                                        <span
+                                                            onClick={() => {
+                                                                action?.handle(
+                                                                    data
+                                                                );
+                                                            }}
+                                                            className="overflow-hidden group "
+                                                        >
+                                                            {action?.icon}
+
+                                                            <span
+                                                                className={`hidden no-underline group-hover:block group-hover:absolute -translate-x-[50%] -translate-y-[170%] text-whiteColor bg-textColor shadow-lg p-1 z-10 rounded-lg text-smallestFontSize`}
+                                                            >
+                                                                {action?.type}
+                                                            </span>
+                                                        </span>
+                                                    )
+                                                )} */}
                                             </td>
                                         ))
                                 )}

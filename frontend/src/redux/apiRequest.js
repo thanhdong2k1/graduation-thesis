@@ -18,6 +18,9 @@ import {
     getTopicsSuccess,
 } from "./userSlice";
 import {
+    getAdminCouncilsFailed,
+    getAdminCouncilsStart,
+    getAdminCouncilsSuccess,
     getGenderFailed,
     getGenderStart,
     getGenderSuccess,
@@ -25,7 +28,7 @@ import {
 } from "./adminSlice";
 
 export const apiAuth = {
-    logginUser: async ({data, dispatch, navigate}) => {
+    logginUser: async ({ data, dispatch, navigate }) => {
         try {
             dispatch(logginStart());
             const res = await axios.post("/api/auth/login", {
@@ -41,7 +44,7 @@ export const apiAuth = {
                         res.data?.user?.roleId == "R1"
                             ? "admin"
                             : res.data?.user?.roleId == "R2"
-                            ? "secretary"
+                            ? "dean"
                             : res.data?.user?.roleId == "R3"
                             ? "lecturer"
                             : res.data?.user?.roleId == "R4"
@@ -49,11 +52,15 @@ export const apiAuth = {
                             : ""
                     }`
                 );
+                return res?.data;
             } else {
-                // setShowMessage(res?.data?.errMessage);
+                dispatch(logginFailed());
+                return res?.data;
             }
         } catch (error) {
+            console.log(error);
             dispatch(logginFailed());
+            return error?.response?.data;
             // setShowMessage(res?.res?.data?.errMessage);
         }
     },
@@ -136,9 +143,9 @@ export const apiUser = {
 };
 
 export const apiAdmin = {
-    apiChangePassword: async (user, oldPassword, newPassword) => {
+    apiChangePassword: async (user, oldPassword, newPassword, axiosJWT) => {
         try {
-            const res = await axios.post(
+            const res = await axiosJWT.post(
                 "/api/admin/change-password",
                 {
                     email: user?.email,
@@ -159,9 +166,9 @@ export const apiAdmin = {
             }
         }
     },
-    apiChangeInformation: async (user, data) => {
+    apiChangeInformation: async (user, data, axiosJWT) => {
         try {
-            const res = await axios.post(
+            const res = await axiosJWT.post(
                 "/api/admin/change-information",
                 {
                     email: user?.email,
@@ -187,9 +194,9 @@ export const apiAdmin = {
         }
     },
 
-    apiGetInformation: async (user, dispatch) => {
+    apiGetInformation: async (user, dispatch, axiosJWT) => {
         try {
-            const res = await axios.post(
+            const res = await axiosJWT.post(
                 "/api/admin/get-information",
                 {
                     email: user?.email,
@@ -213,7 +220,7 @@ export const apiAdmin = {
         try {
             dispatch(getGenderStart());
             let code = [];
-            const res = await axios.post(
+            const res = await axiosJWT.post(
                 "/api/admin/get-allcode",
                 {
                     type: "gender",
@@ -241,7 +248,7 @@ export const apiAdmin = {
         try {
             dispatch(getGenderStart());
             let code = [];
-            const res = await axios.post(
+            const res = await axiosJWT.post(
                 "/api/admin/get-allcode",
                 {
                     type: "handle",
@@ -269,7 +276,7 @@ export const apiAdmin = {
         try {
             dispatch(getGenderStart());
             let code = [];
-            const res = await axios.post(
+            const res = await axiosJWT.post(
                 "/api/admin/get-allcode",
                 {
                     type: "position",
@@ -297,7 +304,7 @@ export const apiAdmin = {
         try {
             dispatch(getGenderStart());
             let code = [];
-            const res = await axios.post(
+            const res = await axiosJWT.post(
                 "/api/admin/get-allcode",
                 {
                     type: "result",
@@ -325,7 +332,7 @@ export const apiAdmin = {
         try {
             dispatch(getGenderStart());
             let code = [];
-            const res = await axios.post(
+            const res = await axiosJWT.post(
                 "/api/admin/get-allcode",
                 {
                     type: "role",
@@ -353,7 +360,7 @@ export const apiAdmin = {
         try {
             dispatch(getGenderStart());
             let code = [];
-            const res = await axios.post(
+            const res = await axiosJWT.post(
                 "/api/admin/get-allcode",
                 {
                     type: "status",
@@ -377,18 +384,54 @@ export const apiAdmin = {
             }
         }
     },
-    getAllCouncils: async ({ inputSearch, filterSearch, dispatch }) => {
+    getAllCouncils: async ({
+        user,
+        inputSearch,
+        filterSearch,
+        dispatch,
+        axiosJWT,
+    }) => {
         try {
-            dispatch(getCouncilsStart());
+            dispatch(getAdminCouncilsStart());
             // console.log("data api getalltopic", offset, limit);
-            const res = await axios.post("/api/admin/councils", {
-                inputSearch: inputSearch,
-                filterSearch: filterSearch,
-            });
-            dispatch(getCouncilsSuccess(res?.data));
+            const res = await axiosJWT.post(
+                "/api/admin/councils",
+                {
+                    inputSearch: inputSearch,
+                    filterSearch: filterSearch,
+                },
+                {
+                    headers: {
+                        token: "Bearer " + user?.accessToken,
+                    },
+                }
+            );
+            dispatch(getAdminCouncilsSuccess(res?.data));
         } catch (error) {
             console.log(error);
-            dispatch(getCouncilsFailed());
+            dispatch(getAdminCouncilsFailed());
+        }
+    },
+    importCouncils: async ({ user, data, axiosJWT }) => {
+        try {
+            // console.log("data api getalltopic", offset, limit);
+            const res = await axiosJWT.post(
+                "/api/admin/import-councils",
+                {
+                    data: data,
+                },
+                {
+                    headers: {
+                        token: "Bearer " + user?.accessToken,
+                    },
+                }
+            );
+            return res?.data;
+        } catch (error) {
+            console.log(error?.response?.data);
+            if (error?.response?.status) {
+                return error?.response?.data;
+            }
         }
     },
 };

@@ -26,6 +26,7 @@ module.exports = (sequelize, DataTypes) => {
       Major.belongsTo(models.Department, {
         foreignKey: "departmentId",
         targetKey: "id",
+        as: "departmentData",
       });
       Major.hasMany(models.Class, {
         foreignKey: "majorId",

@@ -18,12 +18,15 @@ import { customSelectStyles } from "../utils/customStyleReactSelect";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import moment from "moment/moment";
+import { createAxios } from "../utils/createInstance";
+import { logginSuccess } from "../redux/authSlice";
 
 const ChangeInformation = () => {
     const currentUser = useSelector((state) => state.auth.currentUser);
+    const dispatch = useDispatch();
+    let axiosJWT = createAxios(currentUser, dispatch, logginSuccess);
     const gender = useSelector((state) => state.admin.gender);
     const informationUser = useSelector((state) => state.admin.information);
-    const dispatch = useDispatch();
     const [showModal, setShowModal] = useState(false);
     const [srcImg, setSrcImg] = useState(
         "https://png.pngtree.com/png-vector/20191026/ourlarge/pngtree-avatar-vector-icon-white-background-png-image_1870181.jpg"
@@ -38,20 +41,62 @@ const ChangeInformation = () => {
         setValue,
         reset,
     } = useForm();
+    const handleSaveImage = async () => {
+        const id = toast.loading("Please wait...");
+        const datasend = {
+            image: previewImg,
+        };
+        // console.log(datasend);
+        await apiAdmin
+            .apiChangeInformation(currentUser, datasend, axiosJWT)
+            .then((res) => {
+                if (res?.errCode > 0) {
+                    // console.log(res);
+                    toast.update(id, {
+                        render: res?.errMessage,
+                        type: "error",
+                        isLoading: false,
+                        closeButton: true,
+                        autoClose: 1500,
+                        pauseOnFocusLoss: true,
+                    });
+                } else {
+                    // console.log(res);
+                    toast.update(id, {
+                        render: res?.errMessage,
+                        type: "success",
+                        isLoading: false,
+                        closeButton: true,
+                        autoClose: 1500,
+                        pauseOnFocusLoss: true,
+                    });
+                    // reset();
+                    apiAdmin.apiGetInformation(currentUser, dispatch, axiosJWT);
+                }
+            })
+            .catch((error) => {
+                // console.log(error);
+                toast.update(id, {
+                    render: "Đã xảy ra lỗi, vui lòng thử lại sau",
+                    type: "error",
+                    isLoading: false,
+                    closeButton: true,
+                    autoClose: 1500,
+                    pauseOnFocusLoss: true,
+                });
+            });
+    };
     const onSubmit = async (data) => {
         const id = toast.loading("Please wait...");
         const datasend = {
             ...data,
-            image: previewImg
-                ? previewImg
-                : new Buffer(informationUser?.image, "base64").toString(
-                      "binary"
-                  ),
-            birthday: new Date(moment(data.birthday, "DD/MM/YYYY")).toLocaleDateString("vi-VN"),
+            birthday: new Date(
+                moment(data.birthday, "DD/MM/YYYY")
+            ).toLocaleDateString("vi-VN"),
         };
         // console.log(datasend);
         await apiAdmin
-            .apiChangeInformation(currentUser, datasend)
+            .apiChangeInformation(currentUser, datasend, axiosJWT)
             .then((res) => {
                 if (res?.errCode > 0) {
                     // console.log(res);
@@ -102,9 +147,9 @@ const ChangeInformation = () => {
     };
     useEffect(() => {
         // console.log("useEffect changeInfor");
-        apiAdmin.apiGetInformation(currentUser, dispatch);
-        apiAdmin.apiGetGender(currentUser, dispatch);
-    }, [handleSubmit]);
+        apiAdmin.apiGetInformation(currentUser, dispatch, axiosJWT);
+        apiAdmin.apiGetGender(currentUser, dispatch, axiosJWT);
+    }, [currentUser]);
     useEffect(() => {
         if (informationUser?.image) {
             const imageBuffer = new Buffer(
@@ -155,7 +200,7 @@ const ChangeInformation = () => {
                 <div className="row flex justify-center items-center w-full">
                     <div className="w-28 h-28 p-1 bg-whiteColor rounded-full relative">
                         <img
-                            src={previewImg ? previewImg : srcImg}
+                            src={srcImg}
                             className="w-[6.5rem] h-[6.5rem] rounded-full"
                         />
                         <div
@@ -167,13 +212,12 @@ const ChangeInformation = () => {
                             <FaPenAlt className="icon" />
                         </div>
                     </div>
-
                     <ModalPopup
                         showModal={showModal}
                         setShowModal={setShowModal}
                         title={"Change Avatar"}
                         result={previewImg}
-                        setResult={setPreviewImg}
+                        setResult={handleSaveImage}
                     >
                         <div className="">
                             <Avatar

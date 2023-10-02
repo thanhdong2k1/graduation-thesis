@@ -40,6 +40,7 @@ module.exports = (sequelize, DataTypes) => {
       Lecturer.belongsTo(models.Department, {
         foreignKey: "departmentId",
         targetKey: "id",
+        as: "departmentData",
       });
       Lecturer.hasMany(models.Department, {
         foreignKey: "deanId",
@@ -48,6 +49,7 @@ module.exports = (sequelize, DataTypes) => {
       Lecturer.belongsToMany(models.Council, {
         through: models.CouncilDetail,
         foreignKey: "lecturerId",
+        // as: "lecturerData",
       });
       
       Lecturer.hasMany(models.Thesis, {
@@ -61,14 +63,17 @@ module.exports = (sequelize, DataTypes) => {
       Lecturer.belongsTo(models.Allcode, {
         foreignKey: "genderId",
         targetKey: "code",
+        as: "genderData",
       });
       Lecturer.belongsTo(models.Allcode, {
         foreignKey: "statusId",
         targetKey: "code",
+        as: "statusData",
       });
       Lecturer.belongsTo(models.Allcode, {
         foreignKey: "roleId",
         targetKey: "code",
+        as: "roleData",
       });
     }
   }
@@ -86,6 +91,8 @@ module.exports = (sequelize, DataTypes) => {
       statusId: DataTypes.STRING,
       departmentId: DataTypes.INTEGER,
       image: DataTypes.BLOB,
+      permissions: DataTypes.STRING,
+      refreshToken: DataTypes.STRING,
     },
     {
       sequelize,

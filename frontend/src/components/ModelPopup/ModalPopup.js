@@ -13,6 +13,9 @@ const ModalPopup = ({
         setResult && setResult(result);
         console.log(result);
     };
+    const handleClose = async () => {
+        setShowModal(false);
+    };
     return (
         <>
             {showModal ? (
@@ -89,9 +92,7 @@ const ModalPopup = ({
                                                     className="text-PrimaryColor background-transparent font-bold uppercase px-6 py-2 text-sm outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150"
                                                     type="button"
                                                     onClick={() => {
-                                                        setShowModal(false);
-                                                        setResult &&
-                                                            setResult(null);
+                                                        handleClose();
                                                     }}
                                                 >
                                                     Close

@@ -37,14 +37,17 @@ module.exports = (sequelize, DataTypes) => {
       Student.belongsTo(models.Allcode, {
         foreignKey: "genderId",
         targetKey: "code",
+        as: "genderData",
       });
       Student.belongsTo(models.Allcode, {
         foreignKey: "roleId",
         targetKey: "code",
+        as: "roleData",
       });
       Student.belongsTo(models.Allcode, {
         foreignKey: "statusId",
         targetKey: "code",
+        as: "statusData",
       });
     }
   }
@@ -62,6 +65,8 @@ module.exports = (sequelize, DataTypes) => {
       classId: DataTypes.INTEGER,
       roleId: DataTypes.STRING,
       image: DataTypes.BLOB,
+      permissions: DataTypes.STRING,
+      refreshToken: DataTypes.STRING,
     },
     {
       sequelize,

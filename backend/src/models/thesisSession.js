@@ -17,6 +17,7 @@ module.exports = (sequelize, DataTypes) => {
       ThesisSession.belongsTo(models.EvaluationMethod, {
         foreignKey: "evaluationMethodId",
         targetKey: "id",
+        as: "evaluationMethodData",
       });
       ThesisSession.hasMany(models.Council, {
         foreignKey: "thesisSessionId",

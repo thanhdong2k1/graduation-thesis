@@ -3,8 +3,9 @@ const pathRoutes = {
         home: "home",
         changeInformation: "change-information",
         changePassword: "change-password",
-        class: "class",
-        classDetail: "class/:id",
+        council: "council",
+        addCouncil: "council/add-council",
+        councilDetail: "council/:id",
     },
 };
 

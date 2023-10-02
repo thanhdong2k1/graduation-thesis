@@ -19,6 +19,13 @@ export const customSelectStyles = {
         height: `${targetHeight - 1 - 1}px`,
         padding: "0px 8px",
     }),
+    option: (base, state) => ({
+        ...base,
+        // borderBottom: '1px dotted pink',
+        // color: state.isSelected ? 'red' : 'blue',
+        padding: "4px 8px",
+        fontWeight: "500",
+      }),
     singleValue: (base) => ({
         ...base,
         color: "#686868",

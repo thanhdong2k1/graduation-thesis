@@ -11,6 +11,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { MdKeyboardBackspace } from "react-icons/md";
 import { apiAuth, logginUser } from "../../redux/apiRequest";
 import { useForm } from "react-hook-form";
+import { toast } from "react-toastify";
 const CardAuth = () => {
     const dispatch = useDispatch();
     const {
@@ -30,7 +31,7 @@ const CardAuth = () => {
         currentUser?.roleId == "R1"
             ? "admin"
             : currentUser?.roleId == "R2"
-            ? "secretary"
+            ? "dean"
             : currentUser?.roleId == "R3"
             ? "lecturer"
             : currentUser?.roleId == "R4"
@@ -42,7 +43,7 @@ const CardAuth = () => {
 
     const navigate = useNavigate();
     useEffect(() => {
-        // console.log("Đã useffect");
+        console.log("Đã useffect");
         if (rolePath == "") {
             // console.log("Đã vào");
             navigate("/login");
@@ -50,13 +51,51 @@ const CardAuth = () => {
             navigate(`/${rolePath}`);
         }
     }, []);
-    const onSubmit = (data) => {
+    const onSubmit = async (data) => {
+        const id = toast.loading("Please wait...");
         console.log(data);
-        apiAuth.logginUser({
-            data: data,
-            dispatch: dispatch,
-            navigate: navigate,
-        });
+        await apiAuth
+            .logginUser({
+                data: data,
+                dispatch: dispatch,
+                navigate: navigate,
+            })
+            .then((res) => {
+                    console.log(res);
+                    if (res?.errCode > 0) {
+                    console.log(res);
+                    toast.update(id, {
+                        render: res?.errMessage,
+                        type: "error",
+                        isLoading: false,
+                        closeButton: true,
+                        autoClose: 1500,
+                        pauseOnFocusLoss: true,
+                    });
+                } else {
+                    // console.log(res);
+                    toast.update(id, {
+                        render: res?.errMessage,
+                        type: "success",
+                        isLoading: false,
+                        closeButton: true,
+                        autoClose: 1500,
+                        pauseOnFocusLoss: true,
+                    });
+                    // reset();
+                }
+            })
+            .catch((err) => {
+                console.log(err);
+                toast.update(id, {
+                    render: "Đã xảy ra lỗi, vui lòng thử lại sau",
+                    type: "error",
+                    isLoading: false,
+                    closeButton: true,
+                    autoClose: 1500,
+                    pauseOnFocusLoss: true,
+                });
+            });
     };
     return (
         <div className="cardAuth h-[75vh] w-[60%] flex justify-between rounded-lg shadow-lg bg-bgColor overflow-auto media-max-md:h-full media-max-md:w-full media-max-md:flex-col media-max-md:p-6">

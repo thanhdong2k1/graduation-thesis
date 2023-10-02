@@ -1,8 +1,9 @@
 import ChangeInformation from "../pages/ChangeInformation";
 import ChangePassword from "../pages/ChangePassword";
 import AdminHomePage from "../pages/admin/AdminHomePage";
-import Class from "../pages/admin/class/Class";
-import ClassDetail from "../pages/admin/class/ClassDetail";
+import AddCouncil from "../pages/admin/council/AddCouncil";
+import Council from "../pages/admin/council/Council";
+import CouncilDetail from "../pages/admin/council/CouncilDetail";
 import LecturerHomePage from "../pages/lecturer/LecturerHomePage";
 import Topic from "../pages/lecturer/topic/Topic";
 import StudentHomePage from "../pages/student/StudentHomePage";
@@ -36,15 +37,57 @@ export const routes = [
             },
             {
                 //   icon: <HomeIcon {...icon} />,
-                name: "Class",
-                path: pathRoutes.R1.class,
-                element: <Class />,
+                name: "Council",
+                path: pathRoutes.R1.council,
+                element: <Council />,
             },
             {
                 //   icon: <HomeIcon {...icon} />,
-                name: "Class Detail",
-                path: pathRoutes.R1.classDetail,
-                element: <ClassDetail />,
+                name: "Add Council",
+                path: pathRoutes.R1.addCouncil,
+                element: <AddCouncil />,
+            },
+            {
+                //   icon: <HomeIcon {...icon} />,
+                name: "Council Detail",
+                path: pathRoutes.R1.councilDetail,
+                element: <CouncilDetail />,
+            },
+        ],
+    },
+    {
+        role: "R2",
+        pages: [
+            {
+                //   icon: <HomeIcon {...icon} />,
+                name: "Home",
+                path: "home",
+                element: <LecturerHomePage />,
+            },
+
+            {
+                //   icon: <HomeIcon {...icon} />,
+                name: "Change Information",
+                path: pathRoutes.R1.changeInformation,
+                element: <ChangeInformation />,
+            },
+            {
+                //   icon: <HomeIcon {...icon} />,
+                name: "Change Password",
+                path: pathRoutes.R1.changePassword,
+                element: <ChangePassword />,
+            },
+            {
+                //   icon: <HomeIcon {...icon} />,
+                name: "Topic",
+                path: "topic",
+                element: <Topic />,
+            },
+            {
+                //   icon: <HomeIcon {...icon} />,
+                name: "Council",
+                path: pathRoutes.R1.council,
+                element: <Council />,
             },
         ],
     },
@@ -75,6 +118,12 @@ export const routes = [
                 name: "Topic",
                 path: "topic",
                 element: <Topic />,
+            },
+            {
+                //   icon: <HomeIcon {...icon} />,
+                name: "Council",
+                path: pathRoutes.R1.council,
+                element: <Council />,
             },
         ],
     },
