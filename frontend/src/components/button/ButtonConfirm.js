@@ -2,7 +2,7 @@ import { Link, useLocation } from "react-router-dom";
 import pathRoutes from "../../utils/pathRoutes";
 import { FaCheck, FaXmark } from "react-icons/fa6";
 
-const ButtonConfirm = () => {
+const ButtonConfirm = ({ type }) => {
     const path = useLocation();
     const arrPath = path.pathname
         .split("/")
@@ -30,8 +30,12 @@ const ButtonConfirm = () => {
                         to={`/${arrPath[0]}`}
                         className="button w-[45%] flex justify-center"
                     >
-                        <span>Cancel</span>
-                        <FaXmark className="icon"/>
+                        {type == "detail" ? (
+                            <span>Ok</span>
+                        ) : (
+                            <span>Cancel</span>
+                        )}
+                        <FaXmark className="icon" />
                     </Link>
                 )}
                 {arrPath.length == 2 && (
@@ -40,17 +44,23 @@ const ButtonConfirm = () => {
                         relative="route"
                         className="button w-[45%] flex justify-center items-center"
                     >
-                        <span>Cancel</span>
-                        <FaXmark className="icon"/>
+                        {type == "detail" ? (
+                            <span>Ok</span>
+                        ) : (
+                            <span>Cancel</span>
+                        )}
+                        <FaXmark className="icon" />
                     </Link>
                 )}
-                <button
-                    type="submit"
-                    className="button w-[45%] flex justify-center items-center"
-                >
-                    <span>Confirm</span>
-                    <FaCheck className="icon"/>
-                </button>
+                {type != "detail" && (
+                    <button
+                        type="submit"
+                        className="button w-[45%] flex justify-center items-center"
+                    >
+                        <span>Confirm</span>
+                        <FaCheck className="icon" />
+                    </button>
+                )}
             </div>
         </div>
     );

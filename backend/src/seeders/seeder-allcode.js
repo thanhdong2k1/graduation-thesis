@@ -157,7 +157,7 @@ module.exports = {
       },
       {
         code: "PERR",
-        type: "PERMISSIONS",
+        type: "PERMISSION",
         valueEn: "View",
         valueVi: "Xem",
         createdAt: new Date(),
@@ -165,7 +165,7 @@ module.exports = {
       },
       {
         code: "PERU",
-        type: "PERMISSIONS",
+        type: "PERMISSION",
         valueEn: "Edit",
         valueVi: "Sửa",
         createdAt: new Date(),
@@ -173,7 +173,7 @@ module.exports = {
       },
       {
         code: "PERD",
-        type: "PERMISSIONS",
+        type: "PERMISSION",
         valueEn: "Delete",
         valueVi: "Xóa",
         createdAt: new Date(),
@@ -181,7 +181,7 @@ module.exports = {
       },
       {
         code: "PERE",
-        type: "PERMISSIONS",
+        type: "PERMISSION",
         valueEn: "Export",
         valueVi: "Xuất",
         createdAt: new Date(),
@@ -189,7 +189,7 @@ module.exports = {
       },
       {
         code: "PERI",
-        type: "PERMISSIONS",
+        type: "PERMISSION",
         valueEn: "Import",
         valueVi: "Nhập",
         createdAt: new Date(),
@@ -197,7 +197,7 @@ module.exports = {
       },
       {
         code: "PERC",
-        type: "PERMISSIONS",
+        type: "PERMISSION",
         valueEn: "Add",
         valueVi: "Thêm",
         createdAt: new Date(),
@@ -205,7 +205,7 @@ module.exports = {
       },
       {
         code: "PERF",
-        type: "PERMISSIONS",
+        type: "PERMISSION",
         valueEn: "Full",
         valueVi: "Toàn quyền",
         createdAt: new Date(),

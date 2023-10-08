@@ -19,14 +19,15 @@ import { createAxios } from "../../../utils/createInstance";
 import { logginSuccess } from "../../../redux/authSlice";
 import ModalPopup from "../../../components/ModelPopup/ModalPopup";
 
-const Council = () => {
+const Lecturer = () => {
     const dispatch = useDispatch();
     const navigate = useNavigate();
-    const councils = useSelector((state) => state.admin.councils);
+    const lecturers = useSelector((state) => state.admin.lecturers);
     const totalRecords = useSelector((state) => state.admin.totalRecords);
     const currentUser = useSelector((state) => state.auth.currentUser);
     let axiosJWT = createAxios(currentUser, dispatch, logginSuccess);
 
+    console.log("lecturers", lecturers);
     const [defineTable, setDefineTable] = useState({
         inputSearch: "",
         filterSearch: "",
@@ -41,7 +42,7 @@ const Council = () => {
 
     // Handle
     const handleAdd = () => {
-        navigate(`../${pathRoutes.R1.addCouncil}`, { replace: true });
+        navigate(`../${pathRoutes.R1.addLecturer}`, { replace: true });
     };
     const handleImport = () => {
         console.log("handleImport");
@@ -50,13 +51,12 @@ const Council = () => {
         console.log("handleExport");
     };
     const handleEdit = (data) => {
-        navigate(`../${pathRoutes.R1.updateCouncil}/${data.id}`, {
+        navigate(`../${pathRoutes.R1.updateLecturer}/${data.id}`, {
             replace: true,
         });
     };
     const handleDetail = (data) => {
-        console.log(pathRoutes.R1.councilDetail)
-        navigate(`../${pathRoutes.R1.councilDetail}/${data.id}`, {
+        navigate(`../${pathRoutes.R1.lecturerDetail}/${data.id}`, {
             replace: true,
         });
     };
@@ -70,7 +70,7 @@ const Council = () => {
     const onDelete = async () => {
         const id = toast.loading("Please wait...");
         await apiAdmin
-            .apiDeleteCouncil({
+            .apiDeleteLecturer({
                 user: currentUser,
                 data: result,
                 axiosJWT: axiosJWT,
@@ -87,7 +87,7 @@ const Council = () => {
                         pauseOnFocusLoss: true,
                     });
                     // reset();
-                    apiAdmin.getAllCouncils({
+                    apiAdmin.getAllLecturers({
                         user: currentUser,
                         inputSearch: defineTable.inputSearch,
                         filterSearch: defineTable.filterSearch,
@@ -146,7 +146,7 @@ const Council = () => {
         // console.log("convertImport", convertImport);
         // console.log("convertImport", data);
         await apiAdmin
-            .importCouncils({
+            .importLecturers({
                 user: currentUser,
                 data: data,
                 axiosJWT: axiosJWT,
@@ -163,7 +163,7 @@ const Council = () => {
                         pauseOnFocusLoss: true,
                     });
                     // reset();
-                    apiAdmin.getAllCouncils({
+                    apiAdmin.getAllLecturers({
                         user: currentUser,
                         inputSearch: defineTable.inputSearch,
                         filterSearch: defineTable.filterSearch,
@@ -204,6 +204,20 @@ const Council = () => {
             });
     };
 
+    // email: { type: DataTypes.STRING, unique: true },
+    //   password: DataTypes.STRING,
+    //   code: { type: DataTypes.STRING, unique: true },
+    //   fullName: DataTypes.STRING,
+    //   numberPhone: { type: DataTypes.STRING, unique: true },
+    //   birthday: DataTypes.STRING,
+    //   address: DataTypes.STRING,
+    //   genderId: DataTypes.STRING,
+    //   roleId: DataTypes.STRING,
+    //   statusId: DataTypes.STRING,
+    //   departmentId: DataTypes.INTEGER,
+    //   image: DataTypes.BLOB,
+    //   permissions: DataTypes.STRING,
+    //   refreshToken: DataTypes.STRING,
     const tableData = [
         {
             header: "#",
@@ -212,30 +226,81 @@ const Council = () => {
             column: "id",
         },
         {
-            header: "Tên hội đồng",
+            header: "Mã giảng viên",
             width: "w-[250px]",
             maxWidth: "max-w-[250px]",
-            column: "name",
+            column: "code",
         },
         {
-            header: "Mô tả hội đồng",
+            header: "Tên giảng viên",
             width: "w-[300px]",
             maxWidth: "max-w-[300px]",
-            column: "description",
+            column: "fullName",
         },
         {
-            header: "Khóa luận",
+            header: "Email",
             width: "w-[300px]",
             maxWidth: "max-w-[300px]",
-            column: "thesisSessionId",
-            columnData: "thesisSessionData",
+            column: "email",
+        },
+        {
+            header: "Điện thoại",
+            width: "w-[300px]",
+            maxWidth: "max-w-[300px]",
+            column: "numberPhone",
+        },
+        {
+            header: "Ngày sinh",
+            width: "w-[300px]",
+            maxWidth: "max-w-[300px]",
+            column: "birthday",
+            hide: true,
+        },
+        {
+            header: "Địa chỉ",
+            width: "w-[300px]",
+            maxWidth: "max-w-[300px]",
+            column: "address",
+            hide: true,
+        },
+        {
+            header: "Phân quyền",
+            width: "w-[300px]",
+            maxWidth: "max-w-[300px]",
+            column: "permissions",
+            hide: true,
+        },
+        {
+            header: "Chức vụ",
+            width: "w-[300px]",
+            maxWidth: "max-w-[300px]",
+            columnData: "roleData",
+            column: "roleId",
             // hide: true,
         },
         {
-            header: "Trạng thái hội đồng",
-
-            column: "statusId",
+            header: "Giới tính",
+            width: "w-[300px]",
+            maxWidth: "max-w-[300px]",
+            columnData: "genderData",
+            column: "genderId",
+            // hide: true,
+        },
+        {
+            header: "Khoa",
+            width: "w-[300px]",
+            maxWidth: "max-w-[300px]",
+            columnData: "departmentData",
+            column: "departmentId",
+            // hide: true,
+        },
+        {
+            header: "Trạng thái",
+            width: "w-[300px]",
+            maxWidth: "max-w-[300px]",
             columnData: "statusData",
+            column: "statusId",
+            // hide: true,
         },
         {
             header: "Hành động",
@@ -269,7 +334,7 @@ const Council = () => {
             inputSearch: "",
             isSearched: false,
         }));
-        apiAdmin.getAllCouncils({
+        apiAdmin.getAllLecturers({
             user: currentUser,
             inputSearch: defineTable.inputSearch,
             filterSearch: defineTable.filterSearch,
@@ -280,7 +345,7 @@ const Council = () => {
 
     useEffect(() => {
         // console.log("inputSearch", defineTable.inputSearch);
-        apiAdmin.getAllCouncils({
+        apiAdmin.getAllLecturers({
             user: currentUser,
             inputSearch: defineTable.inputSearch,
             filterSearch: defineTable.filterSearch,
@@ -299,7 +364,7 @@ const Council = () => {
             ...prevState,
             currentPage: 1,
         }));
-        // apiAdmin.getAllCouncils(
+        // apiAdmin.getAllLecturers(
         //     defineTable.inputSearch,
         //     (defineTable.currentPage - 1) * defineTable.limit,
         //     defineTable.limit,
@@ -309,7 +374,7 @@ const Council = () => {
 
     // useEffect(() => {
     //     console.log("currentpage effect");
-    //     apiAdmin.getAllCouncils(
+    //     apiAdmin.getAllLecturers(
     //         defineTable.inputSearch,
     //         (defineTable.currentPage - 1) * defineTable.limit,
     //         defineTable.limit,
@@ -357,7 +422,7 @@ const Council = () => {
     return (
         <>
             {/* <div>
-                <div>Hello Council</div>
+                <div>Hello Lecturer</div>
                 <Link to={"1"}>Detail 1</Link>
                 <Select
                     styles={customSelectStylesMulti}
@@ -391,7 +456,7 @@ const Council = () => {
                     defineTable={defineTable}
                     setDefineTable={setDefineTable}
                     tableData={tableData}
-                    datas={councils}
+                    datas={lecturers}
                     totalRecords={totalRecords}
                     functionsModule={true}
                 />
@@ -400,4 +465,4 @@ const Council = () => {
     );
 };
 
-export default Council;
+export default Lecturer;

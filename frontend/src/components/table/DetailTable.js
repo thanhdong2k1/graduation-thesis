@@ -5,50 +5,51 @@ const DetailTable = ({ tableData, datas }) => {
     const isFetching = useSelector((state) => state.user.isFetching);
     const error = useSelector((state) => state.user.error);
     // console.log("datas", datas, isFetching, error);
-    datas?.map((data) => {
-        tableData?.map((table, indexTable) => {
-            // console.log("data, table", data, typeof data[table?.column] === 'object'?data[table?.column]?.valueVi:data[table?.column]);
-            // console.log("data, table", data, table);
-            table?.actions?.map((action) => {
-                // console.log("data", data, table, action);
-                if (
-                    currentUser?.roleId == "R1" ||
-                    currentUser?.roleId == "R2"
-                ) {
-                    console.log("actions", action);
-                } else {
-                    if (currentUser?.permissions) {
-                        if (
-                            currentUser?.permissions.split(",").includes("PERF")
-                        ) {
-                            console.log("actions", action);
-                        } else {
-                            if (
-                                currentUser?.permissions
-                                    .split(",")
-                                    .includes(action?.permissions)
-                            ) {
-                                console.log("actions", action);
-                            } else {
-                                if (data[table?.isRowPer] == currentUser?.id) {
-                                    console.log("actions", action);
-                                }
-                            }
-                        }
-                    } else {
-                        if (data[table?.isRowPer] == currentUser?.id) {
-                            console.log("actions", action);
-                            if (table?.isPerR) {
-                                if (action?.permissions == "PERR") {
-                                    console.log("actions", action);
-                                }
-                            }
-                        }
-                    }
-                }
-            });
-        });
-    });
+
+    // datas?.map((data) => {
+    //     tableData?.map((table, indexTable) => {
+    //         // console.log("data, table", data, typeof data[table?.column] === 'object'?data[table?.column]?.valueVi:data[table?.column]);
+    //         // console.log("data, table", data, table);
+    //         table?.actions?.map((action) => {
+    //             // console.log("data", data, table, action);
+    //             if (
+    //                 currentUser?.roleId == "R1" ||
+    //                 currentUser?.roleId == "R2"
+    //             ) {
+    //                 console.log("actions", action);
+    //             } else {
+    //                 if (currentUser?.permissions) {
+    //                     if (
+    //                         currentUser?.permissions.split(",").includes("PERF")
+    //                     ) {
+    //                         console.log("actions", action);
+    //                     } else {
+    //                         if (
+    //                             currentUser?.permissions
+    //                                 .split(",")
+    //                                 .includes(action?.permissions)
+    //                         ) {
+    //                             console.log("actions", action);
+    //                         } else {
+    //                             if (data[table?.isRowPer] == currentUser?.id) {
+    //                                 console.log("actions", action);
+    //                             }
+    //                         }
+    //                     }
+    //                 } else {
+    //                     if (data[table?.isRowPer] == currentUser?.id) {
+    //                         // console.log("actions", action);
+    //                         if (table?.isPerR) {
+    //                             if (action?.permissions == "PERR") {
+    //                                 console.log("actions", action);
+    //                             }
+    //                         }
+    //                     }
+    //                 }
+    //             }
+    //         });
+    //     });
+    // });
 
     // datas?.map((data) => {
     //     tableData?.map((table, indexTable) => {
@@ -188,12 +189,46 @@ const DetailTable = ({ tableData, datas }) => {
                                                 {data[table?.columnData]
                                                     ? data[table?.columnData]
                                                           ?.valueVi
-                                                        ? data[
-                                                              table?.columnData
-                                                          ]?.valueVi
+                                                        ? `${
+                                                              data[
+                                                                  table
+                                                                      ?.columnData
+                                                              ]?.code
+                                                          } | ${
+                                                              data[
+                                                                  table
+                                                                      ?.columnData
+                                                              ]?.valueVi
+                                                          }`
                                                         : data[
                                                               table?.columnData
                                                           ]?.name
+                                                        ? `${
+                                                              data[
+                                                                  table
+                                                                      ?.columnData
+                                                              ]?.id
+                                                          } | ${
+                                                              data[
+                                                                  table
+                                                                      ?.columnData
+                                                              ]?.name
+                                                          }`
+                                                        : data[
+                                                              table?.columnData
+                                                          ]?.fullName
+                                                        ? `${
+                                                              data[
+                                                                  table
+                                                                      ?.columnData
+                                                              ]?.id
+                                                          } | ${
+                                                              data[
+                                                                  table
+                                                                      ?.columnData
+                                                              ]?.fullName
+                                                          }`
+                                                        : null
                                                     : data[table?.column]}
 
                                                 {/* {typeof data[table?.column] ===

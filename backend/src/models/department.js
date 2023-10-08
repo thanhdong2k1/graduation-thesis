@@ -25,9 +25,11 @@ module.exports = (sequelize, DataTypes) => {
       //// Sauuuuuuuuuuuuuuuuuuuu
       Department.hasMany(models.Major, {
         foreignKey: "departmentId",
+        onDelete: "SET NULL",
       });
       Department.hasMany(models.Lecturer, {
         foreignKey: "departmentId",
+        onDelete: "SET NULL",
       });
       Department.belongsTo(models.Lecturer, {
         foreignKey: "deanId",
@@ -36,6 +38,7 @@ module.exports = (sequelize, DataTypes) => {
       });
       Department.hasMany(models.Topic, {
         foreignKey: "departmentId",
+        onDelete: "SET NULL",
       });
     }
   }

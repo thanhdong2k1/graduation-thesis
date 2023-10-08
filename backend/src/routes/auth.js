@@ -7,6 +7,10 @@ router.post("/login", authController.loginUser);
 
 router.post("/register", authController.registerUser);
 router.post("/refresh", authController.requestRefreshToken);
-router.post("/logout",authController.userLogout);
+router.post(
+  "/logout",
+//   middlewareController.verifyToken,
+  authController.userLogout
+);
 
 module.exports = router;

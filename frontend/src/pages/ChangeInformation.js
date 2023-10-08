@@ -1,11 +1,8 @@
-import { Controller, set, useForm } from "react-hook-form";
+import { Controller, useForm } from "react-hook-form";
 import { useDispatch, useSelector } from "react-redux";
 import { toast } from "react-toastify";
 import {
     apiAdmin,
-    apiChangeInformation,
-    apiChangePassword,
-    apiGetInformation,
 } from "../redux/apiRequest";
 import ButtonConfirm from "../components/button/ButtonConfirm";
 import { useEffect, useState } from "react";
@@ -14,7 +11,10 @@ import ModalPopup from "../components/ModelPopup/ModalPopup";
 import { FaPenAlt } from "react-icons/fa";
 import { Buffer } from "buffer";
 import Select from "react-select";
-import { customSelectStyles } from "../utils/customStyleReactSelect";
+import {
+    customSelectStyles,
+    customSelectStylesMulti,
+} from "../utils/customStyleReactSelect";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import moment from "moment/moment";
@@ -23,6 +23,7 @@ import { logginSuccess } from "../redux/authSlice";
 
 const ChangeInformation = () => {
     const currentUser = useSelector((state) => state.auth.currentUser);
+    const permissions = useSelector((state) => state.admin.permissions);
     const dispatch = useDispatch();
     let axiosJWT = createAxios(currentUser, dispatch, logginSuccess);
     const gender = useSelector((state) => state.admin.gender);
@@ -31,6 +32,8 @@ const ChangeInformation = () => {
     const [srcImg, setSrcImg] = useState(
         "https://png.pngtree.com/png-vector/20191026/ourlarge/pngtree-avatar-vector-icon-white-background-png-image_1870181.jpg"
     );
+    const [isRtl, setIsRtl] = useState(false);
+
     const [previewImg, setPreviewImg] = useState(null);
     const {
         register,
@@ -94,9 +97,10 @@ const ChangeInformation = () => {
                 moment(data.birthday, "DD/MM/YYYY")
             ).toLocaleDateString("vi-VN"),
         };
-        // console.log(datasend);
+        const { role, permissions, department, code, ...dataFilter } = datasend;
+        console.log(datasend, dataFilter);
         await apiAdmin
-            .apiChangeInformation(currentUser, datasend, axiosJWT)
+            .apiChangeInformation(currentUser, dataFilter, axiosJWT)
             .then((res) => {
                 if (res?.errCode > 0) {
                     // console.log(res);
@@ -145,10 +149,37 @@ const ChangeInformation = () => {
             elem.target.value = "";
         }
     };
+    let convert = [];
+    if (informationUser.roleId === "R1") {
+        permissions.forEach((obj) => {
+            if (obj.value === "PERF") {
+                convert.push({ ...obj, isFixed: true });
+            }
+        });
+    } else if (informationUser.roleId === "R2") {
+        permissions.forEach((obj) => {
+            if (obj.value !== "PERD" && obj.value !== "PERF") {
+                convert.push({ ...obj, isFixed: true });
+            }
+        });
+    } else {
+        permissions.forEach((obj) => {
+            if (obj.value === "PERU" || obj.value === "PERR") {
+                convert.push({ ...obj, isFixed: true });
+            }
+        });
+    }
+    const array = informationUser?.permissions?.toString().split(",");
+    permissions.forEach((obj) => {
+        if (array?.includes(obj.value)) {
+            convert.push(obj);
+        }
+    });
     useEffect(() => {
         // console.log("useEffect changeInfor");
         apiAdmin.apiGetInformation(currentUser, dispatch, axiosJWT);
         apiAdmin.apiGetGender(currentUser, dispatch, axiosJWT);
+        apiAdmin.apiGetPermissions(currentUser, dispatch, axiosJWT);
     }, [currentUser]);
     useEffect(() => {
         if (informationUser?.image) {
@@ -162,6 +193,15 @@ const ChangeInformation = () => {
         setValue("numberPhone", informationUser?.numberPhone);
         setValue("address", informationUser?.address);
         setValue("birthday", informationUser?.birthday);
+
+        {
+            /* code, roleId, departmentId, permissions */
+        }
+
+        setValue("code", informationUser?.code);
+        setValue("role", informationUser?.roleData?.valueVi);
+        setValue("department", informationUser?.departmentData.name);
+        setValue("permissions", convert);
         // console.log(informationUser?.birthday,moment(informationUser?.birthday, "DD/MM/YYYY").toString());
         setValue(
             "gender",
@@ -170,6 +210,7 @@ const ChangeInformation = () => {
             )
         );
     }, [informationUser]);
+
     return (
         <div className="changeInformationDiv flex justify-center items-center">
             <form
@@ -265,8 +306,8 @@ const ChangeInformation = () => {
                 <div className="row flex justify-center items-center gap-2">
                     <div className="col w-full">
                         <label className="labelInput">Address</label>
-                        <input
-                            className="input"
+                        <textarea
+                            className="input resize-none"
                             {...register("address", {
                                 // required: "Full name is required",
                             })}
@@ -278,6 +319,7 @@ const ChangeInformation = () => {
                         )}
                     </div>
                 </div>
+
                 <div className="row flex justify-center items-center gap-2">
                     <div className="col w-full flex flex-col">
                         <label className="labelInput">Birthday</label>
@@ -299,7 +341,7 @@ const ChangeInformation = () => {
                                                       "DD/MM/YYYY"
                                                   ).toString()
                                               )
-                                            : new Date()
+                                            : null
                                     }
                                     // closeOnScroll={true}
                                     onChange={onChange}
@@ -334,6 +376,75 @@ const ChangeInformation = () => {
                                 {errors.gender?.message}
                             </p>
                         )}
+                    </div>
+                </div>
+                {/* code, roleId, departmentId, permissions */}
+
+                <div className="row flex justify-center items-center gap-2">
+                    <div className="col w-full">
+                        <label className="labelInput">Code</label>
+                        <input
+                            className="input disabled:bg-whiteColor"
+                            disabled
+                            {...register("code", {})}
+                        />
+                    </div>
+                    <div className="col w-full">
+                        <label className="labelInput">Role</label>
+                        <input
+                            className="input disabled:bg-whiteColor"
+                            disabled
+                            {...register("role", {})}
+                        />
+                    </div>
+                </div>
+
+                <div className="row flex justify-center items-center gap-2">
+                    <div className="col w-full">
+                        <label className="labelInput">Department</label>
+                        <input
+                            className="input disabled:bg-whiteColor"
+                            disabled
+                            {...register("department", {})}
+                        />
+                    </div>
+                </div>
+                <div className="row flex justify-center items-center gap-2">
+                    <div className="col w-full">
+                        <label className="labelInput">Permissions</label>
+                        <Controller
+                            name="permissions"
+                            control={control}
+                            {...register("permissions", {
+                                // required: "Full name is required",
+                            })}
+                            render={({ field }) => (
+                                <Select
+                                    styles={customSelectStylesMulti}
+                                    {...field}
+                                    isRtl={isRtl}
+                                    isMulti
+                                    isClearable={false}
+                                    isDisabled={true}
+                                    options={permissions}
+                                    className="basic-multi-select "
+                                    classNamePrefix="select"
+                                />
+                            )}
+                        />
+                        {/* <input className="input disabled:bg-whiteColor" disabled defaultValue={} /> */}
+                        {/* <Select
+                            styles={customSelectStylesMulti}
+                            isRtl={isRtl}
+                            defaultValue={defaultSelect}
+                            isMulti
+                            name="colors"
+                            isClearable={false}
+                            isDisabled={true}
+                            options={permissions}
+                            className="basic-multi-select "
+                            classNamePrefix="select"
+                        /> */}
                     </div>
                 </div>
                 <ButtonConfirm />

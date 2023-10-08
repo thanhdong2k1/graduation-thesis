@@ -159,7 +159,7 @@ const Table = ({
         );
     }, [tableData]);
     const exportFile = useCallback(() => {
-        console.log(datas);
+        console.log("export datasa",datas);
         const convertedItem = [];
         datas.map((item) => {
             const obj = {};
@@ -224,13 +224,14 @@ const Table = ({
         }
     };
     const handleSearch = () => {
+        console.log("Nhấn enter")
         setDefineTable((prevState) => ({
             ...prevState,
             isSearched: true,
         }));
     };
     const handleChangeInput = (e) => {
-        // console.log(e.target.value);
+        console.log(e.target.value);
         setDefineTable((prevState) => ({
             ...prevState,
             inputSearch: e.target.value,
@@ -405,7 +406,7 @@ const Table = ({
         //     defineTable?.limit * defineTable?.currentPage
         // );
         const dataFilter = [];
-        datas.map((data, index) => {
+        datas?.map((data, index) => {
             if (
                 index >= defineTable?.offset &&
                 index < defineTable?.limit * defineTable?.currentPage

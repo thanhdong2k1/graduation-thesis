@@ -20,16 +20,19 @@ import {
 import ButtonConfirm from "../../../components/button/ButtonConfirm";
 import { useParams } from "react-router-dom";
 
-const AddCouncil = ({ type }, params) => {
+const AddClass = ({ type }, params) => {
     let { id } = useParams();
     console.log("type", type, id);
 
     const currentUser = useSelector((state) => state.auth.currentUser);
     const dispatch = useDispatch();
     let axiosJWT = createAxios(currentUser, dispatch, logginSuccess);
-    const status = useSelector((state) => state.admin.status);
-    const thesisSessions = useSelector((state) => state.admin.thesisSessions);
-    let codeThesisSessions = thesisSessions.map((v) => {
+    const majors = useSelector((state) => state.admin.majors);
+    const blocks = useSelector((state) => state.admin.blocks);
+    let codeMajor = majors.map((v) => {
+        return { value: v.id, label: `${v.id} | ${v.name}` };
+    });
+    let codeBlock = blocks.map((v) => {
         return { value: v.id, label: `${v.id} | ${v.name}` };
     });
     const [isRtl, setIsRtl] = useState(false);
@@ -48,7 +51,7 @@ const AddCouncil = ({ type }, params) => {
         console.log(data);
         type == "add"
             ? await apiAdmin
-                  .apiAddCouncil({
+                  .apiAddClass({
                       user: currentUser,
                       data: data,
                       axiosJWT: axiosJWT,
@@ -74,7 +77,7 @@ const AddCouncil = ({ type }, params) => {
                               autoClose: 1500,
                               pauseOnFocusLoss: true,
                           });
-                          setValue("thesisSession", "");
+                          setValue("major", "");
                           setValue("status", "");
                           reset();
                       }
@@ -91,7 +94,7 @@ const AddCouncil = ({ type }, params) => {
                       });
                   })
             : await apiAdmin
-                  .apiUpdateCouncil({
+                  .apiUpdateClass({
                       user: currentUser,
                       data: data,
                       axiosJWT: axiosJWT,
@@ -117,7 +120,7 @@ const AddCouncil = ({ type }, params) => {
                               autoClose: 1500,
                               pauseOnFocusLoss: true,
                           });
-                          //   setValue("thesisSession", "");
+                          //   setValue("major", "");
                           //   setValue("status", "");
                           //   reset();
                       }
@@ -135,15 +138,19 @@ const AddCouncil = ({ type }, params) => {
                   });
     };
     useEffect(() => {
-        apiAdmin.apiGetStatus(currentUser, dispatch, axiosJWT);
-        apiAdmin.getAllThesisSession({
+        apiAdmin.getAllMajors({
+            user: currentUser,
+            dispatch: dispatch,
+            axiosJWT: axiosJWT,
+        });
+        apiAdmin.getAllBlocks({
             user: currentUser,
             dispatch: dispatch,
             axiosJWT: axiosJWT,
         });
         if (id) {
             apiAdmin
-                .getCouncilById({
+                .getClassById({
                     user: currentUser,
                     id: id,
                     axiosJWT: axiosJWT,
@@ -164,16 +171,15 @@ const AddCouncil = ({ type }, params) => {
                         setValue("name", res?.result?.name);
                         setValue("description", res?.result?.description);
                         setValue(
-                            "thesisSession",
-                            codeThesisSessions.filter(
-                                (value) =>
-                                    value?.value == res?.result?.thesisSessionId
+                            "major",
+                            codeMajor.filter(
+                                (value) => value?.value == res?.result?.majorId
                             )
                         );
                         setValue(
-                            "status",
-                            status.filter(
-                                (value) => value?.value == res?.result?.statusId
+                            "block",
+                            codeBlock.filter(
+                                (value) => value?.value == res?.result?.blockId
                             )
                         );
                         toast.update(id, {
@@ -204,7 +210,7 @@ const AddCouncil = ({ type }, params) => {
     return (
         <div className="changeInformationDiv flex flex-col justify-center items-center gap-2">
             <div className="capitalize font-semibold text-h1FontSize">
-                {type} Council
+                {type} Class
             </div>
             <form
                 onSubmit={handleSubmit(onSubmit)}
@@ -274,55 +280,55 @@ const AddCouncil = ({ type }, params) => {
 
                 <div className="row flex justify-center items-center gap-2">
                     <div className="col w-full">
-                        <label className="labelInput">Thesis Session</label>
+                        <label className="labelInput">Block</label>
                         <Controller
-                            name="thesisSession"
+                            name="block"
                             control={control}
-                            {...register("thesisSession", {
+                            {...register("block", {
                                 // required: "Full name is required",
                             })}
                             render={({ field }) => (
                                 <Select
                                     styles={customSelectStyles}
                                     {...field}
-                                    options={codeThesisSessions}
+                                    options={codeBlock}
                                     isClearable={true}
                                     isDisabled={type == "detail" ? true : false}
                                 />
                             )}
                         />
-                        {errors.thesisSession?.type && (
+                        {errors.block?.type && (
                             <p className=" text-normal text-red-500">
-                                {errors.thesisSession?.message}
+                                {errors.block?.message}
                             </p>
                         )}
                     </div>
                     <div className="col w-full">
-                        <label className="labelInput">Status</label>
+                        <label className="labelInput">Major</label>
                         <Controller
-                            name="status"
+                            name="major"
                             control={control}
-                            {...register("status", {
+                            {...register("major", {
                                 // required: "Full name is required",
                             })}
                             render={({ field }) => (
                                 <Select
                                     styles={customSelectStyles}
                                     {...field}
-                                    options={status}
+                                    options={codeMajor}
                                     isClearable={true}
                                     isDisabled={type == "detail" ? true : false}
                                 />
                             )}
                         />
-                        {errors.status?.type && (
+                        {errors.major?.type && (
                             <p className=" text-normal text-red-500">
-                                {errors.status?.message}
+                                {errors.major?.message}
                             </p>
                         )}
                     </div>
                 </div>
-                {/* code, roleId, departmentId, permissions */}
+                {/* code, roleId, majorId, permissions */}
 
                 <ButtonConfirm type={type} />
             </form>
@@ -330,4 +336,4 @@ const AddCouncil = ({ type }, params) => {
     );
 };
 
-export default AddCouncil;
+export default AddClass;

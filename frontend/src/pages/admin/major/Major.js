@@ -19,10 +19,10 @@ import { createAxios } from "../../../utils/createInstance";
 import { logginSuccess } from "../../../redux/authSlice";
 import ModalPopup from "../../../components/ModelPopup/ModalPopup";
 
-const Council = () => {
+const Major = () => {
     const dispatch = useDispatch();
     const navigate = useNavigate();
-    const councils = useSelector((state) => state.admin.councils);
+    const majors = useSelector((state) => state.admin.majors);
     const totalRecords = useSelector((state) => state.admin.totalRecords);
     const currentUser = useSelector((state) => state.auth.currentUser);
     let axiosJWT = createAxios(currentUser, dispatch, logginSuccess);
@@ -41,7 +41,7 @@ const Council = () => {
 
     // Handle
     const handleAdd = () => {
-        navigate(`../${pathRoutes.R1.addCouncil}`, { replace: true });
+        navigate(`../${pathRoutes.R1.addMajor}`, { replace: true });
     };
     const handleImport = () => {
         console.log("handleImport");
@@ -50,13 +50,13 @@ const Council = () => {
         console.log("handleExport");
     };
     const handleEdit = (data) => {
-        navigate(`../${pathRoutes.R1.updateCouncil}/${data.id}`, {
+        navigate(`../${pathRoutes.R1.updateMajor}/${data.id}`, {
             replace: true,
         });
     };
     const handleDetail = (data) => {
-        console.log(pathRoutes.R1.councilDetail)
-        navigate(`../${pathRoutes.R1.councilDetail}/${data.id}`, {
+        console.log(pathRoutes.R1.majorDetail)
+        navigate(`../${pathRoutes.R1.majorDetail}/${data.id}`, {
             replace: true,
         });
     };
@@ -70,7 +70,7 @@ const Council = () => {
     const onDelete = async () => {
         const id = toast.loading("Please wait...");
         await apiAdmin
-            .apiDeleteCouncil({
+            .apiDeleteMajor({
                 user: currentUser,
                 data: result,
                 axiosJWT: axiosJWT,
@@ -87,7 +87,7 @@ const Council = () => {
                         pauseOnFocusLoss: true,
                     });
                     // reset();
-                    apiAdmin.getAllCouncils({
+                    apiAdmin.getAllMajors({
                         user: currentUser,
                         inputSearch: defineTable.inputSearch,
                         filterSearch: defineTable.filterSearch,
@@ -146,7 +146,7 @@ const Council = () => {
         // console.log("convertImport", convertImport);
         // console.log("convertImport", data);
         await apiAdmin
-            .importCouncils({
+            .importMajors({
                 user: currentUser,
                 data: data,
                 axiosJWT: axiosJWT,
@@ -163,7 +163,7 @@ const Council = () => {
                         pauseOnFocusLoss: true,
                     });
                     // reset();
-                    apiAdmin.getAllCouncils({
+                    apiAdmin.getAllMajors({
                         user: currentUser,
                         inputSearch: defineTable.inputSearch,
                         filterSearch: defineTable.filterSearch,
@@ -212,30 +212,24 @@ const Council = () => {
             column: "id",
         },
         {
-            header: "Tên hội đồng",
+            header: "Tên chuyên ngành",
             width: "w-[250px]",
             maxWidth: "max-w-[250px]",
             column: "name",
         },
         {
-            header: "Mô tả hội đồng",
+            header: "Mô tả chuyên ngành",
             width: "w-[300px]",
             maxWidth: "max-w-[300px]",
             column: "description",
         },
         {
-            header: "Khóa luận",
-            width: "w-[300px]",
-            maxWidth: "max-w-[300px]",
-            column: "thesisSessionId",
-            columnData: "thesisSessionData",
+            header: "Khoa",
+            // width: "w-[300px]",
+            // maxWidth: "max-w-[300px]",
+            column: "departmentId",
+            columnData: "departmentData",
             // hide: true,
-        },
-        {
-            header: "Trạng thái hội đồng",
-
-            column: "statusId",
-            columnData: "statusData",
         },
         {
             header: "Hành động",
@@ -269,7 +263,7 @@ const Council = () => {
             inputSearch: "",
             isSearched: false,
         }));
-        apiAdmin.getAllCouncils({
+        apiAdmin.getAllMajors({
             user: currentUser,
             inputSearch: defineTable.inputSearch,
             filterSearch: defineTable.filterSearch,
@@ -280,7 +274,7 @@ const Council = () => {
 
     useEffect(() => {
         // console.log("inputSearch", defineTable.inputSearch);
-        apiAdmin.getAllCouncils({
+        apiAdmin.getAllMajors({
             user: currentUser,
             inputSearch: defineTable.inputSearch,
             filterSearch: defineTable.filterSearch,
@@ -299,7 +293,7 @@ const Council = () => {
             ...prevState,
             currentPage: 1,
         }));
-        // apiAdmin.getAllCouncils(
+        // apiAdmin.getAllMajors(
         //     defineTable.inputSearch,
         //     (defineTable.currentPage - 1) * defineTable.limit,
         //     defineTable.limit,
@@ -309,7 +303,7 @@ const Council = () => {
 
     // useEffect(() => {
     //     console.log("currentpage effect");
-    //     apiAdmin.getAllCouncils(
+    //     apiAdmin.getAllMajors(
     //         defineTable.inputSearch,
     //         (defineTable.currentPage - 1) * defineTable.limit,
     //         defineTable.limit,
@@ -357,7 +351,7 @@ const Council = () => {
     return (
         <>
             {/* <div>
-                <div>Hello Council</div>
+                <div>Hello Major</div>
                 <Link to={"1"}>Detail 1</Link>
                 <Select
                     styles={customSelectStylesMulti}
@@ -391,7 +385,7 @@ const Council = () => {
                     defineTable={defineTable}
                     setDefineTable={setDefineTable}
                     tableData={tableData}
-                    datas={councils}
+                    datas={majors}
                     totalRecords={totalRecords}
                     functionsModule={true}
                 />
@@ -400,4 +394,4 @@ const Council = () => {
     );
 };
 
-export default Council;
+export default Major;

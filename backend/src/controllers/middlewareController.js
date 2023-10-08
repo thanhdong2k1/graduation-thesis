@@ -16,8 +16,8 @@ const middlewareController = {
           return res
             .status(403)
             .json({
-              errCode: 2,
-              errMessage: "Token is not valid, please log in again",
+              errCode: 403,
+              errMessage: "Authentication code is invalid, please log in again",
             });
         }
         console.log("req", req.user);
@@ -28,8 +28,8 @@ const middlewareController = {
       return res
         .status(401)
         .json({
-          errCode: 1,
-          errMessage: "You're not authenticated, please log in again",
+          errCode: 401,
+          errMessage: "You're not authenticated, please log in",
         });
     }
   },
@@ -47,7 +47,7 @@ const middlewareController = {
         return res
           .status(403)
           .json({
-            errCode: 3,
+            errCode: 403,
             errMessage: "You're not allowed to import data",
           });
       }
@@ -67,7 +67,7 @@ const middlewareController = {
         return res
           .status(403)
           .json({
-            errCode: 3,
+            errCode: 403,
             errMessage: "You're not allowed to create data",
           });
       }
@@ -86,7 +86,7 @@ const middlewareController = {
       } else {
         return res
           .status(403)
-          .json({ errCode: 3, errMessage: "You're not allowed to view data" });
+          .json({ errCode: 403, errMessage: "You're not allowed to view data" });
       }
     });
   },
@@ -103,7 +103,7 @@ const middlewareController = {
         return res
           .status(403)
           .json({
-            errCode: 3,
+            errCode: 403,
             errMessage: "You're not allowed to update data",
           });
       }
@@ -122,7 +122,7 @@ const middlewareController = {
         return res
           .status(403)
           .json({
-            errCode: 3,
+            errCode: 403,
             errMessage: "You're not allowed to delete data",
           });
       }

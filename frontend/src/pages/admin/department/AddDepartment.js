@@ -20,17 +20,16 @@ import {
 import ButtonConfirm from "../../../components/button/ButtonConfirm";
 import { useParams } from "react-router-dom";
 
-const AddCouncil = ({ type }, params) => {
+const AddDepartment = ({ type }, params) => {
     let { id } = useParams();
     console.log("type", type, id);
 
     const currentUser = useSelector((state) => state.auth.currentUser);
     const dispatch = useDispatch();
     let axiosJWT = createAxios(currentUser, dispatch, logginSuccess);
-    const status = useSelector((state) => state.admin.status);
-    const thesisSessions = useSelector((state) => state.admin.thesisSessions);
-    let codeThesisSessions = thesisSessions.map((v) => {
-        return { value: v.id, label: `${v.id} | ${v.name}` };
+    const deans = useSelector((state) => state.admin.lecturers);
+    let codeDean = deans.map((v) => {
+        return { value: v.id, label: `${v.id} | ${v.fullName}` };
     });
     const [isRtl, setIsRtl] = useState(false);
 
@@ -45,12 +44,18 @@ const AddCouncil = ({ type }, params) => {
     } = useForm();
     const onSubmit = async (data) => {
         const id = toast.loading("Please wait...");
-        console.log(data);
+        const datasend = {
+            ...data,
+            founding: new Date(
+                moment(data.founding, "DD/MM/YYYY")
+            ).toLocaleDateString("vi-VN"),
+        };
+        console.log(datasend);
         type == "add"
             ? await apiAdmin
-                  .apiAddCouncil({
+                  .apiAddDepartment({
                       user: currentUser,
-                      data: data,
+                      data: datasend,
                       axiosJWT: axiosJWT,
                   })
                   .then((res) => {
@@ -74,8 +79,7 @@ const AddCouncil = ({ type }, params) => {
                               autoClose: 1500,
                               pauseOnFocusLoss: true,
                           });
-                          setValue("thesisSession", "");
-                          setValue("status", "");
+                          setValue("dean", "");
                           reset();
                       }
                   })
@@ -91,9 +95,9 @@ const AddCouncil = ({ type }, params) => {
                       });
                   })
             : await apiAdmin
-                  .apiUpdateCouncil({
+                  .apiUpdateDepartment({
                       user: currentUser,
-                      data: data,
+                      data: datasend,
                       axiosJWT: axiosJWT,
                   })
                   .then((res) => {
@@ -135,15 +139,14 @@ const AddCouncil = ({ type }, params) => {
                   });
     };
     useEffect(() => {
-        apiAdmin.apiGetStatus(currentUser, dispatch, axiosJWT);
-        apiAdmin.getAllThesisSession({
+        apiAdmin.getAllLecturers({
             user: currentUser,
             dispatch: dispatch,
             axiosJWT: axiosJWT,
         });
         if (id) {
             apiAdmin
-                .getCouncilById({
+                .getDepartmentById({
                     user: currentUser,
                     id: id,
                     axiosJWT: axiosJWT,
@@ -163,17 +166,11 @@ const AddCouncil = ({ type }, params) => {
                         setValue("id", res?.result?.id);
                         setValue("name", res?.result?.name);
                         setValue("description", res?.result?.description);
+                        setValue("founding", res?.result?.founding);
                         setValue(
-                            "thesisSession",
-                            codeThesisSessions.filter(
-                                (value) =>
-                                    value?.value == res?.result?.thesisSessionId
-                            )
-                        );
-                        setValue(
-                            "status",
-                            status.filter(
-                                (value) => value?.value == res?.result?.statusId
+                            "dean",
+                            codeDean.filter(
+                                (value) => value?.value == res?.result?.deanId
                             )
                         );
                         toast.update(id, {
@@ -204,7 +201,7 @@ const AddCouncil = ({ type }, params) => {
     return (
         <div className="changeInformationDiv flex flex-col justify-center items-center gap-2">
             <div className="capitalize font-semibold text-h1FontSize">
-                {type} Council
+                {type} Department
             </div>
             <form
                 onSubmit={handleSubmit(onSubmit)}
@@ -273,51 +270,59 @@ const AddCouncil = ({ type }, params) => {
                 </div>
 
                 <div className="row flex justify-center items-center gap-2">
-                    <div className="col w-full">
-                        <label className="labelInput">Thesis Session</label>
+                    <div className="col w-full flex flex-col">
+                        <label className="labelInput">Founding</label>
                         <Controller
-                            name="thesisSession"
+                            name="founding"
                             control={control}
-                            {...register("thesisSession", {
+                            {...register("founding", {
                                 // required: "Full name is required",
                             })}
-                            render={({ field }) => (
-                                <Select
-                                    styles={customSelectStyles}
-                                    {...field}
-                                    options={codeThesisSessions}
-                                    isClearable={true}
-                                    isDisabled={type == "detail" ? true : false}
+                            render={({ field: { onChange, value } }) => (
+                                <DatePicker
+                                    className="input"
+                                    dateFormat="dd/MM/yyyy"
+                                    selected={
+                                        value
+                                            ? new Date(
+                                                  moment(
+                                                      value,
+                                                      "DD/MM/YYYY"
+                                                  ).toString()
+                                              )
+                                            : null
+                                    }
+                                    // closeOnScroll={true}
+                                    onChange={onChange}
                                 />
                             )}
                         />
-                        {errors.thesisSession?.type && (
+                        {errors.founding?.type && (
                             <p className=" text-normal text-red-500">
-                                {errors.thesisSession?.message}
+                                {errors.founding?.message}
                             </p>
                         )}
                     </div>
                     <div className="col w-full">
-                        <label className="labelInput">Status</label>
+                        <label className="labelInput">Dean</label>
                         <Controller
-                            name="status"
+                            name="dean"
                             control={control}
-                            {...register("status", {
+                            {...register("dean", {
                                 // required: "Full name is required",
                             })}
                             render={({ field }) => (
                                 <Select
                                     styles={customSelectStyles}
                                     {...field}
-                                    options={status}
+                                    options={codeDean}
                                     isClearable={true}
-                                    isDisabled={type == "detail" ? true : false}
                                 />
                             )}
                         />
-                        {errors.status?.type && (
+                        {errors.dean?.type && (
                             <p className=" text-normal text-red-500">
-                                {errors.status?.message}
+                                {errors.dean?.message}
                             </p>
                         )}
                     </div>
@@ -330,4 +335,4 @@ const AddCouncil = ({ type }, params) => {
     );
 };
 
-export default AddCouncil;
+export default AddDepartment;

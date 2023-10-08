@@ -16,7 +16,6 @@ const Sidebar = ({ isShowSidebar, setIsShowSidebar }) => {
             ? "lecturer"
             : "";
     const path = useLocation();
-    const navigate = useNavigate();
     const routesAdmin = routes
         .filter((route) => route.role == userData?.roleId)[0]
         ?.pages?.filter(

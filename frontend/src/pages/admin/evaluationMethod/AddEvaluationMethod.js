@@ -20,7 +20,7 @@ import {
 import ButtonConfirm from "../../../components/button/ButtonConfirm";
 import { useParams } from "react-router-dom";
 
-const AddCouncil = ({ type }, params) => {
+const AddEvaluationMethod = ({ type }, params) => {
     let { id } = useParams();
     console.log("type", type, id);
 
@@ -48,7 +48,7 @@ const AddCouncil = ({ type }, params) => {
         console.log(data);
         type == "add"
             ? await apiAdmin
-                  .apiAddCouncil({
+                  .apiAddEvaluationMethod({
                       user: currentUser,
                       data: data,
                       axiosJWT: axiosJWT,
@@ -74,8 +74,6 @@ const AddCouncil = ({ type }, params) => {
                               autoClose: 1500,
                               pauseOnFocusLoss: true,
                           });
-                          setValue("thesisSession", "");
-                          setValue("status", "");
                           reset();
                       }
                   })
@@ -91,7 +89,7 @@ const AddCouncil = ({ type }, params) => {
                       });
                   })
             : await apiAdmin
-                  .apiUpdateCouncil({
+                  .apiUpdateEvaluationMethod({
                       user: currentUser,
                       data: data,
                       axiosJWT: axiosJWT,
@@ -135,15 +133,9 @@ const AddCouncil = ({ type }, params) => {
                   });
     };
     useEffect(() => {
-        apiAdmin.apiGetStatus(currentUser, dispatch, axiosJWT);
-        apiAdmin.getAllThesisSession({
-            user: currentUser,
-            dispatch: dispatch,
-            axiosJWT: axiosJWT,
-        });
         if (id) {
             apiAdmin
-                .getCouncilById({
+                .getEvaluationMethodById({
                     user: currentUser,
                     id: id,
                     axiosJWT: axiosJWT,
@@ -162,20 +154,6 @@ const AddCouncil = ({ type }, params) => {
                         console.log(res);
                         setValue("id", res?.result?.id);
                         setValue("name", res?.result?.name);
-                        setValue("description", res?.result?.description);
-                        setValue(
-                            "thesisSession",
-                            codeThesisSessions.filter(
-                                (value) =>
-                                    value?.value == res?.result?.thesisSessionId
-                            )
-                        );
-                        setValue(
-                            "status",
-                            status.filter(
-                                (value) => value?.value == res?.result?.statusId
-                            )
-                        );
                         toast.update(id, {
                             render: res?.errMessage,
                             type: "success",
@@ -204,7 +182,7 @@ const AddCouncil = ({ type }, params) => {
     return (
         <div className="changeInformationDiv flex flex-col justify-center items-center gap-2">
             <div className="capitalize font-semibold text-h1FontSize">
-                {type} Council
+                {type} Evaluation Method
             </div>
             <form
                 onSubmit={handleSubmit(onSubmit)}
@@ -244,7 +222,7 @@ const AddCouncil = ({ type }, params) => {
                         )}
                     </div>
                 </div>
-                <div className="row flex justify-center items-center gap-2">
+                {/* <div className="row flex justify-center items-center gap-2">
                     <div className="col w-full">
                         <label className="labelInput">Description</label>
                         <textarea
@@ -256,23 +234,15 @@ const AddCouncil = ({ type }, params) => {
                                 // required: "Full name is required",
                             })}
                         ></textarea>
-                        {/* <input
-                            type=""
-                            className="input"
-                            disabled={type == "detail" ? true : false}
-                            {...register("description", {
-                                // required: "Full name is required",
-                            })}
-                        /> */}
                         {errors.description?.type && (
                             <p className=" text-normal text-red-500">
                                 {errors.description?.message}
                             </p>
                         )}
                     </div>
-                </div>
+                </div> */}
 
-                <div className="row flex justify-center items-center gap-2">
+                {/* <div className="row flex justify-center items-center gap-2">
                     <div className="col w-full">
                         <label className="labelInput">Thesis Session</label>
                         <Controller
@@ -321,7 +291,7 @@ const AddCouncil = ({ type }, params) => {
                             </p>
                         )}
                     </div>
-                </div>
+                </div> */}
                 {/* code, roleId, departmentId, permissions */}
 
                 <ButtonConfirm type={type} />
@@ -330,4 +300,4 @@ const AddCouncil = ({ type }, params) => {
     );
 };
 
-export default AddCouncil;
+export default AddEvaluationMethod;

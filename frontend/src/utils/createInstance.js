@@ -43,6 +43,7 @@ export const createAxios = (user, dispatch, stateSuccess) => {
             return config;
         },
         (err) => {
+            console.log(err)
             return Promise.reject(err);
         }
     );

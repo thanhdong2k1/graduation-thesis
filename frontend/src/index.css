@@ -64,6 +64,9 @@ body {
     .input {
         @apply appearance-none border border-textColor rounded-lg w-full py-2 px-3 text-textColor font-medium leading-tight;
     }
+    .disabled {
+        @apply disabled:bg-whiteColor;
+    }
     .input:focus {
         @apply outline-none border-HoverColor shadow-md shadow-paleBlue;
     }

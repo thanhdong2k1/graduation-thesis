@@ -20,7 +20,7 @@ import {
 import ButtonConfirm from "../../../components/button/ButtonConfirm";
 import { useParams } from "react-router-dom";
 
-const AddCouncil = ({ type }, params) => {
+const AddBlock = ({ type }, params) => {
     let { id } = useParams();
     console.log("type", type, id);
 
@@ -28,10 +28,6 @@ const AddCouncil = ({ type }, params) => {
     const dispatch = useDispatch();
     let axiosJWT = createAxios(currentUser, dispatch, logginSuccess);
     const status = useSelector((state) => state.admin.status);
-    const thesisSessions = useSelector((state) => state.admin.thesisSessions);
-    let codeThesisSessions = thesisSessions.map((v) => {
-        return { value: v.id, label: `${v.id} | ${v.name}` };
-    });
     const [isRtl, setIsRtl] = useState(false);
 
     const {
@@ -48,7 +44,7 @@ const AddCouncil = ({ type }, params) => {
         console.log(data);
         type == "add"
             ? await apiAdmin
-                  .apiAddCouncil({
+                  .apiAddBlock({
                       user: currentUser,
                       data: data,
                       axiosJWT: axiosJWT,
@@ -91,7 +87,7 @@ const AddCouncil = ({ type }, params) => {
                       });
                   })
             : await apiAdmin
-                  .apiUpdateCouncil({
+                  .apiUpdateBlock({
                       user: currentUser,
                       data: data,
                       axiosJWT: axiosJWT,
@@ -135,15 +131,9 @@ const AddCouncil = ({ type }, params) => {
                   });
     };
     useEffect(() => {
-        apiAdmin.apiGetStatus(currentUser, dispatch, axiosJWT);
-        apiAdmin.getAllThesisSession({
-            user: currentUser,
-            dispatch: dispatch,
-            axiosJWT: axiosJWT,
-        });
         if (id) {
             apiAdmin
-                .getCouncilById({
+                .getBlockById({
                     user: currentUser,
                     id: id,
                     axiosJWT: axiosJWT,
@@ -163,19 +153,6 @@ const AddCouncil = ({ type }, params) => {
                         setValue("id", res?.result?.id);
                         setValue("name", res?.result?.name);
                         setValue("description", res?.result?.description);
-                        setValue(
-                            "thesisSession",
-                            codeThesisSessions.filter(
-                                (value) =>
-                                    value?.value == res?.result?.thesisSessionId
-                            )
-                        );
-                        setValue(
-                            "status",
-                            status.filter(
-                                (value) => value?.value == res?.result?.statusId
-                            )
-                        );
                         toast.update(id, {
                             render: res?.errMessage,
                             type: "success",
@@ -204,7 +181,7 @@ const AddCouncil = ({ type }, params) => {
     return (
         <div className="changeInformationDiv flex flex-col justify-center items-center gap-2">
             <div className="capitalize font-semibold text-h1FontSize">
-                {type} Council
+                {type} Block
             </div>
             <form
                 onSubmit={handleSubmit(onSubmit)}
@@ -272,7 +249,7 @@ const AddCouncil = ({ type }, params) => {
                     </div>
                 </div>
 
-                <div className="row flex justify-center items-center gap-2">
+                {/* <div className="row flex justify-center items-center gap-2">
                     <div className="col w-full">
                         <label className="labelInput">Thesis Session</label>
                         <Controller
@@ -321,7 +298,7 @@ const AddCouncil = ({ type }, params) => {
                             </p>
                         )}
                     </div>
-                </div>
+                </div> */}
                 {/* code, roleId, departmentId, permissions */}
 
                 <ButtonConfirm type={type} />
@@ -330,4 +307,4 @@ const AddCouncil = ({ type }, params) => {
     );
 };
 
-export default AddCouncil;
+export default AddBlock;

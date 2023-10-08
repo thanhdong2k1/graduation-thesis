@@ -44,6 +44,7 @@ module.exports = (sequelize, DataTypes) => {
       });
       Lecturer.hasMany(models.Department, {
         foreignKey: "deanId",
+        onDelete: "SET NULL",
       });
 
       Lecturer.belongsToMany(models.Council, {
@@ -54,10 +55,12 @@ module.exports = (sequelize, DataTypes) => {
       
       Lecturer.hasMany(models.Thesis, {
         foreignKey: "thesisAdvisor",
+        onDelete: "SET NULL",
       });
 
       Lecturer.hasMany(models.Comment, {
         foreignKey: "lecturerId",
+        onDelete: "SET NULL",
       });
 
       Lecturer.belongsTo(models.Allcode, {

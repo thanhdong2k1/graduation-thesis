@@ -20,7 +20,7 @@ import {
 import ButtonConfirm from "../../../components/button/ButtonConfirm";
 import { useParams } from "react-router-dom";
 
-const AddCouncil = ({ type }, params) => {
+const AddMajor = ({ type }, params) => {
     let { id } = useParams();
     console.log("type", type, id);
 
@@ -28,8 +28,8 @@ const AddCouncil = ({ type }, params) => {
     const dispatch = useDispatch();
     let axiosJWT = createAxios(currentUser, dispatch, logginSuccess);
     const status = useSelector((state) => state.admin.status);
-    const thesisSessions = useSelector((state) => state.admin.thesisSessions);
-    let codeThesisSessions = thesisSessions.map((v) => {
+    const departments = useSelector((state) => state.admin.departments);
+    let codeDepartment = departments.map((v) => {
         return { value: v.id, label: `${v.id} | ${v.name}` };
     });
     const [isRtl, setIsRtl] = useState(false);
@@ -48,7 +48,7 @@ const AddCouncil = ({ type }, params) => {
         console.log(data);
         type == "add"
             ? await apiAdmin
-                  .apiAddCouncil({
+                  .apiAddMajor({
                       user: currentUser,
                       data: data,
                       axiosJWT: axiosJWT,
@@ -74,7 +74,7 @@ const AddCouncil = ({ type }, params) => {
                               autoClose: 1500,
                               pauseOnFocusLoss: true,
                           });
-                          setValue("thesisSession", "");
+                          setValue("department", "");
                           setValue("status", "");
                           reset();
                       }
@@ -91,7 +91,7 @@ const AddCouncil = ({ type }, params) => {
                       });
                   })
             : await apiAdmin
-                  .apiUpdateCouncil({
+                  .apiUpdateMajor({
                       user: currentUser,
                       data: data,
                       axiosJWT: axiosJWT,
@@ -117,7 +117,7 @@ const AddCouncil = ({ type }, params) => {
                               autoClose: 1500,
                               pauseOnFocusLoss: true,
                           });
-                          //   setValue("thesisSession", "");
+                          //   setValue("department", "");
                           //   setValue("status", "");
                           //   reset();
                       }
@@ -135,15 +135,14 @@ const AddCouncil = ({ type }, params) => {
                   });
     };
     useEffect(() => {
-        apiAdmin.apiGetStatus(currentUser, dispatch, axiosJWT);
-        apiAdmin.getAllThesisSession({
+        apiAdmin.getAllDepartments({
             user: currentUser,
             dispatch: dispatch,
             axiosJWT: axiosJWT,
         });
         if (id) {
             apiAdmin
-                .getCouncilById({
+                .getMajorById({
                     user: currentUser,
                     id: id,
                     axiosJWT: axiosJWT,
@@ -164,16 +163,10 @@ const AddCouncil = ({ type }, params) => {
                         setValue("name", res?.result?.name);
                         setValue("description", res?.result?.description);
                         setValue(
-                            "thesisSession",
-                            codeThesisSessions.filter(
+                            "department",
+                            codeDepartment.filter(
                                 (value) =>
-                                    value?.value == res?.result?.thesisSessionId
-                            )
-                        );
-                        setValue(
-                            "status",
-                            status.filter(
-                                (value) => value?.value == res?.result?.statusId
+                                    value?.value == res?.result?.departmentId
                             )
                         );
                         toast.update(id, {
@@ -204,7 +197,7 @@ const AddCouncil = ({ type }, params) => {
     return (
         <div className="changeInformationDiv flex flex-col justify-center items-center gap-2">
             <div className="capitalize font-semibold text-h1FontSize">
-                {type} Council
+                {type} Major
             </div>
             <form
                 onSubmit={handleSubmit(onSubmit)}
@@ -274,50 +267,26 @@ const AddCouncil = ({ type }, params) => {
 
                 <div className="row flex justify-center items-center gap-2">
                     <div className="col w-full">
-                        <label className="labelInput">Thesis Session</label>
+                        <label className="labelInput">Department</label>
                         <Controller
-                            name="thesisSession"
+                            name="department"
                             control={control}
-                            {...register("thesisSession", {
+                            {...register("department", {
                                 // required: "Full name is required",
                             })}
                             render={({ field }) => (
                                 <Select
                                     styles={customSelectStyles}
                                     {...field}
-                                    options={codeThesisSessions}
+                                    options={codeDepartment}
                                     isClearable={true}
                                     isDisabled={type == "detail" ? true : false}
                                 />
                             )}
                         />
-                        {errors.thesisSession?.type && (
+                        {errors.department?.type && (
                             <p className=" text-normal text-red-500">
-                                {errors.thesisSession?.message}
-                            </p>
-                        )}
-                    </div>
-                    <div className="col w-full">
-                        <label className="labelInput">Status</label>
-                        <Controller
-                            name="status"
-                            control={control}
-                            {...register("status", {
-                                // required: "Full name is required",
-                            })}
-                            render={({ field }) => (
-                                <Select
-                                    styles={customSelectStyles}
-                                    {...field}
-                                    options={status}
-                                    isClearable={true}
-                                    isDisabled={type == "detail" ? true : false}
-                                />
-                            )}
-                        />
-                        {errors.status?.type && (
-                            <p className=" text-normal text-red-500">
-                                {errors.status?.message}
+                                {errors.department?.message}
                             </p>
                         )}
                     </div>
@@ -330,4 +299,4 @@ const AddCouncil = ({ type }, params) => {
     );
 };
 
-export default AddCouncil;
+export default AddMajor;

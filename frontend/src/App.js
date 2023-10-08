@@ -17,6 +17,10 @@ import { logginSuccess } from "./redux/authSlice";
 import HomeLayout from "./components/layouts/HomeLayout";
 import HomePage from "./pages/HomePage";
 import ListTopic from "./pages/ListTopic";
+import { apiAuth, apiUser } from "./redux/apiRequest";
+import { createAxios } from "./utils/createInstance";
+import { toast } from "react-toastify";
+import { getErrMessageSuccess } from "./redux/adminSlice";
 // export const routers = createBrowserRouter([
 //     {
 //         path: "",
@@ -39,27 +43,29 @@ import ListTopic from "./pages/ListTopic";
 // ]);
 function App() {
     const navigate = useNavigate();
-    const userData = useSelector((state) => state.auth.currentUser);
+    const dispatch = useDispatch();
+    const currentUser = useSelector((state) => state.auth.currentUser);
+    const errMessage = useSelector((state) => state.admin.errMessage);
     const rolePath =
-        userData?.roleId == "R1"
+        currentUser?.roleId == "R1"
             ? "admin"
-            : userData?.roleId == "R2"
+            : currentUser?.roleId == "R2"
             ? "dean"
-            : userData?.roleId == "R3"
+            : currentUser?.roleId == "R3"
             ? "lecturer"
-            : userData?.roleId == "R4"
+            : currentUser?.roleId == "R4"
             ? "student"
             : null;
-    const route = routes.filter((route) => route.role == userData?.roleId)[0]
-        ? routes.filter((route) => route.role == userData?.roleId)[0]
+    const route = routes.filter((route) => route.role == currentUser?.roleId)[0]
+        ? routes.filter((route) => route.role == currentUser?.roleId)[0]
         : "";
-    useEffect(() => {
-        // console.log(route, rolePath);
+    // useEffect(() => {
+    //     // console.log(route, rolePath);
 
-        if (rolePath == "") {
-            navigate("");
-        }
-    }, [userData]);
+    //     if (rolePath == "") {
+    //         navigate("");
+    //     }
+    // }, [currentUser]);
     return (
         <Routes>
             <Route path="" element={<HomeLayout />}>
@@ -81,7 +87,6 @@ function App() {
                             path={route.path}
                             element={route.element}
                         />
-                        
                     ))}
                 {/* <Route path="" element={<Navigate to="home" replace />} /> */}
                 <Route path="*" element={<Navigate to="home" replace />} />

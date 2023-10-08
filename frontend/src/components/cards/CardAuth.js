@@ -12,6 +12,7 @@ import { MdKeyboardBackspace } from "react-icons/md";
 import { apiAuth, logginUser } from "../../redux/apiRequest";
 import { useForm } from "react-hook-form";
 import { toast } from "react-toastify";
+import { getErrMessageSuccess } from "../../redux/adminSlice";
 const CardAuth = () => {
     const dispatch = useDispatch();
     const {
@@ -25,6 +26,7 @@ const CardAuth = () => {
     } = useForm();
     const [showMessage, setShowMessage] = useState("");
     const [showPassword, setShowPassword] = useState(false);
+    const navigate = useNavigate();
     const currentUser = useSelector((state) => state.auth.currentUser);
     const stateAuth = useSelector((state) => state.auth);
     const rolePath =
@@ -41,16 +43,6 @@ const CardAuth = () => {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
 
-    const navigate = useNavigate();
-    useEffect(() => {
-        console.log("Đã useffect");
-        if (rolePath == "") {
-            // console.log("Đã vào");
-            navigate("/login");
-        } else {
-            navigate(`/${rolePath}`);
-        }
-    }, []);
     const onSubmit = async (data) => {
         const id = toast.loading("Please wait...");
         console.log(data);
@@ -61,8 +53,8 @@ const CardAuth = () => {
                 navigate: navigate,
             })
             .then((res) => {
-                    console.log(res);
-                    if (res?.errCode > 0) {
+                // console.log(res);
+                if (res?.errCode > 0) {
                     console.log(res);
                     toast.update(id, {
                         render: res?.errMessage,
@@ -73,7 +65,7 @@ const CardAuth = () => {
                         pauseOnFocusLoss: true,
                     });
                 } else {
-                    // console.log(res);
+                    console.log(res);
                     toast.update(id, {
                         render: res?.errMessage,
                         type: "success",
@@ -83,6 +75,16 @@ const CardAuth = () => {
                         pauseOnFocusLoss: true,
                     });
                     // reset();
+
+                    if (res?.user?.roleId == "R1") {
+                        navigate("/admin");
+                    } else if (res?.user?.roleId == "R2") {
+                        navigate("/dean");
+                    } else if (res?.user?.roleId == "R3") {
+                        navigate("/lecturer");
+                    } else if (res?.user?.roleId == "R4") {
+                        navigate("/student");
+                    }
                 }
             })
             .catch((err) => {
@@ -97,6 +99,16 @@ const CardAuth = () => {
                 });
             });
     };
+
+    useEffect(() => {
+        console.log("Đã useffect");
+        if (rolePath == "") {
+            // console.log("Đã vào");
+            navigate("/login");
+        } else {
+            navigate(`/${rolePath}`);
+        }
+    }, [currentUser]);
     return (
         <div className="cardAuth h-[75vh] w-[60%] flex justify-between rounded-lg shadow-lg bg-bgColor overflow-auto media-max-md:h-full media-max-md:w-full media-max-md:flex-col media-max-md:p-6">
             <div className="imageDiv flex justify-center basis-1/2 h-full m-0 text-center rounded-lg overflow-hidden relative shadow-2xl">
