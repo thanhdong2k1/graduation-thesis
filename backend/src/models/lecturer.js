@@ -54,7 +54,7 @@ module.exports = (sequelize, DataTypes) => {
       });
       
       Lecturer.hasMany(models.Thesis, {
-        foreignKey: "thesisAdvisor",
+        foreignKey: "thesisAdvisorId",
         onDelete: "SET NULL",
       });
 

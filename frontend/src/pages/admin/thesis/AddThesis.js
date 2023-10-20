@@ -2,7 +2,9 @@ import { Controller, useForm } from "react-hook-form";
 import { useDispatch, useSelector } from "react-redux";
 import { toast } from "react-toastify";
 import { useEffect, useState } from "react";
-import { MdLockReset } from "react-icons/md";
+import Avatar from "react-avatar-edit";
+import { FaPenAlt } from "react-icons/fa";
+import { Buffer } from "buffer";
 import Select from "react-select";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
@@ -10,15 +12,16 @@ import moment from "moment/moment";
 import { createAxios } from "../../../utils/createInstance";
 import { logginSuccess } from "../../../redux/authSlice";
 import { apiAdmin } from "../../../redux/apiRequest";
+import ModalPopup from "../../../components/ModelPopup/ModalPopup";
 import {
     customSelectStyles,
     customSelectStylesMulti,
 } from "../../../utils/customStyleReactSelect";
 import ButtonConfirm from "../../../components/button/ButtonConfirm";
 import { useParams } from "react-router-dom";
-import ModalPopup from "../../../components/ModelPopup/ModalPopup";
+import { MdLockReset } from "react-icons/md";
 
-const AddLecturer = ({ type }, params) => {
+const AddThesis = ({ type }) => {
     let { id } = useParams();
     console.log("type", type, id);
 
@@ -29,8 +32,30 @@ const AddLecturer = ({ type }, params) => {
     const gender = useSelector((state) => state.admin.gender);
     const role = useSelector((state) => state.admin.role);
     const permissions = useSelector((state) => state.admin.permissions);
-    const departments = useSelector((state) => state.admin.departments);
-    let codeDepartment = departments.map((v) => {
+    const results = useSelector((state) => state.admin.result);
+    const topics = useSelector((state) => state.admin.topics);
+    const students = useSelector((state) => state.admin.students);
+    const thesisAdvisor = useSelector((state) => state.admin.lecturers);
+    const thesisAdvisorStatus = useSelector((state) => state.admin.handle);
+    const thesisSessions = useSelector((state) => state.admin.thesisSessions);
+    const councils = useSelector((state) => state.admin.councils);
+    const councilStatus = useSelector((state) => state.admin.handle);
+    let codeCouncil = councils?.map((v) => {
+        return { value: v.id, label: `${v.id} | ${v.name}` };
+    });
+    let codeThesisSession = thesisSessions?.map((v) => {
+        return { value: v.id, label: `${v.id} | ${v.name}` };
+    });
+    let codeThesisAdvisor = thesisAdvisor?.map((v) => {
+        return { value: v.id, label: `${v.id} | ${v.fullName}` };
+    });
+    let codeStudent = students?.map((v) => {
+        return { value: v.id, label: `${v.id} | ${v.fullName}` };
+    });
+    let codeTopic = topics?.map((v) => {
+        return { value: v.id, label: `${v.id} | ${v.name}` };
+    });
+    let codeResult = results?.map((v) => {
         return { value: v.id, label: `${v.id} | ${v.name}` };
     });
     const [isRtl, setIsRtl] = useState(false);
@@ -48,7 +73,7 @@ const AddLecturer = ({ type }, params) => {
         console.log("hello", data, getValues());
         const id = toast.loading("Please wait...");
         await apiAdmin
-            .apiResetPasswordLecturer({
+            .apiResetPasswordThesis({
                 user: currentUser,
                 data: getValues(),
                 axiosJWT: axiosJWT,
@@ -114,15 +139,15 @@ const AddLecturer = ({ type }, params) => {
         data?.permissions
             ?.filter((value) => !value.isFixed)
             ?.map((obj) => {
-                console.log(obj?.value);
-                permissions.push(obj?.value);
+                console.log(obj.value);
+                permissions.push(obj.value);
             });
         const datasend = {
             ...data,
             birthday: new Date(
-                moment(data?.birthday, "DD/MM/YYYY")
+                moment(data.birthday, "DD/MM/YYYY")
             ).toLocaleDateString("vi-VN"),
-            permissions: permissions.toString(),
+            permissions: permissions?.toString(),
             //     e.map((obj) => {
             //         console.log(obj.value);
             //         permissions.push(obj.value);
@@ -131,7 +156,7 @@ const AddLecturer = ({ type }, params) => {
         console.log(datasend);
         type == "add"
             ? await apiAdmin
-                  .apiAddLecturer({
+                  .apiAddThesis({
                       user: currentUser,
                       data: datasend,
                       axiosJWT: axiosJWT,
@@ -173,7 +198,7 @@ const AddLecturer = ({ type }, params) => {
                       });
                   })
             : await apiAdmin
-                  .apiUpdateLecturer({
+                  .apiUpdateThesis({
                       user: currentUser,
                       data: datasend,
                       axiosJWT: axiosJWT,
@@ -217,11 +242,36 @@ const AddLecturer = ({ type }, params) => {
                   });
     };
     useEffect(() => {
-        apiAdmin.apiGetRole(currentUser, dispatch, axiosJWT);
-        apiAdmin.apiGetGender(currentUser, dispatch, axiosJWT);
+        apiAdmin.apiGetResult(currentUser, dispatch, axiosJWT);
+        apiAdmin.apiGetHandle(currentUser, dispatch, axiosJWT);
+        apiAdmin.getAllTopics({
+            user: currentUser,
+            dispatch: dispatch,
+            axiosJWT: axiosJWT,
+        });
+        apiAdmin.getAllStudents({
+            user: currentUser,
+            dispatch: dispatch,
+            axiosJWT: axiosJWT,
+        });
+        apiAdmin.getAllLecturers({
+            user: currentUser,
+            dispatch: dispatch,
+            axiosJWT: axiosJWT,
+        });
+        apiAdmin.getAllThesisSessions({
+            user: currentUser,
+            dispatch: dispatch,
+            axiosJWT: axiosJWT,
+        });
+        apiAdmin.getAllCouncils({
+            user: currentUser,
+            dispatch: dispatch,
+            axiosJWT: axiosJWT,
+        });
         if (id) {
             apiAdmin
-                .getLecturerById({
+                .getThesisById({
                     user: currentUser,
                     id: id,
                     axiosJWT: axiosJWT,
@@ -273,46 +323,14 @@ const AddLecturer = ({ type }, params) => {
                             }
                         });
                         setValue("id", res?.result?.id);
-                        setValue("fullName", res?.result?.fullName);
-                        setValue("email", res?.result?.email);
-                        setValue("numberPhone", res?.result?.numberPhone);
-                        setValue("address", res?.result?.address);
-                        setValue("birthday", res?.result?.birthday);
-
-                        {
-                            /* code, roleId, departmentId, permissions */
-                        }
-
-                        setValue("code", res?.result?.code);
                         setValue(
-                            "role",
-                            role.filter(
-                                (role) => role?.value === res?.result?.roleId
+                            "result",
+                            codeResult.filter(
+                                (value) => value?.value == res?.result?.resultId
                             )
                         );
-                        setValue(
-                            "department",
-                            codeDepartment.filter(
-                                (value) =>
-                                    value?.value == res?.result?.departmentId
-                            )
-                        );
-                        setValue("permissions", convert);
-                        // console.log(res?.result?.birthday,moment(res?.result?.birthday, "DD/MM/YYYY").toString());
-                        setValue(
-                            "gender",
-                            gender.filter(
-                                (gender) =>
-                                    gender?.value === res?.result?.genderId
-                            )
-                        );
-                        setValue(
-                            "status",
-                            status.filter(
-                                (status) =>
-                                    status?.value === res?.result?.statusId
-                            )
-                        );
+                        // id, startDate, complateDate, thesisStartDate, thesisEndDate, reportFile, totalScore, resultId,
+                        // topicId, studentId, thesisAdvisorId, thesisAdvisorStatusId, thesisSessionId, councilId, councilStatusId,
                         toast.update(id, {
                             render: res?.errMessage,
                             type: "success",
@@ -342,46 +360,13 @@ const AddLecturer = ({ type }, params) => {
         <>
             <div className="changeInformationDiv flex flex-col justify-center items-center gap-2">
                 <div className="capitalize font-semibold text-h1FontSize">
-                    {type} Lecturer
+                    {type} Thesis
                 </div>
                 <form
                     onSubmit={handleSubmit(onSubmit)}
                     className="formDiv flex flex-col gap-2  media-min-md:w-[80%]"
                 >
-                    <div className="row flex justify-center items-center gap-2">
-                        <div className="col w-full">
-                            <label className="labelInput">ID</label>
-                            <input
-                                className="input disabled"
-                                disabled
-                                {...register("id", {
-                                    // required: "Full name is required",
-                                })}
-                            />
-                            {errors.id?.type && (
-                                <p className=" text-normal text-red-500">
-                                    {errors.id?.message}
-                                </p>
-                            )}
-                        </div>
-                        <div className="col w-full">
-                            <label className="labelInput">Email</label>
-                            <input
-                                className={`input ${
-                                    type == "detail" ? "disabled" : ""
-                                }`}
-                                disabled={type == "detail" ? true : false}
-                                {...register("email", {
-                                    required: "Email is required",
-                                })}
-                            />
-                            {errors.email?.type && (
-                                <p className=" text-normal text-red-500">
-                                    {errors.email?.message}
-                                </p>
-                            )}
-                        </div>
-                    </div>
+                    {/* 
                     <div className="row flex justify-center items-center gap-2">
                         <div className="col w-full">
                             <label className="labelInput">Full name</label>
@@ -436,15 +421,271 @@ const AddLecturer = ({ type }, params) => {
                                 </p>
                             )}
                         </div>
+                    </div> */}
+                    <div className="row flex justify-center items-center gap-2">
+                        <div className="col w-full">
+                            <label className="labelInput">ID</label>
+                            <input
+                                className="input disabled"
+                                disabled
+                                {...register("id", {
+                                    // required: "Full name is required",
+                                })}
+                            />
+                            {errors.id?.type && (
+                                <p className=" text-normal text-red-500">
+                                    {errors.id?.message}
+                                </p>
+                            )}
+                        </div>
+                        <div className="col w-full">
+                            <label className="labelInput">Total Record</label>
+                            <input
+                                className={`input ${
+                                    type == "detail" ? "disabled" : ""
+                                }`}
+                                disabled={type == "detail" ? true : false}
+                                {...register("totalRecord", {
+                                    // required: "Full name is required",
+                                })}
+                            />
+                            {errors.totalRecord?.type && (
+                                <p className=" text-normal text-red-500">
+                                    {errors.totalRecord?.message}
+                                </p>
+                            )}
+                        </div>
+                        <div className="col w-full">
+                            <label className="labelInput">Result</label>
+                            <Controller
+                                name="result"
+                                control={control}
+                                {...register("result", {
+                                    // required: "Full name is required",
+                                })}
+                                render={({ field }) => (
+                                    <Select
+                                        styles={customSelectStyles}
+                                        {...field}
+                                        options={codeResult}
+                                        isClearable={true}
+                                        isDisabled={true}
+                                    />
+                                )}
+                            />
+                        </div>
                     </div>
-
+                    <div className="row flex justify-center items-center gap-2">
+                        <div className="col w-full">
+                            <label className="labelInput">Student</label>
+                            <Controller
+                                name="student"
+                                control={control}
+                                {...register("student", {
+                                    // required: "Full name is required",
+                                })}
+                                render={({ field }) => (
+                                    <Select
+                                        styles={customSelectStyles}
+                                        {...field}
+                                        options={codeStudent}
+                                        isClearable={true}
+                                        isDisabled={
+                                            type == "detail" ? true : false
+                                        }
+                                    />
+                                )}
+                            />
+                            {errors.student?.type && (
+                                <p className=" text-normal text-red-500">
+                                    {errors.student?.message}
+                                </p>
+                            )}
+                        </div>
+                        <div className="col w-full">
+                            <label className="labelInput">Topic</label>
+                            <Controller
+                                name="topic"
+                                control={control}
+                                {...register("topic", {
+                                    // required: "Full name is required",
+                                })}
+                                render={({ field }) => (
+                                    <Select
+                                        styles={customSelectStyles}
+                                        {...field}
+                                        options={codeTopic}
+                                        isClearable={true}
+                                        isDisabled={
+                                            type == "detail" ? true : false
+                                        }
+                                    />
+                                )}
+                            />
+                            {errors.topic?.type && (
+                                <p className=" text-normal text-red-500">
+                                    {errors.topic?.message}
+                                </p>
+                            )}
+                        </div>
+                    </div>
+                    <div className="row flex justify-center items-center gap-2">
+                        <div className="col w-full">
+                            <label className="labelInput">Thesis Advisor</label>
+                            <Controller
+                                name="thesisAdvisor"
+                                control={control}
+                                {...register("thesisAdvisor", {
+                                    // required: "Full name is required",
+                                })}
+                                render={({ field }) => (
+                                    <Select
+                                        styles={customSelectStyles}
+                                        {...field}
+                                        options={codeThesisAdvisor}
+                                        isClearable={true}
+                                        isDisabled={
+                                            type == "detail" ? true : false
+                                        }
+                                    />
+                                )}
+                            />
+                            {errors.thesisAdvisor?.type && (
+                                <p className=" text-normal text-red-500">
+                                    {errors.thesisAdvisor?.message}
+                                </p>
+                            )}
+                        </div>
+                        <div className="col w-full">
+                            <label className="labelInput">
+                                Thesis Advisor Status
+                            </label>
+                            <Controller
+                                name="thesisAdvisorStatus"
+                                control={control}
+                                {...register("thesisAdvisorStatus", {
+                                    // required: "Full name is required",
+                                })}
+                                render={({ field }) => (
+                                    <Select
+                                        styles={customSelectStyles}
+                                        {...field}
+                                        options={thesisAdvisorStatus}
+                                        isClearable={true}
+                                        isDisabled={
+                                            type == "detail" ? true : false
+                                        }
+                                    />
+                                )}
+                            />
+                            {errors.thesisAdvisorStatus?.type && (
+                                <p className=" text-normal text-red-500">
+                                    {errors.thesisAdvisorStatus?.message}
+                                </p>
+                            )}
+                        </div>
+                    </div>
+                    <div className="row flex justify-center items-center gap-2">
+                        <div className="col w-full">
+                            <label className="labelInput" for="file_input">
+                                Upload file Report
+                            </label>
+                            <input
+                                className="inputFile"
+                                id="file_input"
+                                type="file"
+                                accept=".xls,.xlsx"
+                                // onChange={importFile}
+                            />
+                        </div>
+                        <div className="col w-full">
+                            <label className="labelInput">Thesis Session</label>
+                            <Controller
+                                name="thesisSession"
+                                control={control}
+                                {...register("thesisSession", {
+                                    // required: "Full name is required",
+                                })}
+                                render={({ field }) => (
+                                    <Select
+                                        styles={customSelectStyles}
+                                        {...field}
+                                        options={codeThesisSession}
+                                        isClearable={true}
+                                        isDisabled={
+                                            type == "detail" ? true : false
+                                        }
+                                    />
+                                )}
+                            />
+                            {errors.thesisSession?.type && (
+                                <p className=" text-normal text-red-500">
+                                    {errors.thesisSession?.message}
+                                </p>
+                            )}
+                        </div>
+                    </div>
+                    <div className="row flex justify-center items-center gap-2">
+                        <div className="col w-full">
+                            <label className="labelInput">Council</label>
+                            <Controller
+                                name="council"
+                                control={control}
+                                {...register("council", {
+                                    // required: "Full name is required",
+                                })}
+                                render={({ field }) => (
+                                    <Select
+                                        styles={customSelectStyles}
+                                        {...field}
+                                        options={codeCouncil}
+                                        isClearable={true}
+                                        isDisabled={
+                                            type == "detail" ? true : false
+                                        }
+                                    />
+                                )}
+                            />
+                            {errors.council?.type && (
+                                <p className=" text-normal text-red-500">
+                                    {errors.council?.message}
+                                </p>
+                            )}
+                        </div>
+                        <div className="col w-full">
+                            <label className="labelInput">Council Status</label>
+                            <Controller
+                                name="councilStatus"
+                                control={control}
+                                {...register("councilStatus", {
+                                    // required: "Full name is required",
+                                })}
+                                render={({ field }) => (
+                                    <Select
+                                        styles={customSelectStyles}
+                                        {...field}
+                                        options={councilStatus}
+                                        isClearable={true}
+                                        isDisabled={
+                                            type == "detail" ? true : false
+                                        }
+                                    />
+                                )}
+                            />
+                            {errors.councilStatus?.type && (
+                                <p className=" text-normal text-red-500">
+                                    {errors.councilStatus?.message}
+                                </p>
+                            )}
+                        </div>
+                    </div>
                     <div className="row flex justify-center items-center gap-2">
                         <div className="col w-full flex flex-col">
-                            <label className="labelInput">Birthday</label>
+                            <label className="labelInput">Start Date</label>
                             <Controller
-                                name="birthday"
+                                name="startDate"
                                 control={control}
-                                {...register("birthday", {
+                                {...register("startDate", {
                                     // required: "Full name is required",
                                 })}
                                 render={({ field: { onChange, value } }) => (
@@ -471,188 +712,129 @@ const AddLecturer = ({ type }, params) => {
                                     />
                                 )}
                             />
-                            {errors.birthday?.type && (
+                            {errors.startDate?.type && (
                                 <p className=" text-normal text-red-500">
-                                    {errors.birthday?.message}
+                                    {errors.startDate?.message}
                                 </p>
                             )}
                         </div>
-                        <div className="col w-full">
-                            <label className="labelInput">Gender</label>
+                        <div className="col w-full flex flex-col">
+                            <label className="labelInput">Complate Date</label>
                             <Controller
-                                name="gender"
+                                name="complateDate"
                                 control={control}
-                                {...register("gender", {
+                                {...register("complateDate", {
                                     // required: "Full name is required",
                                 })}
-                                render={({ field }) => (
-                                    <Select
-                                        styles={customSelectStyles}
-                                        {...field}
-                                        options={gender}
-                                        isClearable={true}
-                                        isDisabled={type == "detail" ? true : false}
-                                    />
-                                )}
-                            />
-                            {errors.gender?.type && (
-                                <p className=" text-normal text-red-500">
-                                    {errors.gender?.message}
-                                </p>
-                            )}
-                        </div>
-                    </div>
-                    {/* code, roleId, departmentId, permissions */}
-
-                    <div className="row flex justify-center items-center gap-2">
-                        <div className="col w-full">
-                            <label className="labelInput">Code</label>
-                            <div className="flex gap-2">
-                                <input
-                                    className={`input ${
-                                        type == "detail" ? "disabled" : ""
-                                    }`}
-                                    disabled={type == "detail" ? true : false}
-                                    {...register("code", {})}
-                                />
-                                {type == "update" && (
-                                    <div className="col group">
-                                        <div
-                                            className="buttonDiv button h-full"
-                                            // disabled
-                                            onClick={onResetPassword}
-                                        >
-                                            <MdLockReset className="" />
-                                            <span
-                                                className={`hidden no-underline group-hover:block group-hover:absolute -translate-x-[50%] -translate-y-[170%] text-whiteColor bg-textColor shadow-lg p-1 z-10 rounded-lg text-smallestFontSize`}
-                                            >
-                                                Reset Password
-                                            </span>
-                                        </div>
-                                    </div>
-                                )}
-                            </div>
-                        </div>
-                        <div className="col w-full">
-                            <label className="labelInput">Role</label>
-                            <Controller
-                                name="role"
-                                control={control}
-                                {...register("role", {
-                                    // required: "Full name is required",
-                                })}
-                                render={({ field }) => (
-                                    <Select
-                                        styles={customSelectStyles}
-                                        {...field}
-                                        options={role}
-                                        isClearable={true}
-                                        isDisabled={type == "detail" ? true : false}
-                                    />
-                                )}
-                            />
-                            {errors.role?.type && (
-                                <p className=" text-normal text-red-500">
-                                    {errors.role?.message}
-                                </p>
-                            )}
-                        </div>
-                    </div>
-
-                    <div className="row flex justify-center items-center gap-2">
-                        <div className="col w-full">
-                            <label className="labelInput">Department</label>
-                            <Controller
-                                name="department"
-                                control={control}
-                                {...register("department", {
-                                    // required: "Full name is required",
-                                })}
-                                render={({ field }) => (
-                                    <Select
-                                        styles={customSelectStyles}
-                                        {...field}
-                                        options={codeDepartment}
-                                        isClearable={true}
-                                        isDisabled={type == "detail" ? true : false}
-                                    />
-                                )}
-                            />
-                            {errors.department?.type && (
-                                <p className=" text-normal text-red-500">
-                                    {errors.department?.message}
-                                </p>
-                            )}
-                        </div>
-                        <div className="col w-full">
-                            <label className="labelInput">Status</label>
-                            <Controller
-                                name="status"
-                                control={control}
-                                {...register("status", {
-                                    // required: "Full name is required",
-                                })}
-                                render={({ field }) => (
-                                    <Select
-                                        styles={customSelectStyles}
-                                        {...field}
-                                        options={status}
-                                        isClearable={true}
-                                        isDisabled={
+                                render={({ field: { onChange, value } }) => (
+                                    <DatePicker
+                                        className={`input ${
+                                            type == "detail" ? "disabled" : ""
+                                        }`}
+                                        disabled={
                                             type == "detail" ? true : false
                                         }
+                                        dateFormat="dd/MM/yyyy"
+                                        selected={
+                                            value
+                                                ? new Date(
+                                                      moment(
+                                                          value,
+                                                          "DD/MM/YYYY"
+                                                      ).toString()
+                                                  )
+                                                : null
+                                        }
+                                        // closeOnScroll={true}
+                                        onChange={onChange}
                                     />
                                 )}
                             />
-                            {errors.status?.type && (
+                            {errors.complateDate?.type && (
                                 <p className=" text-normal text-red-500">
-                                    {errors.status?.message}
+                                    {errors.complateDate?.message}
                                 </p>
                             )}
                         </div>
                     </div>
                     <div className="row flex justify-center items-center gap-2">
-                        <div className="col w-full">
-                            <label className="labelInput">Permissions</label>
+                        <div className="col w-full flex flex-col">
+                            <label className="labelInput">Thesis Start Date</label>
                             <Controller
-                                name="permissions"
+                                name="thesisStartDate"
                                 control={control}
-                                {...register("permissions", {
+                                {...register("thesisStartDate", {
                                     // required: "Full name is required",
                                 })}
-                                render={({ field }) => (
-                                    <Select
-                                        styles={customSelectStylesMulti}
-                                        {...field}
-                                        isRtl={isRtl}
-                                        isMulti
-                                        isClearable={false}
-                                        isDisabled={
+                                render={({ field: { onChange, value } }) => (
+                                    <DatePicker
+                                        className={`input ${
+                                            type == "detail" ? "disabled" : ""
+                                        }`}
+                                        disabled={
                                             type == "detail" ? true : false
                                         }
-                                        options={permissions}
-                                        className="basic-multi-select "
-                                        classNamePrefix="select"
+                                        dateFormat="dd/MM/yyyy"
+                                        selected={
+                                            value
+                                                ? new Date(
+                                                      moment(
+                                                          value,
+                                                          "DD/MM/YYYY"
+                                                      ).toString()
+                                                  )
+                                                : null
+                                        }
+                                        // closeOnScroll={true}
+                                        onChange={onChange}
                                     />
                                 )}
                             />
-                            {/* <input className="input disabled:bg-whiteColor" disabled defaultValue={} /> */}
-                            {/* <Select
-                            styles={customSelectStylesMulti}
-                            isRtl={isRtl}
-                            defaultValue={defaultSelect}
-                            isMulti
-                            name="colors"
-                            isClearable={false}
-                            isDisabled={true}
-                            options={permissions}
-                            className="basic-multi-select "
-                            classNamePrefix="select"
-                        /> */}
+                            {errors.thesisStartDate?.type && (
+                                <p className=" text-normal text-red-500">
+                                    {errors.thesisStartDate?.message}
+                                </p>
+                            )}
+                        </div>
+                        <div className="col w-full flex flex-col">
+                            <label className="labelInput">Thesis End Date</label>
+                            <Controller
+                                name="thesisEndDate"
+                                control={control}
+                                {...register("thesisEndDate", {
+                                    // required: "Full name is required",
+                                })}
+                                render={({ field: { onChange, value } }) => (
+                                    <DatePicker
+                                        className={`input ${
+                                            type == "detail" ? "disabled" : ""
+                                        }`}
+                                        disabled={
+                                            type == "detail" ? true : false
+                                        }
+                                        dateFormat="dd/MM/yyyy"
+                                        selected={
+                                            value
+                                                ? new Date(
+                                                      moment(
+                                                          value,
+                                                          "DD/MM/YYYY"
+                                                      ).toString()
+                                                  )
+                                                : null
+                                        }
+                                        // closeOnScroll={true}
+                                        onChange={onChange}
+                                    />
+                                )}
+                            />
+                            {errors.thesisEndDate?.type && (
+                                <p className=" text-normal text-red-500">
+                                    {errors.thesisEndDate?.message}
+                                </p>
+                            )}
                         </div>
                     </div>
-                    {/* code, roleId, departmentId, permissions */}
-
                     <ButtonConfirm type={type} />
                 </form>
             </div>
@@ -669,4 +851,4 @@ const AddLecturer = ({ type }, params) => {
     );
 };
 
-export default AddLecturer;
+export default AddThesis;

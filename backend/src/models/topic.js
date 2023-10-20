@@ -19,6 +19,7 @@ module.exports = (sequelize, DataTypes) => {
       Topic.belongsTo(models.Allcode, {
         foreignKey: "statusId",
         targetKey: "code",
+        as:"statusData"
       });
 
       Topic.hasOne(models.Thesis, {

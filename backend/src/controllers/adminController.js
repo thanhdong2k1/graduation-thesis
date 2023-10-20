@@ -5,6 +5,7 @@ const salt = bcrypt.genSaltSync(10);
 
 const adminController = {
   // Register
+
   changePassword: async (req, res) => {
     try {
       const hashPasswordFromBcrypt = await bcrypt.hashSync(
@@ -1736,6 +1737,10 @@ const adminController = {
   },
   addLecturer: async (req, res) => {
     try {
+      const hashPasswordFromBcrypt = await bcrypt.hashSync(
+        req?.body?.code,
+        salt
+      );
       if (req?.body) {
         console.log("req.body", req.body);
         if (req?.body?.departmentId && req?.body?.roleId == "R2") {
@@ -1753,11 +1758,12 @@ const adminController = {
         const result = await db.Lecturer.create({
           email: req?.body?.email,
           fullName: req?.body?.fullName,
+          password: hashPasswordFromBcrypt,
           numberPhone: req?.body?.numberPhone,
           address: req?.body?.address,
           birthday: req?.body?.birthday,
           genderId: req?.body?.genderId,
-          codeId: req?.body?.codeId,
+          code: req?.body?.code,
           roleId: req?.body?.roleId,
           departmentId: req?.body?.departmentId,
           statusId: req?.body?.statusId,
@@ -1832,7 +1838,7 @@ const adminController = {
             address: req?.body?.address,
             birthday: req?.body?.birthday,
             genderId: req?.body?.genderId,
-            codeId: req?.body?.codeId,
+            code: req?.body?.code,
             roleId: req?.body?.roleId,
             departmentId: req?.body?.departmentId,
             statusId: req?.body?.statusId,
@@ -1941,6 +1947,609 @@ const adminController = {
     }
   },
 
+  // Api Student
+  getStudents: async (req, res) => {
+    try {
+      console.log(req.body);
+      const searchTerms = `%${
+        req?.body?.inputSearch ? req?.body?.inputSearch?.trim() : ""
+      }%`?.replace(/\s/g, "%");
+      console.log(searchTerms);
+      const whereClause = {};
+      console.log(req?.body?.inputSearch?.toLowerCase());
+      console.log("req?.body?.length", Object.keys(req?.body).length);
+      if (Object.keys(req?.body).length > 0) {
+        console.log("Đã vào");
+        if (!req?.body?.filterSearch?.includes("Data")) {
+          if (searchTerms?.toLowerCase() != "%null%") {
+            whereClause[req?.body?.filterSearch] = {
+              [Op.like]: searchTerms,
+            };
+          } else {
+            whereClause[req?.body?.filterSearch] = {
+              [Op.is]: null,
+            };
+          }
+        } else {
+          if (searchTerms?.toLowerCase() != "%null%") {
+            console.log(req?.body?.filterSearch);
+            if (req?.body?.filterSearch == "deanData") {
+              whereClause["$deanData.fullName$"] = {
+                [Op.like]: searchTerms,
+              };
+            }
+            if (req?.body?.filterSearch == "classData") {
+              whereClause["$classData.name$"] = {
+                [Op.like]: searchTerms,
+              };
+            }
+            if (req?.body?.filterSearch == "roleData") {
+              whereClause["$roleData.valueVi$"] = {
+                [Op.like]: searchTerms,
+              };
+            }
+            if (req?.body?.filterSearch == "statusData") {
+              whereClause["$statusData.valueVi$"] = {
+                [Op.like]: searchTerms,
+              };
+            }
+            if (req?.body?.filterSearch == "genderData") {
+              whereClause["$genderData.valueVi$"] = {
+                [Op.like]: searchTerms,
+              };
+            }
+            // theo id
+            whereClause[req?.body?.filterSearch.replace("Data", "Id")] = {
+              [Op.like]: searchTerms,
+            };
+          } else {
+            whereClause[req?.body?.filterSearch?.replace("Data", "Id")] = {
+              [Op.is]: null,
+            };
+          }
+        }
+      }
+      console.log("whereClause", whereClause);
+
+      const queryOptions = {
+        attributes: { exclude: ["password", "refreshToken", "image"] },
+        include: [
+          {
+            model: db.Class,
+            as: "classData",
+            // attributes: ["name"],
+          },
+          {
+            model: db.Allcode,
+            as: "roleData",
+            // attributes: ["name"],
+          },
+          {
+            model: db.Allcode,
+            as: "statusData",
+            // attributes: ["name"],
+          },
+          {
+            model: db.Allcode,
+            as: "genderData",
+            // attributes: ["name"],
+          },
+        ],
+        order: [["updatedAt", "DESC"]],
+        raw: true,
+        nest: true,
+      };
+
+      if (Object.keys(whereClause).length > 0) {
+        queryOptions.where = {
+          [Op.or]: whereClause,
+        };
+      }
+
+      const result = await db.Student.findAndCountAll(queryOptions);
+      // console.log(result);
+      const { rows: students, count: totalRecords } = result;
+      return res.status(200).json({ errCode: 0, students, totalRecords });
+    } catch (error) {
+      return res.status(500).json({ errCode: -1, errMessage: error });
+    }
+  },
+  getStudentById: async (req, res) => {
+    try {
+      const result = await db.Student.findOne({
+        where: {
+          id: req?.params?.id,
+        },
+        attributes: { exclude: ["password", "refreshToken", "image"] },
+        include: [
+          {
+            model: db.Class,
+            as: "classData",
+            // attributes: ["name"],
+          },
+          {
+            model: db.Allcode,
+            as: "roleData",
+            // attributes: ["name"],
+          },
+          {
+            model: db.Allcode,
+            as: "statusData",
+            // attributes: ["name"],
+          },
+          {
+            model: db.Allcode,
+            as: "genderData",
+            // attributes: ["name"],
+          },
+        ],
+        order: [["updatedAt", "DESC"]],
+        raw: true,
+        nest: true,
+      });
+      if (result) {
+        return res
+          .status(200)
+          .json({ errCode: 0, errMessage: "Tìm dữ liệu thành công", result });
+      } else {
+        return res.status(200).json({
+          errCode: 1,
+          errMessage: "Đã xảy ra lỗi trong quá trình tìm, vui lòng thử lại sau",
+        });
+      }
+    } catch (error) {
+      return res.status(500).json({ errCode: -1, errMessage: error });
+    }
+  },
+  addStudent: async (req, res) => {
+    try {
+      if (req?.body) {
+        const hashPasswordFromBcrypt = await bcrypt.hashSync(
+          req?.body?.code,
+          salt
+        );
+        console.log("req.body", req.body);
+        const result = await db.Student.create({
+          email: req?.body?.email,
+          fullName: req?.body?.fullName,
+          password: hashPasswordFromBcrypt,
+          numberPhone: req?.body?.numberPhone,
+          address: req?.body?.address,
+          birthday: req?.body?.birthday,
+          genderId: req?.body?.genderId,
+          code: req?.body?.code,
+          roleId: req?.body?.roleId,
+          classId: req?.body?.classId,
+          statusId: req?.body?.statusId,
+          permissions: req?.body?.permissions ? req?.body?.permissions : null,
+        });
+        if (result) {
+          console.log("result", result);
+          return res
+            .status(200)
+            .json({ errCode: 0, errMessage: "Thêm dữ liệu thành công" });
+        } else {
+          return res.status(200).json({
+            errCode: 2,
+            errMessage:
+              "Đã xảy ra lỗi trong quá trình thêm, vui lòng thử lại sau",
+          });
+        }
+      } else {
+        return res
+          .status(404)
+          .json({ errCode: 1, errMessage: "Dữ liệu không được tìm thấy" });
+      }
+    } catch (error) {
+      return res.status(500).json({ errCode: -1, errMessage: error });
+    }
+  },
+  updateStudent: async (req, res) => {
+    try {
+      if (req?.params?.id) {
+        console.log("req.body", req.body);
+        const result = await db.Student.update(
+          {
+            email: req?.body?.email,
+            fullName: req?.body?.fullName,
+            numberPhone: req?.body?.numberPhone,
+            address: req?.body?.address,
+            birthday: req?.body?.birthday,
+            genderId: req?.body?.genderId,
+            code: req?.body?.code,
+            roleId: req?.body?.roleId,
+            classId: req?.body?.classId,
+            statusId: req?.body?.statusId,
+            permissions: req?.body?.permissions,
+          },
+          {
+            where: {
+              id: req?.params.id,
+            },
+          }
+        );
+
+        if (result) {
+          return res
+            .status(200)
+            .json({ errCode: 0, errMessage: "Thêm dữ liệu thành công" });
+        } else {
+          return res.status(200).json({
+            errCode: 2,
+            errMessage:
+              "Đã xảy ra lỗi trong quá trình thêm, vui lòng thử lại sau",
+          });
+        }
+      } else {
+        return res
+          .status(404)
+          .json({ errCode: 1, errMessage: "Dữ liệu không được tìm thấy" });
+      }
+    } catch (error) {
+      return res.status(500).json({ errCode: -1, errMessage: error });
+    }
+  },
+  resetPasswordStudent: async (req, res) => {
+    try {
+      if (req?.params?.id) {
+        const hashPasswordFromBcrypt = await bcrypt.hashSync(
+          req?.body?.code,
+          salt
+        );
+        console.log("req.body", req.body);
+        const result = await db.Student.update(
+          {
+            password: hashPasswordFromBcrypt,
+          },
+          {
+            where: {
+              id: req?.params.id,
+            },
+          }
+        );
+
+        if (result) {
+          return res
+            .status(200)
+            .json({ errCode: 0, errMessage: "Khôi phục mật khẩu thành công" });
+        } else {
+          return res.status(200).json({
+            errCode: 2,
+            errMessage:
+              "Đã xảy ra lỗi trong quá trình khôi phục, vui lòng thử lại sau",
+          });
+        }
+      } else {
+        return res
+          .status(404)
+          .json({ errCode: 1, errMessage: "Dữ liệu không được tìm thấy" });
+      }
+    } catch (error) {
+      return res.status(500).json({ errCode: -1, errMessage: error });
+    }
+  },
+  resetPasswordLecturer: async (req, res) => {
+    try {
+      if (req?.params?.id) {
+        const hashPasswordFromBcrypt = await bcrypt.hashSync(
+          req?.body?.code,
+          salt
+        );
+        console.log("req.body", req.body);
+        const result = await db.Lecturer.update(
+          {
+            password: hashPasswordFromBcrypt,
+          },
+          {
+            where: {
+              id: req?.params.id,
+            },
+          }
+        );
+
+        if (result) {
+          return res
+            .status(200)
+            .json({ errCode: 0, errMessage: "Khôi phục mật khẩu thành công" });
+        } else {
+          return res.status(200).json({
+            errCode: 2,
+            errMessage:
+              "Đã xảy ra lỗi trong quá trình khôi phục, vui lòng thử lại sau",
+          });
+        }
+      } else {
+        return res
+          .status(404)
+          .json({ errCode: 1, errMessage: "Dữ liệu không được tìm thấy" });
+      }
+    } catch (error) {
+      return res.status(500).json({ errCode: -1, errMessage: error });
+    }
+  },
+  deleteStudent: async (req, res) => {
+    try {
+      if (req?.params?.id) {
+        console.log(req.body);
+        const result = await db.Student.destroy({
+          where: { id: req?.params?.id },
+        });
+        if (result) {
+          return res
+            .status(200)
+            .json({ errCode: 0, errMessage: "Xóa dữ liệu thành công" });
+        } else {
+          return res.status(200).json({
+            errCode: 2,
+            errMessage:
+              "Đã xảy ra lỗi trong quá trình xóa, vui lòng thử lại sau",
+          });
+        }
+      } else {
+        return res
+          .status(404)
+          .json({ errCode: 1, errMessage: "Dữ liệu không được tìm thấy" });
+      }
+    } catch (error) {
+      return res.status(500).json({ errCode: -1, errMessage: error });
+    }
+  },
+  importStudents: async (req, res) => {
+    try {
+      if (req?.body?.data) {
+        console.log(req?.body?.data);
+        const result = await db.Student.bulkCreate(req?.body?.data);
+        if (result) {
+          return res
+            .status(200)
+            .json({ errCode: 0, errMessage: "Import dữ liệu thành công" });
+        } else {
+          return res.status(200).json({
+            errCode: 2,
+            errMessage:
+              "Đã xảy ra lỗi trong quá trình import, vui lòng thử lại sau",
+          });
+        }
+      } else {
+        return res
+          .status(404)
+          .json({ errCode: 1, errMessage: "Dữ liệu không được tìm thấy" });
+      }
+    } catch (error) {
+      return res.status(500).json({ errCode: -1, errMessage: error });
+    }
+  },
+
+  // Api Topic
+  getTopics: async (req, res) => {
+    try {
+      console.log(req.body);
+      const searchTerms = `%${
+        req?.body?.inputSearch ? req?.body?.inputSearch?.trim() : ""
+      }%`?.replace(/\s/g, "%");
+      console.log(searchTerms);
+      const whereClause = {};
+      console.log(req?.body?.inputSearch?.toLowerCase());
+      console.log("req?.body?.length", Object.keys(req?.body).length);
+      if (Object.keys(req?.body).length > 0) {
+        console.log("Đã vào");
+        if (!req?.body?.filterSearch?.includes("Data")) {
+          if (searchTerms?.toLowerCase() != "%null%") {
+            whereClause[req?.body?.filterSearch] = {
+              [Op.like]: searchTerms,
+            };
+          } else {
+            whereClause[req?.body?.filterSearch] = {
+              [Op.is]: null,
+            };
+          }
+        } else {
+          if (searchTerms?.toLowerCase() != "%null%") {
+            console.log(req?.body?.filterSearch);
+            if (req?.body?.filterSearch == "departmentData") {
+              whereClause["$departmentData.name$"] = {
+                [Op.like]: searchTerms,
+              };
+            } else if (req?.body?.filterSearch == "statusData") {
+              whereClause["$statusData.valueVi$"] = {
+                [Op.like]: searchTerms,
+              };
+            }
+
+            // theo id
+            whereClause[req?.body?.filterSearch.replace("Data", "Id")] = {
+              [Op.like]: searchTerms,
+            };
+          } else {
+            whereClause[req?.body?.filterSearch?.replace("Data", "Id")] = {
+              [Op.is]: null,
+            };
+          }
+        }
+      }
+      console.log("whereClause", whereClause);
+
+      const queryOptions = {
+        include: [
+          {
+            model: db.Allcode,
+            as: "statusData",
+            // attributes: ["name"],
+          },
+          {
+            model: db.Department,
+            as: "departmentData",
+          },
+        ],
+        order: [["updatedAt", "DESC"]],
+        raw: true,
+        nest: true,
+      };
+
+      if (Object.keys(whereClause).length > 0) {
+        queryOptions.where = {
+          [Op.or]: whereClause,
+        };
+      }
+
+      const result = await db.Topic.findAndCountAll(queryOptions);
+      // console.log(result);
+      const { rows: topics, count: totalRecords } = result;
+      return res.status(200).json({ errCode: 0, topics, totalRecords });
+    } catch (error) {
+      return res.status(500).json({ errCode: -1, errMessage: error });
+    }
+  },
+  getTopicById: async (req, res) => {
+    try {
+      const result = await db.Topic.findOne({
+        where: {
+          id: req?.params?.id,
+        },
+        include: [
+          {
+            model: db.Allcode,
+            as: "statusData",
+            // attributes: ["name"],
+          },
+          {
+            model: db.Department,
+            as: "departmentData",
+          },
+        ],
+        order: [["updatedAt", "DESC"]],
+        raw: true,
+        nest: true,
+      });
+      if (result) {
+        return res
+          .status(200)
+          .json({ errCode: 0, errMessage: "Tìm dữ liệu thành công", result });
+      } else {
+        return res.status(200).json({
+          errCode: 1,
+          errMessage: "Đã xảy ra lỗi trong quá trình tìm, vui lòng thử lại sau",
+        });
+      }
+    } catch (error) {
+      return res.status(500).json({ errCode: -1, errMessage: error });
+    }
+  },
+  addTopic: async (req, res) => {
+    try {
+      if (req?.body) {
+        const result = await db.Topic.create({
+          name: req?.body?.name,
+          description: req?.body?.description,
+          statusId: req?.body?.statusId,
+          departmentId: req?.body?.departmentId,
+        });
+        if (result) {
+          return res
+            .status(200)
+            .json({ errCode: 0, errMessage: "Thêm dữ liệu thành công" });
+        } else {
+          return res.status(200).json({
+            errCode: 2,
+            errMessage:
+              "Đã xảy ra lỗi trong quá trình thêm, vui lòng thử lại sau",
+          });
+        }
+      } else {
+        return res
+          .status(404)
+          .json({ errCode: 1, errMessage: "Dữ liệu không được tìm thấy" });
+      }
+    } catch (error) {
+      return res.status(500).json({ errCode: -1, errMessage: error });
+    }
+  },
+  updateTopic: async (req, res) => {
+    try {
+      if (req?.params?.id) {
+        console.log(req.body);
+        const result = await db.Topic.update(
+          {
+            name: req?.body?.name,
+            description: req?.body?.description,
+            statusId: req?.body?.statusId,
+            departmentId: req?.body?.departmentId,
+          },
+          { where: { id: req?.params?.id } }
+        );
+        if (result) {
+          return res
+            .status(200)
+            .json({ errCode: 0, errMessage: "Cập nhật dữ liệu thành công" });
+        } else {
+          return res.status(200).json({
+            errCode: 2,
+            errMessage:
+              "Đã xảy ra lỗi trong quá trình thêm, vui lòng thử lại sau",
+          });
+        }
+      } else {
+        return res
+          .status(404)
+          .json({ errCode: 1, errMessage: "Dữ liệu không được tìm thấy" });
+      }
+    } catch (error) {
+      return res.status(500).json({ errCode: -1, errMessage: error });
+    }
+  },
+  deleteTopic: async (req, res) => {
+    try {
+      if (req?.params?.id) {
+        console.log(req.body);
+        const result = await db.Topic.destroy({
+          where: { id: req?.params?.id },
+        });
+        if (result) {
+          return res
+            .status(200)
+            .json({ errCode: 0, errMessage: "Xóa dữ liệu thành công" });
+        } else {
+          return res.status(200).json({
+            errCode: 2,
+            errMessage:
+              "Đã xảy ra lỗi trong quá trình xóa, vui lòng thử lại sau",
+          });
+        }
+      } else {
+        return res
+          .status(404)
+          .json({ errCode: 1, errMessage: "Dữ liệu không được tìm thấy" });
+      }
+    } catch (error) {
+      return res.status(500).json({ errCode: -1, errMessage: error });
+    }
+  },
+  importTopics: async (req, res) => {
+    try {
+      if (req?.body?.data) {
+        console.log(req?.body?.data);
+        const result = await db.Topic.bulkCreate(req?.body?.data);
+        if (result) {
+          return res
+            .status(200)
+            .json({ errCode: 0, errMessage: "Import dữ liệu thành công" });
+        } else {
+          return res.status(200).json({
+            errCode: 2,
+            errMessage:
+              "Đã xảy ra lỗi trong quá trình import, vui lòng thử lại sau",
+          });
+        }
+      } else {
+        return res
+          .status(404)
+          .json({ errCode: 1, errMessage: "Dữ liệu không được tìm thấy" });
+      }
+    } catch (error) {
+      return res.status(500).json({ errCode: -1, errMessage: error });
+    }
+  },
+
   // Api ThesisSession
   getThesisSessions: async (req, res) => {
     try {
@@ -2007,6 +2616,499 @@ const adminController = {
       console.log(result);
       const { rows: thesisSessions, count: totalRecords } = result;
       return res.status(200).json({ errCode: 0, thesisSessions, totalRecords });
+    } catch (error) {
+      return res.status(500).json({ errCode: -1, errMessage: error });
+    }
+  },
+  getThesisSessionById: async (req, res) => {
+    try {
+      const result = await db.ThesisSession.findOne({
+        where: {
+          id: req?.params?.id,
+        },
+        include: [
+          {
+            model: db.EvaluationMethod,
+            as: "evaluationMethodData",
+            // attributes: ["name"],
+          },
+        ],
+        order: [["evaluationMethodId", "DESC"]],
+        raw: true,
+        nest: true,
+      });
+      if (result) {
+        return res
+          .status(200)
+          .json({ errCode: 0, errMessage: "Tìm dữ liệu thành công", result });
+      } else {
+        return res.status(200).json({
+          errCode: 1,
+          errMessage: "Đã xảy ra lỗi trong quá trình tìm, vui lòng thử lại sau",
+        });
+      }
+    } catch (error) {
+      return res.status(500).json({ errCode: -1, errMessage: error });
+    }
+  },
+  addThesisSession: async (req, res) => {
+    try {
+      if (req?.body) {
+        const result = await db.ThesisSession.create({
+          name: req?.body?.name,
+          description: req?.body?.description,
+          evaluationMethodId: req?.body?.evaluationMethodId,
+          startDate: req?.body?.startDate,
+          endDate: req?.body?.endDate,
+          validPoint: req?.body?.validPoint,
+        });
+        if (result) {
+          return res
+            .status(200)
+            .json({ errCode: 0, errMessage: "Thêm dữ liệu thành công" });
+        } else {
+          return res.status(200).json({
+            errCode: 2,
+            errMessage:
+              "Đã xảy ra lỗi trong quá trình thêm, vui lòng thử lại sau",
+          });
+        }
+      } else {
+        return res
+          .status(404)
+          .json({ errCode: 1, errMessage: "Dữ liệu không được tìm thấy" });
+      }
+    } catch (error) {
+      return res.status(500).json({ errCode: -1, errMessage: error });
+    }
+  },
+  updateThesisSession: async (req, res) => {
+    try {
+      if (req?.params?.id) {
+        console.log(req.body);
+        const result = await db.ThesisSession.update(
+          {
+            name: req?.body?.name,
+            description: req?.body?.description,
+            evaluationMethodId: req?.body?.evaluationMethodId,
+            startDate: req?.body?.startDate,
+            endDate: req?.body?.endDate,
+            validPoint: req?.body?.validPoint,
+          },
+          { where: { id: req?.params?.id } }
+        );
+        if (result) {
+          return res
+            .status(200)
+            .json({ errCode: 0, errMessage: "Cập nhật dữ liệu thành công" });
+        } else {
+          return res.status(200).json({
+            errCode: 2,
+            errMessage:
+              "Đã xảy ra lỗi trong quá trình thêm, vui lòng thử lại sau",
+          });
+        }
+      } else {
+        return res
+          .status(404)
+          .json({ errCode: 1, errMessage: "Dữ liệu không được tìm thấy" });
+      }
+    } catch (error) {
+      return res.status(500).json({ errCode: -1, errMessage: error });
+    }
+  },
+  deleteThesisSession: async (req, res) => {
+    try {
+      if (req?.params?.id) {
+        console.log(req.body);
+        const result = await db.ThesisSession.destroy({
+          where: { id: req?.params?.id },
+        });
+        if (result) {
+          return res
+            .status(200)
+            .json({ errCode: 0, errMessage: "Xóa dữ liệu thành công" });
+        } else {
+          return res.status(200).json({
+            errCode: 2,
+            errMessage:
+              "Đã xảy ra lỗi trong quá trình xóa, vui lòng thử lại sau",
+          });
+        }
+      } else {
+        return res
+          .status(404)
+          .json({ errCode: 1, errMessage: "Dữ liệu không được tìm thấy" });
+      }
+    } catch (error) {
+      return res.status(500).json({ errCode: -1, errMessage: error });
+    }
+  },
+  importThesisSessions: async (req, res) => {
+    try {
+      if (req?.body?.data) {
+        console.log(req?.body?.data);
+        const result = await db.ThesisSession.bulkCreate(req?.body?.data);
+        if (result) {
+          return res
+            .status(200)
+            .json({ errCode: 0, errMessage: "Import dữ liệu thành công" });
+        } else {
+          return res.status(200).json({
+            errCode: 2,
+            errMessage:
+              "Đã xảy ra lỗi trong quá trình import, vui lòng thử lại sau",
+          });
+        }
+      } else {
+        return res
+          .status(404)
+          .json({ errCode: 1, errMessage: "Dữ liệu không được tìm thấy" });
+      }
+    } catch (error) {
+      return res.status(500).json({ errCode: -1, errMessage: error });
+    }
+  },
+
+  // Api Thesis
+  getTheses: async (req, res) => {
+    try {
+      console.log(req.body);
+      const searchTerms = `%${
+        req?.body?.inputSearch ? req?.body?.inputSearch?.trim() : ""
+      }%`?.replace(/\s/g, "%");
+      console.log(searchTerms);
+      const whereClause = {};
+      console.log(req?.body?.inputSearch?.toLowerCase());
+      console.log("req?.body?.length", Object.keys(req?.body).length);
+      if (Object.keys(req?.body).length > 0) {
+        console.log("Đã vào");
+        if (!req?.body?.filterSearch?.includes("Data")) {
+          if (searchTerms?.toLowerCase() != "%null%") {
+            whereClause[req?.body?.filterSearch] = {
+              [Op.like]: searchTerms,
+            };
+          } else {
+            whereClause[req?.body?.filterSearch] = {
+              [Op.is]: null,
+            };
+          }
+        } else {
+          // councilStatusData,
+          // thesisAdvisorStatusData,
+          // resultData,
+          // topicData,
+          // studentData,
+          // thesisAdvisorData,
+          // thesisSessionData,
+          // councilData,
+          if (searchTerms?.toLowerCase() != "%null%") {
+            console.log(req?.body?.filterSearch);
+            if (req?.body?.filterSearch == "topicData") {
+              whereClause["$topicData.name$"] = {
+                [Op.like]: searchTerms,
+              };
+            } else if (req?.body?.filterSearch == "studentData") {
+              whereClause["$studentData.fullName$"] = {
+                [Op.like]: searchTerms,
+              };
+            } else if (req?.body?.filterSearch == "thesisAdvisorData") {
+              whereClause["$thesisAdvisorData.fullName$"] = {
+                [Op.like]: searchTerms,
+              };
+            } else if (req?.body?.filterSearch == "thesisSessionData") {
+              whereClause["$thesisSessionData.name$"] = {
+                [Op.like]: searchTerms,
+              };
+            } else if (req?.body?.filterSearch == "councilData") {
+              whereClause["$councilData.name$"] = {
+                [Op.like]: searchTerms,
+              };
+            } else if (req?.body?.filterSearch == "councilStatusData") {
+              whereClause["$councilStatusData.valueVi$"] = {
+                [Op.like]: searchTerms,
+              };
+            } else if (req?.body?.filterSearch == "thesisAdvisorStatusData") {
+              whereClause["$thesisAdvisorStatusData.valueVi$"] = {
+                [Op.like]: searchTerms,
+              };
+            } else if (req?.body?.filterSearch == "resultData") {
+              whereClause["$resultData.valueVi$"] = {
+                [Op.like]: searchTerms,
+              };
+            }
+            // theo id
+            whereClause[req?.body?.filterSearch.replace("Data", "Id")] = {
+              [Op.like]: searchTerms,
+            };
+          } else {
+            whereClause[req?.body?.filterSearch?.replace("Data", "Id")] = {
+              [Op.is]: null,
+            };
+          }
+        }
+      }
+      console.log("whereClause", whereClause);
+
+      const queryOptions = {
+        include: [
+          {
+            model: db.Allcode,
+            as: "councilStatusData",
+          },
+          {
+            model: db.Allcode,
+            as: "resultData",
+          },
+          {
+            model: db.Allcode,
+            as: "thesisAdvisorStatusData",
+          },
+          {
+            model: db.Topic,
+            as: "topicData",
+          },
+          {
+            model: db.Student,
+            as: "studentData",
+          },
+          {
+            model: db.Council,
+            as: "councilData",
+          },
+          {
+            model: db.Lecturer,
+            as: "thesisAdvisorData",
+          },
+          {
+            model: db.ThesisSession,
+            as: "thesisSessionData",
+          },
+        ],
+        order: [["updatedAt", "DESC"]],
+        raw: true,
+        nest: true,
+      };
+
+      if (Object.keys(whereClause).length > 0) {
+        queryOptions.where = {
+          [Op.or]: whereClause,
+        };
+      }
+
+      const result = await db.Thesis.findAndCountAll(queryOptions);
+      // console.log(result);
+      const { rows: theses, count: totalRecords } = result;
+      return res.status(200).json({ errCode: 0, theses, totalRecords });
+    } catch (error) {
+      return res.status(500).json({ errCode: -1, errMessage: error });
+    }
+  },
+  getThesisById: async (req, res) => {
+    try {
+      const result = await db.Thesis.findOne({
+        where: {
+          id: req?.params?.id,
+        },
+        include: [
+          {
+            model: db.Allcode,
+            as: "councilStatusData",
+          },
+          {
+            model: db.Allcode,
+            as: "resultData",
+          },
+          {
+            model: db.Allcode,
+            as: "thesisAdvisorStatusData",
+          },
+          {
+            model: db.Topic,
+            as: "topicData",
+          },
+          {
+            model: db.Student,
+            as: "studentData",
+          },
+          {
+            model: db.Council,
+            as: "councilData",
+          },
+          {
+            model: db.Lecturer,
+            as: "thesisAdvisorData",
+          },
+          {
+            model: db.ThesisSession,
+            as: "thesisSessionData",
+          },
+        ],
+        order: [["updatedAt", "DESC"]],
+        raw: true,
+        nest: true,
+      });
+      if (result) {
+        return res
+          .status(200)
+          .json({ errCode: 0, errMessage: "Tìm dữ liệu thành công", result });
+      } else {
+        return res.status(200).json({
+          errCode: 1,
+          errMessage: "Đã xảy ra lỗi trong quá trình tìm, vui lòng thử lại sau",
+        });
+      }
+    } catch (error) {
+      return res.status(500).json({ errCode: -1, errMessage: error });
+    }
+  },
+  // id,
+  // startDate,
+  // complateDate,
+  // thesisStartDate,
+  // thesisEndDate,
+  // reportFile,
+  // totalScore,
+  // resultId,
+  // topicId,
+  // studentId,
+  // thesisAdvisorId,
+  // thesisAdvisorStatusId,
+  // thesisSessionId,
+  // councilId,
+  // councilStatusId,
+  // createdAt,
+  // updatedAt,
+  addThesis: async (req, res) => {
+    try {
+      if (req?.body) {
+        const result = await db.Thesis.create({
+          startDate: req?.body?.startDate,
+          complateDate: req?.body?.complateDate,
+          thesisStartDate: req?.body?.thesisStartDate,
+          thesisEndDate: req?.body?.thesisEndDate,
+          reportFile: req?.body?.reportFile,
+          totalScore: req?.body?.totalScore,
+          resultId: req?.body?.resultId,
+          topicId: req?.body?.topicId,
+          studentId: req?.body?.studentId,
+          thesisAdvisorId: req?.body?.thesisAdvisorId,
+          thesisAdvisorStatusId: req?.body?.thesisAdvisorStatusId,
+          thesisSessionId: req?.body?.thesisSessionId,
+          councilId: req?.body?.councilId,
+          councilStatusId: req?.body?.councilStatusId,
+        });
+        if (result) {
+          return res
+            .status(200)
+            .json({ errCode: 0, errMessage: "Thêm dữ liệu thành công" });
+        } else {
+          return res.status(200).json({
+            errCode: 2,
+            errMessage:
+              "Đã xảy ra lỗi trong quá trình thêm, vui lòng thử lại sau",
+          });
+        }
+      } else {
+        return res
+          .status(404)
+          .json({ errCode: 1, errMessage: "Dữ liệu không được tìm thấy" });
+      }
+    } catch (error) {
+      return res.status(500).json({ errCode: -1, errMessage: error });
+    }
+  },
+  updateThesis: async (req, res) => {
+    try {
+      if (req?.params?.id) {
+        console.log(req.body);
+        const result = await db.Thesis.update(
+          {
+            startDate: req?.body?.startDate,
+            complateDate: req?.body?.complateDate,
+            thesisStartDate: req?.body?.thesisStartDate,
+            thesisEndDate: req?.body?.thesisEndDate,
+            reportFile: req?.body?.reportFile,
+            totalScore: req?.body?.totalScore,
+            resultId: req?.body?.resultId,
+            topicId: req?.body?.topicId,
+            studentId: req?.body?.studentId,
+            thesisAdvisorId: req?.body?.thesisAdvisorId,
+            thesisAdvisorStatusId: req?.body?.thesisAdvisorStatusId,
+            thesisSessionId: req?.body?.thesisSessionId,
+            councilId: req?.body?.councilId,
+            councilStatusId: req?.body?.councilStatusId,
+          },
+          { where: { id: req?.params?.id } }
+        );
+        if (result) {
+          return res
+            .status(200)
+            .json({ errCode: 0, errMessage: "Cập nhật dữ liệu thành công" });
+        } else {
+          return res.status(200).json({
+            errCode: 2,
+            errMessage:
+              "Đã xảy ra lỗi trong quá trình thêm, vui lòng thử lại sau",
+          });
+        }
+      } else {
+        return res
+          .status(404)
+          .json({ errCode: 1, errMessage: "Dữ liệu không được tìm thấy" });
+      }
+    } catch (error) {
+      return res.status(500).json({ errCode: -1, errMessage: error });
+    }
+  },
+  deleteThesis: async (req, res) => {
+    try {
+      if (req?.params?.id) {
+        console.log(req.body);
+        const result = await db.Thesis.destroy({
+          where: { id: req?.params?.id },
+        });
+        if (result) {
+          return res
+            .status(200)
+            .json({ errCode: 0, errMessage: "Xóa dữ liệu thành công" });
+        } else {
+          return res.status(200).json({
+            errCode: 2,
+            errMessage:
+              "Đã xảy ra lỗi trong quá trình xóa, vui lòng thử lại sau",
+          });
+        }
+      } else {
+        return res
+          .status(404)
+          .json({ errCode: 1, errMessage: "Dữ liệu không được tìm thấy" });
+      }
+    } catch (error) {
+      return res.status(500).json({ errCode: -1, errMessage: error });
+    }
+  },
+  importTheses: async (req, res) => {
+    try {
+      if (req?.body?.data) {
+        console.log(req?.body?.data);
+        const result = await db.Thesis.bulkCreate(req?.body?.data);
+        if (result) {
+          return res
+            .status(200)
+            .json({ errCode: 0, errMessage: "Import dữ liệu thành công" });
+        } else {
+          return res.status(200).json({
+            errCode: 2,
+            errMessage:
+              "Đã xảy ra lỗi trong quá trình import, vui lòng thử lại sau",
+          });
+        }
+      } else {
+        return res
+          .status(404)
+          .json({ errCode: 1, errMessage: "Dữ liệu không được tìm thấy" });
+      }
     } catch (error) {
       return res.status(500).json({ errCode: -1, errMessage: error });
     }

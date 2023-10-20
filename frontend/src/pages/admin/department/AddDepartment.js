@@ -280,8 +280,11 @@ const AddDepartment = ({ type }, params) => {
                             })}
                             render={({ field: { onChange, value } }) => (
                                 <DatePicker
-                                    className="input"
+                                    className={`input ${
+                                        type == "detail" ? "disabled" : ""
+                                    }`}
                                     dateFormat="dd/MM/yyyy"
+                                    disabled={type == "detail" ? true : false}
                                     selected={
                                         value
                                             ? new Date(
@@ -316,6 +319,7 @@ const AddDepartment = ({ type }, params) => {
                                     styles={customSelectStyles}
                                     {...field}
                                     options={codeDean}
+                                    isDisabled={type == "detail" ? true : false}
                                     isClearable={true}
                                 />
                             )}

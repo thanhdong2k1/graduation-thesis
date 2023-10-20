@@ -15,8 +15,15 @@ import AddLecturer from "../pages/admin/lecturer/AddLecturer";
 import Lecturer from "../pages/admin/lecturer/Lecturer";
 import AddMajor from "../pages/admin/major/AddMajor";
 import Major from "../pages/admin/major/Major";
+import AddStudent from "../pages/admin/student/AddStudent";
+import Student from "../pages/admin/student/Student";
+import AddThesis from "../pages/admin/thesis/AddThesis";
+import Thesis from "../pages/admin/thesis/Thesis";
+import AddThesisSession from "../pages/admin/thesisSession/AddThesisSession";
+import ThesisSession from "../pages/admin/thesisSession/ThesisSession";
+import AddTopic from "../pages/admin/topic/AddCouncil";
+import Topic from "../pages/admin/topic/Topic";
 import LecturerHomePage from "../pages/lecturer/LecturerHomePage";
-import Topic from "../pages/lecturer/topic/Topic";
 import StudentHomePage from "../pages/student/StudentHomePage";
 import pathRoutes from "../utils/pathRoutes";
 
@@ -201,6 +208,111 @@ export const routes = [
                 name: "Lecturer Detail",
                 path: pathRoutes.R1.lecturerDetailId,
                 element: <AddLecturer type={"detail"} />,
+            },
+
+            // Student
+            {
+                //   icon: <HomeIcon {...icon} />,
+                name: "Student",
+                path: pathRoutes.R1.student,
+                element: <Student />,
+            },
+            {
+                //   icon: <HomeIcon {...icon} />,
+                name: "Add Student",
+                path: pathRoutes.R1.addStudent,
+                element: <AddStudent type={"add"} />,
+            },
+            {
+                //   icon: <HomeIcon {...icon} />,
+                name: "Update Student",
+                path: pathRoutes.R1.updateStudentId,
+                element: <AddStudent type={"update"} />,
+            },
+            {
+                //   icon: <HomeIcon {...icon} />,
+                name: "Student Detail",
+                path: pathRoutes.R1.studentDetailId,
+                element: <AddStudent type={"detail"} />,
+            },
+
+            // Topic
+            {
+                //   icon: <HomeIcon {...icon} />,
+                name: "Topic",
+                path: pathRoutes.R1.topic,
+                element: <Topic />,
+            },
+            {
+                //   icon: <HomeIcon {...icon} />,
+                name: "Add Topic",
+                path: pathRoutes.R1.addTopic,
+                element: <AddTopic type={"add"} />,
+            },
+            {
+                //   icon: <HomeIcon {...icon} />,
+                name: "Update Topic",
+                path: pathRoutes.R1.updateTopicId,
+                element: <AddTopic type={"update"} />,
+            },
+            {
+                //   icon: <HomeIcon {...icon} />,
+                name: "Topic Detail",
+                path: pathRoutes.R1.topicDetailId,
+                element: <AddTopic type={"detail"} />,
+            },
+
+            
+            // ThesisSession
+            {
+                //   icon: <HomeIcon {...icon} />,
+                name: "Thesis Session",
+                path: pathRoutes.R1.thesisSession,
+                element: <ThesisSession />,
+            },
+            {
+                //   icon: <HomeIcon {...icon} />,
+                name: "Add Thesis Session",
+                path: pathRoutes.R1.addThesisSession,
+                element: <AddThesisSession type={"add"} />,
+            },
+            {
+                //   icon: <HomeIcon {...icon} />,
+                name: "Update Thesis Session",
+                path: pathRoutes.R1.updateThesisSessionId,
+                element: <AddThesisSession type={"update"} />,
+            },
+            {
+                //   icon: <HomeIcon {...icon} />,
+                name: "Thesis Session Detail",
+                path: pathRoutes.R1.thesisSessionDetailId,
+                element: <AddThesisSession type={"detail"} />,
+            },
+
+            // Thesis
+            {
+                //   icon: <HomeIcon {...icon} />,
+                name: "Thesis",
+                path: pathRoutes.R1.thesis,
+                element: <Thesis />,
+            },
+            {
+                //   icon: <HomeIcon {...icon} />,
+                name: "Add Thesis",
+                path: pathRoutes.R1.addThesis,
+                element: <AddThesis type={"add"} />,
+            },
+            {
+                //   icon: <HomeIcon {...icon} />,
+                name: "Update Thesis",
+                path: pathRoutes.R1.updateThesisId,
+                element: <AddThesis type={"update"} />,
+            },
+            {
+                //   icon: <HomeIcon {...icon} />,
+                name: "Thesis Detail",
+                path: pathRoutes.R1.thesisDetailId,
+                element: <AddThesis type={"detail"} />,
             },
 
             // EvaluationMethod

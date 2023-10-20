@@ -150,28 +150,28 @@ const ChangeInformation = () => {
         }
     };
     let convert = [];
-    if (informationUser.roleId === "R1") {
-        permissions.forEach((obj) => {
-            if (obj.value === "PERF") {
+    if (informationUser?.roleId === "R1") {
+        permissions?.forEach((obj) => {
+            if (obj?.value === "PERF") {
                 convert.push({ ...obj, isFixed: true });
             }
         });
     } else if (informationUser.roleId === "R2") {
-        permissions.forEach((obj) => {
-            if (obj.value !== "PERD" && obj.value !== "PERF") {
+        permissions?.forEach((obj) => {
+            if (obj?.value !== "PERD" && obj?.value !== "PERF") {
                 convert.push({ ...obj, isFixed: true });
             }
         });
     } else {
-        permissions.forEach((obj) => {
-            if (obj.value === "PERU" || obj.value === "PERR") {
+        permissions?.forEach((obj) => {
+            if (obj?.value === "PERU" || obj?.value === "PERR") {
                 convert.push({ ...obj, isFixed: true });
             }
         });
     }
     const array = informationUser?.permissions?.toString().split(",");
-    permissions.forEach((obj) => {
-        if (array?.includes(obj.value)) {
+    permissions?.forEach((obj) => {
+        if (array?.includes(obj?.value)) {
             convert.push(obj);
         }
     });
@@ -193,11 +193,6 @@ const ChangeInformation = () => {
         setValue("numberPhone", informationUser?.numberPhone);
         setValue("address", informationUser?.address);
         setValue("birthday", informationUser?.birthday);
-
-        {
-            /* code, roleId, departmentId, permissions */
-        }
-
         setValue("code", informationUser?.code);
         setValue("role", informationUser?.roleData?.valueVi);
         setValue("department", informationUser?.departmentData.name);

@@ -62,8 +62,14 @@ body {
         @apply text-blackColor font-semibold;
     }
     .input {
-        @apply appearance-none border border-textColor rounded-lg w-full py-2 px-3 text-textColor font-medium leading-tight;
+        @apply appearance-none border border-textColor rounded-lg w-full py-2 px-3 text-textColor font-medium leading-tight bg-whiteColor;
     }
+    .inputFile {
+        @apply appearance-none border border-textColor rounded-lg w-full py-2 px-3 text-textColor font-medium leading-tight bg-whiteColor file:cursor-pointer 
+        file:items-center file:text-h3FontSize file:font-semibold file:bg-inputColor file:rounded-lg file:border-none file:shadow-sm
+        file:hover:text-PrimaryColor file:hover:bg-paleBlue;
+    }
+
     .disabled {
         @apply disabled:bg-whiteColor;
     }

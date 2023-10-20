@@ -62,10 +62,42 @@ router.get("/lecturer/:id", middlewareController.verifyToken, adminController.ge
 router.post("/import-lecturers", middlewareController.verifyTokenImport, adminController.importLecturers);
 router.post("/create-lecturer", middlewareController.verifyTokenAdd, adminController.addLecturer);
 router.put("/update-lecturer/:id", middlewareController.verifyTokenUpdate, adminController.updateLecturer);
+router.put("/reset-password-lecturer/:id", middlewareController.verifyTokenUpdate, adminController.resetPasswordLecturer);
 router.delete("/delete-lecturer/:id", middlewareController.verifyTokenDelete, adminController.deleteLecturer);
+
+// Api Student
+router.post("/students", middlewareController.verifyToken, adminController.getStudents);
+router.get("/student/:id", middlewareController.verifyToken, adminController.getStudentById);
+router.post("/import-students", middlewareController.verifyTokenImport, adminController.importStudents);
+router.post("/create-student", middlewareController.verifyTokenAdd, adminController.addStudent);
+router.put("/update-student/:id", middlewareController.verifyTokenUpdate, adminController.updateStudent);
+router.put("/reset-password-student/:id", middlewareController.verifyTokenUpdate, adminController.resetPasswordStudent);
+router.delete("/delete-student/:id", middlewareController.verifyTokenDelete, adminController.deleteStudent);
+
+// Api Topic
+router.post("/topics", middlewareController.verifyToken, adminController.getTopics);
+router.get("/topic/:id", middlewareController.verifyToken, adminController.getTopicById);
+router.post("/import-topics", middlewareController.verifyTokenImport, adminController.importTopics);
+router.post("/create-topic", middlewareController.verifyTokenAdd, adminController.addTopic);
+router.put("/update-topic/:id", middlewareController.verifyTokenUpdate, adminController.updateTopic);
+router.delete("/delete-topic/:id", middlewareController.verifyTokenDelete, adminController.deleteTopic);
+
 
 // Api ThesisSession
 router.post("/thesis-session",middlewareController.verifyToken, adminController.getThesisSessions);
+router.get("/thesis-session/:id", middlewareController.verifyToken, adminController.getThesisSessionById);
+router.post("/import-thesis-sessions", middlewareController.verifyTokenImport, adminController.importThesisSessions);
+router.post("/create-thesis-session", middlewareController.verifyTokenAdd, adminController.addThesisSession);
+router.put("/update-thesis-session/:id", middlewareController.verifyTokenUpdate, adminController.updateThesisSession);
+router.delete("/delete-thesis-session/:id", middlewareController.verifyTokenDelete, adminController.deleteThesisSession);
+
+// Api Thesis
+router.post("/theses", middlewareController.verifyToken, adminController.getTheses);
+router.get("/thesis/:id", middlewareController.verifyToken, adminController.getThesisById);
+router.post("/import-theses", middlewareController.verifyTokenImport, adminController.importTheses);
+router.post("/create-thesis", middlewareController.verifyTokenAdd, adminController.addThesis);
+router.put("/update-thesis/:id", middlewareController.verifyTokenUpdate, adminController.updateThesis);
+router.delete("/delete-thesis/:id", middlewareController.verifyTokenDelete, adminController.deleteThesis);
 
 router.post("/refresh", authController.requestRefreshToken);
 router.post(

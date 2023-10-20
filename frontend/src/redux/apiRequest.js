@@ -39,16 +39,34 @@ import {
     getAdminMajorsFailed,
     getAdminMajorsStart,
     getAdminMajorsSuccess,
+    getAdminStudentsFailed,
+    getAdminStudentsStart,
+    getAdminStudentsSuccess,
+    getAdminThesesFailed,
+    getAdminThesesStart,
+    getAdminThesesSuccess,
     getAdminThesisSessionsFailed,
     getAdminThesisSessionsStart,
     getAdminThesisSessionsSuccess,
+    getAdminTopicsFailed,
+    getAdminTopicsStart,
+    getAdminTopicsSuccess,
     getGenderFailed,
     getGenderStart,
     getGenderSuccess,
+    getHandleFailed,
+    getHandleStart,
+    getHandleSuccess,
     getInformationSuccess,
     getPermissionsFailed,
     getPermissionsStart,
     getPermissionsSuccess,
+    getPositionFailed,
+    getPositionStart,
+    getPositionSuccess,
+    getResultFailed,
+    getResultStart,
+    getResultSuccess,
     getRoleFailed,
     getRoleStart,
     getRoleSuccess,
@@ -106,7 +124,6 @@ export const apiUser = {
     }) => {
         try {
             dispatch(getTopicsStart());
-            // console.log("data api getalltopic", departmentId, offset, limit);
             const res = await axios.post("/api/user/topics", {
                 departmentId: departmentId,
                 inputSearch: inputSearch,
@@ -121,7 +138,6 @@ export const apiUser = {
     getAllCouncils: async ({ inputSearch, filterSearch, dispatch }) => {
         try {
             dispatch(getCouncilsStart());
-            // console.log("data api getalltopic", offset, limit);
             const res = await axios.post("/api/user/councils", {
                 inputSearch: inputSearch,
                 filterSearch: filterSearch,
@@ -189,7 +205,11 @@ export const apiAdmin = {
                     numberPhone: data?.numberPhone,
                     birthday: data?.birthday,
                     address: data?.address,
-                    genderId: data?.gender?data?.gender[0]?.value?data?.gender[0]?.value:data?.gender?.value:null,
+                    genderId: data?.gender
+                        ? data?.gender[0]?.value
+                            ? data?.gender[0]?.value
+                            : data?.gender?.value
+                        : null,
                     image: data?.image,
                 },
                 {
@@ -259,7 +279,7 @@ export const apiAdmin = {
     },
     apiGetHandle: async (user, dispatch, axiosJWT) => {
         try {
-            dispatch(getGenderStart());
+            dispatch(getHandleStart());
             let code = [];
             const res = await axiosJWT.post(
                 "/api/admin/get-allcode",
@@ -276,10 +296,10 @@ export const apiAdmin = {
                 return { value: v.code, label: `${v.code} | ${v.valueVi}` };
             });
             // console.log(res);
-            dispatch(getGenderSuccess({ code }));
+            dispatch(getHandleSuccess({ code }));
         } catch (error) {
             console.log(error);
-            getGenderFailed();
+            getHandleFailed();
             if (error?.response?.status) {
                 return error?.response?.data;
             }
@@ -287,7 +307,7 @@ export const apiAdmin = {
     },
     apiGetPosition: async (user, dispatch, axiosJWT) => {
         try {
-            dispatch(getGenderStart());
+            dispatch(getPositionStart());
             let code = [];
             const res = await axiosJWT.post(
                 "/api/admin/get-allcode",
@@ -304,10 +324,10 @@ export const apiAdmin = {
                 return { value: v.code, label: `${v.code} | ${v.valueVi}` };
             });
             // console.log(res);
-            dispatch(getGenderSuccess({ code }));
+            dispatch(getPositionSuccess({ code }));
         } catch (error) {
             console.log(error);
-            getGenderFailed();
+            getPositionFailed();
             if (error?.response?.status) {
                 return error?.response?.data;
             }
@@ -315,7 +335,7 @@ export const apiAdmin = {
     },
     apiGetResult: async (user, dispatch, axiosJWT) => {
         try {
-            dispatch(getGenderStart());
+            dispatch(getResultStart());
             let code = [];
             const res = await axiosJWT.post(
                 "/api/admin/get-allcode",
@@ -332,10 +352,10 @@ export const apiAdmin = {
                 return { value: v.code, label: `${v.code} | ${v.valueVi}` };
             });
             // console.log(res);
-            dispatch(getGenderSuccess({ code }));
+            dispatch(getResultSuccess({ code }));
         } catch (error) {
             console.log(error);
-            getGenderFailed();
+            getResultFailed();
             if (error?.response?.status) {
                 return error?.response?.data;
             }
@@ -436,7 +456,6 @@ export const apiAdmin = {
     }) => {
         try {
             dispatch(getAdminCouncilsStart());
-            // console.log("data api getalltopic", offset, limit);
             const res = await axiosJWT.post(
                 "/api/admin/councils",
                 {
@@ -457,7 +476,6 @@ export const apiAdmin = {
     },
     getCouncilById: async ({ user, id, axiosJWT }) => {
         try {
-            // console.log("data api getalltopic", offset, limit);
             const res = await axiosJWT.get(`/api/admin/council/${id}`, {
                 headers: {
                     token: `Bearer ${user?.accessToken}`,
@@ -470,7 +488,6 @@ export const apiAdmin = {
     },
     importCouncils: async ({ user, data, axiosJWT }) => {
         try {
-            // console.log("data api getalltopic", offset, limit);
             const res = await axiosJWT.post(
                 "/api/admin/import-councils",
                 {
@@ -492,19 +509,21 @@ export const apiAdmin = {
     },
     apiAddCouncil: async ({ user, data, axiosJWT }) => {
         try {
-            console.log("data Add", {
-                name: data?.name,
-                description: data?.description,
-                statusId: data?.status?data?.status[0]?.value?data?.status[0]?.value:data?.status?.value:null,
-                thesisSessionId: data?.thesisSession?data?.thesisSession[0]?.value?data?.thesisSession[0]?.value:data?.thesisSession?.value:null,
-            });
             const res = await axiosJWT.post(
                 "/api/admin/create-council",
                 {
                     name: data?.name,
                     description: data?.description,
-                    statusId: data?.status?data?.status[0]?.value?data?.status[0]?.value:data?.status?.value:null,
-                    thesisSessionId: data?.thesisSession?data?.thesisSession[0]?.value?data?.thesisSession[0]?.value:data?.thesisSession?.value:null,
+                    statusId: data?.status
+                        ? data?.status[0]?.value
+                            ? data?.status[0]?.value
+                            : data?.status?.value
+                        : null,
+                    thesisSessionId: data?.thesisSession
+                        ? data?.thesisSession[0]?.value
+                            ? data?.thesisSession[0]?.value
+                            : data?.thesisSession?.value
+                        : null,
                 },
                 {
                     headers: {
@@ -522,19 +541,21 @@ export const apiAdmin = {
     },
     apiUpdateCouncil: async ({ user, data, axiosJWT }) => {
         try {
-            console.log("data Add", {
-                name: data?.name,
-                description: data?.description,
-                statusId: data?.status?data?.status[0]?.value?data?.status[0]?.value:data?.status?.value:null,
-                thesisSessionId: data?.thesisSession?data?.thesisSession[0]?.value?data?.thesisSession[0]?.value:data?.thesisSession?.value:null,
-            });
             const res = await axiosJWT.put(
                 `/api/admin/update-council/${data.id}`,
                 {
                     name: data?.name,
                     description: data?.description,
-                    statusId: data?.status?data?.status[0]?.value?data?.status[0]?.value:data?.status?.value:null,
-                    thesisSessionId: data?.thesisSession?data?.thesisSession[0]?.value?data?.thesisSession[0]?.value:data?.thesisSession?.value:null,
+                    statusId: data?.status
+                        ? data?.status[0]?.value
+                            ? data?.status[0]?.value
+                            : data?.status?.value
+                        : null,
+                    thesisSessionId: data?.thesisSession
+                        ? data?.thesisSession[0]?.value
+                            ? data?.thesisSession[0]?.value
+                            : data?.thesisSession?.value
+                        : null,
                 },
                 {
                     headers: {
@@ -579,7 +600,6 @@ export const apiAdmin = {
     }) => {
         try {
             dispatch(getAdminDepartmentsStart());
-            // console.log("data api getalltopic", offset, limit);
             const res = await axiosJWT.post(
                 "/api/admin/departments",
                 {
@@ -600,7 +620,6 @@ export const apiAdmin = {
     },
     getDepartmentById: async ({ user, id, axiosJWT }) => {
         try {
-            // console.log("data api getalltopic", offset, limit);
             const res = await axiosJWT.get(`/api/admin/department/${id}`, {
                 headers: {
                     token: `Bearer ${user?.accessToken}`,
@@ -613,7 +632,6 @@ export const apiAdmin = {
     },
     importDepartments: async ({ user, data, axiosJWT }) => {
         try {
-            // console.log("data api getalltopic", offset, limit);
             const res = await axiosJWT.post(
                 "/api/admin/import-departments",
                 {
@@ -635,19 +653,17 @@ export const apiAdmin = {
     },
     apiAddDepartment: async ({ user, data, axiosJWT }) => {
         try {
-            console.log("data Add", {
-                name: data?.name,
-                description: data?.description,
-                founding: data?.founding,
-                deanId: data?.dean?data?.dean[0]?.value?data?.dean[0]?.value:data?.dean?.value:null,
-            });
             const res = await axiosJWT.post(
                 "/api/admin/create-department",
                 {
                     name: data?.name,
                     description: data?.description,
                     founding: data?.founding,
-                    deanId: data?.dean?data?.dean[0]?.value?data?.dean[0]?.value:data?.dean?.value:null,
+                    deanId: data?.dean
+                        ? data?.dean[0]?.value
+                            ? data?.dean[0]?.value
+                            : data?.dean?.value
+                        : null,
                 },
                 {
                     headers: {
@@ -665,19 +681,17 @@ export const apiAdmin = {
     },
     apiUpdateDepartment: async ({ user, data, axiosJWT }) => {
         try {
-            console.log("data Add", {
-                name: data?.name,
-                description: data?.description,
-                founding: data?.founding,
-                deanId: data?.dean?data?.dean[0]?.value?data?.dean[0]?.value:data?.dean?.value:null,
-            });
             const res = await axiosJWT.put(
                 `/api/admin/update-department/${data.id}`,
                 {
                     name: data?.name,
                     description: data?.description,
                     founding: data?.founding,
-                    deanId: data?.dean?data?.dean[0]?.value?data?.dean[0]?.value:data?.dean?.value:null,
+                    deanId: data?.dean
+                        ? data?.dean[0]?.value
+                            ? data?.dean[0]?.value
+                            : data?.dean?.value
+                        : null,
                 },
                 {
                     headers: {
@@ -722,7 +736,6 @@ export const apiAdmin = {
     }) => {
         try {
             dispatch(getAdminLecturersStart());
-            // console.log("data api getalltopic", offset, limit);
             const res = await axiosJWT.post(
                 "/api/admin/lecturers",
                 {
@@ -743,7 +756,6 @@ export const apiAdmin = {
     },
     getLecturerById: async ({ user, id, axiosJWT }) => {
         try {
-            // console.log("data api getalltopic", offset, limit);
             const res = await axiosJWT.get(`/api/admin/lecturer/${id}`, {
                 headers: {
                     token: `Bearer ${user?.accessToken}`,
@@ -756,7 +768,6 @@ export const apiAdmin = {
     },
     importLecturers: async ({ user, data, axiosJWT }) => {
         try {
-            // console.log("data api getalltopic", offset, limit);
             const res = await axiosJWT.post(
                 "/api/admin/import-lecturers",
                 {
@@ -778,19 +789,6 @@ export const apiAdmin = {
     },
     apiAddLecturer: async ({ user, data, axiosJWT }) => {
         try {
-            console.log("data Add", {
-                email: data?.email,
-                fullName: data?.fullName,
-                numberPhone: data?.numberPhone,
-                address: data?.address,
-                birthday: data?.birthday,
-                genderId: data?.gender?data?.gender[0]?.value?data?.gender[0]?.value:data?.gender?.value:null,
-                code: data?.code,
-                roleId: data?.role?data?.role[0]?.value?data?.role[0]?.value:data?.role?.value:null,
-                departmentId: data?.department?data?.department?.value?data?.department[0]?.value:data?.department?.value:null,
-                statusId: data?.status?data?.status[0]?.value?data?.status[0]?.value:data?.status?.value:null,
-                permissions: data?.permissions,
-            });
             const res = await axiosJWT.post(
                 "/api/admin/create-lecturer",
                 {
@@ -799,11 +797,27 @@ export const apiAdmin = {
                     numberPhone: data?.numberPhone,
                     address: data?.address,
                     birthday: data?.birthday,
-                    genderId: data?.gender?data?.gender[0]?.value?data?.gender[0]?.value:data?.gender?.value:null,
+                    genderId: data?.gender
+                        ? data?.gender[0]?.value
+                            ? data?.gender[0]?.value
+                            : data?.gender?.value
+                        : null,
                     code: data?.code,
-                    roleId: data?.role?data?.role[0]?.value?data?.role[0]?.value:data?.role?.value:null,
-                    departmentId: data?.department?data?.department[0]?.value?data?.department[0]?.value:data?.department?.value:null,
-                    statusId: data?.status?data?.status[0]?.value?data?.status[0]?.value:data?.status?.value:null,
+                    roleId: data?.role
+                        ? data?.role[0]?.value
+                            ? data?.role[0]?.value
+                            : data?.role?.value
+                        : null,
+                    departmentId: data?.department
+                        ? data?.department[0]?.value
+                            ? data?.department[0]?.value
+                            : data?.department?.value
+                        : null,
+                    statusId: data?.status
+                        ? data?.status[0]?.value
+                            ? data?.status[0]?.value
+                            : data?.status?.value
+                        : null,
                     permissions: data?.permissions,
                 },
                 {
@@ -822,19 +836,6 @@ export const apiAdmin = {
     },
     apiUpdateLecturer: async ({ user, data, axiosJWT }) => {
         try {
-            console.log("data Add", {
-                email: data?.email,
-                fullName: data?.fullName,
-                numberPhone: data?.numberPhone,
-                address: data?.address,
-                birthday: data?.birthday,
-                genderId: data?.gender?data?.gender[0]?.value?data?.gender[0]?.value:data?.gender?.value:null,
-                code: data?.code[0],
-                roleId: data?.role?data?.role[0]?.value?data?.role[0]?.value:data?.role?.value:null,
-                departmentId: data?.department?data?.department[0]?.value?data?.department[0]?.value:data?.department?.value:null,
-                statusId: data?.status?data?.status[0]?.value?data?.status[0]?.value:data?.status?.value:null,
-                permissions: data?.permissions,
-            });
             const res = await axiosJWT.put(
                 `/api/admin/update-lecturer/${data.id}`,
                 {
@@ -843,11 +844,27 @@ export const apiAdmin = {
                     numberPhone: data?.numberPhone,
                     address: data?.address,
                     birthday: data?.birthday,
-                    genderId: data?.gender?data?.gender[0]?.value?data?.gender[0]?.value:data?.gender?.value:null,
-                    code: data?.code[0],
-                    roleId: data?.role?data?.role[0]?.value?data?.role[0]?.value:data?.role?.value:null,
-                    departmentId: data?.department?data?.department[0]?.value?data?.department[0]?.value:data?.department?.value:null,
-                    statusId: data?.status?data?.status[0]?.value?data?.status[0]?.value:data?.status?.value:null,
+                    genderId: data?.gender
+                        ? data?.gender[0]?.value
+                            ? data?.gender[0]?.value
+                            : data?.gender?.value
+                        : null,
+                    code: data?.code,
+                    roleId: data?.role
+                        ? data?.role[0]?.value
+                            ? data?.role[0]?.value
+                            : data?.role?.value
+                        : null,
+                    departmentId: data?.department
+                        ? data?.department[0]?.value
+                            ? data?.department[0]?.value
+                            : data?.department?.value
+                        : null,
+                    statusId: data?.status
+                        ? data?.status[0]?.value
+                            ? data?.status[0]?.value
+                            : data?.status?.value
+                        : null,
                     permissions: data?.permissions,
                 },
                 {
@@ -893,7 +910,6 @@ export const apiAdmin = {
     }) => {
         try {
             dispatch(getAdminBlocksStart());
-            // console.log("data api getalltopic", offset, limit);
             const res = await axiosJWT.post(
                 "/api/admin/blocks",
                 {
@@ -914,7 +930,6 @@ export const apiAdmin = {
     },
     getBlockById: async ({ user, id, axiosJWT }) => {
         try {
-            // console.log("data api getalltopic", offset, limit);
             const res = await axiosJWT.get(`/api/admin/block/${id}`, {
                 headers: {
                     token: `Bearer ${user?.accessToken}`,
@@ -927,7 +942,6 @@ export const apiAdmin = {
     },
     importBlocks: async ({ user, data, axiosJWT }) => {
         try {
-            // console.log("data api getalltopic", offset, limit);
             const res = await axiosJWT.post(
                 "/api/admin/import-blocks",
                 {
@@ -1020,7 +1034,6 @@ export const apiAdmin = {
     }) => {
         try {
             dispatch(getAdminEvaluationMethodsStart());
-            // console.log("data api getalltopic", offset, limit);
             const res = await axiosJWT.post(
                 "/api/admin/evaluation-methods",
                 {
@@ -1041,7 +1054,6 @@ export const apiAdmin = {
     },
     getEvaluationMethodById: async ({ user, id, axiosJWT }) => {
         try {
-            // console.log("data api getalltopic", offset, limit);
             const res = await axiosJWT.get(
                 `/api/admin/evaluation-method/${id}`,
                 {
@@ -1057,7 +1069,6 @@ export const apiAdmin = {
     },
     importEvaluationMethods: async ({ user, data, axiosJWT }) => {
         try {
-            // console.log("data api getalltopic", offset, limit);
             const res = await axiosJWT.post(
                 "/api/admin/import-evaluation-methods",
                 {
@@ -1150,7 +1161,6 @@ export const apiAdmin = {
     }) => {
         try {
             dispatch(getAdminMajorsStart());
-            // console.log("data api getalltopic", offset, limit);
             const res = await axiosJWT.post(
                 "/api/admin/majors",
                 {
@@ -1171,7 +1181,6 @@ export const apiAdmin = {
     },
     getMajorById: async ({ user, id, axiosJWT }) => {
         try {
-            // console.log("data api getalltopic", offset, limit);
             const res = await axiosJWT.get(`/api/admin/major/${id}`, {
                 headers: {
                     token: `Bearer ${user?.accessToken}`,
@@ -1184,7 +1193,6 @@ export const apiAdmin = {
     },
     importMajors: async ({ user, data, axiosJWT }) => {
         try {
-            // console.log("data api getalltopic", offset, limit);
             const res = await axiosJWT.post(
                 "/api/admin/import-majors",
                 {
@@ -1206,17 +1214,16 @@ export const apiAdmin = {
     },
     apiAddMajor: async ({ user, data, axiosJWT }) => {
         try {
-            console.log("data Add", {
-                name: data?.name,
-                description: data?.description,
-                departmentId: data?.department?data?.department[0]?.value?data?.department[0]?.value:data?.department?.value:null,
-            });
             const res = await axiosJWT.post(
                 "/api/admin/create-major",
                 {
                     name: data?.name,
                     description: data?.description,
-                    departmentId: data?.department?data?.department[0]?.value?data?.department[0]?.value:data?.department?.value:null,
+                    departmentId: data?.department
+                        ? data?.department[0]?.value
+                            ? data?.department[0]?.value
+                            : data?.department?.value
+                        : null,
                 },
                 {
                     headers: {
@@ -1234,18 +1241,16 @@ export const apiAdmin = {
     },
     apiUpdateMajor: async ({ user, data, axiosJWT }) => {
         try {
-            console.log("data Add", {
-                name: data?.name,
-                description: data?.description,
-                founding: data?.founding,
-                departmentId: data?.department?data?.department[0]?.value?data?.department[0]?.value:data?.department?.value:null,
-            });
             const res = await axiosJWT.put(
                 `/api/admin/update-major/${data.id}`,
                 {
                     name: data?.name,
                     description: data?.description,
-                    departmentId: data?.department?data?.department[0]?.value?data?.department[0]?.value:data?.department?.value:null,
+                    departmentId: data?.department
+                        ? data?.department[0]?.value
+                            ? data?.department[0]?.value
+                            : data?.department?.value
+                        : null,
                 },
                 {
                     headers: {
@@ -1290,7 +1295,6 @@ export const apiAdmin = {
     }) => {
         try {
             dispatch(getAdminClassesStart());
-            // console.log("data api getalltopic", offset, limit);
             const res = await axiosJWT.post(
                 "/api/admin/classes",
                 {
@@ -1311,7 +1315,6 @@ export const apiAdmin = {
     },
     getClassById: async ({ user, id, axiosJWT }) => {
         try {
-            // console.log("data api getalltopic", offset, limit);
             const res = await axiosJWT.get(`/api/admin/class/${id}`, {
                 headers: {
                     token: `Bearer ${user?.accessToken}`,
@@ -1324,7 +1327,6 @@ export const apiAdmin = {
     },
     importClasses: async ({ user, data, axiosJWT }) => {
         try {
-            // console.log("data api getalltopic", offset, limit);
             const res = await axiosJWT.post(
                 "/api/admin/import-classes",
                 {
@@ -1346,19 +1348,21 @@ export const apiAdmin = {
     },
     apiAddClass: async ({ user, data, axiosJWT }) => {
         try {
-            console.log("data Add", {
-                name: data?.name,
-                description: data?.description,
-                majorId: data?.major?data?.major[0]?.value?data?.major[0]?.value:data?.major?.value:null,
-                blockId: data?.block?data?.block[0]?.value?data?.block[0]?.value:data?.block?.value:null,
-            });
             const res = await axiosJWT.post(
                 "/api/admin/create-class",
                 {
                     name: data?.name,
                     description: data?.description,
-                    majorId: data?.major?data?.major[0]?.value?data?.major[0]?.value:data?.major?.value:null,
-                    blockId: data?.block?data?.block[0]?.value?data?.block[0]?.value:data?.block?.value:null,
+                    majorId: data?.major
+                        ? data?.major[0]?.value
+                            ? data?.major[0]?.value
+                            : data?.major?.value
+                        : null,
+                    blockId: data?.block
+                        ? data?.block[0]?.value
+                            ? data?.block[0]?.value
+                            : data?.block?.value
+                        : null,
                 },
                 {
                     headers: {
@@ -1376,20 +1380,21 @@ export const apiAdmin = {
     },
     apiUpdateClass: async ({ user, data, axiosJWT }) => {
         try {
-            console.log("data Add", {
-                name: data?.name,
-                description: data?.description,
-                founding: data?.founding,
-                majorId: data?.major?data?.major[0]?.value?data?.major[0]?.value:data?.major?.value:null,
-                blockId: data?.block?data?.block[0]?.value?data?.block[0]?.value:data?.block?.value:null,
-            });
             const res = await axiosJWT.put(
                 `/api/admin/update-class/${data.id}`,
                 {
                     name: data?.name,
                     description: data?.description,
-                    majorId: data?.major?data?.major[0]?.value?data?.major[0]?.value:data?.major?.value:null,
-                    blockId: data?.block?data?.block[0]?.value?data?.block[0]?.value:data?.block?.value:null,
+                    majorId: data?.major
+                        ? data?.major[0]?.value
+                            ? data?.major[0]?.value
+                            : data?.major?.value
+                        : null,
+                    blockId: data?.block
+                        ? data?.block[0]?.value
+                            ? data?.block[0]?.value
+                            : data?.block?.value
+                        : null,
                 },
                 {
                     headers: {
@@ -1424,8 +1429,581 @@ export const apiAdmin = {
         }
     },
 
+    // Api Student
+    getAllStudents: async ({
+        user,
+        inputSearch,
+        filterSearch,
+        dispatch,
+        axiosJWT,
+    }) => {
+        try {
+            dispatch(getAdminStudentsStart());
+            const res = await axiosJWT.post(
+                "/api/admin/students",
+                {
+                    inputSearch: inputSearch,
+                    filterSearch: filterSearch,
+                },
+                {
+                    headers: {
+                        token: `Bearer ${user?.accessToken}`,
+                    },
+                }
+            );
+            dispatch(getAdminStudentsSuccess(res?.data));
+        } catch (error) {
+            toast.error(error?.response?.data?.errMessage);
+            dispatch(getAdminStudentsFailed());
+        }
+    },
+    getStudentById: async ({ user, id, axiosJWT }) => {
+        try {
+            const res = await axiosJWT.get(`/api/admin/student/${id}`, {
+                headers: {
+                    token: `Bearer ${user?.accessToken}`,
+                },
+            });
+            return res?.data;
+        } catch (error) {
+            return error?.response?.data;
+        }
+    },
+    importStudents: async ({ user, data, axiosJWT }) => {
+        try {
+            const res = await axiosJWT.post(
+                "/api/admin/import-students",
+                {
+                    data: data,
+                },
+                {
+                    headers: {
+                        token: `Bearer ${user?.accessToken}`,
+                    },
+                }
+            );
+            return res?.data;
+        } catch (error) {
+            console.log(error?.response?.data);
+            if (error?.response?.status) {
+                return error?.response?.data;
+            }
+        }
+    },
+    apiAddStudent: async ({ user, data, axiosJWT }) => {
+        try {
+            const res = await axiosJWT.post(
+                "/api/admin/create-student",
+                {
+                    email: data?.email,
+                    fullName: data?.fullName,
+                    numberPhone: data?.numberPhone,
+                    address: data?.address,
+                    birthday: data?.birthday,
+                    genderId: data?.gender
+                        ? data?.gender[0]?.value
+                            ? data?.gender[0]?.value
+                            : data?.gender?.value
+                        : null,
+                    code: data?.code,
+                    roleId: data?.role
+                        ? data?.role[0]?.value
+                            ? data?.role[0]?.value
+                            : data?.role?.value
+                        : null,
+                    classId: data?.class
+                        ? data?.class[0]?.value
+                            ? data?.class[0]?.value
+                            : data?.class?.value
+                        : null,
+                    statusId: data?.status
+                        ? data?.status[0]?.value
+                            ? data?.status[0]?.value
+                            : data?.status?.value
+                        : null,
+                    permissions: data?.permissions,
+                },
+                {
+                    headers: {
+                        token: `Bearer ${user?.accessToken}`,
+                    },
+                }
+            );
+            return res?.data;
+        } catch (error) {
+            console.log(error);
+            if (error?.response?.status) {
+                return error?.response?.data;
+            }
+        }
+    },
+    apiUpdateStudent: async ({ user, data, axiosJWT }) => {
+        try {
+            const res = await axiosJWT.put(
+                `/api/admin/update-student/${data.id}`,
+                {
+                    email: data?.email,
+                    fullName: data?.fullName,
+                    numberPhone: data?.numberPhone,
+                    address: data?.address,
+                    birthday: data?.birthday,
+                    genderId: data?.gender
+                        ? data?.gender[0]?.value
+                            ? data?.gender[0]?.value
+                            : data?.gender?.value
+                        : null,
+                    code: data?.code,
+                    roleId: data?.role
+                        ? data?.role[0]?.value
+                            ? data?.role[0]?.value
+                            : data?.role?.value
+                        : null,
+                    classId: data?.class
+                        ? data?.class[0]?.value
+                            ? data?.class[0]?.value
+                            : data?.class?.value
+                        : null,
+                    statusId: data?.status
+                        ? data?.status[0]?.value
+                            ? data?.status[0]?.value
+                            : data?.status?.value
+                        : null,
+                    permissions: data?.permissions,
+                },
+                {
+                    headers: {
+                        token: `Bearer ${user?.accessToken}`,
+                    },
+                }
+            );
+            return res?.data;
+        } catch (error) {
+            console.log(error);
+            if (error?.response?.status) {
+                return error?.response?.data;
+            }
+        }
+    },
+    apiResetPasswordStudent: async ({ user, data, axiosJWT }) => {
+        try {
+            const res = await axiosJWT.put(
+                `/api/admin/reset-password-student/${data.id}`,
+                {
+                    code: data?.code,
+                },
+                {
+                    headers: {
+                        token: `Bearer ${user?.accessToken}`,
+                    },
+                }
+            );
+            return res?.data;
+        } catch (error) {
+            console.log(error);
+            if (error?.response?.status) {
+                return error?.response?.data;
+            }
+        }
+    },
+    apiResetPasswordLecturer: async ({ user, data, axiosJWT }) => {
+        try {
+            const res = await axiosJWT.put(
+                `/api/admin/reset-password-lecturer/${data.id}`,
+                {
+                    code: data?.code,
+                },
+                {
+                    headers: {
+                        token: `Bearer ${user?.accessToken}`,
+                    },
+                }
+            );
+            return res?.data;
+        } catch (error) {
+            console.log(error);
+            if (error?.response?.status) {
+                return error?.response?.data;
+            }
+        }
+    },
+    apiDeleteStudent: async ({ user, data, axiosJWT }) => {
+        try {
+            const res = await axiosJWT.delete(
+                `/api/admin/delete-student/${data.id}`,
+                {
+                    headers: {
+                        token: `Bearer ${user?.accessToken}`,
+                    },
+                }
+            );
+            return res?.data;
+        } catch (error) {
+            console.log(error);
+            if (error?.response?.status) {
+                return error?.response?.data;
+            }
+        }
+    },
+
+    // Api Thesis
+    getAllTheses: async ({
+        user,
+        inputSearch,
+        filterSearch,
+        dispatch,
+        axiosJWT,
+    }) => {
+        try {
+            dispatch(getAdminThesesStart());
+            const res = await axiosJWT.post(
+                "/api/admin/theses",
+                {
+                    inputSearch: inputSearch,
+                    filterSearch: filterSearch,
+                },
+                {
+                    headers: {
+                        token: `Bearer ${user?.accessToken}`,
+                    },
+                }
+            );
+            dispatch(getAdminThesesSuccess(res?.data));
+        } catch (error) {
+            toast.error(error?.response?.data?.errMessage);
+            dispatch(getAdminThesesFailed());
+        }
+    },
+    getThesisById: async ({ user, id, axiosJWT }) => {
+        try {
+            const res = await axiosJWT.get(`/api/admin/thesis/${id}`, {
+                headers: {
+                    token: `Bearer ${user?.accessToken}`,
+                },
+            });
+            return res?.data;
+        } catch (error) {
+            return error?.response?.data;
+        }
+    },
+    importTheses: async ({ user, data, axiosJWT }) => {
+        try {
+            const res = await axiosJWT.post(
+                "/api/admin/import-theses",
+                {
+                    data: data,
+                },
+                {
+                    headers: {
+                        token: `Bearer ${user?.accessToken}`,
+                    },
+                }
+            );
+            return res?.data;
+        } catch (error) {
+            console.log(error?.response?.data);
+            if (error?.response?.status) {
+                return error?.response?.data;
+            }
+        }
+    },
+    apiAddThesis: async ({ user, data, axiosJWT }) => {
+        try {
+            console.log(data);
+            const res = await axiosJWT.post(
+                "/api/admin/create-thesis",
+                {
+                    startDate: data?.startDate,
+                    complateDate: data?.complateDate,
+                    thesisStartDate: data?.thesisStartDate,
+                    thesisEndDate: data?.thesisEndDate,
+                    reportFile: data?.reportFile,
+                    totalScore: data?.totalScore,
+                    resultId: data?.result
+                        ? data?.result[0]?.value
+                            ? data?.result[0]?.value
+                            : data?.result.value
+                        : null,
+                    topicId: data?.topic
+                        ? data?.topic[0]?.value
+                            ? data?.topic[0]?.value
+                            : data?.topic.value
+                        : null,
+                    studentId: data?.student
+                        ? data?.student[0]?.value
+                            ? data?.student[0]?.value
+                            : data?.student.value
+                        : null,
+                    thesisAdvisorId: data?.thesisAdvisor
+                        ? data?.thesisAdvisor[0]?.value
+                            ? data?.thesisAdvisor[0]?.value
+                            : data?.thesisAdvisor.value
+                        : null,
+                    thesisAdvisorStatusId: data?.thesisAdvisorStatus
+                        ? data?.thesisAdvisorStatus[0]?.value
+                            ? data?.thesisAdvisorStatus[0]?.value
+                            : data?.thesisAdvisorStatus.value
+                        : null,
+                    thesisSessionId: data?.thesisSession
+                        ? data?.thesisSession[0]?.value
+                            ? data?.thesisSession[0]?.value
+                            : data?.thesisSession.value
+                        : null,
+                    councilId: data?.council
+                        ? data?.council[0]?.value
+                            ? data?.council[0]?.value
+                            : data?.council.value
+                        : null,
+                    councilStatusId: data?.councilStatus
+                        ? data?.councilStatus[0]?.value
+                            ? data?.councilStatus[0]?.value
+                            : data?.councilStatus.value
+                        : null,
+                },
+                {
+                    headers: {
+                        token: `Bearer ${user?.accessToken}`,
+                    },
+                }
+            );
+            return res?.data;
+        } catch (error) {
+            console.log(error);
+            if (error?.response?.status) {
+                return error?.response?.data;
+            }
+        }
+    },
+    apiUpdateThesis: async ({ user, data, axiosJWT }) => {
+        try {
+            const res = await axiosJWT.put(
+                `/api/admin/update-thesis/${data.id}`,
+                {
+                    startDate: data?.startDate,
+                    complateDate: data?.complateDate,
+                    thesisStartDate: data?.thesisStartDate,
+                    thesisEndDate: data?.thesisEndDate,
+                    reportFile: data?.reportFile,
+                    totalScore: data?.totalScore,
+                    resultId: data?.result
+                        ? data?.result[0]?.value
+                            ? data?.result[0]?.value
+                            : data?.result.value
+                        : null,
+                    topicId: data?.topic
+                        ? data?.topic[0]?.value
+                            ? data?.topic[0]?.value
+                            : data?.topic.value
+                        : null,
+                    studentId: data?.student
+                        ? data?.student[0]?.value
+                            ? data?.student[0]?.value
+                            : data?.student.value
+                        : null,
+                    thesisAdvisorId: data?.thesisAdvisor
+                        ? data?.thesisAdvisor[0]?.value
+                            ? data?.thesisAdvisor[0]?.value
+                            : data?.thesisAdvisor.value
+                        : null,
+                    thesisAdvisorStatusId: data?.thesisAdvisorStatus
+                        ? data?.thesisAdvisorStatus[0]?.value
+                            ? data?.thesisAdvisorStatus[0]?.value
+                            : data?.thesisAdvisorStatus.value
+                        : null,
+                    thesisSessionId: data?.thesisSession
+                        ? data?.thesisSession[0]?.value
+                            ? data?.thesisSession[0]?.value
+                            : data?.thesisSession.value
+                        : null,
+                    councilId: data?.council
+                        ? data?.council[0]?.value
+                            ? data?.council[0]?.value
+                            : data?.council.value
+                        : null,
+                    councilStatusId: data?.councilStatus
+                        ? data?.councilStatus[0]?.value
+                            ? data?.councilStatus[0]?.value
+                            : data?.councilStatus.value
+                        : null,
+                },
+                {
+                    headers: {
+                        token: `Bearer ${user?.accessToken}`,
+                    },
+                }
+            );
+            return res?.data;
+        } catch (error) {
+            console.log(error);
+            if (error?.response?.status) {
+                return error?.response?.data;
+            }
+        }
+    },
+    apiDeleteThesis: async ({ user, data, axiosJWT }) => {
+        try {
+            const res = await axiosJWT.delete(
+                `/api/admin/delete-thesis/${data.id}`,
+                {
+                    headers: {
+                        token: `Bearer ${user?.accessToken}`,
+                    },
+                }
+            );
+            return res?.data;
+        } catch (error) {
+            console.log(error);
+            if (error?.response?.status) {
+                return error?.response?.data;
+            }
+        }
+    },
+
+    // Api Topic
+    getAllTopics: async ({
+        user,
+        inputSearch,
+        filterSearch,
+        dispatch,
+        axiosJWT,
+    }) => {
+        try {
+            dispatch(getAdminTopicsStart());
+            const res = await axiosJWT.post(
+                "/api/admin/topics",
+                {
+                    inputSearch: inputSearch,
+                    filterSearch: filterSearch,
+                },
+                {
+                    headers: {
+                        token: `Bearer ${user?.accessToken}`,
+                    },
+                }
+            );
+            dispatch(getAdminTopicsSuccess(res?.data));
+        } catch (error) {
+            toast.error(error?.response?.data?.errMessage);
+            dispatch(getAdminTopicsFailed());
+        }
+    },
+    getTopicById: async ({ user, id, axiosJWT }) => {
+        try {
+            const res = await axiosJWT.get(`/api/admin/topic/${id}`, {
+                headers: {
+                    token: `Bearer ${user?.accessToken}`,
+                },
+            });
+            return res?.data;
+        } catch (error) {
+            return error?.response?.data;
+        }
+    },
+    importTopics: async ({ user, data, axiosJWT }) => {
+        try {
+            const res = await axiosJWT.post(
+                "/api/admin/import-topics",
+                {
+                    data: data,
+                },
+                {
+                    headers: {
+                        token: `Bearer ${user?.accessToken}`,
+                    },
+                }
+            );
+            return res?.data;
+        } catch (error) {
+            console.log(error?.response?.data);
+            if (error?.response?.status) {
+                return error?.response?.data;
+            }
+        }
+    },
+    apiAddTopic: async ({ user, data, axiosJWT }) => {
+        try {
+            const res = await axiosJWT.post(
+                "/api/admin/create-topic",
+                {
+                    name: data?.name,
+                    description: data?.description,
+                    statusId: data?.status
+                        ? data?.status[0]?.value
+                            ? data?.status[0]?.value
+                            : data?.status?.value
+                        : null,
+                    departmentId: data?.department
+                        ? data?.department[0]?.value
+                            ? data?.department[0]?.value
+                            : data?.department?.value
+                        : null,
+                },
+                {
+                    headers: {
+                        token: `Bearer ${user?.accessToken}`,
+                    },
+                }
+            );
+            return res?.data;
+        } catch (error) {
+            console.log(error);
+            if (error?.response?.status) {
+                return error?.response?.data;
+            }
+        }
+    },
+    apiUpdateTopic: async ({ user, data, axiosJWT }) => {
+        try {
+            const res = await axiosJWT.put(
+                `/api/admin/update-topic/${data.id}`,
+                {
+                    name: data?.name,
+                    description: data?.description,
+                    statusId: data?.status
+                        ? data?.status[0]?.value
+                            ? data?.status[0]?.value
+                            : data?.status?.value
+                        : null,
+                    departmentId: data?.department
+                        ? data?.department[0]?.value
+                            ? data?.department[0]?.value
+                            : data?.department?.value
+                        : null,
+                },
+                {
+                    headers: {
+                        token: `Bearer ${user?.accessToken}`,
+                    },
+                }
+            );
+            return res?.data;
+        } catch (error) {
+            console.log(error);
+            if (error?.response?.status) {
+                return error?.response?.data;
+            }
+        }
+    },
+    apiDeleteTopic: async ({ user, data, axiosJWT }) => {
+        try {
+            const res = await axiosJWT.delete(
+                `/api/admin/delete-topic/${data.id}`,
+                {
+                    headers: {
+                        token: `Bearer ${user?.accessToken}`,
+                    },
+                }
+            );
+            return res?.data;
+        } catch (error) {
+            console.log(error);
+            if (error?.response?.status) {
+                return error?.response?.data;
+            }
+        }
+    },
+
     // Api ThesisSession
-    getAllThesisSession: async ({
+    getAllThesisSessions: async ({
         user,
         inputSearch,
         filterSearch,
@@ -1434,7 +2012,6 @@ export const apiAdmin = {
     }) => {
         try {
             dispatch(getAdminThesisSessionsStart());
-            // console.log("data api getalltopic", offset, limit);
             let code = [];
             const res = await axiosJWT.post(
                 "/api/admin/thesis-session",
@@ -1454,6 +2031,117 @@ export const apiAdmin = {
         } catch (error) {
             toast.error(error?.response?.data?.errMessage);
             dispatch(getAdminThesisSessionsFailed());
+        }
+    },
+    getThesisSessionById: async ({ user, id, axiosJWT }) => {
+        try {
+            const res = await axiosJWT.get(`/api/admin/thesis-session/${id}`, {
+                headers: {
+                    token: `Bearer ${user?.accessToken}`,
+                },
+            });
+            return res?.data;
+        } catch (error) {
+            return error?.response?.data;
+        }
+    },
+    importThesisSessions: async ({ user, data, axiosJWT }) => {
+        try {
+            const res = await axiosJWT.post(
+                "/api/admin/import-thesis-sessions",
+                {
+                    data: data,
+                },
+                {
+                    headers: {
+                        token: `Bearer ${user?.accessToken}`,
+                    },
+                }
+            );
+            return res?.data;
+        } catch (error) {
+            console.log(error?.response?.data);
+            if (error?.response?.status) {
+                return error?.response?.data;
+            }
+        }
+    },
+    apiAddThesisSession: async ({ user, data, axiosJWT }) => {
+        try {
+            const res = await axiosJWT.post(
+                "/api/admin/create-thesis-session",
+                {
+                    name: data?.name,
+                    description: data?.description,
+                    evaluationMethodId: data?.evaluationMethod
+                        ? data?.evaluationMethod[0]?.value
+                            ? data?.evaluationMethod[0]?.value
+                            : data?.evaluationMethod?.value
+                        : null,
+                    startDate: data?.startDate,
+                    endDate: data?.endDate,
+                    validPoint: data?.validPoint,
+                },
+                {
+                    headers: {
+                        token: `Bearer ${user?.accessToken}`,
+                    },
+                }
+            );
+            return res?.data;
+        } catch (error) {
+            console.log(error);
+            if (error?.response?.status) {
+                return error?.response?.data;
+            }
+        }
+    },
+    apiUpdateThesisSession: async ({ user, data, axiosJWT }) => {
+        try {
+            const res = await axiosJWT.put(
+                `/api/admin/update-thesis-session/${data.id}`,
+                {
+                    name: data?.name,
+                    description: data?.description,
+                    evaluationMethodId: data?.evaluationMethod
+                        ? data?.evaluationMethod[0]?.value
+                            ? data?.evaluationMethod[0]?.value
+                            : data?.evaluationMethod?.value
+                        : null,
+                    startDate: data?.startDate,
+                    endDate: data?.endDate,
+                    validPoint: data?.validPoint,
+                },
+                {
+                    headers: {
+                        token: `Bearer ${user?.accessToken}`,
+                    },
+                }
+            );
+            return res?.data;
+        } catch (error) {
+            console.log(error);
+            if (error?.response?.status) {
+                return error?.response?.data;
+            }
+        }
+    },
+    apiDeleteThesisSession: async ({ user, data, axiosJWT }) => {
+        try {
+            const res = await axiosJWT.delete(
+                `/api/admin/delete-thesis-session/${data.id}`,
+                {
+                    headers: {
+                        token: `Bearer ${user?.accessToken}`,
+                    },
+                }
+            );
+            return res?.data;
+        } catch (error) {
+            console.log(error);
+            if (error?.response?.status) {
+                return error?.response?.data;
+            }
         }
     },
 };

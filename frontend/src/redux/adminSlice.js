@@ -204,6 +204,21 @@ const adminSlice = createSlice({
             state.isFetching = false;
         },
 
+        getAdminThesesSuccess: (state, action) => {
+            state.theses = action.payload.theses;
+            state.totalRecords = action.payload.totalRecords;
+            state.isFetching = false;
+            state.error = false;
+        },
+        getAdminThesesStart: (state) => {
+            state.isFetching = true;
+        },
+        getAdminThesesFailed: (state) => {
+            state.totalRecords = 0;
+            state.error = true;
+            state.isFetching = false;
+        },
+
         getAdminMajorsSuccess: (state, action) => {
             state.majors = action.payload.majors;
             state.totalRecords = action.payload.totalRecords;
@@ -229,6 +244,36 @@ const adminSlice = createSlice({
             state.isFetching = true;
         },
         getAdminClassesFailed: (state) => {
+            state.totalRecords = 0;
+            state.error = true;
+            state.isFetching = false;
+        },
+
+        getAdminStudentsSuccess: (state, action) => {
+            state.students = action.payload.students;
+            state.totalRecords = action.payload.totalRecords;
+            state.isFetching = false;
+            state.error = false;
+        },
+        getAdminStudentsStart: (state) => {
+            state.isFetching = true;
+        },
+        getAdminStudentsFailed: (state) => {
+            state.totalRecords = 0;
+            state.error = true;
+            state.isFetching = false;
+        },
+
+        getAdminTopicsSuccess: (state, action) => {
+            state.topics = action.payload.topics;
+            state.totalRecords = action.payload.totalRecords;
+            state.isFetching = false;
+            state.error = false;
+        },
+        getAdminTopicsStart: (state) => {
+            state.isFetching = true;
+        },
+        getAdminTopicsFailed: (state) => {
             state.totalRecords = 0;
             state.error = true;
             state.isFetching = false;
@@ -297,6 +342,15 @@ export const {
     getAdminClassesFailed,
     getAdminClassesStart,
     getAdminClassesSuccess,
+    getAdminStudentsFailed,
+    getAdminStudentsStart,
+    getAdminStudentsSuccess,
+    getAdminTopicsFailed,
+    getAdminTopicsStart,
+    getAdminTopicsSuccess,
+    getAdminThesesFailed,
+    getAdminThesesStart,
+    getAdminThesesSuccess,
     getAdminThesisSessionsFailed,
     getAdminThesisSessionsStart,
     getAdminThesisSessionsSuccess,

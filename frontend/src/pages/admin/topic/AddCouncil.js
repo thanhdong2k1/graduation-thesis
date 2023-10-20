@@ -20,16 +20,16 @@ import {
 import ButtonConfirm from "../../../components/button/ButtonConfirm";
 import { useParams } from "react-router-dom";
 
-const AddCouncil = ({ type }, params) => {
+const AddTopic = ({ type }, params) => {
     let { id } = useParams();
     console.log("type", type, id);
 
     const currentUser = useSelector((state) => state.auth.currentUser);
     const dispatch = useDispatch();
     let axiosJWT = createAxios(currentUser, dispatch, logginSuccess);
-    const status = useSelector((state) => state.admin.status);
-    const thesisSessions = useSelector((state) => state.admin.thesisSessions);
-    let codeThesisSessions = thesisSessions.map((v) => {
+    const status = useSelector((state) => state.admin.handle);
+    const departments = useSelector((state) => state.admin.departments);
+    let codeDepartments = departments.map((v) => {
         return { value: v.id, label: `${v.id} | ${v.name}` };
     });
     const [isRtl, setIsRtl] = useState(false);
@@ -48,7 +48,7 @@ const AddCouncil = ({ type }, params) => {
         console.log(data);
         type == "add"
             ? await apiAdmin
-                  .apiAddCouncil({
+                  .apiAddTopic({
                       user: currentUser,
                       data: data,
                       axiosJWT: axiosJWT,
@@ -74,7 +74,7 @@ const AddCouncil = ({ type }, params) => {
                               autoClose: 1500,
                               pauseOnFocusLoss: true,
                           });
-                          setValue("thesisSession", "");
+                          setValue("department", "");
                           setValue("status", "");
                           reset();
                       }
@@ -91,7 +91,7 @@ const AddCouncil = ({ type }, params) => {
                       });
                   })
             : await apiAdmin
-                  .apiUpdateCouncil({
+                  .apiUpdateTopic({
                       user: currentUser,
                       data: data,
                       axiosJWT: axiosJWT,
@@ -117,7 +117,7 @@ const AddCouncil = ({ type }, params) => {
                               autoClose: 1500,
                               pauseOnFocusLoss: true,
                           });
-                          //   setValue("thesisSession", "");
+                          //   setValue("department", "");
                           //   setValue("status", "");
                           //   reset();
                       }
@@ -135,15 +135,15 @@ const AddCouncil = ({ type }, params) => {
                   });
     };
     useEffect(() => {
-        apiAdmin.apiGetStatus(currentUser, dispatch, axiosJWT);
-        apiAdmin.getAllThesisSessions({
+        apiAdmin.apiGetHandle(currentUser, dispatch, axiosJWT);
+        apiAdmin.getAllDepartments({
             user: currentUser,
             dispatch: dispatch,
             axiosJWT: axiosJWT,
         });
         if (id) {
             apiAdmin
-                .getCouncilById({
+                .getTopicById({
                     user: currentUser,
                     id: id,
                     axiosJWT: axiosJWT,
@@ -164,10 +164,10 @@ const AddCouncil = ({ type }, params) => {
                         setValue("name", res?.result?.name);
                         setValue("description", res?.result?.description);
                         setValue(
-                            "thesisSession",
-                            codeThesisSessions.filter(
+                            "department",
+                            codeDepartments.filter(
                                 (value) =>
-                                    value?.value == res?.result?.thesisSessionId
+                                    value?.value == res?.result?.departmentId
                             )
                         );
                         setValue(
@@ -204,7 +204,7 @@ const AddCouncil = ({ type }, params) => {
     return (
         <div className="changeInformationDiv flex flex-col justify-center items-center gap-2">
             <div className="capitalize font-semibold text-h1FontSize">
-                {type} Council
+                {type} Topic
             </div>
             <form
                 onSubmit={handleSubmit(onSubmit)}
@@ -274,26 +274,26 @@ const AddCouncil = ({ type }, params) => {
 
                 <div className="row flex justify-center items-center gap-2">
                     <div className="col w-full">
-                        <label className="labelInput">Thesis Session</label>
+                        <label className="labelInput">Department</label>
                         <Controller
-                            name="thesisSession"
+                            name="department"
                             control={control}
-                            {...register("thesisSession", {
+                            {...register("department", {
                                 // required: "Full name is required",
                             })}
                             render={({ field }) => (
                                 <Select
                                     styles={customSelectStyles}
                                     {...field}
-                                    options={codeThesisSessions}
+                                    options={codeDepartments}
                                     isClearable={true}
                                     isDisabled={type == "detail" ? true : false}
                                 />
                             )}
                         />
-                        {errors.thesisSession?.type && (
+                        {errors.department?.type && (
                             <p className=" text-normal text-red-500">
-                                {errors.thesisSession?.message}
+                                {errors.department?.message}
                             </p>
                         )}
                     </div>
@@ -330,4 +330,4 @@ const AddCouncil = ({ type }, params) => {
     );
 };
 
-export default AddCouncil;
+export default AddTopic;

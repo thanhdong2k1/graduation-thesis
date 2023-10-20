@@ -2,7 +2,9 @@ import { Controller, useForm } from "react-hook-form";
 import { useDispatch, useSelector } from "react-redux";
 import { toast } from "react-toastify";
 import { useEffect, useState } from "react";
-import { MdLockReset } from "react-icons/md";
+import Avatar from "react-avatar-edit";
+import { FaPenAlt } from "react-icons/fa";
+import { Buffer } from "buffer";
 import Select from "react-select";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
@@ -10,15 +12,16 @@ import moment from "moment/moment";
 import { createAxios } from "../../../utils/createInstance";
 import { logginSuccess } from "../../../redux/authSlice";
 import { apiAdmin } from "../../../redux/apiRequest";
+import ModalPopup from "../../../components/ModelPopup/ModalPopup";
 import {
     customSelectStyles,
     customSelectStylesMulti,
 } from "../../../utils/customStyleReactSelect";
 import ButtonConfirm from "../../../components/button/ButtonConfirm";
 import { useParams } from "react-router-dom";
-import ModalPopup from "../../../components/ModelPopup/ModalPopup";
+import { MdLockReset } from "react-icons/md";
 
-const AddLecturer = ({ type }, params) => {
+const AddStudent = ({ type }) => {
     let { id } = useParams();
     console.log("type", type, id);
 
@@ -29,8 +32,8 @@ const AddLecturer = ({ type }, params) => {
     const gender = useSelector((state) => state.admin.gender);
     const role = useSelector((state) => state.admin.role);
     const permissions = useSelector((state) => state.admin.permissions);
-    const departments = useSelector((state) => state.admin.departments);
-    let codeDepartment = departments.map((v) => {
+    const classes = useSelector((state) => state.admin.classes);
+    let codeClass = classes.map((v) => {
         return { value: v.id, label: `${v.id} | ${v.name}` };
     });
     const [isRtl, setIsRtl] = useState(false);
@@ -48,7 +51,7 @@ const AddLecturer = ({ type }, params) => {
         console.log("hello", data, getValues());
         const id = toast.loading("Please wait...");
         await apiAdmin
-            .apiResetPasswordLecturer({
+            .apiResetPasswordStudent({
                 user: currentUser,
                 data: getValues(),
                 axiosJWT: axiosJWT,
@@ -114,15 +117,15 @@ const AddLecturer = ({ type }, params) => {
         data?.permissions
             ?.filter((value) => !value.isFixed)
             ?.map((obj) => {
-                console.log(obj?.value);
-                permissions.push(obj?.value);
+                console.log(obj.value);
+                permissions.push(obj.value);
             });
         const datasend = {
             ...data,
             birthday: new Date(
-                moment(data?.birthday, "DD/MM/YYYY")
+                moment(data.birthday, "DD/MM/YYYY")
             ).toLocaleDateString("vi-VN"),
-            permissions: permissions.toString(),
+            permissions: permissions?.toString(),
             //     e.map((obj) => {
             //         console.log(obj.value);
             //         permissions.push(obj.value);
@@ -131,7 +134,7 @@ const AddLecturer = ({ type }, params) => {
         console.log(datasend);
         type == "add"
             ? await apiAdmin
-                  .apiAddLecturer({
+                  .apiAddStudent({
                       user: currentUser,
                       data: datasend,
                       axiosJWT: axiosJWT,
@@ -173,7 +176,7 @@ const AddLecturer = ({ type }, params) => {
                       });
                   })
             : await apiAdmin
-                  .apiUpdateLecturer({
+                  .apiUpdateStudent({
                       user: currentUser,
                       data: datasend,
                       axiosJWT: axiosJWT,
@@ -221,7 +224,7 @@ const AddLecturer = ({ type }, params) => {
         apiAdmin.apiGetGender(currentUser, dispatch, axiosJWT);
         if (id) {
             apiAdmin
-                .getLecturerById({
+                .getStudentById({
                     user: currentUser,
                     id: id,
                     axiosJWT: axiosJWT,
@@ -280,7 +283,7 @@ const AddLecturer = ({ type }, params) => {
                         setValue("birthday", res?.result?.birthday);
 
                         {
-                            /* code, roleId, departmentId, permissions */
+                            /* code, roleId, classeId, permissions */
                         }
 
                         setValue("code", res?.result?.code);
@@ -291,10 +294,9 @@ const AddLecturer = ({ type }, params) => {
                             )
                         );
                         setValue(
-                            "department",
-                            codeDepartment.filter(
-                                (value) =>
-                                    value?.value == res?.result?.departmentId
+                            "class",
+                            codeClass.filter(
+                                (value) => value?.value == res?.result?.classId
                             )
                         );
                         setValue("permissions", convert);
@@ -342,7 +344,7 @@ const AddLecturer = ({ type }, params) => {
         <>
             <div className="changeInformationDiv flex flex-col justify-center items-center gap-2">
                 <div className="capitalize font-semibold text-h1FontSize">
-                    {type} Lecturer
+                    {type} Student
                 </div>
                 <form
                     onSubmit={handleSubmit(onSubmit)}
@@ -491,7 +493,9 @@ const AddLecturer = ({ type }, params) => {
                                         {...field}
                                         options={gender}
                                         isClearable={true}
-                                        isDisabled={type == "detail" ? true : false}
+                                        isDisabled={
+                                            type == "detail" ? true : false
+                                        }
                                     />
                                 )}
                             />
@@ -502,7 +506,7 @@ const AddLecturer = ({ type }, params) => {
                             )}
                         </div>
                     </div>
-                    {/* code, roleId, departmentId, permissions */}
+                    {/* code, roleId, classeId, permissions */}
 
                     <div className="row flex justify-center items-center gap-2">
                         <div className="col w-full">
@@ -547,7 +551,9 @@ const AddLecturer = ({ type }, params) => {
                                         {...field}
                                         options={role}
                                         isClearable={true}
-                                        isDisabled={type == "detail" ? true : false}
+                                        isDisabled={
+                                            type == "detail" ? true : false
+                                        }
                                     />
                                 )}
                             />
@@ -561,26 +567,28 @@ const AddLecturer = ({ type }, params) => {
 
                     <div className="row flex justify-center items-center gap-2">
                         <div className="col w-full">
-                            <label className="labelInput">Department</label>
+                            <label className="labelInput">Class</label>
                             <Controller
-                                name="department"
+                                name="class"
                                 control={control}
-                                {...register("department", {
+                                {...register("class", {
                                     // required: "Full name is required",
                                 })}
                                 render={({ field }) => (
                                     <Select
                                         styles={customSelectStyles}
                                         {...field}
-                                        options={codeDepartment}
+                                        options={codeClass}
                                         isClearable={true}
-                                        isDisabled={type == "detail" ? true : false}
+                                        isDisabled={
+                                            type == "detail" ? true : false
+                                        }
                                     />
                                 )}
                             />
-                            {errors.department?.type && (
+                            {errors.class?.type && (
                                 <p className=" text-normal text-red-500">
-                                    {errors.department?.message}
+                                    {errors.class?.message}
                                 </p>
                             )}
                         </div>
@@ -651,7 +659,7 @@ const AddLecturer = ({ type }, params) => {
                         /> */}
                         </div>
                     </div>
-                    {/* code, roleId, departmentId, permissions */}
+                    {/* code, roleId, classeId, permissions */}
 
                     <ButtonConfirm type={type} />
                 </form>
@@ -669,4 +677,4 @@ const AddLecturer = ({ type }, params) => {
     );
 };
 
-export default AddLecturer;
+export default AddStudent;
