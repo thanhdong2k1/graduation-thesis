@@ -189,6 +189,20 @@ const adminSlice = createSlice({
             state.isFetching = false;
         },
 
+        getAdminEvaluationCriteriasSuccess: (state, action) => {
+            state.evaluationCriterias = action.payload.result;
+            state.isFetching = false;
+            state.error = false;
+        },
+        getAdminEvaluationCriteriasStart: (state) => {
+            state.isFetching = true;
+        },
+        getAdminEvaluationCriteriasFailed: (state) => {
+            state.totalRecords = 0;
+            state.error = true;
+            state.isFetching = false;
+        },
+
         getAdminLecturersSuccess: (state, action) => {
             state.lecturers = action.payload.lecturers;
             state.totalRecords = action.payload.totalRecords;
@@ -333,6 +347,9 @@ export const {
     getAdminEvaluationMethodsFailed,
     getAdminEvaluationMethodsStart,
     getAdminEvaluationMethodsSuccess,
+    getAdminEvaluationCriteriasFailed,
+    getAdminEvaluationCriteriasStart,
+    getAdminEvaluationCriteriasSuccess,
     getAdminLecturersFailed,
     getAdminLecturersStart,
     getAdminLecturersSuccess,

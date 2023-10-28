@@ -56,6 +56,14 @@ router.post("/create-evaluation-method", middlewareController.verifyTokenAdd, ad
 router.put("/update-evaluation-method/:id", middlewareController.verifyTokenUpdate, adminController.updateEvaluationMethod);
 router.delete("/delete-evaluation-method/:id", middlewareController.verifyTokenDelete, adminController.deleteEvaluationMethod);
 
+// Api Evaluation Criteria
+router.post("/evaluation-criterias", middlewareController.verifyToken, adminController.getEvaluationCriterias);
+router.get("/evaluation-criteria/:id", middlewareController.verifyToken, adminController.getEvaluationCriteriaByIdMethod);
+router.post("/import-evaluation-criterias", middlewareController.verifyTokenImport, adminController.importEvaluationCriterias);
+router.post("/create-evaluation-criteria", middlewareController.verifyTokenAdd, adminController.addEvaluationCriteria);
+router.put("/update-evaluation-criteria/:id", middlewareController.verifyTokenUpdate, adminController.updateEvaluationCriteria);
+router.delete("/delete-evaluation-criteria/:id", middlewareController.verifyTokenDelete, adminController.deleteEvaluationCriteria);
+
 // Api Lecturer
 router.post("/lecturers", middlewareController.verifyToken, adminController.getLecturers);
 router.get("/lecturer/:id", middlewareController.verifyToken, adminController.getLecturerById);

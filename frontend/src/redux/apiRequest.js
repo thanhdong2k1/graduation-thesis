@@ -30,6 +30,9 @@ import {
     getAdminDepartmentsFailed,
     getAdminDepartmentsStart,
     getAdminDepartmentsSuccess,
+    getAdminEvaluationCriteriasFailed,
+    getAdminEvaluationCriteriasStart,
+    getAdminEvaluationCriteriasSuccess,
     getAdminEvaluationMethodsFailed,
     getAdminEvaluationMethodsStart,
     getAdminEvaluationMethodsSuccess,
@@ -1024,6 +1027,25 @@ export const apiAdmin = {
         }
     },
 
+    // Api EvaluationCriteria
+    getAllEvaluationCriterias: async ({ user, id, axiosJWT }) => {
+        try {
+            const res = await axiosJWT.get(
+                `/api/admin/evaluation-criteria/${id}`,
+                {
+                    headers: {
+                        token: `Bearer ${user?.accessToken}`,
+                    },
+                }
+            );
+            return res?.data;
+        } catch (error) {
+            if (error?.response?.status) {
+                return error?.response?.data;
+            }
+        }
+    },
+
     // Api EvaluationMethod
     getAllEvaluationMethods: async ({
         user,
@@ -1088,13 +1110,14 @@ export const apiAdmin = {
             }
         }
     },
-    apiAddEvaluationMethod: async ({ user, data, axiosJWT }) => {
+    apiAddEvaluationMethod: async ({ user, data, criterias, axiosJWT }) => {
         try {
             const res = await axiosJWT.post(
                 "/api/admin/create-evaluation-method",
                 {
                     name: data?.name,
                     description: data?.description,
+                    criterias: criterias,
                 },
                 {
                     headers: {

@@ -14,6 +14,7 @@ module.exports = (sequelize, DataTypes) => {
         foreignKey: "evaluationMethodId",
         targetKey: "id",
         as: "evaluationMethodData",
+        onDelete: "CASCADE",
       });
 
       EvaluationCriteria.belongsToMany(models.Point, {
@@ -28,6 +29,7 @@ module.exports = (sequelize, DataTypes) => {
       evaluationMethodId: DataTypes.INTEGER,
       name: DataTypes.STRING,
       weight: DataTypes.FLOAT,
+      level: DataTypes.INTEGER,
       order: DataTypes.INTEGER,
     },
     {

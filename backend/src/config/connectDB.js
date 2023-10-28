@@ -23,6 +23,7 @@ const sequelize = new Sequelize("graduation-thesis-full", "root", null, {
   logging: false,
 });
 
+
 const connectDB = async () => {
   try {
     // db.sequelize.sync({ force: true }).then(() => {

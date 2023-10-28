@@ -2,8 +2,9 @@
 /vendor
 /.idea
 .idea/
-.env
+# .env
 /package-lock.json
 /material-tailwind-dashboard-react
 /plantdashboard
 /React-Admin-Dashboard
+/Quan_he.pdf

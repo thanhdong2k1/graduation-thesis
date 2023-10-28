@@ -1,6 +1,7 @@
 const bcrypt = require("bcryptjs");
 const db = require("../models");
 const { Op, where } = require("sequelize");
+const evaluationCriteria = require("../models/evaluationCriteria");
 const salt = bcrypt.genSaltSync(10);
 
 const adminController = {
@@ -1472,15 +1473,32 @@ const adminController = {
   addEvaluationMethod: async (req, res) => {
     try {
       if (req?.body) {
-        const result = await db.EvaluationMethod.create({
+        let result = await db.EvaluationMethod.create({
           name: req?.body?.name,
           description: req?.body?.description,
         });
         if (result) {
-          console.log("result", result);
-          return res
-            .status(200)
-            .json({ errCode: 0, errMessage: "Thêm dữ liệu thành công" });
+          let criterias = [];
+          req?.body?.criterias.map((criteria) => {
+            criterias.push({
+              evaluationMethodId: result?.dataValues?.id,
+              ...criteria,
+            });
+          });
+          console.log("criterias", criterias);
+          result = null;
+          result = await db.EvaluationCriteria.bulkCreate(criterias);
+          if (result) {
+            return res
+              .status(200)
+              .json({ errCode: 0, errMessage: "Thêm dữ liệu thành công" });
+          } else {
+            return res.status(200).json({
+              errCode: 2,
+              errMessage:
+                "Đã xảy ra lỗi trong quá trình thêm, vui lòng thử lại sau",
+            });
+          }
         } else {
           return res.status(200).json({
             errCode: 2,
@@ -1556,6 +1574,222 @@ const adminController = {
     }
   },
   importEvaluationMethods: async (req, res) => {
+    try {
+      if (req?.body?.data) {
+        console.log(req?.body?.data);
+        const result = await db.EvaluationMethod.bulkCreate(req?.body?.data);
+        if (result) {
+          return res
+            .status(200)
+            .json({ errCode: 0, errMessage: "Import dữ liệu thành công" });
+        } else {
+          return res.status(200).json({
+            errCode: 2,
+            errMessage:
+              "Đã xảy ra lỗi trong quá trình import, vui lòng thử lại sau",
+          });
+        }
+      } else {
+        return res
+          .status(404)
+          .json({ errCode: 1, errMessage: "Dữ liệu không được tìm thấy" });
+      }
+    } catch (error) {
+      return res.status(500).json({ errCode: -1, errMessage: error });
+    }
+  },
+
+  // Api EvaluationCriteria
+  getEvaluationCriterias: async (req, res) => {
+    try {
+      console.log(req.body);
+      const searchTerms = `%${
+        req?.body?.inputSearch ? req?.body?.inputSearch?.trim() : ""
+      }%`?.replace(/\s/g, "%");
+      // console.log(searchTerms);
+      const whereClause = {};
+      // console.log(req?.body?.inputSearch?.toLowerCase());
+      // console.log("req?.body?.length", Object.keys(req?.body).length);
+      if (Object.keys(req?.body).length > 0) {
+        console.log("Đã vào");
+        if (!req?.body?.filterSearch?.includes("Data")) {
+          if (searchTerms?.toLowerCase() != "%null%") {
+            whereClause[req?.body?.filterSearch] = {
+              [Op.like]: searchTerms,
+            };
+          } else {
+            whereClause[req?.body?.filterSearch] = {
+              [Op.is]: null,
+            };
+          }
+        } else {
+          if (searchTerms?.toLowerCase() != "%null%") {
+            console.log(req?.body?.filterSearch);
+            // if (req?.body?.filterSearch == "deanData") {
+            //   whereClause["$deanData.fullName$"] = {
+            //     [Op.like]: searchTerms,
+            //   };
+            // }
+            // theo id
+            whereClause[req?.body?.filterSearch.replace("Data", "Id")] = {
+              [Op.like]: searchTerms,
+            };
+          } else {
+            whereClause[req?.body?.filterSearch?.replace("Data", "Id")] = {
+              [Op.is]: null,
+            };
+          }
+        }
+      }
+      // console.log("whereClause", whereClause);
+
+      const queryOptions = {
+        // include: [
+        //   {
+        //     model: db.Lecturer,
+        //     as: "deanData",
+        //     // attributes: ["name"],
+        //   },
+        // ],
+        order: [["order", "ASC"]],
+        raw: true,
+        nest: true,
+      };
+
+      if (Object.keys(whereClause).length > 0) {
+        queryOptions.where = {
+          [Op.or]: whereClause,
+        };
+      }
+
+      const result = await db.EvaluationCriteria.findAndCountAll(queryOptions);
+      console.log(result);
+      const { rows: evaluationCriterias, count: totalRecords } = result;
+      return res
+        .status(200)
+        .json({ errCode: 0, evaluationCriterias, totalRecords });
+    } catch (error) {
+      return res.status(500).json({ errCode: -1, errMessage: error });
+    }
+  },
+  getEvaluationCriteriaByIdMethod: async (req, res) => {
+    try {
+      const result = await db.EvaluationCriteria.findAll({
+        where: {
+          evaluationMethodId: req?.params?.id,
+        },
+        // include: [
+        //   {
+        //     model: db.Lecturer,
+        //     as: "deanData",
+        //     // attributes: ["name"],
+        //   },
+        // ],
+        order: [["order", "ASC"]],
+        raw: true,
+        nest: true,
+      });
+      if (result) {
+        return res
+          .status(200)
+          .json({ errCode: 0, errMessage: "Tìm dữ liệu thành công", result });
+      } else {
+        return res.status(200).json({
+          errCode: 1,
+          errMessage: "Đã xảy ra lỗi trong quá trình tìm, vui lòng thử lại sau",
+        });
+      }
+    } catch (error) {
+      return res.status(500).json({ errCode: -1, errMessage: error });
+    }
+  },
+  addEvaluationCriteria: async (req, res) => {
+    try {
+      if (req?.body) {
+        const result = await db.EvaluationCriteria.create({
+          name: req?.body?.name,
+          description: req?.body?.description,
+        });
+        if (result) {
+          console.log("result", result);
+          return res
+            .status(200)
+            .json({ errCode: 0, errMessage: "Thêm dữ liệu thành công" });
+        } else {
+          return res.status(200).json({
+            errCode: 2,
+            errMessage:
+              "Đã xảy ra lỗi trong quá trình thêm, vui lòng thử lại sau",
+          });
+        }
+      } else {
+        return res
+          .status(404)
+          .json({ errCode: 1, errMessage: "Dữ liệu không được tìm thấy" });
+      }
+    } catch (error) {
+      return res.status(500).json({ errCode: -1, errMessage: error });
+    }
+  },
+  updateEvaluationCriteria: async (req, res) => {
+    try {
+      if (req?.params?.id) {
+        console.log(req.body);
+        const result = await db.EvaluationCriteria.update(
+          {
+            name: req?.body?.name,
+            description: req?.body?.description,
+          },
+          { where: { id: req?.params?.id } }
+        );
+        if (result) {
+          return res
+            .status(200)
+            .json({ errCode: 0, errMessage: "Cập nhật dữ liệu thành công" });
+        } else {
+          return res.status(200).json({
+            errCode: 2,
+            errMessage:
+              "Đã xảy ra lỗi trong quá trình thêm, vui lòng thử lại sau",
+          });
+        }
+      } else {
+        return res
+          .status(404)
+          .json({ errCode: 1, errMessage: "Dữ liệu không được tìm thấy" });
+      }
+    } catch (error) {
+      return res.status(500).json({ errCode: -1, errMessage: error });
+    }
+  },
+  deleteEvaluationCriteria: async (req, res) => {
+    try {
+      if (req?.params?.id) {
+        console.log(req.body);
+        const result = await db.EvaluationCriteria.destroy({
+          where: { id: req?.params?.id },
+        });
+        if (result) {
+          return res
+            .status(200)
+            .json({ errCode: 0, errMessage: "Xóa dữ liệu thành công" });
+        } else {
+          return res.status(200).json({
+            errCode: 2,
+            errMessage:
+              "Đã xảy ra lỗi trong quá trình xóa, vui lòng thử lại sau",
+          });
+        }
+      } else {
+        return res
+          .status(404)
+          .json({ errCode: 1, errMessage: "Dữ liệu không được tìm thấy" });
+      }
+    } catch (error) {
+      return res.status(500).json({ errCode: -1, errMessage: error });
+    }
+  },
+  importEvaluationCriterias: async (req, res) => {
     try {
       if (req?.body?.data) {
         console.log(req?.body?.data);
