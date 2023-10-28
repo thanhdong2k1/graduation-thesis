@@ -2,7 +2,7 @@
 
 module.exports = {
   up: async (queryInterface, Sequelize) => {
-    return queryInterface.bulkInsert("Thesis_Session", [
+    return queryInterface.bulkInsert("thesis_session", [
       {
         name: "Đợt 1 2022-2023",
         description: "Mô tả khóa luận Đợt 1 2022-2023",
