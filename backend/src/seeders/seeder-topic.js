@@ -2,7 +2,7 @@
 
 module.exports = {
   up: async (queryInterface, Sequelize) => {
-    return queryInterface.bulkInsert("Topics", [
+    return queryInterface.bulkInsert("topics", [
       {
         name: "CNTT-Phát triển ứng dụng di động cho quản lý việc làm tự động.",
         description:

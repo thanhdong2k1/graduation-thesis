@@ -2,7 +2,7 @@
 
 module.exports = {
   up: async (queryInterface, Sequelize) => {
-    return queryInterface.bulkInsert("Lecturers", [
+    return queryInterface.bulkInsert("lecturers", [
       {
         email: "admin@e.tlu.edu.vn",
         password:
