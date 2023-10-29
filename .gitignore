@@ -4,6 +4,7 @@
 .idea/
 # .env
 /package-lock.json
+/frontend/build
 /material-tailwind-dashboard-react
 /plantdashboard
 /React-Admin-Dashboard
