@@ -1,27 +1,23 @@
 import { Controller, useForm } from "react-hook-form";
 import { useDispatch, useSelector } from "react-redux";
 import { toast } from "react-toastify";
-import {
-    apiAdmin,
-} from "../redux/apiRequest";
-import ButtonConfirm from "../components/button/ButtonConfirm";
 import { useEffect, useState } from "react";
 import Avatar from "react-avatar-edit";
-import ModalPopup from "../components/ModelPopup/ModalPopup";
 import { FaPenAlt } from "react-icons/fa";
 import { Buffer } from "buffer";
 import Select from "react-select";
-import {
-    customSelectStyles,
-    customSelectStylesMulti,
-} from "../utils/customStyleReactSelect";
+
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import moment from "moment/moment";
-import { createAxios } from "../utils/createInstance";
-import { logginSuccess } from "../redux/authSlice";
+import { createAxios } from "../../utils/createInstance";
+import { logginSuccess } from "../../redux/authSlice";
+import {  apiStudent } from "../../redux/apiRequest";
+import ModalPopup from "../../components/ModelPopup/ModalPopup";
+import { customSelectStyles, customSelectStylesMulti } from "../../utils/customStyleReactSelect";
+import ButtonConfirm from "../../components/button/ButtonConfirm";
 
-const ChangeInformation = () => {
+const StudentChangeInformation = () => {
     const currentUser = useSelector((state) => state.auth.currentUser);
     const permissions = useSelector((state) => state.admin.permissions);
     const dispatch = useDispatch();
@@ -50,7 +46,7 @@ const ChangeInformation = () => {
             image: previewImg,
         };
         // console.log(datasend);
-        await apiAdmin
+        await apiStudent
             .apiChangeInformation(currentUser, datasend, axiosJWT)
             .then((res) => {
                 if (res?.errCode > 0) {
@@ -74,7 +70,7 @@ const ChangeInformation = () => {
                         pauseOnFocusLoss: true,
                     });
                     // reset();
-                    apiAdmin.apiGetInformation(currentUser, dispatch, axiosJWT);
+                    apiStudent.apiGetInformation(currentUser, dispatch, axiosJWT);
                 }
             })
             .catch((error) => {
@@ -97,9 +93,9 @@ const ChangeInformation = () => {
                 moment(data.birthday, "DD/MM/YYYY")
             ).toLocaleDateString("vi-VN"),
         };
-        const { role, permissions, department, code, ...dataFilter } = datasend;
+        const { role, permissions, clases, code, ...dataFilter } = datasend;
         console.log(datasend, dataFilter);
-        await apiAdmin
+        await apiStudent
             .apiChangeInformation(currentUser, dataFilter, axiosJWT)
             .then((res) => {
                 if (res?.errCode > 0) {
@@ -177,9 +173,9 @@ const ChangeInformation = () => {
     });
     useEffect(() => {
         // console.log("useEffect changeInfor");
-        apiAdmin.apiGetInformation(currentUser, dispatch, axiosJWT);
-        apiAdmin.apiGetGender(currentUser, dispatch, axiosJWT);
-        apiAdmin.apiGetPermissions(currentUser, dispatch, axiosJWT);
+        apiStudent.apiStudentGetInformation(currentUser, dispatch, axiosJWT);
+        apiStudent.apiGetGender(currentUser, dispatch, axiosJWT);
+        apiStudent.apiGetPermissions(currentUser, dispatch, axiosJWT);
     }, [currentUser]);
     useEffect(() => {
         if (informationUser?.image) {
@@ -195,7 +191,7 @@ const ChangeInformation = () => {
         setValue("birthday", informationUser?.birthday);
         setValue("code", informationUser?.code);
         setValue("role", informationUser?.roleData?.valueVi);
-        setValue("department", informationUser?.departmentData.name);
+        setValue("class", informationUser?.classData?.name);
         setValue("permissions", convert);
         // console.log(informationUser?.birthday,moment(informationUser?.birthday, "DD/MM/YYYY").toString());
         setValue(
@@ -373,7 +369,7 @@ const ChangeInformation = () => {
                         )}
                     </div>
                 </div>
-                {/* code, roleId, departmentId, permissions */}
+                {/* code, roleId, classId, permissions */}
 
                 <div className="row flex justify-center items-center gap-2">
                     <div className="col w-full">
@@ -396,11 +392,11 @@ const ChangeInformation = () => {
 
                 <div className="row flex justify-center items-center gap-2">
                     <div className="col w-full">
-                        <label className="labelInput">Department</label>
+                        <label className="labelInput">Class</label>
                         <input
                             className="input disabled:bg-whiteColor"
                             disabled
-                            {...register("department", {})}
+                            {...register("class", {})}
                         />
                     </div>
                 </div>
@@ -448,4 +444,4 @@ const ChangeInformation = () => {
     );
 };
 
-export default ChangeInformation;
+export default StudentChangeInformation;

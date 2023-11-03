@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { toast } from "react-toastify";
 import { useEffect, useState } from "react";
 import Avatar from "react-avatar-edit";
-import { FaPenAlt } from "react-icons/fa";
+import { FaPenAlt, FaRegTrashAlt } from "react-icons/fa";
 import { Buffer } from "buffer";
 import Select from "react-select";
 import DatePicker from "react-datepicker";
@@ -19,6 +19,7 @@ import {
 } from "../../../utils/customStyleReactSelect";
 import ButtonConfirm from "../../../components/button/ButtonConfirm";
 import { useParams } from "react-router-dom";
+import { MdAdd } from "react-icons/md";
 
 const AddCouncil = ({ type }, params) => {
     let { id } = useParams();
@@ -29,6 +30,11 @@ const AddCouncil = ({ type }, params) => {
     let axiosJWT = createAxios(currentUser, dispatch, logginSuccess);
     const status = useSelector((state) => state.admin.status);
     const thesisSessions = useSelector((state) => state.admin.thesisSessions);
+    const position = useSelector((state) => state.admin.position);
+    const lecturers = useSelector((state) => state.admin.lecturers);
+    let codeLecturers = lecturers.map((v) => {
+        return { value: v.id, label: `${v.id} | ${v.fullName}` };
+    });
     let codeThesisSessions = thesisSessions.map((v) => {
         return { value: v.id, label: `${v.id} | ${v.name}` };
     });
@@ -46,12 +52,26 @@ const AddCouncil = ({ type }, params) => {
     const onSubmit = async (data) => {
         const id = toast.loading("Please wait...");
         console.log(data);
+        let councilDetailsFilter = [];
+        councilDetails?.map((item) => {
+            councilDetailsFilter.push({
+                id: item?.id,
+                positionId: item?.positionId?.value,
+                lecturerId: item?.lecturerId?.value,
+                // positionId: item.filter(
+                //     (value) =>
+                //         value?.value == res?.result?.positionId
+                // )
+            });
+        });
+        console.log("councilDetailsFilter", councilDetailsFilter);
         type == "add"
             ? await apiAdmin
                   .apiAddCouncil({
                       user: currentUser,
                       data: data,
                       axiosJWT: axiosJWT,
+                      councilDetails: councilDetailsFilter,
                   })
                   .then((res) => {
                       if (res?.errCode > 0) {
@@ -95,6 +115,7 @@ const AddCouncil = ({ type }, params) => {
                       user: currentUser,
                       data: data,
                       axiosJWT: axiosJWT,
+                      councilDetails: councilDetailsFilter,
                   })
                   .then((res) => {
                       if (res?.errCode > 0) {
@@ -136,7 +157,13 @@ const AddCouncil = ({ type }, params) => {
     };
     useEffect(() => {
         apiAdmin.apiGetStatus(currentUser, dispatch, axiosJWT);
+        apiAdmin.apiGetPosition(currentUser, dispatch, axiosJWT);
         apiAdmin.getAllThesisSessions({
+            user: currentUser,
+            dispatch: dispatch,
+            axiosJWT: axiosJWT,
+        });
+        apiAdmin.getAllLecturers({
             user: currentUser,
             dispatch: dispatch,
             axiosJWT: axiosJWT,
@@ -198,9 +225,90 @@ const AddCouncil = ({ type }, params) => {
                         pauseOnFocusLoss: true,
                     });
                 });
+            async function fetchData() {
+                try {
+                    const response = await apiAdmin.getAllCouncilDetails({
+                        user: currentUser,
+                        id: id,
+                        axiosJWT: axiosJWT,
+                    });
+                    let filter = [];
+                    response?.result?.map((item) => {
+                        filter.push({
+                            id: item?.id,
+                            positionId: position?.filter(
+                                (value) => value?.value == item?.positionId
+                            )[0],
+                            lecturerId: codeLecturers?.filter(
+                                (value) => value?.value == item?.lecturerId
+                            )[0],
+                            // positionId: item.filter(
+                            //     (value) =>
+                            //         value?.value == res?.result?.positionId
+                            // )
+                        });
+                    });
+                    console.log(filter);
+                    setCouncilDetails(filter);
+                } catch (e) {
+                    console.error(e);
+                }
+            }
+            fetchData();
         }
     }, [currentUser]);
 
+    const [councilDetails, setCouncilDetails] = useState([]);
+    // const [councilDetailsFilter, setCouncilDetailsFilter] = useState([]);
+
+    const addItem = (level) => {
+        setCouncilDetails([
+            ...councilDetails,
+            {
+                positionId: "",
+                lecturerId: "",
+            },
+        ]);
+        console.log(councilDetails);
+    };
+
+    const removeItem = (index) => {
+        const updatedItems = [...councilDetails];
+        updatedItems.splice(index, 1);
+        setCouncilDetails(updatedItems);
+    };
+
+    const updateItem = (index, field, value) => {
+        const updatedItems = [...councilDetails];
+        updatedItems[index][field] = value;
+        updatedItems[index][field] = value;
+        setCouncilDetails(updatedItems);
+    };
+    // useEffect(() => {
+    //     console.log(councilDetails);
+    //     councilDetails?.map((item) => {
+    //         console.log(item);
+    //         setCouncilDetailsFilter((prev) => [
+    //             ...prev,
+    //             {
+    //                 id: item?.id,
+    //                 positionId: position.filter(
+    //                     (value) => value?.value == item?.positionId
+    //                 )[0],
+    //                 lecturerId: codeLecturers.filter(
+    //                     (value) => value?.value == item?.lecturerId
+    //                 )[0],
+    //                 // positionId: item.filter(
+    //                 //     (value) =>
+    //                 //         value?.value == res?.result?.positionId
+    //                 // )
+    //             },
+    //         ]);
+    //     });
+    // }, [councilDetails]);
+    useEffect(() => {
+        console.log(councilDetails);
+    }, [councilDetails]);
     return (
         <div className="changeInformationDiv flex flex-col justify-center items-center gap-2">
             <div className="capitalize font-semibold text-h1FontSize">
@@ -211,7 +319,7 @@ const AddCouncil = ({ type }, params) => {
                 className="formDiv flex flex-col gap-2  media-min-md:w-[80%]"
             >
                 <div className="row flex justify-center items-center gap-2">
-                    <div className="col w-full">
+                    <div className="col w-1/5">
                         <label className="labelInput">ID</label>
                         <input
                             className="input disabled"
@@ -323,7 +431,131 @@ const AddCouncil = ({ type }, params) => {
                     </div>
                 </div>
                 {/* code, roleId, departmentId, permissions */}
+                {councilDetails &&
+                    councilDetails?.map((item, index) => (
+                        <div
+                            className="row flex justify-center items-center gap-2"
+                            key={index}
+                        >
+                            <div className="col w-1/4">
+                                <div className="row flex justify-center items-center gap-2">
+                                    <div className="col w-full">
+                                        {index == 0 && (
+                                            <label className="labelInput">
+                                                ID
+                                            </label>
+                                        )}
+                                        <input
+                                            className="input disabled"
+                                            disabled
+                                            value={item?.id}
+                                            // {...register("idCriteria", {
+                                            //     // required: "Full name is required",
+                                            // })}
+                                        />
+                                    </div>
+                                    {/* {errors.idCriteria?.type && (
+                                    <p className=" text-normal text-red-500">
+                                        {errors.idCriteria?.message}
+                                    </p>
+                                )} */}
+                                </div>
+                            </div>
+                            <div className="col w-full">
+                                {index == 0 && (
+                                    <label className="labelInput">
+                                        Position
+                                    </label>
+                                )}
 
+                                <Select
+                                    defaultValue={item?.positionId}
+                                    styles={customSelectStyles}
+                                    options={position}
+                                    isDisabled={type == "detail" ? true : false}
+                                    // value={item.name}
+                                    onChange={(e) =>
+                                        // console.log(e)
+                                        updateItem(index, "positionId", e)
+                                    }
+                                />
+                                {/* {errors.nameCriteria?.type && (
+                                <p className=" text-normal text-red-500">
+                                    {errors.nameCriteria?.message}
+                                </p>
+                            )} */}
+                            </div>
+                            <div className="col w-full">
+                                {index == 0 && (
+                                    <>
+                                        <label className="labelInput flex justify-between">
+                                            <span>Lecturer</span>
+                                            {/* <span>Total: {totalScore}</span> */}
+                                        </label>
+                                    </>
+                                )}
+                                <div className="flex flex-row gap-2">
+                                    <Select
+                                        defaultValue={item?.lecturerId}
+                                        styles={customSelectStyles}
+                                        options={codeLecturers}
+                                        isDisabled={
+                                            type == "detail" ? true : false
+                                        }
+                                        className="w-full"
+                                        // value={item.name}
+                                        onChange={(e) =>
+                                            // console.log(e)
+                                            updateItem(index, "lecturerId", e)
+                                        }
+                                    />
+                                    {/* <div
+                                        className="button"
+                                        onClick={() => moveUpItem(index)}
+                                    >
+                                        <HiArrowUp className="hover:text-PrimaryColor" />
+                                    </div>
+                                    <div
+                                        className="button"
+                                        onClick={() => moveDownItem(index)}
+                                    >
+                                        <HiArrowDown className="hover:text-PrimaryColor" />
+                                    </div>
+                                    <div
+                                        className="button"
+                                        onClick={() => removeItem(index)}
+                                    >
+                                        <FaRegTrashAlt className="hover:text-PrimaryColor" />
+                                    </div> */}
+                                    {type != "detail" && (
+                                        <div
+                                            className="button"
+                                            onClick={() => removeItem(index)}
+                                        >
+                                            <FaRegTrashAlt className="hover:text-PrimaryColor" />
+                                        </div>
+                                    )}
+                                </div>
+                            </div>
+                            {/* {errors.weightCriteria?.type && (
+                                <p className=" text-normal text-red-500">
+                                    {errors.weightCriteria?.message}
+                                </p>
+                            )} */}
+                        </div>
+                    ))}
+
+                {type != "detail" && (
+                    <div className="flex justify-end items-center gap-2">
+                        <div
+                            className="button gap-1"
+                            onClick={() => addItem(1)}
+                        >
+                            <MdAdd className="" />
+                            <span>Add Position</span>
+                        </div>
+                    </div>
+                )}
                 <ButtonConfirm type={type} />
             </form>
         </div>

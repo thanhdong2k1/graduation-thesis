@@ -96,6 +96,7 @@ const AddEvaluationMethod = ({ type }, params) => {
                   .apiUpdateEvaluationMethod({
                       user: currentUser,
                       data: data,
+                      criterias: criterias,
                       axiosJWT: axiosJWT,
                   })
                   .then((res) => {
@@ -275,8 +276,8 @@ const AddEvaluationMethod = ({ type }, params) => {
         criterias.map((item) => {
             total = total + +item.weight;
         });
-        setTotalScore(total);
-
+        // setTotalScore(total);
+        setValue("total",total);
         console.log(criterias, total);
     }, [criterias]);
 
@@ -290,7 +291,7 @@ const AddEvaluationMethod = ({ type }, params) => {
                 className="formDiv flex flex-col gap-2  media-min-md:w-[80%]"
             >
                 <div className="row flex justify-center items-center gap-2">
-                    <div className="col w-full">
+                    <div className="col w-1/5">
                         <label className="labelInput">ID</label>
                         <input
                             className="input disabled"
@@ -329,15 +330,15 @@ const AddEvaluationMethod = ({ type }, params) => {
                             className="row flex justify-center items-center gap-2"
                             key={index}
                         >
-                            <div className="col w-full">
+                            <div className="col w-1/3">
                                 <div className="row flex justify-center items-center gap-2">
                                     {index != 0 && item.level == "2" && (
-                                        <div className="col w-full"></div>
+                                        <div className="col w-full media-max-md:w-1/4"></div>
                                     )}
                                     <div className="col w-full">
                                         {index == 0 && (
                                             <label className="labelInput">
-                                                ID Criteria
+                                                ID
                                             </label>
                                         )}
                                         <input
@@ -356,7 +357,7 @@ const AddEvaluationMethod = ({ type }, params) => {
                                 )} */}
                                 </div>
                             </div>
-                            <div className="col w-full">
+                            <div className="col w-3/4 media-min-md:w-full">
                                 {index == 0 && (
                                     <label className="labelInput">
                                         Name Criteria
@@ -385,7 +386,7 @@ const AddEvaluationMethod = ({ type }, params) => {
                                 </p>
                             )} */}
                             </div>
-                            <div className="col w-full">
+                            <div className="col w-full media-min-md:w-1/2">
                                 {index == 0 && (
                                     <>
                                         <label className="labelInput flex justify-between">
@@ -456,16 +457,18 @@ const AddEvaluationMethod = ({ type }, params) => {
                             className={`input disabled`}
                             type="number"
                             disabled={true}
-                            // {...register("weightCriteria", {
-                            //     required: "Name is required",
-                            // })}
-                            value={totalScore}
+                            {...register("total", {
+                                validate: (value) => {
+                                    return value == "10" || "The total weight must be 1 or 10!";
+                                  }
+                            })}
+                            // value={totalScore}
                         />
-                        {/* {errors.weightCriteria?.type && (
-                                <p className=" text-normal text-red-500">
-                                    {errors.weightCriteria?.message}
-                                </p>
-                            )} */}
+                        {errors.total?.type && (
+                            <p className=" text-normal text-red-500">
+                                {errors.total?.message}
+                            </p>
+                        )}
                     </div>
                 </div>
                 <div className="flex justify-end items-center gap-2">

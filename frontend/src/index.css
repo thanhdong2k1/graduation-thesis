@@ -41,13 +41,13 @@ body {
         cursor: pointer;
     }
     .button {
-        @apply cursor-pointer flex items-center text-h3FontSize font-semibold bg-inputColor rounded-lg px-2 py-1 border-none shadow-sm;
+        @apply cursor-pointer flex items-center text-h3FontSize font-semibold bg-inputColor rounded-lg px-2 py-1 border-none shadow-md;
     }
     .button .icon {
         @apply ml-2;
     }
     .button:hover {
-        @apply text-PrimaryColor bg-paleBlue;
+        @apply text-PrimaryColor bg-paleBlue shadow-lg;
     }
     .buttonPrimary {
         @apply bg-PrimaryColor text-white font-bold uppercase text-sm px-3 py-2 rounded-lg shadow-md;

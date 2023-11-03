@@ -20,6 +20,7 @@ import {
 import ButtonConfirm from "../../../components/button/ButtonConfirm";
 import { useParams } from "react-router-dom";
 import { MdLockReset } from "react-icons/md";
+import pdf from "../../../assets/540cb75550adf33f281f29132dddd14fded85bfc.pdf";
 
 const AddThesis = ({ type }) => {
     let { id } = useParams();
@@ -28,10 +29,6 @@ const AddThesis = ({ type }) => {
     const currentUser = useSelector((state) => state.auth.currentUser);
     const dispatch = useDispatch();
     let axiosJWT = createAxios(currentUser, dispatch, logginSuccess);
-    const status = useSelector((state) => state.admin.status);
-    const gender = useSelector((state) => state.admin.gender);
-    const role = useSelector((state) => state.admin.role);
-    const permissions = useSelector((state) => state.admin.permissions);
     const results = useSelector((state) => state.admin.result);
     const topics = useSelector((state) => state.admin.topics);
     const students = useSelector((state) => state.admin.students);
@@ -55,9 +52,7 @@ const AddThesis = ({ type }) => {
     let codeTopic = topics?.map((v) => {
         return { value: v.id, label: `${v.id} | ${v.name}` };
     });
-    let codeResult = results?.map((v) => {
-        return { value: v.id, label: `${v.id} | ${v.name}` };
-    });
+
     const [isRtl, setIsRtl] = useState(false);
     const [showModal, setShowModal] = useState(false);
     const [result, setResult] = useState(null);
@@ -144,11 +139,18 @@ const AddThesis = ({ type }) => {
             });
         const datasend = {
             ...data,
-            birthday: new Date(
-                moment(data.birthday, "DD/MM/YYYY")
+            startDate: new Date(
+                moment(data.startDate, "DD/MM/YYYY")
             ).toLocaleDateString("vi-VN"),
-            permissions: permissions?.toString(),
-            //     e.map((obj) => {
+            complateDate: new Date(
+                moment(data.complateDate, "DD/MM/YYYY")
+            ).toLocaleDateString("vi-VN"),
+            thesisStartDate: new Date(
+                moment(data.thesisStartDate, "DD/MM/YYYY")
+            ).toLocaleDateString("vi-VN"),
+            thesisEndDate: new Date(
+                moment(data.thesisEndDate, "DD/MM/YYYY")
+            ).toLocaleDateString("vi-VN"),
             //         console.log(obj.value);
             //         permissions.push(obj.value);
             //     });,
@@ -289,48 +291,73 @@ const AddThesis = ({ type }) => {
                     } else {
                         console.log(res);
                         let convert = [];
-                        if (res?.result?.roleId === "R1") {
-                            permissions.forEach((obj) => {
-                                if (obj.value === "PERF") {
-                                    convert.push({ ...obj, isFixed: true });
-                                }
-                            });
-                        } else if (res?.result?.roleId === "R2") {
-                            permissions.forEach((obj) => {
-                                if (
-                                    obj.value !== "PERD" &&
-                                    obj.value !== "PERF"
-                                ) {
-                                    convert.push({ ...obj, isFixed: true });
-                                }
-                            });
-                        } else {
-                            permissions.forEach((obj) => {
-                                if (
-                                    obj.value === "PERU" ||
-                                    obj.value === "PERR"
-                                ) {
-                                    convert.push({ ...obj, isFixed: true });
-                                }
-                            });
-                        }
-                        const array = res?.result?.permissions
-                            ?.toString()
-                            .split(",");
-                        permissions.forEach((obj) => {
-                            if (array?.includes(obj.value)) {
-                                convert.push(obj);
-                            }
-                        });
+
                         setValue("id", res?.result?.id);
                         setValue(
                             "result",
-                            codeResult.filter(
+                            results.filter(
                                 (value) => value?.value == res?.result?.resultId
                             )
                         );
-                        // id, startDate, complateDate, thesisStartDate, thesisEndDate, reportFile, totalScore, resultId,
-                        // topicId, studentId, thesisAdvisorId, thesisAdvisorStatusId, thesisSessionId, councilId, councilStatusId,
+                        setValue(
+                            "student",
+                            codeStudent.filter(
+                                (value) =>
+                                    value?.value == res?.result?.studentId
+                            )
+                        );
+                        setValue(
+                            "topic",
+                            codeTopic.filter(
+                                (value) => value?.value == res?.result?.topicId
+                            )
+                        );
+                        setValue(
+                            "thesisAdvisor",
+                            codeThesisAdvisor.filter(
+                                (value) =>
+                                    value?.value == res?.result?.thesisAdvisorId
+                            )
+                        );
+                        setValue(
+                            "thesisAdvisorStatus",
+                            thesisAdvisorStatus.filter(
+                                (value) =>
+                                    value?.value ==
+                                    res?.result?.thesisAdvisorStatusId
+                            )
+                        );
+                        setValue(
+                            "thesisSession",
+                            codeThesisSession.filter(
+                                (value) =>
+                                    value?.value == res?.result?.thesisSessionId
+                            )
+                        );
+                        setValue(
+                            "council",
+                            codeCouncil.filter(
+                                (value) =>
+                                    value?.value == res?.result?.councilId
+                            )
+                        );
+                        setValue(
+                            "councilStatus",
+                            councilStatus.filter(
+                                (value) =>
+                                    value?.value == res?.result?.councilStatusId
+                            )
+                        );
+
+                        setValue("startDate", res?.result?.startDate);
+                        setValue("complateDate", res?.result?.complateDate);
+                        setValue(
+                            "thesisStartDate",
+                            res?.result?.thesisStartDate
+                        );
+                        setValue("thesisEndDate", res?.result?.thesisEndDate);
+                        setValue("totalScore", res?.result?.totalScore);
+
                         toast.update(id, {
                             render: res?.errMessage,
                             type: "success",
@@ -354,7 +381,7 @@ const AddThesis = ({ type }) => {
                     });
                 });
         }
-    }, [currentUser]);
+    }, []);
 
     return (
         <>
@@ -423,7 +450,7 @@ const AddThesis = ({ type }) => {
                         </div>
                     </div> */}
                     <div className="row flex justify-center items-center gap-2">
-                        <div className="col w-full">
+                        <div className="col w-1/5">
                             <label className="labelInput">ID</label>
                             <input
                                 className="input disabled"
@@ -438,20 +465,24 @@ const AddThesis = ({ type }) => {
                                 </p>
                             )}
                         </div>
-                        <div className="col w-full">
-                            <label className="labelInput">Total Record</label>
+                        <div className="col w-3/5">
+                            <label className="labelInput">Total Score</label>
                             <input
-                                className={`input ${
-                                    type == "detail" ? "disabled" : ""
-                                }`}
-                                disabled={type == "detail" ? true : false}
-                                {...register("totalRecord", {
+                                // className={`input ${
+                                //     type == "detail" ? "disabled" : ""
+                                // }`}
+                                className={`input disabled`}
+                                type="number"
+                                step="0.1"
+                                // disabled={type == "detail" ? true : false}
+                                disabled={true}
+                                {...register("totalScore", {
                                     // required: "Full name is required",
                                 })}
                             />
-                            {errors.totalRecord?.type && (
+                            {errors.totalScore?.type && (
                                 <p className=" text-normal text-red-500">
-                                    {errors.totalRecord?.message}
+                                    {errors.totalScore?.message}
                                 </p>
                             )}
                         </div>
@@ -467,7 +498,7 @@ const AddThesis = ({ type }) => {
                                     <Select
                                         styles={customSelectStyles}
                                         {...field}
-                                        options={codeResult}
+                                        options={results}
                                         isClearable={true}
                                         isDisabled={true}
                                     />
@@ -587,7 +618,7 @@ const AddThesis = ({ type }) => {
                     </div>
                     <div className="row flex justify-center items-center gap-2">
                         <div className="col w-full">
-                            <label className="labelInput" for="file_input">
+                            {/* <label className="labelInput" for="file_input">
                                 Upload file Report
                             </label>
                             <input
@@ -596,7 +627,19 @@ const AddThesis = ({ type }) => {
                                 type="file"
                                 accept=".xls,.xlsx"
                                 // onChange={importFile}
-                            />
+                            /> */}
+                            <label className="labelInput" for="file_input">
+                                Report
+                            </label>
+                            <a
+                                className="button"
+                                href="https://tlus.edu.vn/wp-content/uploads/2023/09/TB-80-HKP-K2-23-24_Web.pdf"
+                                target="_blank"
+                                underline="none"
+                                // download
+                            >
+                                Download Resume
+                            </a>
                         </div>
                         <div className="col w-full">
                             <label className="labelInput">Thesis Session</label>
@@ -759,7 +802,9 @@ const AddThesis = ({ type }) => {
                     </div>
                     <div className="row flex justify-center items-center gap-2">
                         <div className="col w-full flex flex-col">
-                            <label className="labelInput">Thesis Start Date</label>
+                            <label className="labelInput">
+                                Thesis Start Date
+                            </label>
                             <Controller
                                 name="thesisStartDate"
                                 control={control}
@@ -797,7 +842,9 @@ const AddThesis = ({ type }) => {
                             )}
                         </div>
                         <div className="col w-full flex flex-col">
-                            <label className="labelInput">Thesis End Date</label>
+                            <label className="labelInput">
+                                Thesis End Date
+                            </label>
                             <Controller
                                 name="thesisEndDate"
                                 control={control}
@@ -836,8 +883,15 @@ const AddThesis = ({ type }) => {
                         </div>
                     </div>
                     <ButtonConfirm type={type} />
+                    {/* <div>
+                        <iframe
+                            className="w-full rounded-lg"
+                            src="https://tlus.edu.vn/wp-content/uploads/2023/09/TB-80-HKP-K2-23-24_Web.pdf"
+                        ></iframe>
+                    </div> */}
                 </form>
             </div>
+
             <div>
                 <ModalPopup
                     title={"Confim Reset Password User"}

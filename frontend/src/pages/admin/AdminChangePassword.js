@@ -1,17 +1,16 @@
 import { useForm } from "react-hook-form";
 import { FaUserShield } from "react-icons/fa";
 import { Link } from "react-router-dom";
-import pathRoutes from "../utils/pathRoutes";
-import ButtonConfirm from "../components/button/ButtonConfirm";
-import { apiAdmin, apiChangePassword } from "../redux/apiRequest";
 import { useDispatch, useSelector } from "react-redux";
 import { toast } from "react-toastify";
 import { FaEye, FaEyeSlash } from "react-icons/fa6";
 import { useState } from "react";
-import { logginSuccess } from "../redux/authSlice";
-import { createAxios } from "../utils/createInstance";
+import { createAxios } from "../../utils/createInstance";
+import { logginSuccess } from "../../redux/authSlice";
+import { apiAdmin } from "../../redux/apiRequest";
+import ButtonConfirm from "../../components/button/ButtonConfirm";
 
-const ChangePassword = () => {
+const AdminChangePassword = () => {
 
     const currentUser = useSelector((state) => state.auth.currentUser);
     const dispatch = useDispatch();
@@ -180,7 +179,7 @@ const ChangePassword = () => {
                             id="confirmPassword"
                             placeholder=""
                             className="bg-transparent outline-none border-none w-full media-max-md:w-full"
-                            {...register("confirmPassword", {
+                            {...register("newPassword", {
                                 required: "New Password is required",
                             })}
                         />
@@ -200,9 +199,9 @@ const ChangePassword = () => {
                             />
                         )}
                     </div>
-                    {errors.confirmPassword?.type && (
+                    {errors.newPassword?.type && (
                         <p className=" text-normal text-red-500">
-                            {errors.confirmPassword?.message}
+                            {errors.newPassword?.message}
                         </p>
                     )}
                 </div>
@@ -216,6 +215,10 @@ const ChangePassword = () => {
                             className="bg-transparent outline-none border-none w-full media-max-md:w-full"
                             {...register("confirmPassword", {
                                 required: "Confirm Password is required",
+                                validate: (value) => {
+                                    const {newPassword} = getValues();
+                                    return value == newPassword || "The password is not the same!";
+                                  }
                             })}
                         />
                         {showPassword3 ? (
@@ -246,4 +249,4 @@ const ChangePassword = () => {
     );
 };
 
-export default ChangePassword;
+export default AdminChangePassword;

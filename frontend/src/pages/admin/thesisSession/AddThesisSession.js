@@ -218,7 +218,7 @@ const AddThesisSession = ({ type }, params) => {
                 className="formDiv flex flex-col gap-2  media-min-md:w-[80%]"
             >
                 <div className="row flex justify-center items-center gap-2">
-                    <div className="col w-full">
+                    <div className="col w-1/5">
                         <label className="labelInput">ID</label>
                         <input
                             className="input disabled"

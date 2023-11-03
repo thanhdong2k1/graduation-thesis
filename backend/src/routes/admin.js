@@ -4,9 +4,13 @@ const middlewareController = require("../controllers/middlewareController");
 const adminController = require("../controllers/adminController");
 const router = express.Router();
 
-router.post("/change-password", middlewareController.verifyToken,adminController.changePassword);
-router.post("/change-information", middlewareController.verifyToken, adminController.changeInformation);
-router.post("/get-information", middlewareController.verifyToken, adminController.getInformation);
+router.post("/change-password-admin", middlewareController.verifyToken,adminController.changePasswordAdmin);
+router.post("/change-information-admin", middlewareController.verifyToken, adminController.changeInformationAdmin);
+router.post("/get-information-admin", middlewareController.verifyToken, adminController.getInformationAdmin);
+
+router.post("/change-password-student", middlewareController.verifyToken,adminController.changePasswordStudent);
+router.post("/change-information-student", middlewareController.verifyToken, adminController.changeInformationStudent);
+router.post("/get-information-student", middlewareController.verifyToken, adminController.getInformationStudent);
 router.post("/get-allcode", middlewareController.verifyToken, adminController.getAllcode);
 // Api Council
 router.post("/councils", middlewareController.verifyToken, adminController.getCouncils);
@@ -15,6 +19,9 @@ router.post("/import-councils", middlewareController.verifyTokenImport, adminCon
 router.post("/create-council", middlewareController.verifyTokenAdd, adminController.addCouncil);
 router.put("/update-council/:id", middlewareController.verifyTokenUpdate, adminController.updateCouncil);
 router.delete("/delete-council/:id", middlewareController.verifyTokenDelete, adminController.deleteCouncil);
+
+// Api Council
+router.get("/council-detail/:id", middlewareController.verifyToken, adminController.getCouncilDetailByIdCouncil);
 
 // Api Department
 router.post("/departments", middlewareController.verifyToken, adminController.getDepartments);

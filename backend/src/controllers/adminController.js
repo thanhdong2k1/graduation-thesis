@@ -7,7 +7,7 @@ const salt = bcrypt.genSaltSync(10);
 const adminController = {
   // Register
 
-  changePassword: async (req, res) => {
+  changePasswordAdmin: async (req, res) => {
     try {
       const hashPasswordFromBcrypt = await bcrypt.hashSync(
         req?.body?.newPassword,
@@ -60,7 +60,7 @@ const adminController = {
       return res.status(500).json({ errCode: -1, errMessage: error });
     }
   },
-  changeInformation: async (req, res) => {
+  changeInformationAdmin: async (req, res) => {
     try {
       const user = await db.Lecturer.findOne({
         where: {
@@ -105,7 +105,7 @@ const adminController = {
       return res.status(500).json({ errCode: -1, errMessage: error });
     }
   },
-  getInformation: async (req, res) => {
+  getInformationAdmin: async (req, res) => {
     try {
       let userData = {};
       //   findOne
@@ -136,35 +136,155 @@ const adminController = {
         raw: true,
         nest: true,
       });
-      information = information
-        ? information
-        : await db.Student.findOne({
-            where: { email: req.body.email },
-            include: [
-              //     genderId: DataTypes.STRING,
-              // roleId: DataTypes.STRING,
-              // statusId: DataTypes.STRING,
-              // departmentId: DataTypes.INTEGER,
-              {
-                model: db.Allcode,
-                as: "genderData",
+      if (information) {
+        delete information.password;
+        delete information.refreshToken;
+        return res.status(200).json({
+          errCode: 0,
+          errMessage: "Retrieve information successfully",
+          information,
+        });
+      } else {
+        return res.status(404).json({
+          errCode: 1,
+          errMessage: `Your's Email isn't exist in the system. Plz try log in again.`,
+        });
+      }
+    } catch (error) {
+      console.log("error", error);
+      return res.status(500).json({ errCode: -1, errMessage: error });
+    }
+  },
+
+  changePasswordStudent: async (req, res) => {
+    try {
+      const hashPasswordFromBcrypt = await bcrypt.hashSync(
+        req?.body?.newPassword,
+        salt
+      );
+      const user = await db.Student.findOne({
+        where: {
+          email: req?.body?.email,
+        },
+      });
+      if (user) {
+        const comparePasswordFromBcrypt = await bcrypt.compareSync(
+          req.body.oldPassword,
+          user.password
+        );
+        if (comparePasswordFromBcrypt) {
+          const changePassword = await db.Lecturer.update(
+            { password: hashPasswordFromBcrypt },
+            {
+              where: {
+                email: req?.body?.email,
               },
-              {
-                model: db.Allcode,
-                as: "roleData",
-              },
-              {
-                model: db.Allcode,
-                as: "statusData",
-              },
-              {
-                model: db.Department,
-                as: "departmentData",
-              },
-            ],
-            raw: true,
-            nest: true,
+            }
+          );
+          if (changePassword) {
+            console.log("changePassword", changePassword);
+            return res.status(200).json({
+              errCode: 0,
+              errMessage: "Password has been changed",
+            });
+          } else {
+            return res.status(400).json({
+              errCode: 3,
+              errMessage: "Plz try again late!",
+            });
+          }
+        } else {
+          return res.status(400).json({
+            errCode: 2,
+            errMessage: "The old password is incorrect",
           });
+        }
+      } else {
+        return res
+          .status(400)
+          .json({ errCode: 1, errMessage: "User is not valid" });
+      }
+    } catch (error) {
+      console.log(error);
+      return res.status(500).json({ errCode: -1, errMessage: error });
+    }
+  },
+  changeInformationStudent: async (req, res) => {
+    try {
+      const user = await db.Lecturer.findOne({
+        where: {
+          email: req?.body?.email,
+        },
+      });
+      if (user) {
+        const changeInformation = await db.Student.update(
+          {
+            fullName: req?.body?.fullName,
+            numberPhone: req?.body?.numberPhone,
+            birthday: req?.body?.birthday,
+            address: req?.body?.address,
+            genderId: req?.body?.genderId,
+            image: req?.body?.image,
+          },
+          {
+            where: {
+              email: req?.body?.email,
+            },
+          }
+        );
+        if (changeInformation) {
+          console.log("changeInformation", changeInformation);
+          return res.status(200).json({
+            errCode: 0,
+            errMessage: "Information has been changed",
+          });
+        } else {
+          return res.status(200).json({
+            errCode: 3,
+            errMessage: "Plz try again late!",
+          });
+        }
+      } else {
+        return res
+          .status(200)
+          .json({ errCode: 1, errMessage: "User is not valid" });
+      }
+    } catch (error) {
+      console.log(error);
+      return res.status(500).json({ errCode: -1, errMessage: error });
+    }
+  },
+  getInformationStudent: async (req, res) => {
+    try {
+      let userData = {};
+      //   findOne
+      let information = await db.Student.findOne({
+        where: { email: req.body.email },
+        include: [
+          //     genderId: DataTypes.STRING,
+          // roleId: DataTypes.STRING,
+          // statusId: DataTypes.STRING,
+          // departmentId: DataTypes.INTEGER,
+          {
+            model: db.Allcode,
+            as: "genderData",
+          },
+          {
+            model: db.Allcode,
+            as: "roleData",
+          },
+          {
+            model: db.Allcode,
+            as: "statusData",
+          },
+          {
+            model: db.Class,
+            as: "classData",
+          },
+        ],
+        raw: true,
+        nest: true,
+      });
       console.log("information", information);
       if (information) {
         delete information.password;
@@ -326,16 +446,34 @@ const adminController = {
   addCouncil: async (req, res) => {
     try {
       if (req?.body) {
-        const result = await db.Council.create({
+        let result = await db.Council.create({
           name: req?.body?.name,
           description: req?.body?.description,
           statusId: req?.body?.statusId,
           thesisSessionId: req?.body?.thesisSessionId,
         });
         if (result) {
-          return res
-            .status(200)
-            .json({ errCode: 0, errMessage: "Thêm dữ liệu thành công" });
+          let councilDetails = [];
+          req?.body?.councilDetails.map((criteria) => {
+            councilDetails.push({
+              councilId: result?.dataValues?.id,
+              ...criteria,
+            });
+          });
+          console.log("councilDetails", councilDetails);
+          result = null;
+          result = await db.CouncilDetail.bulkCreate(councilDetails);
+          if (result) {
+            return res
+              .status(200)
+              .json({ errCode: 0, errMessage: "Thêm dữ liệu thành công" });
+          } else {
+            return res.status(200).json({
+              errCode: 2,
+              errMessage:
+                "Đã xảy ra lỗi trong quá trình thêm, vui lòng thử lại sau",
+            });
+          }
         } else {
           return res.status(200).json({
             errCode: 2,
@@ -356,7 +494,7 @@ const adminController = {
     try {
       if (req?.params?.id) {
         console.log(req.body);
-        const result = await db.Council.update(
+        let result = await db.Council.update(
           {
             name: req?.body?.name,
             description: req?.body?.description,
@@ -366,9 +504,47 @@ const adminController = {
           { where: { id: req?.params?.id } }
         );
         if (result) {
-          return res
-            .status(200)
-            .json({ errCode: 0, errMessage: "Cập nhật dữ liệu thành công" });
+          let councilDetails = [];
+          req?.body?.councilDetails.map((position) => {
+            councilDetails.push({
+              councilId: req?.params?.id,
+              ...position,
+            });
+          });
+          result = null;
+          let ids = councilDetails?.map((position) => position.id);
+          let resultDelete = await db.CouncilDetail.findAll({
+            where: {
+              id: {
+                [Op.notIn]: ids,
+              },
+              councilId: req?.params?.id,
+            },
+          });
+          ids = resultDelete?.map((position) => position.id);
+          result = await db.CouncilDetail.destroy({
+            where: { id: ids },
+          });
+
+          console.log("resultDelete", result, ids);
+
+          result = await db.CouncilDetail.bulkCreate(councilDetails, {
+            upsertKeys: ["id"],
+            updateOnDuplicate: ["positionId", "councilId", "lecturerId"],
+          });
+          console.log("result", result);
+
+          if (result) {
+            return res
+              .status(200)
+              .json({ errCode: 0, errMessage: "Cập nhật dữ liệu thành công" });
+          } else {
+            return res.status(200).json({
+              errCode: 2,
+              errMessage:
+                "Đã xảy ra lỗi trong quá trình thêm, vui lòng thử lại sau",
+            });
+          }
         } else {
           return res.status(200).json({
             errCode: 2,
@@ -432,6 +608,39 @@ const adminController = {
         return res
           .status(404)
           .json({ errCode: 1, errMessage: "Dữ liệu không được tìm thấy" });
+      }
+    } catch (error) {
+      return res.status(500).json({ errCode: -1, errMessage: error });
+    }
+  },
+
+  // Api Council Detail
+  getCouncilDetailByIdCouncil: async (req, res) => {
+    try {
+      const result = await db.CouncilDetail.findAll({
+        where: {
+          councilId: req?.params?.id,
+        },
+        // include: [
+        //   {
+        //     model: db.Lecturer,
+        //     as: "deanData",
+        //     // attributes: ["name"],
+        //   },
+        // ],
+        order: [["positionId", "ASC"]],
+        raw: true,
+        nest: true,
+      });
+      if (result) {
+        return res
+          .status(200)
+          .json({ errCode: 0, errMessage: "Tìm dữ liệu thành công", result });
+      } else {
+        return res.status(200).json({
+          errCode: 1,
+          errMessage: "Đã xảy ra lỗi trong quá trình tìm, vui lòng thử lại sau",
+        });
       }
     } catch (error) {
       return res.status(500).json({ errCode: -1, errMessage: error });
@@ -1519,7 +1728,7 @@ const adminController = {
     try {
       if (req?.params?.id) {
         console.log(req.body);
-        const result = await db.EvaluationMethod.update(
+        let result = await db.EvaluationMethod.update(
           {
             name: req?.body?.name,
             description: req?.body?.description,
@@ -1527,9 +1736,53 @@ const adminController = {
           { where: { id: req?.params?.id } }
         );
         if (result) {
-          return res
-            .status(200)
-            .json({ errCode: 0, errMessage: "Cập nhật dữ liệu thành công" });
+          let criterias = [];
+          req?.body?.criterias.map((criteria) => {
+            criterias.push({
+              evaluationMethodId: req?.params?.id,
+              ...criteria,
+            });
+          });
+          result = null;
+          let ids = criterias?.map((criteria) => criteria.id);
+          let resultDelete = await db.EvaluationCriteria.findAll({
+            where: {
+              id: {
+                [Op.notIn]: ids,
+              },
+              evaluationMethodId: req?.params?.id,
+            },
+          });
+          ids = resultDelete?.map((criteria) => criteria.id);
+          result = await db.EvaluationCriteria.destroy({
+            where: { id: ids },
+          });
+
+          console.log("resultDelete", result, ids);
+
+          result = await db.EvaluationCriteria.bulkCreate(criterias, {
+            upsertKeys: ["id"],
+            updateOnDuplicate: [
+              "name",
+              "evaluationMethodId",
+              "weight",
+              "level",
+              "order",
+            ],
+          });
+          console.log("result", result);
+
+          if (result) {
+            return res
+              .status(200)
+              .json({ errCode: 0, errMessage: "Cập nhật dữ liệu thành công" });
+          } else {
+            return res.status(200).json({
+              errCode: 2,
+              errMessage:
+                "Đã xảy ra lỗi trong quá trình thêm, vui lòng thử lại sau",
+            });
+          }
         } else {
           return res.status(200).json({
             errCode: 2,
@@ -2352,7 +2605,7 @@ const adminController = {
           birthday: req?.body?.birthday,
           genderId: req?.body?.genderId,
           code: req?.body?.code,
-          roleId: req?.body?.roleId,
+          roleId: "R4",
           classId: req?.body?.classId,
           statusId: req?.body?.statusId,
           permissions: req?.body?.permissions ? req?.body?.permissions : null,
@@ -2391,7 +2644,7 @@ const adminController = {
             birthday: req?.body?.birthday,
             genderId: req?.body?.genderId,
             code: req?.body?.code,
-            roleId: req?.body?.roleId,
+            roleId: "R4",
             classId: req?.body?.classId,
             statusId: req?.body?.statusId,
             permissions: req?.body?.permissions,
@@ -3223,7 +3476,11 @@ const adminController = {
           thesisEndDate: req?.body?.thesisEndDate,
           reportFile: req?.body?.reportFile,
           totalScore: req?.body?.totalScore,
-          resultId: req?.body?.resultId,
+          resultId: req?.body?.totalScore
+            ? req?.body?.totalScore > 4
+              ? "RS1"
+              : "RS0"
+            : req?.body?.resultId,
           topicId: req?.body?.topicId,
           studentId: req?.body?.studentId,
           thesisAdvisorId: req?.body?.thesisAdvisorId,
@@ -3264,7 +3521,11 @@ const adminController = {
             thesisEndDate: req?.body?.thesisEndDate,
             reportFile: req?.body?.reportFile,
             totalScore: req?.body?.totalScore,
-            resultId: req?.body?.resultId,
+            resultId: req?.body?.totalScore
+              ? req?.body?.totalScore >= 4
+                ? "RS1"
+                : "RS0"
+              : null,
             topicId: req?.body?.topicId,
             studentId: req?.body?.studentId,
             thesisAdvisorId: req?.body?.thesisAdvisorId,

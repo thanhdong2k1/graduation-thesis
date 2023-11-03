@@ -217,125 +217,137 @@ const AddLecturer = ({ type }, params) => {
                   });
     };
     useEffect(() => {
-        apiAdmin.apiGetRole(currentUser, dispatch, axiosJWT);
-        apiAdmin.apiGetGender(currentUser, dispatch, axiosJWT);
-        if (id) {
-            apiAdmin
-                .getLecturerById({
-                    user: currentUser,
-                    id: id,
-                    axiosJWT: axiosJWT,
-                })
-                .then((res) => {
-                    if (res?.errCode > 0) {
+        async function fetchData() {
+            await apiAdmin.apiGetRole(currentUser, dispatch, axiosJWT);
+            await apiAdmin.apiGetStatus(currentUser, dispatch, axiosJWT);
+            await apiAdmin.apiGetPermissions(currentUser, dispatch, axiosJWT);
+            await apiAdmin.apiGetGender(currentUser, dispatch, axiosJWT);
+            await apiAdmin.getAllDepartments({
+                user: currentUser,
+                dispatch: dispatch,
+                axiosJWT: axiosJWT,
+            });
+            if (id) {
+                await apiAdmin
+                    .getLecturerById({
+                        user: currentUser,
+                        id: id,
+                        axiosJWT: axiosJWT,
+                    })
+                    .then((res) => {
+                        if (res?.errCode > 0) {
+                            toast.update(id, {
+                                render: res?.errMessage,
+                                type: "error",
+                                isLoading: false,
+                                closeButton: true,
+                                autoClose: 1500,
+                                pauseOnFocusLoss: true,
+                            });
+                        } else {
+                            console.log(res);
+                            let convert = [];
+                            if (res?.result?.roleId === "R1") {
+                                permissions.forEach((obj) => {
+                                    if (obj.value === "PERF") {
+                                        convert.push({ ...obj, isFixed: true });
+                                    }
+                                });
+                            } else if (res?.result?.roleId === "R2") {
+                                permissions.forEach((obj) => {
+                                    if (
+                                        obj.value !== "PERD" &&
+                                        obj.value !== "PERF"
+                                    ) {
+                                        convert.push({ ...obj, isFixed: true });
+                                    }
+                                });
+                            } else {
+                                permissions.forEach((obj) => {
+                                    if (
+                                        obj.value === "PERU" ||
+                                        obj.value === "PERR"
+                                    ) {
+                                        convert.push({ ...obj, isFixed: true });
+                                    }
+                                });
+                            }
+                            const array = res?.result?.permissions
+                                ?.toString()
+                                .split(",");
+                            permissions.forEach((obj) => {
+                                if (array?.includes(obj.value)) {
+                                    convert.push(obj);
+                                }
+                            });
+                            setValue("id", res?.result?.id);
+                            setValue("fullName", res?.result?.fullName);
+                            setValue("email", res?.result?.email);
+                            setValue("numberPhone", res?.result?.numberPhone);
+                            setValue("address", res?.result?.address);
+                            setValue("birthday", res?.result?.birthday);
+
+                            {
+                                /* code, roleId, departmentId, permissions */
+                            }
+
+                            setValue("code", res?.result?.code);
+                            setValue(
+                                "role",
+                                role.filter(
+                                    (role) =>
+                                        role?.value === res?.result?.roleId
+                                )
+                            );
+                            setValue(
+                                "department",
+                                codeDepartment.filter(
+                                    (value) =>
+                                        value?.value ==
+                                        res?.result?.departmentId
+                                )
+                            );
+                            setValue("permissions", convert);
+                            // console.log(res?.result?.birthday,moment(res?.result?.birthday, "DD/MM/YYYY").toString());
+                            setValue(
+                                "gender",
+                                gender.filter(
+                                    (gender) =>
+                                        gender?.value === res?.result?.genderId
+                                )
+                            );
+                            setValue(
+                                "status",
+                                status.filter(
+                                    (status) =>
+                                        status?.value === res?.result?.statusId
+                                )
+                            );
+                            toast.update(id, {
+                                render: res?.errMessage,
+                                type: "success",
+                                isLoading: false,
+                                closeButton: true,
+                                autoClose: 1500,
+                                pauseOnFocusLoss: true,
+                            });
+                            // reset();
+                        }
+                    })
+                    .catch((error) => {
+                        // console.log(error);
                         toast.update(id, {
-                            render: res?.errMessage,
+                            render: "Đã xảy ra lỗi, vui lòng thử lại sau",
                             type: "error",
                             isLoading: false,
                             closeButton: true,
                             autoClose: 1500,
                             pauseOnFocusLoss: true,
                         });
-                    } else {
-                        console.log(res);
-                        let convert = [];
-                        if (res?.result?.roleId === "R1") {
-                            permissions.forEach((obj) => {
-                                if (obj.value === "PERF") {
-                                    convert.push({ ...obj, isFixed: true });
-                                }
-                            });
-                        } else if (res?.result?.roleId === "R2") {
-                            permissions.forEach((obj) => {
-                                if (
-                                    obj.value !== "PERD" &&
-                                    obj.value !== "PERF"
-                                ) {
-                                    convert.push({ ...obj, isFixed: true });
-                                }
-                            });
-                        } else {
-                            permissions.forEach((obj) => {
-                                if (
-                                    obj.value === "PERU" ||
-                                    obj.value === "PERR"
-                                ) {
-                                    convert.push({ ...obj, isFixed: true });
-                                }
-                            });
-                        }
-                        const array = res?.result?.permissions
-                            ?.toString()
-                            .split(",");
-                        permissions.forEach((obj) => {
-                            if (array?.includes(obj.value)) {
-                                convert.push(obj);
-                            }
-                        });
-                        setValue("id", res?.result?.id);
-                        setValue("fullName", res?.result?.fullName);
-                        setValue("email", res?.result?.email);
-                        setValue("numberPhone", res?.result?.numberPhone);
-                        setValue("address", res?.result?.address);
-                        setValue("birthday", res?.result?.birthday);
-
-                        {
-                            /* code, roleId, departmentId, permissions */
-                        }
-
-                        setValue("code", res?.result?.code);
-                        setValue(
-                            "role",
-                            role.filter(
-                                (role) => role?.value === res?.result?.roleId
-                            )
-                        );
-                        setValue(
-                            "department",
-                            codeDepartment.filter(
-                                (value) =>
-                                    value?.value == res?.result?.departmentId
-                            )
-                        );
-                        setValue("permissions", convert);
-                        // console.log(res?.result?.birthday,moment(res?.result?.birthday, "DD/MM/YYYY").toString());
-                        setValue(
-                            "gender",
-                            gender.filter(
-                                (gender) =>
-                                    gender?.value === res?.result?.genderId
-                            )
-                        );
-                        setValue(
-                            "status",
-                            status.filter(
-                                (status) =>
-                                    status?.value === res?.result?.statusId
-                            )
-                        );
-                        toast.update(id, {
-                            render: res?.errMessage,
-                            type: "success",
-                            isLoading: false,
-                            closeButton: true,
-                            autoClose: 1500,
-                            pauseOnFocusLoss: true,
-                        });
-                        // reset();
-                    }
-                })
-                .catch((error) => {
-                    // console.log(error);
-                    toast.update(id, {
-                        render: "Đã xảy ra lỗi, vui lòng thử lại sau",
-                        type: "error",
-                        isLoading: false,
-                        closeButton: true,
-                        autoClose: 1500,
-                        pauseOnFocusLoss: true,
                     });
-                });
+            }
         }
+        fetchData()
     }, [currentUser]);
 
     return (
@@ -349,7 +361,7 @@ const AddLecturer = ({ type }, params) => {
                     className="formDiv flex flex-col gap-2  media-min-md:w-[80%]"
                 >
                     <div className="row flex justify-center items-center gap-2">
-                        <div className="col w-full">
+                        <div className="col w-1/5">
                             <label className="labelInput">ID</label>
                             <input
                                 className="input disabled"
@@ -491,7 +503,9 @@ const AddLecturer = ({ type }, params) => {
                                         {...field}
                                         options={gender}
                                         isClearable={true}
-                                        isDisabled={type == "detail" ? true : false}
+                                        isDisabled={
+                                            type == "detail" ? true : false
+                                        }
                                     />
                                 )}
                             />
@@ -547,7 +561,9 @@ const AddLecturer = ({ type }, params) => {
                                         {...field}
                                         options={role}
                                         isClearable={true}
-                                        isDisabled={type == "detail" ? true : false}
+                                        isDisabled={
+                                            type == "detail" ? true : false
+                                        }
                                     />
                                 )}
                             />
@@ -574,7 +590,9 @@ const AddLecturer = ({ type }, params) => {
                                         {...field}
                                         options={codeDepartment}
                                         isClearable={true}
-                                        isDisabled={type == "detail" ? true : false}
+                                        isDisabled={
+                                            type == "detail" ? true : false
+                                        }
                                     />
                                 )}
                             />

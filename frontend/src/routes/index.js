@@ -1,5 +1,5 @@
-import ChangeInformation from "../pages/ChangeInformation";
-import ChangePassword from "../pages/ChangePassword";
+import AdminChangeInformation from "../pages/admin/AdminChangeInformation";
+import AdminChangePassword from "../pages/admin/AdminChangePassword";
 import AdminHomePage from "../pages/admin/AdminHomePage";
 import AddBlock from "../pages/admin/block/AddBlock";
 import Block from "../pages/admin/block/Block";
@@ -24,6 +24,8 @@ import ThesisSession from "../pages/admin/thesisSession/ThesisSession";
 import AddTopic from "../pages/admin/topic/AddCouncil";
 import Topic from "../pages/admin/topic/Topic";
 import LecturerHomePage from "../pages/lecturer/LecturerHomePage";
+import StudentChangeInformation from "../pages/student/StudentChangeInformation";
+import StudentChangePassword from "../pages/student/StudentChangePassword";
 import StudentHomePage from "../pages/student/StudentHomePage";
 import pathRoutes from "../utils/pathRoutes";
 
@@ -45,13 +47,13 @@ export const routes = [
                 //   icon: <HomeIcon {...icon} />,
                 name: "Change Information",
                 path: pathRoutes.R1.changeInformation,
-                element: <ChangeInformation />,
+                element: <AdminChangeInformation />,
             },
             {
                 //   icon: <HomeIcon {...icon} />,
                 name: "Change Password",
                 path: pathRoutes.R1.changePassword,
-                element: <ChangePassword />,
+                element: <AdminChangePassword />,
             },
 
             // Council
@@ -356,13 +358,13 @@ export const routes = [
                 //   icon: <HomeIcon {...icon} />,
                 name: "Change Information",
                 path: pathRoutes.R1.changeInformation,
-                element: <ChangeInformation />,
+                element: <AdminChangeInformation />,
             },
             {
                 //   icon: <HomeIcon {...icon} />,
                 name: "Change Password",
                 path: pathRoutes.R1.changePassword,
-                element: <ChangePassword />,
+                element: <AdminChangePassword />,
             },
             {
                 //   icon: <HomeIcon {...icon} />,
@@ -392,13 +394,13 @@ export const routes = [
                 //   icon: <HomeIcon {...icon} />,
                 name: "Change Information",
                 path: pathRoutes.R1.changeInformation,
-                element: <ChangeInformation />,
+                element: <AdminChangeInformation />,
             },
             {
                 //   icon: <HomeIcon {...icon} />,
                 name: "Change Password",
                 path: pathRoutes.R1.changePassword,
-                element: <ChangePassword />,
+                element: <AdminChangePassword />,
             },
             {
                 //   icon: <HomeIcon {...icon} />,
@@ -427,13 +429,13 @@ export const routes = [
                 //   icon: <HomeIcon {...icon} />,
                 name: "Change Information",
                 path: pathRoutes.R1.changeInformation,
-                element: <ChangeInformation />,
+                element: <StudentChangeInformation />,
             },
             {
                 //   icon: <HomeIcon {...icon} />,
                 name: "Change Password",
                 path: pathRoutes.R1.changePassword,
-                element: <ChangePassword />,
+                element: <StudentChangePassword />,
             },
             {
                 //   icon: <HomeIcon {...icon} />,

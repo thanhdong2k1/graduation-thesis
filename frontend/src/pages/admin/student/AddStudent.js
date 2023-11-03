@@ -221,7 +221,18 @@ const AddStudent = ({ type }) => {
     };
     useEffect(() => {
         apiAdmin.apiGetRole(currentUser, dispatch, axiosJWT);
+        apiAdmin.apiGetPermissions(currentUser, dispatch, axiosJWT);
+        apiAdmin.apiGetStatus(currentUser, dispatch, axiosJWT);
+        apiAdmin.getAllClasses({
+            user: currentUser,
+            dispatch: dispatch,
+            axiosJWT: axiosJWT,
+        });
         apiAdmin.apiGetGender(currentUser, dispatch, axiosJWT);
+        setValue(
+            "role",
+            role.filter((role) => role?.value == "R4")
+        );
         if (id) {
             apiAdmin
                 .getStudentById({
@@ -281,17 +292,13 @@ const AddStudent = ({ type }) => {
                         setValue("numberPhone", res?.result?.numberPhone);
                         setValue("address", res?.result?.address);
                         setValue("birthday", res?.result?.birthday);
-
                         {
                             /* code, roleId, classeId, permissions */
                         }
-
                         setValue("code", res?.result?.code);
                         setValue(
                             "role",
-                            role.filter(
-                                (role) => role?.value === res?.result?.roleId
-                            )
+                            role.filter((role) => role?.value == "R4")
                         );
                         setValue(
                             "class",
@@ -351,7 +358,7 @@ const AddStudent = ({ type }) => {
                     className="formDiv flex flex-col gap-2  media-min-md:w-[80%]"
                 >
                     <div className="row flex justify-center items-center gap-2">
-                        <div className="col w-full">
+                        <div className="col w-1/5">
                             <label className="labelInput">ID</label>
                             <input
                                 className="input disabled"
@@ -551,9 +558,7 @@ const AddStudent = ({ type }) => {
                                         {...field}
                                         options={role}
                                         isClearable={true}
-                                        isDisabled={
-                                            type == "detail" ? true : false
-                                        }
+                                        isDisabled={true}
                                     />
                                 )}
                             />
