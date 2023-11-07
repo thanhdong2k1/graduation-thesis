@@ -236,6 +236,7 @@ const Council = () => {
 
             column: "statusId",
             columnData: "statusData",
+            actions: actionsDetail(handleDetail),
         },
         {
             header: "Hành động",

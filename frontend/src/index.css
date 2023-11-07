@@ -49,6 +49,15 @@ body {
     .button:hover {
         @apply text-PrimaryColor bg-paleBlue shadow-lg;
     }
+
+    .buttonTable {
+        @apply cursor-pointer text-h3FontSize font-semibold rounded-lg px-3 py-1 border-none shadow-md;
+    }
+    .buttonTable:hover {
+        @apply text-PrimaryColor bg-paleBlue shadow-lg;
+    }
+
+
     .buttonPrimary {
         @apply bg-PrimaryColor text-white font-bold uppercase text-sm px-3 py-2 rounded-lg shadow-md;
     }

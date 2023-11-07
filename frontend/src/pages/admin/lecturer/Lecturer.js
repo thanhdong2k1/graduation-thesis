@@ -301,6 +301,8 @@ const Lecturer = () => {
             columnData: "statusData",
             column: "statusId",
             // hide: true,
+            isStatus: true,
+            actions: actionsDetail(handleDetail),
         },
         {
             header: "Hành động",

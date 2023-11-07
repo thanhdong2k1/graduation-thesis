@@ -25,3 +25,12 @@ export const actionsRemove = (handle) => {
         permissions: "PERD",
     };
 };
+
+// export const actions = (handle) => {
+//     return {
+//         handle: handle,
+//         icon: <FaRegTrashAlt className="icon hover:text-PrimaryColor" />,
+//         type: "Remove",
+//         permissions: "PERD",
+//     };
+// };

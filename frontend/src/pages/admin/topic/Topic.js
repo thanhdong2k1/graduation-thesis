@@ -55,7 +55,7 @@ const Topic = () => {
         });
     };
     const handleDetail = (data) => {
-        console.log(pathRoutes.R1.topicDetail)
+        console.log(pathRoutes.R1.topicDetail);
         navigate(`../${pathRoutes.R1.topicDetail}/${data.id}`, {
             replace: true,
         });
@@ -233,9 +233,10 @@ const Topic = () => {
         },
         {
             header: "Trạng thái hội đồng",
-
             column: "statusId",
             columnData: "statusData",
+            isStatus: true,
+            actions: actionsDetail(handleDetail),
         },
         {
             header: "Hành động",

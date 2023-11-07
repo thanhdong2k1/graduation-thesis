@@ -21,7 +21,7 @@ import AddThesis from "../pages/admin/thesis/AddThesis";
 import Thesis from "../pages/admin/thesis/Thesis";
 import AddThesisSession from "../pages/admin/thesisSession/AddThesisSession";
 import ThesisSession from "../pages/admin/thesisSession/ThesisSession";
-import AddTopic from "../pages/admin/topic/AddCouncil";
+import AddTopic from "../pages/admin/topic/AddTopic";
 import Topic from "../pages/admin/topic/Topic";
 import LecturerHomePage from "../pages/lecturer/LecturerHomePage";
 import StudentChangeInformation from "../pages/student/StudentChangeInformation";
