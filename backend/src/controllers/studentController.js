@@ -34,24 +34,24 @@ const studentController = {
             console.log("changePassword", changePassword);
             return res.status(200).json({
               errCode: 0,
-              errMessage: "Password has been changed",
+              errMessage: "Mật khẩu đã được thay đổi.",
             });
           } else {
             return res.status(400).json({
               errCode: 3,
-              errMessage: "Plz try again late!",
+              errMessage: "Vui lòng thử lại sau!",
             });
           }
         } else {
           return res.status(400).json({
             errCode: 2,
-            errMessage: "The old password is incorrect",
+            errMessage: "Mật khẩu cũ không đúng!",
           });
         }
       } else {
         return res
           .status(400)
-          .json({ errCode: 1, errMessage: "User is not valid" });
+          .json({ errCode: 1, errMessage: "Mật khẩu cũ không đúng!" });
       }
     } catch (error) {
       console.log(error);
@@ -85,18 +85,18 @@ const studentController = {
           console.log("changeInformation", changeInformation);
           return res.status(200).json({
             errCode: 0,
-            errMessage: "Information has been changed",
+            errMessage: "Thông tin đã được thay đổi.",
           });
         } else {
           return res.status(200).json({
             errCode: 3,
-            errMessage: "Plz try again late!",
+            errMessage: "Vui lòng thử lại sau!",
           });
         }
       } else {
         return res
           .status(200)
-          .json({ errCode: 1, errMessage: "User is not valid" });
+          .json({ errCode: 1, errMessage: "Mật khẩu cũ không đúng!" });
       }
     } catch (error) {
       console.log(error);
@@ -140,13 +140,13 @@ const studentController = {
         delete information.refreshToken;
         return res.status(200).json({
           errCode: 0,
-          errMessage: "Retrieve information successfully",
+          errMessage: "Truy xuất thông tin thành công.",
           information,
         });
       } else {
         return res.status(404).json({
           errCode: 1,
-          errMessage: `Your's Email isn't exist in the system. Plz try log in again.`,
+          errMessage: `Email của bạn không tồn tại trong hệ thống. Vui lòng thử đăng nhập lại!`,
         });
       }
     } catch (error) {
@@ -471,11 +471,11 @@ const studentController = {
       if (result) {
         return res
           .status(200)
-          .json({ errCode: 0, errMessage: "Tìm dữ liệu thành công", result });
+          .json({ errCode: 0, errMessage: "Tìm dữ liệu thành công!", result });
       } else {
         return res.status(200).json({
           errCode: 1,
-          errMessage: "Đã xảy ra lỗi trong quá trình tìm, vui lòng thử lại sau",
+          errMessage: "Đã xảy ra lỗi trong quá trình tìm, vui lòng thử lại sau!",
         });
       }
     } catch (error) {
@@ -518,11 +518,11 @@ const studentController = {
       if (result) {
         return res
           .status(200)
-          .json({ errCode: 0, errMessage: "Tìm dữ liệu thành công", result });
+          .json({ errCode: 0, errMessage: "Tìm dữ liệu thành công!", result });
       } else {
         return res.status(200).json({
           errCode: 1,
-          errMessage: "Đã xảy ra lỗi trong quá trình tìm, vui lòng thử lại sau",
+          errMessage: "Đã xảy ra lỗi trong quá trình tìm, vui lòng thử lại sau!",
         });
       }
     } catch (error) {
@@ -582,7 +582,7 @@ const studentController = {
             return res.status(200).json({
               errCode: 2,
               errMessage:
-                "Đã xảy ra lỗi trong quá trình đăng ký, vui lòng thử lại sau",
+                "Đã xảy ra lỗi trong quá trình đăng ký, vui lòng thử lại sau!",
             });
           }
         } else {
@@ -604,12 +604,12 @@ const studentController = {
         if (result) {
           return res
             .status(200)
-            .json({ errCode: 0, errMessage: "Thêm dữ liệu thành công" });
+            .json({ errCode: 0, errMessage: "Thêm dữ liệu thành công!" });
         } else {
           return res.status(200).json({
             errCode: 2,
             errMessage:
-              "Đã xảy ra lỗi trong quá trình thêm, vui lòng thử lại sau",
+              "Đã xảy ra lỗi trong quá trình thêm, vui lòng thử lại sau!",
           });
         }
       }
@@ -653,7 +653,7 @@ const studentController = {
           return res.status(200).json({
             errCode: 2,
             errMessage:
-              "Đã xảy ra lỗi trong quá trình thêm, vui lòng thử lại sau",
+              "Đã xảy ra lỗi trong quá trình thêm, vui lòng thử lại sau!",
           });
         }
       } else {
@@ -793,11 +793,11 @@ const studentController = {
       if (result) {
         return res
           .status(200)
-          .json({ errCode: 0, errMessage: "Tìm dữ liệu thành công", result });
+          .json({ errCode: 0, errMessage: "Tìm dữ liệu thành công!", result });
       } else {
         return res.status(200).json({
           errCode: 1,
-          errMessage: "Đã xảy ra lỗi trong quá trình tìm, vui lòng thử lại sau",
+          errMessage: "Đã xảy ra lỗi trong quá trình tìm, vui lòng thử lại sau!",
         });
       }
     } catch (error) {
