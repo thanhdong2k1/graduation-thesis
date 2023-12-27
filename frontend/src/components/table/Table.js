@@ -462,7 +462,7 @@ const Table = ({
                                     <input
                                         type="text"
                                         id="username"
-                                        placeholder="Enter search keywords here"
+                                        placeholder="Nhập từ khóa tìm kiếm"
                                         value={defineTable?.inputSearch}
                                         onChange={handleChangeInput}
                                         onKeyDown={(e) => {
@@ -503,7 +503,7 @@ const Table = ({
                                             className="importDiv button"
                                             onClick={exportFile}
                                         >
-                                            <span>Export</span>
+                                            <span>Xuất</span>
                                             <TbTableExport className="icon" />
                                         </button>
                                         <button
@@ -512,14 +512,14 @@ const Table = ({
                                                 setShowModal(true);
                                             }}
                                         >
-                                            <span>Import</span>
+                                            <span>Nhập</span>
                                             <TbTableImport className="icon" />
                                         </button>
                                         <button
                                             className="addDiv button"
                                             onClick={handleAdd}
                                         >
-                                            <span>Add</span>
+                                            <span>Thêm</span>
                                             <TbTablePlus className="icon" />
                                         </button>
                                     </>
@@ -532,7 +532,7 @@ const Table = ({
                                                 className="importDiv button"
                                                 onClick={exportFile}
                                             >
-                                                <span>Export</span>
+                                                <span>Xuất</span>
                                                 <TbTableExport className="icon" />
                                             </button>
                                             <button
@@ -541,14 +541,14 @@ const Table = ({
                                                     setShowModal(true);
                                                 }}
                                             >
-                                                <span>Import</span>
+                                                <span>Nhập</span>
                                                 <TbTableImport className="icon" />
                                             </button>
                                             <button
                                                 className="addDiv button"
                                                 onClick={handleAdd}
                                             >
-                                                <span>Add</span>
+                                                <span>Thêm</span>
                                                 <TbTablePlus className="icon" />
                                             </button>
                                         </>
@@ -565,7 +565,7 @@ const Table = ({
                                                             className="importDiv button"
                                                             onClick={exportFile}
                                                         >
-                                                            <span>Export</span>
+                                                            <span>Xuất</span>
                                                             <TbTableExport className="icon" />
                                                         </button>
                                                     );
@@ -580,7 +580,7 @@ const Table = ({
                                                                 );
                                                             }}
                                                         >
-                                                            <span>Import</span>
+                                                            <span>Nhập</span>
                                                             <TbTableImport className="icon" />
                                                         </button>
                                                     );
@@ -591,7 +591,7 @@ const Table = ({
                                                             className="addDiv button"
                                                             onClick={handleAdd}
                                                         >
-                                                            <span>Add</span>
+                                                            <span>Thêm</span>
                                                             <TbTablePlus className="icon" />
                                                         </button>
                                                     );
@@ -606,7 +606,7 @@ const Table = ({
                                         className="importDiv button"
                                         onClick={exportFile}
                                     >
-                                        <span>Export</span>
+                                        <span>Xuất</span>
                                         <TbTableExport className="icon" />
                                     </button>
                                 )}
@@ -617,7 +617,7 @@ const Table = ({
                                             setShowModal(true);
                                         }}
                                     >
-                                        <span>Import</span>
+                                        <span>Nhập</span>
                                         <TbTableImport className="icon" />
                                     </button>
                                 )}
@@ -626,7 +626,7 @@ const Table = ({
                                         className="addDiv button"
                                         onClick={handleAdd}
                                     >
-                                        <span>Add</span>
+                                        <span>Thêm</span>
                                         <TbTablePlus className="icon" />
                                     </button>
                                 )} */}

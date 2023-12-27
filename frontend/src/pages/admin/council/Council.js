@@ -207,6 +207,7 @@ const Council = () => {
     const tableData = [
         {
             header: "#",
+            hide: true,
             // width: "w-[10px]",
             // maxWidth: "max-w-[10px]",
             column: "id",
@@ -228,15 +229,16 @@ const Council = () => {
             width: "w-[300px]",
             maxWidth: "max-w-[300px]",
             column: "thesisSessionId",
-            columnData: "thesisSessionData",
+            columnData: "thesisSessionData.name",
             // hide: true,
         },
         {
             header: "Trạng thái hội đồng",
 
             column: "statusId",
-            columnData: "statusData",
-            actions: actionsDetail(handleDetail),
+            columnData: "statusData.valueVi",
+            isStatus: true,
+            // actions: actionsDetail(handleDetail),
         },
         {
             header: "Hành động",
@@ -376,7 +378,7 @@ const Council = () => {
             </div> */}
             <div>
                 <ModalPopup
-                    title={"Confim Delete"}
+                    title={"Xác nhận xóa"}
                     showModal={showModal}
                     setShowModal={setShowModal}
                     result={result}

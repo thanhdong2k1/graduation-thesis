@@ -4,13 +4,10 @@ const middlewareController = require("../controllers/middlewareController");
 const adminController = require("../controllers/adminController");
 const router = express.Router();
 
-router.post("/change-password-admin", middlewareController.verifyToken,adminController.changePasswordAdmin);
-router.post("/change-information-admin", middlewareController.verifyToken, adminController.changeInformationAdmin);
-router.post("/get-information-admin", middlewareController.verifyToken, adminController.getInformationAdmin);
+router.post("/change-password", middlewareController.verifyToken,adminController.changePasswordAdmin);
+router.post("/change-information", middlewareController.verifyToken, adminController.changeInformationAdmin);
+router.post("/get-information", middlewareController.verifyToken, adminController.getInformationAdmin);
 
-router.post("/change-password-student", middlewareController.verifyToken,adminController.changePasswordStudent);
-router.post("/change-information-student", middlewareController.verifyToken, adminController.changeInformationStudent);
-router.post("/get-information-student", middlewareController.verifyToken, adminController.getInformationStudent);
 router.post("/get-allcode", middlewareController.verifyToken, adminController.getAllcode);
 // Api Council
 router.post("/councils", middlewareController.verifyToken, adminController.getCouncils);

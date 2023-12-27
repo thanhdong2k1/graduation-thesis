@@ -24,9 +24,18 @@ import ThesisSession from "../pages/admin/thesisSession/ThesisSession";
 import AddTopic from "../pages/admin/topic/AddTopic";
 import Topic from "../pages/admin/topic/Topic";
 import LecturerHomePage from "../pages/lecturer/LecturerHomePage";
+import CouncilLecturer from "../pages/lecturer/council/CouncilLecturer";
+import MarkEvaluationMethod from "../pages/lecturer/council/MarkEvaluationMethod";
+import ThesisCouncilLecturer from "../pages/lecturer/council/ThesisCouncilLecturer";
 import StudentChangeInformation from "../pages/student/StudentChangeInformation";
 import StudentChangePassword from "../pages/student/StudentChangePassword";
 import StudentHomePage from "../pages/student/StudentHomePage";
+import AddLecturerAdvisor from "../pages/student/lecturerAdvisor/AddLecturerAdvisor";
+import LecturerAdvisor from "../pages/student/lecturerAdvisor/LecturerAdvisor";
+import AddThesisStudent from "../pages/student/thesis/AddThesisStudent";
+import ThesisStudent from "../pages/student/thesis/ThesisStudent";
+import AddTopicStudent from "../pages/student/topic/AddTopicStudent";
+import TopicStudent from "../pages/student/topic/TopicStudent";
 import pathRoutes from "../utils/pathRoutes";
 
 const icon = {
@@ -39,19 +48,19 @@ export const routes = [
         pages: [
             {
                 //   icon: <HomeIcon {...icon} />,
-                name: "Home",
+                name: "Trang chủ",
                 path: pathRoutes.R1.home,
                 element: <AdminHomePage />,
             },
             {
                 //   icon: <HomeIcon {...icon} />,
-                name: "Change Information",
+                name: "Đổi thông tin",
                 path: pathRoutes.R1.changeInformation,
                 element: <AdminChangeInformation />,
             },
             {
                 //   icon: <HomeIcon {...icon} />,
-                name: "Change Password",
+                name: "Đổi mật khẩu",
                 path: pathRoutes.R1.changePassword,
                 element: <AdminChangePassword />,
             },
@@ -59,7 +68,7 @@ export const routes = [
             // Council
             {
                 //   icon: <HomeIcon {...icon} />,
-                name: "Council",
+                name: "Hội đồng",
                 path: pathRoutes.R1.council,
                 element: <Council />,
             },
@@ -85,7 +94,7 @@ export const routes = [
             // Department
             {
                 //   icon: <HomeIcon {...icon} />,
-                name: "Department",
+                name: "Khoa",
                 path: pathRoutes.R1.department,
                 element: <Department />,
             },
@@ -111,7 +120,7 @@ export const routes = [
             // Block
             {
                 //   icon: <HomeIcon {...icon} />,
-                name: "Block",
+                name: "Khối",
                 path: pathRoutes.R1.block,
                 element: <Block />,
             },
@@ -137,7 +146,7 @@ export const routes = [
             // Major
             {
                 //   icon: <HomeIcon {...icon} />,
-                name: "Major",
+                name: "Chuyên ngành",
                 path: pathRoutes.R1.major,
                 element: <Major />,
             },
@@ -163,7 +172,7 @@ export const routes = [
             // Class
             {
                 //   icon: <HomeIcon {...icon} />,
-                name: "Class",
+                name: "Lớp",
                 path: pathRoutes.R1.class,
                 element: <Class />,
             },
@@ -189,7 +198,7 @@ export const routes = [
             // Lecturer
             {
                 //   icon: <HomeIcon {...icon} />,
-                name: "Lecturer",
+                name: "Giảng viên",
                 path: pathRoutes.R1.lecturer,
                 element: <Lecturer />,
             },
@@ -215,7 +224,7 @@ export const routes = [
             // Student
             {
                 //   icon: <HomeIcon {...icon} />,
-                name: "Student",
+                name: "Sinh viên",
                 path: pathRoutes.R1.student,
                 element: <Student />,
             },
@@ -241,7 +250,7 @@ export const routes = [
             // Topic
             {
                 //   icon: <HomeIcon {...icon} />,
-                name: "Topic",
+                name: "Đề tài",
                 path: pathRoutes.R1.topic,
                 element: <Topic />,
             },
@@ -268,7 +277,7 @@ export const routes = [
             // ThesisSession
             {
                 //   icon: <HomeIcon {...icon} />,
-                name: "Thesis Session",
+                name: "Khóa luận",
                 path: pathRoutes.R1.thesisSession,
                 element: <ThesisSession />,
             },
@@ -294,7 +303,7 @@ export const routes = [
             // Thesis
             {
                 //   icon: <HomeIcon {...icon} />,
-                name: "Thesis",
+                name: "Đồ án",
                 path: pathRoutes.R1.thesis,
                 element: <Thesis />,
             },
@@ -320,7 +329,7 @@ export const routes = [
             // EvaluationMethod
             {
                 //   icon: <HomeIcon {...icon} />,
-                name: "Evaluation Method",
+                name: "PP đánh giá",
                 path: pathRoutes.R1.evaluationMethod,
                 element: <EvaluationMethod />,
             },
@@ -349,32 +358,26 @@ export const routes = [
         pages: [
             {
                 //   icon: <HomeIcon {...icon} />,
-                name: "Home",
+                name: "Trang chủ",
                 path: "home",
                 element: <LecturerHomePage />,
             },
 
             {
                 //   icon: <HomeIcon {...icon} />,
-                name: "Change Information",
+                name: "Đổi thông tin",
                 path: pathRoutes.R1.changeInformation,
                 element: <AdminChangeInformation />,
             },
             {
                 //   icon: <HomeIcon {...icon} />,
-                name: "Change Password",
+                name: "Đổi mật khẩu",
                 path: pathRoutes.R1.changePassword,
                 element: <AdminChangePassword />,
             },
             {
                 //   icon: <HomeIcon {...icon} />,
-                name: "Topic",
-                path: "topic",
-                element: <Topic />,
-            },
-            {
-                //   icon: <HomeIcon {...icon} />,
-                name: "Council",
+                name: "Hội đồng",
                 path: pathRoutes.R1.council,
                 element: <Council />,
             },
@@ -385,34 +388,46 @@ export const routes = [
         pages: [
             {
                 //   icon: <HomeIcon {...icon} />,
-                name: "Home",
+                name: "Trang chủ",
                 path: "home",
                 element: <LecturerHomePage />,
             },
 
             {
                 //   icon: <HomeIcon {...icon} />,
-                name: "Change Information",
+                name: "Đổi thông tin",
                 path: pathRoutes.R1.changeInformation,
                 element: <AdminChangeInformation />,
             },
             {
                 //   icon: <HomeIcon {...icon} />,
-                name: "Change Password",
+                name: "Đổi mật khẩu",
                 path: pathRoutes.R1.changePassword,
                 element: <AdminChangePassword />,
             },
             {
                 //   icon: <HomeIcon {...icon} />,
-                name: "Topic",
+                name: "Đề tài",
                 path: "topic",
                 element: <Topic />,
             },
             {
                 //   icon: <HomeIcon {...icon} />,
-                name: "Council",
-                path: pathRoutes.R1.council,
-                element: <Council />,
+                name: "Hội đồng",
+                path: pathRoutes.R3.council,
+                element: <CouncilLecturer />,
+            },
+            {
+                //   icon: <HomeIcon {...icon} />,
+                name: "CouncilDetail",
+                path: pathRoutes.R3.councilDetailId,
+                element: <ThesisCouncilLecturer />,
+            },
+            {
+                //   icon: <HomeIcon {...icon} />,
+                name: "CouncilDetailThesis",
+                path: pathRoutes.R3.councilDetailThesisId,
+                element: <MarkEvaluationMethod />,
             },
         ],
     },
@@ -421,28 +436,76 @@ export const routes = [
         pages: [
             {
                 //   icon: <HomeIcon {...icon} />,
-                name: "Home",
+                name: "Trang chủ",
                 path: "home",
                 element: <StudentHomePage />,
             },
             {
                 //   icon: <HomeIcon {...icon} />,
-                name: "Change Information",
+                name: "Đổi thông tin",
                 path: pathRoutes.R1.changeInformation,
                 element: <StudentChangeInformation />,
             },
             {
                 //   icon: <HomeIcon {...icon} />,
-                name: "Change Password",
+                name: "Đổi mật khẩu",
                 path: pathRoutes.R1.changePassword,
                 element: <StudentChangePassword />,
             },
+
+            // Topic
             {
                 //   icon: <HomeIcon {...icon} />,
-                name: "Topic",
-                path: "topic",
-                element: <Topic />,
+                name: "Đề tài",
+                path: pathRoutes.R1.topic,
+                element: <TopicStudent />,
             },
+            {
+                //   icon: <HomeIcon {...icon} />,
+                name: "Topic Detail",
+                path: pathRoutes.R1.topicDetailId,
+                element: <AddTopicStudent type={"detail"} />,
+            },
+            
+            // Topic
+            {
+                //   icon: <HomeIcon {...icon} />,
+                name: "Giảng viên hướng dẫn",
+                path: pathRoutes.R1.lecturer,
+                element: <LecturerAdvisor />,
+            },
+            {
+                //   icon: <HomeIcon {...icon} />,
+                name: "Lecturer Detail",
+                path: pathRoutes.R1.lecturerDetailId,
+                element: <AddLecturerAdvisor type={"detail"} />,
+            },
+            // Thesis
+            {
+                //   icon: <HomeIcon {...icon} />,
+                name: "Đồ án",
+                path: pathRoutes.R1.thesis,
+                element: <ThesisStudent />,
+            },
+            {
+                //   icon: <HomeIcon {...icon} />,
+                name: "Add Thesis",
+                path: pathRoutes.R1.addThesis,
+                element: <AddThesisStudent type={"add"} />,
+            },
+            {
+                //   icon: <HomeIcon {...icon} />,
+                name: "Update Thesis",
+                path: pathRoutes.R1.updateThesisId,
+                element: <AddThesisStudent type={"update"} />,
+            },
+            {
+                //   icon: <HomeIcon {...icon} />,
+                name: "Thesis Detail",
+                path: pathRoutes.R1.thesisDetailId,
+                element: <AddThesisStudent type={"detail"} />,
+            },
+
         ],
     },
 ];

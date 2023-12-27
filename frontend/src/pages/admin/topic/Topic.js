@@ -207,6 +207,7 @@ const Topic = () => {
     const tableData = [
         {
             header: "#",
+            hide: true,
             // width: "w-[10px]",
             // maxWidth: "max-w-[10px]",
             column: "id",
@@ -228,15 +229,15 @@ const Topic = () => {
             width: "w-[300px]",
             maxWidth: "max-w-[300px]",
             column: "departmentId",
-            columnData: "departmentData",
+            columnData: "departmentData.name",
             // hide: true,
         },
         {
             header: "Trạng thái hội đồng",
             column: "statusId",
-            columnData: "statusData",
+            columnData: "statusData.valueVi",
             isStatus: true,
-            actions: actionsDetail(handleDetail),
+            // actions: actionsEdit(handleEdit),
         },
         {
             header: "Hành động",
@@ -376,7 +377,7 @@ const Topic = () => {
             </div> */}
             <div>
                 <ModalPopup
-                    title={"Confim Delete"}
+                    title={"Xác nhận xóa"}
                     showModal={showModal}
                     setShowModal={setShowModal}
                     result={result}

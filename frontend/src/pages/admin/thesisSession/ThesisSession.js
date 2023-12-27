@@ -207,6 +207,7 @@ const ThesisSession = () => {
     const tableData = [
         {
             header: "#",
+            hide: true,
             // width: "w-[10px]",
             // maxWidth: "max-w-[10px]",
             column: "id",
@@ -240,7 +241,7 @@ const ThesisSession = () => {
             // width: "w-[300px]",
             // maxWidth: "max-w-[300px]",
             column: "evaluationMethodId",
-            columnData: "evaluationMethodData",
+            columnData: "evaluationMethodData.name",
             // hide: true,
         },
         {
@@ -388,7 +389,7 @@ const ThesisSession = () => {
             </div> */}
             <div>
                 <ModalPopup
-                    title={"Confim Delete"}
+                    title={"Xác nhận xóa"}
                     showModal={showModal}
                     setShowModal={setShowModal}
                     result={result}

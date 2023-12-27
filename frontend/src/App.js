@@ -17,7 +17,7 @@ import { logginSuccess } from "./redux/authSlice";
 import HomeLayout from "./components/layouts/HomeLayout";
 import HomePage from "./pages/HomePage";
 import ListTopic from "./pages/ListTopic";
-import { apiAuth, apiUser } from "./redux/apiRequest";
+import { apiAuth, apiStudent, apiUser } from "./redux/apiRequest";
 import { createAxios } from "./utils/createInstance";
 import { toast } from "react-toastify";
 import { getErrMessageSuccess } from "./redux/adminSlice";
@@ -59,13 +59,10 @@ function App() {
     const route = routes.filter((route) => route.role == currentUser?.roleId)[0]
         ? routes.filter((route) => route.role == currentUser?.roleId)[0]
         : "";
-    // useEffect(() => {
-    //     // console.log(route, rolePath);
-
-    //     if (rolePath == "") {
-    //         navigate("");
-    //     }
-    // }, [currentUser]);
+    let axiosJWT = createAxios(currentUser, dispatch, logginSuccess);
+    useEffect(() => {
+        apiStudent.apiStudentGetInformation(currentUser, dispatch, axiosJWT);
+    }, []);
     return (
         <Routes>
             <Route path="" element={<HomeLayout />}>

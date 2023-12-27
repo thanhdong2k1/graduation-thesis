@@ -196,8 +196,8 @@ const AddMajor = ({ type }, params) => {
 
     return (
         <div className="changeInformationDiv flex flex-col justify-center items-center gap-2">
-            <div className="capitalize font-semibold text-h1FontSize">
-                {type} Major
+            <div className=" font-semibold text-h1FontSize">
+                {type=="add"?"Thêm":"Sửa"} chuyên ngành
             </div>
             <form
                 onSubmit={handleSubmit(onSubmit)}

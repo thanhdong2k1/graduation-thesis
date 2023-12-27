@@ -8,6 +8,8 @@ const connectDB = require("./config/connectDB");
 const authRoute = require("./routes/auth");
 const userRoute = require("./routes/user");
 const adminRoute = require("./routes/admin");
+const lecturerRoute = require("./routes/lecturer");
+const studentRoute = require("./routes/student");
 
 dotenv.config();
 
@@ -29,6 +31,8 @@ connectDB();
 app.use("/api/auth", authRoute);
 app.use("/api/user", userRoute);
 app.use("/api/admin", adminRoute);
+app.use("/api/lecturer", lecturerRoute);
+app.use("/api/student", studentRoute);
 
 const port = process.env.PORT || 8080;
 //port = undefined =? port = 8080

@@ -47,7 +47,7 @@ const AdminChangeInformation = () => {
         };
         // console.log(datasend);
         await apiAdmin
-            .apiChangeInformation(currentUser, datasend, axiosJWT)
+            .apiAdminChangeInformation(currentUser, datasend, axiosJWT)
             .then((res) => {
                 if (res?.errCode > 0) {
                     // console.log(res);
@@ -70,7 +70,7 @@ const AdminChangeInformation = () => {
                         pauseOnFocusLoss: true,
                     });
                     // reset();
-                    apiAdmin.apiGetInformation(currentUser, dispatch, axiosJWT);
+                    apiAdmin.apiAdminGetInformation(currentUser, dispatch, axiosJWT);
                 }
             })
             .catch((error) => {
@@ -96,7 +96,7 @@ const AdminChangeInformation = () => {
         const { role, permissions, department, code, ...dataFilter } = datasend;
         console.log(datasend, dataFilter);
         await apiAdmin
-            .apiChangeInformation(currentUser, dataFilter, axiosJWT)
+            .apiAdminChangeInformation(currentUser, dataFilter, axiosJWT)
             .then((res) => {
                 if (res?.errCode > 0) {
                     // console.log(res);
@@ -173,7 +173,7 @@ const AdminChangeInformation = () => {
     });
     useEffect(() => {
         // console.log("useEffect changeInfor");
-        apiAdmin.apiGetInformation(currentUser, dispatch, axiosJWT);
+        apiAdmin.apiAdminGetInformation(currentUser, dispatch, axiosJWT);
         apiAdmin.apiGetGender(currentUser, dispatch, axiosJWT);
         apiAdmin.apiGetPermissions(currentUser, dispatch, axiosJWT);
     }, [currentUser]);
@@ -247,7 +247,7 @@ const AdminChangeInformation = () => {
                     <ModalPopup
                         showModal={showModal}
                         setShowModal={setShowModal}
-                        title={"Change Avatar"}
+                        title={"Thay đổi ảnh"}
                         result={previewImg}
                         setResult={handleSaveImage}
                     >

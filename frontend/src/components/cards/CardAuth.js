@@ -131,7 +131,7 @@ const CardAuth = () => {
                         className="w-40 media-max-md:w-44"
                     />
                     <h3 className="title text-h1FontSize text-blackColor font-semibold media-max-md:text-h2FontSize">
-                        Welcome Back!
+                        Chào mừng trở lại!
                     </h3>
                 </div>
                 <form
@@ -148,14 +148,14 @@ const CardAuth = () => {
                             htmlFor="email"
                             className="text-blackColor font-normal text-h3FontSize px-2 py-0 block"
                         >
-                            Username
+                            Tài khoản
                         </label>
                         <div className="input flex gap-2 p-4 bg-inputColor rounded-lg items-center">
                             <FaUserShield className="icon" />
                             <input
                                 type="text"
                                 id="email"
-                                placeholder="Enter Username or Email"
+                                placeholder="Nhập username hoặc email"
                                 {...register("email", {
                                     required: "Username or Email is required",
                                 })}
@@ -173,14 +173,14 @@ const CardAuth = () => {
                             htmlFor="password"
                             className="text-blackColor font-normal text-h3FontSize px-2 py-0 block"
                         >
-                            Password
+                            Mật khẩu
                         </label>
                         <div className="input flex gap-2 p-4 bg-inputColor rounded-lg items-center">
                             <BsFillShieldLockFill className="icon" />
                             <input
                                 type={`${showPassword ? "text" : "password"}`}
                                 id="password"
-                                placeholder="Enter Password or Email"
+                                placeholder="Nhập mật khẩu"
                                 className="bg-transparent outline-none border-none w-[200px] media-max-md:w-full"
                                 {...register("password", {
                                     required: "Password is required",
@@ -231,11 +231,11 @@ const CardAuth = () => {
                                         fill="currentColor"
                                     ></path>
                                 </svg>
-                                <span>Loading...</span>
+                                <span>Đang tải...</span>
                             </>
                         ) : (
                             <>
-                                <span>Login</span>
+                                <span>Đăng nhập</span>
                                 <AiOutlineSwapRight className="icon text-[25px] group-hover:translate-x-2" />
                             </>
                         )}
@@ -243,7 +243,7 @@ const CardAuth = () => {
                 </form>
                 <Link to={"/"} className="backLink button">
                     <MdKeyboardBackspace className="mr-2" />
-                    <span className="title">Go Back!</span>
+                    <span className="title">Quay lại!</span>
                 </Link>
             </div>
         </div>

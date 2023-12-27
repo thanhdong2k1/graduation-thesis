@@ -52,14 +52,14 @@ const ModalPopup = ({
                                                     type="button"
                                                     onClick={handleClose}
                                                 >
-                                                    Close
+                                                    Đóng
                                                 </button>
                                                 <button
                                                     className="buttonPrimary"
                                                     type="button"
                                                     onClick={handleSave}
                                                 >
-                                                    Save Changes
+                                                    Xác nhận
                                                 </button>
                                             </div>
                                         </div>

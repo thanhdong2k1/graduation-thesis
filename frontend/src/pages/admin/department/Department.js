@@ -207,6 +207,7 @@ const Department = () => {
     const tableData = [
         {
             header: "#",
+            hide: true,
             // width: "w-[10px]",
             // maxWidth: "max-w-[10px]",
             column: "id",
@@ -233,7 +234,7 @@ const Department = () => {
         {
             header: "Trưởng khoa",
             column: "deanId",
-            columnData: "deanData",
+            columnData: "deanData.fullName",
         },
         {
             header: "Hành động",
@@ -373,7 +374,7 @@ const Department = () => {
             </div> */}
             <div>
                 <ModalPopup
-                    title={"Confim Delete"}
+                    title={"Xác nhận xóa"}
                     showModal={showModal}
                     setShowModal={setShowModal}
                     result={result}

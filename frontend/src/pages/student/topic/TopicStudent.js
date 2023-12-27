@@ -1,5 +1,5 @@
 import { Link, useNavigate } from "react-router-dom";
-import { apiAdmin } from "../../../redux/apiRequest";
+import { apiStudent } from "../../../redux/apiRequest";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import {
@@ -19,15 +19,15 @@ import { createAxios } from "../../../utils/createInstance";
 import { logginSuccess } from "../../../redux/authSlice";
 import ModalPopup from "../../../components/ModelPopup/ModalPopup";
 
-const Student = () => {
+const TopicStudent = () => {
     const dispatch = useDispatch();
     const navigate = useNavigate();
-    const students = useSelector((state) => state.admin.students);
-    const totalRecords = useSelector((state) => state.admin.totalRecords);
+    const topics = useSelector((state) => state.student.topics);
+    const totalRecords = useSelector((state) => state.student.totalRecords);
     const currentUser = useSelector((state) => state.auth.currentUser);
+    const information = useSelector((state) => state.student.information);
     let axiosJWT = createAxios(currentUser, dispatch, logginSuccess);
 
-    console.log("students", students);
     const [defineTable, setDefineTable] = useState({
         inputSearch: "",
         filterSearch: "",
@@ -42,7 +42,7 @@ const Student = () => {
 
     // Handle
     const handleAdd = () => {
-        navigate(`../${pathRoutes.R1.addStudent}`, { replace: true });
+        navigate(`../${pathRoutes.R1.addTopic}`, { replace: true });
     };
     const handleImport = () => {
         console.log("handleImport");
@@ -51,26 +51,31 @@ const Student = () => {
         console.log("handleExport");
     };
     const handleEdit = (data) => {
-        navigate(`../${pathRoutes.R1.updateStudent}/${data.id}`, {
+        navigate(`../${pathRoutes.R1.updateTopic}/${data.id}`, {
             replace: true,
         });
     };
+    const handleStatus = (data) => {
+        console.log(data);
+    };
+
     const handleDetail = (data) => {
-        navigate(`../${pathRoutes.R1.studentDetail}/${data.id}`, {
+        console.log(pathRoutes.R1.topicDetail);
+        navigate(`../${pathRoutes.R1.topicDetail}/${data.id}`, {
             replace: true,
         });
     };
 
-    const onDelete = (data) => {
-        console.log("onDelete", data);
+    const handleDelete = (data) => {
+        console.log("handleDelete", data);
         setShowModal(true);
         setResult(data);
     };
 
-    const handleDelete = async () => {
+    const onDelete = async () => {
         const id = toast.loading("Please wait...");
-        await apiAdmin
-            .apiDeleteStudent({
+        await apiStudent
+            .apiDeleteTopic({
                 user: currentUser,
                 data: result,
                 axiosJWT: axiosJWT,
@@ -87,7 +92,7 @@ const Student = () => {
                         pauseOnFocusLoss: true,
                     });
                     // reset();
-                    apiAdmin.getAllStudents({
+                    apiStudent.getAllTopics({
                         user: currentUser,
                         inputSearch: defineTable.inputSearch,
                         filterSearch: defineTable.filterSearch,
@@ -145,8 +150,8 @@ const Student = () => {
         // });
         // console.log("convertImport", convertImport);
         // console.log("convertImport", data);
-        await apiAdmin
-            .importStudents({
+        await apiStudent
+            .importTopics({
                 user: currentUser,
                 data: data,
                 axiosJWT: axiosJWT,
@@ -163,7 +168,7 @@ const Student = () => {
                         pauseOnFocusLoss: true,
                     });
                     // reset();
-                    apiAdmin.getAllStudents({
+                    apiStudent.getAllTopics({
                         user: currentUser,
                         inputSearch: defineTable.inputSearch,
                         filterSearch: defineTable.filterSearch,
@@ -204,20 +209,6 @@ const Student = () => {
             });
     };
 
-    // email: { type: DataTypes.STRING, unique: true },
-    //   password: DataTypes.STRING,
-    //   code: { type: DataTypes.STRING, unique: true },
-    //   fullName: DataTypes.STRING,
-    //   numberPhone: { type: DataTypes.STRING, unique: true },
-    //   birthday: DataTypes.STRING,
-    //   address: DataTypes.STRING,
-    //   genderId: DataTypes.STRING,
-    //   roleId: DataTypes.STRING,
-    //   statusId: DataTypes.STRING,
-    //   departmentId: DataTypes.INTEGER,
-    //   image: DataTypes.BLOB,
-    //   permissions: DataTypes.STRING,
-    //   refreshToken: DataTypes.STRING,
     const tableData = [
         {
             header: "#",
@@ -227,81 +218,29 @@ const Student = () => {
             column: "id",
         },
         {
-            header: "Mã sinh viên",
+            header: "Tên đề tài",
             width: "w-[250px]",
             maxWidth: "max-w-[250px]",
-            column: "code",
+            column: "name",
         },
         {
-            header: "Tên sinh viên",
+            header: "Mô tả đề tài",
             width: "w-[300px]",
             maxWidth: "max-w-[300px]",
-            column: "fullName",
+            column: "description",
         },
         {
-            header: "Email",
+            header: "Khoa",
             width: "w-[300px]",
             maxWidth: "max-w-[300px]",
-            column: "email",
-        },
-        {
-            header: "Điện thoại",
-            width: "w-[300px]",
-            maxWidth: "max-w-[300px]",
-            column: "numberPhone",
-        },
-        {
-            header: "Ngày sinh",
-            width: "w-[300px]",
-            maxWidth: "max-w-[300px]",
-            column: "birthday",
-            hide: true,
-        },
-        {
-            header: "Địa chỉ",
-            width: "w-[300px]",
-            maxWidth: "max-w-[300px]",
-            column: "address",
-            hide: true,
-        },
-        {
-            header: "Phân quyền",
-            width: "w-[300px]",
-            maxWidth: "max-w-[300px]",
-            column: "permissions",
-            hide: true,
-        },
-        {
-            header: "Chức vụ",
-            width: "w-[300px]",
-            maxWidth: "max-w-[300px]",
-            columnData: "roleData.valueVi",
-            column: "roleId",
+            column: "departmentId",
+            columnData: "departmentData.name",
             // hide: true,
         },
         {
-            header: "Giới tính",
-            width: "w-[300px]",
-            maxWidth: "max-w-[300px]",
-            columnData: "genderData.valueVi",
-            column: "genderId",
-            // hide: true,
-        },
-        {
-            header: "Lớp",
-            width: "w-[300px]",
-            maxWidth: "max-w-[300px]",
-            columnData: "classData.name",
-            column: "classId",
-            // hide: true,
-        },
-        {
-            header: "Trạng thái",
-            width: "w-[300px]",
-            maxWidth: "max-w-[300px]",
-            columnData: "statusData.valueVi",
+            header: "Trạng thái hội đồng",
             column: "statusId",
-            // hide: true,
+            columnData: "statusData.valueVi",
             isStatus: true,
             // actions: actionsDetail(handleDetail),
         },
@@ -314,7 +253,7 @@ const Student = () => {
                     ? [
                           actionsDetail(handleDetail),
                           actionsEdit(handleEdit),
-                          actionsRemove(onDelete),
+                          actionsRemove(handleDelete),
                       ]
                     : [
                           actionsDetail(handleDetail),
@@ -325,7 +264,7 @@ const Student = () => {
                               currentUser?.permissions
                                   ?.split(",")
                                   ?.includes("PERD")) &&
-                              actionsRemove(onDelete),
+                              actionsRemove(handleDelete),
                       ],
         },
     ];
@@ -337,8 +276,9 @@ const Student = () => {
             inputSearch: "",
             isSearched: false,
         }));
-        apiAdmin.getAllStudents({
+        apiStudent.getAllTopics({
             user: currentUser,
+            majorId : information?.classData?.majorId,
             inputSearch: defineTable.inputSearch,
             filterSearch: defineTable.filterSearch,
             dispatch: dispatch,
@@ -348,8 +288,9 @@ const Student = () => {
 
     useEffect(() => {
         // console.log("inputSearch", defineTable.inputSearch);
-        apiAdmin.getAllStudents({
+        apiStudent.getAllTopics({
             user: currentUser,
+            majorId : information?.classData?.majorId,
             inputSearch: defineTable.inputSearch,
             filterSearch: defineTable.filterSearch,
             dispatch: dispatch,
@@ -367,7 +308,7 @@ const Student = () => {
             ...prevState,
             currentPage: 1,
         }));
-        // apiAdmin.getAllStudents(
+        // apiStudent.getAllTopics(
         //     defineTable.inputSearch,
         //     (defineTable.currentPage - 1) * defineTable.limit,
         //     defineTable.limit,
@@ -377,7 +318,7 @@ const Student = () => {
 
     // useEffect(() => {
     //     console.log("currentpage effect");
-    //     apiAdmin.getAllStudents(
+    //     apiStudent.getAllTopics(
     //         defineTable.inputSearch,
     //         (defineTable.currentPage - 1) * defineTable.limit,
     //         defineTable.limit,
@@ -425,7 +366,7 @@ const Student = () => {
     return (
         <>
             {/* <div>
-                <div>Hello Student</div>
+                <div>Hello Topic</div>
                 <Link to={"1"}>Detail 1</Link>
                 <Select
                     styles={customSelectStylesMulti}
@@ -447,7 +388,7 @@ const Student = () => {
                     showModal={showModal}
                     setShowModal={setShowModal}
                     result={result}
-                    setResult={handleDelete}
+                    setResult={onDelete}
                 />
             </div>
             <div>
@@ -459,7 +400,7 @@ const Student = () => {
                     defineTable={defineTable}
                     setDefineTable={setDefineTable}
                     tableData={tableData}
-                    datas={students}
+                    datas={topics}
                     totalRecords={totalRecords}
                     functionsModule={true}
                 />
@@ -468,4 +409,4 @@ const Student = () => {
     );
 };
 
-export default Student;
+export default TopicStudent;

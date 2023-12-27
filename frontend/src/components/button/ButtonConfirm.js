@@ -31,9 +31,9 @@ const ButtonConfirm = ({ type }) => {
                         className="button w-[45%] flex justify-center"
                     >
                         {type == "detail" ? (
-                            <span>Ok</span>
+                            <span>Xong</span>
                         ) : (
-                            <span>Cancel</span>
+                            <span>Hủy</span>
                         )}
                         <FaXmark className="icon" />
                     </Link>
@@ -45,9 +45,9 @@ const ButtonConfirm = ({ type }) => {
                         className="button w-[45%] flex justify-center items-center"
                     >
                         {type == "detail" ? (
-                            <span>Ok</span>
+                            <span>Xong</span>
                         ) : (
-                            <span>Cancel</span>
+                            <span>Hủy</span>
                         )}
                         <FaXmark className="icon" />
                     </Link>
@@ -57,7 +57,7 @@ const ButtonConfirm = ({ type }) => {
                         type="submit"
                         className="button w-[45%] flex justify-center items-center"
                     >
-                        <span>Confirm</span>
+                        <span>Xác nhận</span>
                         <FaCheck className="icon" />
                     </button>
                 )}

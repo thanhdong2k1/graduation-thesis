@@ -1,8 +1,9 @@
-import { Link, useNavigate } from "react-router-dom";
-import { apiAdmin } from "../../../redux/apiRequest";
+import { Link, useNavigate, useParams } from "react-router-dom";
+import { apiLecturer } from "../../../redux/apiRequest";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import {
+    actionsCustom,
     actionsDetail,
     actionsEdit,
     actionsRemove,
@@ -19,15 +20,17 @@ import { createAxios } from "../../../utils/createInstance";
 import { logginSuccess } from "../../../redux/authSlice";
 import ModalPopup from "../../../components/ModelPopup/ModalPopup";
 
-const Student = () => {
+const ThesisCouncilLecturer = () => {
+    let { thesisSessionId, id } = useParams();
+    console.log("type", id);
     const dispatch = useDispatch();
     const navigate = useNavigate();
-    const students = useSelector((state) => state.admin.students);
+    const theses = useSelector((state) => state.admin.theses);
     const totalRecords = useSelector((state) => state.admin.totalRecords);
     const currentUser = useSelector((state) => state.auth.currentUser);
     let axiosJWT = createAxios(currentUser, dispatch, logginSuccess);
 
-    console.log("students", students);
+    console.log("theses", theses);
     const [defineTable, setDefineTable] = useState({
         inputSearch: "",
         filterSearch: "",
@@ -42,7 +45,7 @@ const Student = () => {
 
     // Handle
     const handleAdd = () => {
-        navigate(`../${pathRoutes.R1.addStudent}`, { replace: true });
+        navigate(`../${pathRoutes.R1.addThesis}`, { replace: true });
     };
     const handleImport = () => {
         console.log("handleImport");
@@ -51,12 +54,17 @@ const Student = () => {
         console.log("handleExport");
     };
     const handleEdit = (data) => {
-        navigate(`../${pathRoutes.R1.updateStudent}/${data.id}`, {
-            replace: true,
-        });
+        console.log(
+            navigate(
+                `../council/detail-council/${thesisSessionId}/${id}/mark/${data.id}`,
+                {
+                    replace: true,
+                }
+            )
+        );
     };
     const handleDetail = (data) => {
-        navigate(`../${pathRoutes.R1.studentDetail}/${data.id}`, {
+        navigate(`../${pathRoutes.R1.theseDetail}/${data.id}`, {
             replace: true,
         });
     };
@@ -69,8 +77,8 @@ const Student = () => {
 
     const handleDelete = async () => {
         const id = toast.loading("Please wait...");
-        await apiAdmin
-            .apiDeleteStudent({
+        await apiLecturer
+            .apiDeleteThesis({
                 user: currentUser,
                 data: result,
                 axiosJWT: axiosJWT,
@@ -87,7 +95,7 @@ const Student = () => {
                         pauseOnFocusLoss: true,
                     });
                     // reset();
-                    apiAdmin.getAllStudents({
+                    apiLecturer.getAllTheses({
                         user: currentUser,
                         inputSearch: defineTable.inputSearch,
                         filterSearch: defineTable.filterSearch,
@@ -145,8 +153,8 @@ const Student = () => {
         // });
         // console.log("convertImport", convertImport);
         // console.log("convertImport", data);
-        await apiAdmin
-            .importStudents({
+        await apiLecturer
+            .importTheses({
                 user: currentUser,
                 data: data,
                 axiosJWT: axiosJWT,
@@ -163,7 +171,7 @@ const Student = () => {
                         pauseOnFocusLoss: true,
                     });
                     // reset();
-                    apiAdmin.getAllStudents({
+                    apiLecturer.getAllTheses({
                         user: currentUser,
                         inputSearch: defineTable.inputSearch,
                         filterSearch: defineTable.filterSearch,
@@ -227,107 +235,139 @@ const Student = () => {
             column: "id",
         },
         {
-            header: "Mã sinh viên",
-            width: "w-[250px]",
-            maxWidth: "max-w-[250px]",
-            column: "code",
-        },
-        {
             header: "Tên sinh viên",
             width: "w-[300px]",
             maxWidth: "max-w-[300px]",
-            column: "fullName",
+            column: "studentId",
+            columnData: "studentData.fullName",
         },
         {
-            header: "Email",
+            header: "Giảng viên hướng dẫn",
             width: "w-[300px]",
             maxWidth: "max-w-[300px]",
-            column: "email",
+            column: "thesisAdvisorId",
+            columnData: "thesisAdvisorData.fullName",
         },
         {
-            header: "Điện thoại",
+            header: "Tên đề tài",
             width: "w-[300px]",
             maxWidth: "max-w-[300px]",
-            column: "numberPhone",
+            column: "topicId",
+            columnData: "topicData.name",
         },
         {
-            header: "Ngày sinh",
+            header: "Giảng viên xác nhận",
             width: "w-[300px]",
             maxWidth: "max-w-[300px]",
-            column: "birthday",
+            column: "thesisAdvisorStatusId",
+            columnData: "thesisAdvisorStatusData.valueVi",
+            isStatus: true,
+            hide: true,
+            // actions: actionsDetail(handleDetail),
+        },
+        {
+            header: "Khóa luận",
+            width: "w-[300px]",
+            maxWidth: "max-w-[300px]",
+            column: "thesisSessionId",
+            columnData: "thesisSessionData.name",
             hide: true,
         },
         {
-            header: "Địa chỉ",
+            header: "Hội đồng",
             width: "w-[300px]",
             maxWidth: "max-w-[300px]",
-            column: "address",
+            column: "councilId",
+            columnData: "councilData.name",
             hide: true,
         },
         {
-            header: "Phân quyền",
+            header: "Trạng thái điểm",
             width: "w-[300px]",
             maxWidth: "max-w-[300px]",
-            column: "permissions",
-            hide: true,
-        },
-        {
-            header: "Chức vụ",
-            width: "w-[300px]",
-            maxWidth: "max-w-[300px]",
-            columnData: "roleData.valueVi",
-            column: "roleId",
-            // hide: true,
-        },
-        {
-            header: "Giới tính",
-            width: "w-[300px]",
-            maxWidth: "max-w-[300px]",
-            columnData: "genderData.valueVi",
-            column: "genderId",
-            // hide: true,
-        },
-        {
-            header: "Lớp",
-            width: "w-[300px]",
-            maxWidth: "max-w-[300px]",
-            columnData: "classData.name",
-            column: "classId",
-            // hide: true,
-        },
-        {
-            header: "Trạng thái",
-            width: "w-[300px]",
-            maxWidth: "max-w-[300px]",
-            columnData: "statusData.valueVi",
-            column: "statusId",
-            // hide: true,
+            column: "councilStatusId",
+            columnData: "councilStatusData.valueVi",
             isStatus: true,
             // actions: actionsDetail(handleDetail),
         },
         {
+            header: "Tổng điểm hội đồng",
+            width: "w-[300px]",
+            maxWidth: "max-w-[300px]",
+            column: "totalScore",
+        },
+        {
+            header: "Kết quả",
+            width: "w-[300px]",
+            maxWidth: "max-w-[300px]",
+            column: "resultId",
+            columnData: "resultData.valueVi",
+            isStatus: true,
+            // actions: actionsDetail(handleDetail),
+        },
+        {
+            header: "Ngày thực hiện",
+            width: "w-[300px]",
+            maxWidth: "max-w-[300px]",
+            column: "startDate",
+            hide: true,
+        },
+        {
+            header: "Hạn thực hiện",
+            width: "w-[300px]",
+            maxWidth: "max-w-[300px]",
+            column: "complateDate",
+            hide: true,
+        },
+        {
+            header: "Ngày chấm và bảo vệ",
+            width: "w-[300px]",
+            maxWidth: "max-w-[300px]",
+            column: "thesisStartDate",
+            hide: true,
+        },
+        {
+            header: "Hạn chấm và bảo vệ",
+            width: "w-[300px]",
+            maxWidth: "max-w-[300px]",
+            column: "thesisEndDate",
+            hide: true,
+        },
+        // startDate,
+        // complateDate,
+        // thesisStartDate,
+        // thesisEndDate,
+        // reportFile,
+        {
             header: "Hành động",
             // isRowPer: "thesisSessionId",
-            isPerR: true,
-            actions:
-                currentUser?.roleId == "R1"
-                    ? [
-                          actionsDetail(handleDetail),
-                          actionsEdit(handleEdit),
-                          actionsRemove(onDelete),
-                      ]
-                    : [
-                          actionsDetail(handleDetail),
-                          actionsEdit(handleEdit),
-                          (currentUser?.permissions
-                              ?.split(",")
-                              ?.includes("PERF") ||
-                              currentUser?.permissions
-                                  ?.split(",")
-                                  ?.includes("PERD")) &&
-                              actionsRemove(onDelete),
-                      ],
+            // isPerR: true,
+            customContent: true,
+            actions: [actionsCustom(handleEdit, "Chấm điểm")],
         },
+        // {
+        //     header: "Hành động",
+        //     // isRowPer: "thesisSessionId",
+        //     isPerR: true,
+        //     actions:
+        //         currentUser?.roleId == "R1"
+        //             ? [
+        //                   actionsDetail(handleDetail),
+        //                   actionsEdit(handleEdit),
+        //                   actionsRemove(onDelete),
+        //               ]
+        //             : [
+        //                   actionsDetail(handleDetail),
+        //                   actionsEdit(handleEdit),
+        //                   (currentUser?.permissions
+        //                       ?.split(",")
+        //                       ?.includes("PERF") ||
+        //                       currentUser?.permissions
+        //                           ?.split(",")
+        //                           ?.includes("PERD")) &&
+        //                       actionsRemove(onDelete),
+        //               ],
+        // },
     ];
     // Effect
     useEffect(() => {
@@ -337,21 +377,30 @@ const Student = () => {
             inputSearch: "",
             isSearched: false,
         }));
-        apiAdmin.getAllStudents({
-            user: currentUser,
-            inputSearch: defineTable.inputSearch,
-            filterSearch: defineTable.filterSearch,
-            dispatch: dispatch,
-            axiosJWT: axiosJWT,
-        });
+        if (id) {
+            apiLecturer.getAllThesisCouncils({
+                id: id,
+                user: currentUser,
+                inputSearch: defineTable.inputSearch,
+                filterSearch: defineTable.filterSearch.split(".")
+                    ? defineTable.filterSearch.split(".")[0]
+                    : defineTable.filterSearch,
+                dispatch: dispatch,
+                axiosJWT: axiosJWT,
+            });
+        }
     }, []); // Effect
 
     useEffect(() => {
         // console.log("inputSearch", defineTable.inputSearch);
-        apiAdmin.getAllStudents({
+        apiLecturer.getAllThesisCouncils({
+            id: id,
             user: currentUser,
             inputSearch: defineTable.inputSearch,
-            filterSearch: defineTable.filterSearch,
+            filterSearch: defineTable.filterSearch.split(".")
+                ? defineTable.filterSearch.split(".")[0]
+                : defineTable.filterSearch,
+
             dispatch: dispatch,
             axiosJWT: axiosJWT,
         });
@@ -367,7 +416,7 @@ const Student = () => {
             ...prevState,
             currentPage: 1,
         }));
-        // apiAdmin.getAllStudents(
+        // apiLecturer.getAllTheses(
         //     defineTable.inputSearch,
         //     (defineTable.currentPage - 1) * defineTable.limit,
         //     defineTable.limit,
@@ -377,7 +426,7 @@ const Student = () => {
 
     // useEffect(() => {
     //     console.log("currentpage effect");
-    //     apiAdmin.getAllStudents(
+    //     apiLecturer.getAllTheses(
     //         defineTable.inputSearch,
     //         (defineTable.currentPage - 1) * defineTable.limit,
     //         defineTable.limit,
@@ -425,7 +474,7 @@ const Student = () => {
     return (
         <>
             {/* <div>
-                <div>Hello Student</div>
+                <div>Hello Thesis</div>
                 <Link to={"1"}>Detail 1</Link>
                 <Select
                     styles={customSelectStylesMulti}
@@ -459,7 +508,7 @@ const Student = () => {
                     defineTable={defineTable}
                     setDefineTable={setDefineTable}
                     tableData={tableData}
-                    datas={students}
+                    datas={theses}
                     totalRecords={totalRecords}
                     functionsModule={true}
                 />
@@ -468,4 +517,4 @@ const Student = () => {
     );
 };
 
-export default Student;
+export default ThesisCouncilLecturer;

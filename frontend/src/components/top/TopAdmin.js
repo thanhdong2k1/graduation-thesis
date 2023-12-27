@@ -90,7 +90,7 @@ const TopAdmin = ({ isShowSidebar, setIsShowSidebar }) => {
                         class="button"
                         type="button"
                     >
-                        <span>Settings</span>
+                        <span>Cài đặt</span>
                         <IoMdSettings className="icon" />
                     </button>
                     <div
@@ -103,7 +103,7 @@ const TopAdmin = ({ isShowSidebar, setIsShowSidebar }) => {
                                     to={pathRoutes.R1.changeInformation}
                                     class="block px-4 py-2 font-medium text-textColor hover:bg-gray-100"
                                 >
-                                    Change Information
+                                    Đổi thông tin
                                 </Link>
                             </li>
                             <li>
@@ -111,7 +111,7 @@ const TopAdmin = ({ isShowSidebar, setIsShowSidebar }) => {
                                     to={pathRoutes.R1.changePassword}
                                     class="block px-4 py-2 font-medium text-textColor hover:bg-gray-100"
                                 >
-                                    Change Password
+                                    Đổi mật khẩu
                                 </Link>
                             </li>
                             <li>
@@ -121,7 +121,7 @@ const TopAdmin = ({ isShowSidebar, setIsShowSidebar }) => {
                                     }}
                                     class="block px-4 py-2 font-medium text-textColor hover:bg-gray-100"
                                 >
-                                    Sign out
+                                    Đăng xuất
                                 </Link>
                             </li>
                         </ul>

@@ -33,6 +33,16 @@ module.exports = (sequelize, DataTypes) => {
         foreignKey: "councilDetailId",
         as: "councilDetailData",
       });
+      CouncilDetail.belongsTo(models.Council, {
+        foreignKey: "councilId",
+        targetKey: "id",
+        as: "councilData",
+      });
+      CouncilDetail.belongsTo(models.Lecturer, {
+        foreignKey: "lecturerId",
+        targetKey: "id",
+        as: "lecturerData",
+      });
     }
   }
   CouncilDetail.init(

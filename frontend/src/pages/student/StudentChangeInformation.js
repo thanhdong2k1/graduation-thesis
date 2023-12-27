@@ -47,7 +47,7 @@ const StudentChangeInformation = () => {
         };
         // console.log(datasend);
         await apiStudent
-            .apiChangeInformation(currentUser, datasend, axiosJWT)
+            .apiStudentChangeInformation(currentUser, datasend, axiosJWT)
             .then((res) => {
                 if (res?.errCode > 0) {
                     // console.log(res);
@@ -70,7 +70,7 @@ const StudentChangeInformation = () => {
                         pauseOnFocusLoss: true,
                     });
                     // reset();
-                    apiStudent.apiGetInformation(currentUser, dispatch, axiosJWT);
+                    apiStudent.apiStudentGetInformation(currentUser, dispatch, axiosJWT);
                 }
             })
             .catch((error) => {
@@ -96,7 +96,7 @@ const StudentChangeInformation = () => {
         const { role, permissions, clases, code, ...dataFilter } = datasend;
         console.log(datasend, dataFilter);
         await apiStudent
-            .apiChangeInformation(currentUser, dataFilter, axiosJWT)
+            .apiStudentChangeInformation(currentUser, dataFilter, axiosJWT)
             .then((res) => {
                 if (res?.errCode > 0) {
                     // console.log(res);
@@ -247,7 +247,7 @@ const StudentChangeInformation = () => {
                     <ModalPopup
                         showModal={showModal}
                         setShowModal={setShowModal}
-                        title={"Change Avatar"}
+                        title={"Thay đổi ảnh"}
                         result={previewImg}
                         setResult={handleSaveImage}
                     >

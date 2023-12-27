@@ -207,6 +207,7 @@ const Major = () => {
     const tableData = [
         {
             header: "#",
+            hide: true,
             // width: "w-[10px]",
             // maxWidth: "max-w-[10px]",
             column: "id",
@@ -228,7 +229,7 @@ const Major = () => {
             // width: "w-[300px]",
             // maxWidth: "max-w-[300px]",
             column: "departmentId",
-            columnData: "departmentData",
+            columnData: "departmentData.name",
             // hide: true,
         },
         {
@@ -369,7 +370,7 @@ const Major = () => {
             </div> */}
             <div>
                 <ModalPopup
-                    title={"Confim Delete"}
+                    title={"Xác nhận xóa"}
                     showModal={showModal}
                     setShowModal={setShowModal}
                     result={result}

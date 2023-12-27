@@ -203,8 +203,8 @@ const AddTopic = ({ type }, params) => {
 
     return (
         <div className="changeInformationDiv flex flex-col justify-center items-center gap-2">
-            <div className="capitalize font-semibold text-h1FontSize">
-                {type} Topic
+            <div className=" font-semibold text-h1FontSize">
+                {type=="add"?"Thêm":"Sửa"} đề tài
             </div>
             <form
                 onSubmit={handleSubmit(onSubmit)}

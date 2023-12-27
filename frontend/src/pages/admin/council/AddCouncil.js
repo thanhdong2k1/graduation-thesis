@@ -32,11 +32,15 @@ const AddCouncil = ({ type }, params) => {
     const thesisSessions = useSelector((state) => state.admin.thesisSessions);
     const position = useSelector((state) => state.admin.position);
     const lecturers = useSelector((state) => state.admin.lecturers);
+    const theses = useSelector((state) => state.admin.theses);
     let codeLecturers = lecturers.map((v) => {
         return { value: v.id, label: `${v.id} | ${v.fullName}` };
     });
     let codeThesisSessions = thesisSessions.map((v) => {
         return { value: v.id, label: `${v.id} | ${v.name}` };
+    });
+    let codeTheses = theses.map((v) => {
+        return { value: v.id, label: `${v.id} | ${v.topicData.name}` };
     });
     const [isRtl, setIsRtl] = useState(false);
 
@@ -168,6 +172,11 @@ const AddCouncil = ({ type }, params) => {
             dispatch: dispatch,
             axiosJWT: axiosJWT,
         });
+        apiAdmin.getAllTheses({
+            user: currentUser,
+            dispatch: dispatch,
+            axiosJWT: axiosJWT,
+        });
         if (id) {
             apiAdmin
                 .getCouncilById({
@@ -259,9 +268,10 @@ const AddCouncil = ({ type }, params) => {
     }, [currentUser]);
 
     const [councilDetails, setCouncilDetails] = useState([]);
+    const [thesesDetails, setThesesDetails] = useState([]);
     // const [councilDetailsFilter, setCouncilDetailsFilter] = useState([]);
 
-    const addItem = (level) => {
+    const addItemPosition = (level) => {
         setCouncilDetails([
             ...councilDetails,
             {
@@ -272,17 +282,41 @@ const AddCouncil = ({ type }, params) => {
         console.log(councilDetails);
     };
 
-    const removeItem = (index) => {
+    const removeItemPosition = (index) => {
         const updatedItems = [...councilDetails];
         updatedItems.splice(index, 1);
         setCouncilDetails(updatedItems);
     };
 
-    const updateItem = (index, field, value) => {
+    const updateItemPosition = (index, field, value) => {
         const updatedItems = [...councilDetails];
         updatedItems[index][field] = value;
         updatedItems[index][field] = value;
         setCouncilDetails(updatedItems);
+    };
+
+    const addItemThesis = (level) => {
+        setThesesDetails([
+            ...thesesDetails,
+            {
+                positionId: "",
+                lecturerId: "",
+            },
+        ]);
+        console.log(thesesDetails);
+    };
+
+    const removeItemThesis = (index) => {
+        const updatedItems = [...thesesDetails];
+        updatedItems.splice(index, 1);
+        setThesesDetails(updatedItems);
+    };
+
+    const updateItemThesis = (index, field, value) => {
+        const updatedItems = [...thesesDetails];
+        updatedItems[index][field] = value;
+        updatedItems[index][field] = value;
+        setThesesDetails(updatedItems);
     };
     // useEffect(() => {
     //     console.log(councilDetails);
@@ -311,8 +345,8 @@ const AddCouncil = ({ type }, params) => {
     }, [councilDetails]);
     return (
         <div className="changeInformationDiv flex flex-col justify-center items-center gap-2">
-            <div className="capitalize font-semibold text-h1FontSize">
-                {type} Council
+            <div className=" font-semibold text-h1FontSize">
+                {type=="add"?"Thêm":"Sửa"} hội đồng
             </div>
             <form
                 onSubmit={handleSubmit(onSubmit)}
@@ -476,7 +510,11 @@ const AddCouncil = ({ type }, params) => {
                                     // value={item.name}
                                     onChange={(e) =>
                                         // console.log(e)
-                                        updateItem(index, "positionId", e)
+                                        updateItemPosition(
+                                            index,
+                                            "positionId",
+                                            e
+                                        )
                                     }
                                 />
                                 {/* {errors.nameCriteria?.type && (
@@ -506,7 +544,11 @@ const AddCouncil = ({ type }, params) => {
                                         // value={item.name}
                                         onChange={(e) =>
                                             // console.log(e)
-                                            updateItem(index, "lecturerId", e)
+                                            updateItemPosition(
+                                                index,
+                                                "lecturerId",
+                                                e
+                                            )
                                         }
                                     />
                                     {/* <div
@@ -523,14 +565,16 @@ const AddCouncil = ({ type }, params) => {
                                     </div>
                                     <div
                                         className="button"
-                                        onClick={() => removeItem(index)}
+                                        onClick={() => removeItemPosition(index)}
                                     >
                                         <FaRegTrashAlt className="hover:text-PrimaryColor" />
                                     </div> */}
                                     {type != "detail" && (
                                         <div
                                             className="button"
-                                            onClick={() => removeItem(index)}
+                                            onClick={() =>
+                                                removeItemPosition(index)
+                                            }
                                         >
                                             <FaRegTrashAlt className="hover:text-PrimaryColor" />
                                         </div>
@@ -549,10 +593,94 @@ const AddCouncil = ({ type }, params) => {
                     <div className="flex justify-end items-center gap-2">
                         <div
                             className="button gap-1"
-                            onClick={() => addItem(1)}
+                            onClick={() => addItemPosition(1)}
                         >
                             <MdAdd className="" />
                             <span>Add Position</span>
+                        </div>
+                    </div>
+                )}
+
+                {thesesDetails &&
+                    thesesDetails?.map((item, index) => (
+                        <div
+                            className="row flex justify-center items-center gap-2"
+                            key={index}
+                        >
+                            <div className="col w-full">
+                                {index == 0 && (
+                                    <>
+                                        <label className="labelInput flex justify-between">
+                                            <span>Thesis</span>
+                                            {/* <span>Total: {totalScore}</span> */}
+                                        </label>
+                                    </>
+                                )}
+                                <div className="flex flex-row gap-2">
+                                    <Select
+                                        defaultValue={item?.lecturerId}
+                                        styles={customSelectStyles}
+                                        options={codeTheses}
+                                        isDisabled={
+                                            type == "detail" ? true : false
+                                        }
+                                        className="w-full"
+                                        // value={item.name}
+                                        onChange={(e) =>
+                                            // console.log(e)
+                                            updateItemThesis(
+                                                index,
+                                                "lecturerId",
+                                                e
+                                            )
+                                        }
+                                    />
+                                    {/* <div
+                                        className="button"
+                                        onClick={() => moveUpItem(index)}
+                                    >
+                                        <HiArrowUp className="hover:text-PrimaryColor" />
+                                    </div>
+                                    <div
+                                        className="button"
+                                        onClick={() => moveDownItem(index)}
+                                    >
+                                        <HiArrowDown className="hover:text-PrimaryColor" />
+                                    </div>
+                                    <div
+                                        className="button"
+                                        onClick={() => removeItemThesis(index)}
+                                    >
+                                        <FaRegTrashAlt className="hover:text-PrimaryColor" />
+                                    </div> */}
+                                    {type != "detail" && (
+                                        <div
+                                            className="button"
+                                            onClick={() =>
+                                                removeItemThesis(index)
+                                            }
+                                        >
+                                            <FaRegTrashAlt className="hover:text-PrimaryColor" />
+                                        </div>
+                                    )}
+                                </div>
+                            </div>
+                            {/* {errors.weightCriteria?.type && (
+                                <p className=" text-normal text-red-500">
+                                    {errors.weightCriteria?.message}
+                                </p>
+                            )} */}
+                        </div>
+                    ))}
+
+                {type != "detail" && (
+                    <div className="flex justify-end items-center gap-2">
+                        <div
+                            className="button gap-1"
+                            onClick={() => addItemThesis(1)}
+                        >
+                            <MdAdd className="" />
+                            <span>Add Thesis</span>
                         </div>
                     </div>
                 )}

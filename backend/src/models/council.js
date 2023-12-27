@@ -45,6 +45,10 @@ module.exports = (sequelize, DataTypes) => {
         targetKey: "code",
         as: "statusData",
       });
+
+      Council.hasMany(models.CouncilDetail, {
+        foreignKey: "councilId",
+      });
     }
   }
   Council.init(

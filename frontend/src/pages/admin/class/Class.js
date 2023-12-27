@@ -207,6 +207,7 @@ const Class = () => {
     const tableData = [
         {
             header: "#",
+            hide: true,
             // width: "w-[10px]",
             // maxWidth: "max-w-[10px]",
             column: "id",
@@ -228,7 +229,7 @@ const Class = () => {
             // width: "w-[300px]",
             // maxWidth: "max-w-[300px]",
             column: "blockId",
-            columnData: "blockData",
+            columnData: "blockData.name",
             // hide: true,
         },
         {
@@ -236,7 +237,7 @@ const Class = () => {
             // width: "w-[300px]",
             // maxWidth: "max-w-[300px]",
             column: "majorId",
-            columnData: "majorData",
+            columnData: "majorData.name",
             // hide: true,
         },
         {
@@ -377,7 +378,7 @@ const Class = () => {
             </div> */}
             <div>
                 <ModalPopup
-                    title={"Confim Delete"}
+                    title={"Xác nhận xóa"}
                     showModal={showModal}
                     setShowModal={setShowModal}
                     result={result}

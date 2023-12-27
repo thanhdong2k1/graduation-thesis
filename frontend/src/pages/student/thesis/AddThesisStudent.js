@@ -11,7 +11,7 @@ import "react-datepicker/dist/react-datepicker.css";
 import moment from "moment/moment";
 import { createAxios } from "../../../utils/createInstance";
 import { logginSuccess } from "../../../redux/authSlice";
-import { apiAdmin } from "../../../redux/apiRequest";
+import { apiStudent } from "../../../redux/apiRequest";
 import ModalPopup from "../../../components/ModelPopup/ModalPopup";
 import {
     customSelectStyles,
@@ -22,36 +22,13 @@ import { useParams } from "react-router-dom";
 import { MdLockReset } from "react-icons/md";
 import pdf from "../../../assets/540cb75550adf33f281f29132dddd14fded85bfc.pdf";
 
-const AddThesis = ({ type }) => {
+const AddThesisStudent = ({ type }) => {
     let { id } = useParams();
     console.log("type", type, id);
 
     const currentUser = useSelector((state) => state.auth.currentUser);
     const dispatch = useDispatch();
     let axiosJWT = createAxios(currentUser, dispatch, logginSuccess);
-    const results = useSelector((state) => state.admin.result);
-    const topics = useSelector((state) => state.admin.topics);
-    const students = useSelector((state) => state.admin.students);
-    const thesisAdvisor = useSelector((state) => state.admin.lecturers);
-    const thesisAdvisorStatus = useSelector((state) => state.admin.handle);
-    const thesisSessions = useSelector((state) => state.admin.thesisSessions);
-    const councils = useSelector((state) => state.admin.councils);
-    const councilStatus = useSelector((state) => state.admin.handle);
-    let codeCouncil = councils?.map((v) => {
-        return { value: v.id, label: `${v.id} | ${v.name}` };
-    });
-    let codeThesisSession = thesisSessions?.map((v) => {
-        return { value: v.id, label: `${v.id} | ${v.name}` };
-    });
-    let codeThesisAdvisor = thesisAdvisor?.map((v) => {
-        return { value: v.id, label: `${v.id} | ${v.fullName}` };
-    });
-    let codeStudent = students?.map((v) => {
-        return { value: v.id, label: `${v.id} | ${v.fullName}` };
-    });
-    let codeTopic = topics?.map((v) => {
-        return { value: v.id, label: `${v.id} | ${v.name}` };
-    });
 
     const [isRtl, setIsRtl] = useState(false);
     const [showModal, setShowModal] = useState(false);
@@ -67,7 +44,7 @@ const AddThesis = ({ type }) => {
     const handleResetPassword = async (data) => {
         console.log("hello", data, getValues());
         const id = toast.loading("Please wait...");
-        await apiAdmin
+        await apiStudent
             .apiResetPasswordThesis({
                 user: currentUser,
                 data: getValues(),
@@ -157,7 +134,7 @@ const AddThesis = ({ type }) => {
         };
         console.log(datasend);
         type == "add"
-            ? await apiAdmin
+            ? await apiStudent
                   .apiAddThesis({
                       user: currentUser,
                       data: datasend,
@@ -199,7 +176,7 @@ const AddThesis = ({ type }) => {
                           pauseOnFocusLoss: true,
                       });
                   })
-            : await apiAdmin
+            : await apiStudent
                   .apiUpdateThesis({
                       user: currentUser,
                       data: datasend,
@@ -244,35 +221,35 @@ const AddThesis = ({ type }) => {
                   });
     };
     useEffect(() => {
-        apiAdmin.apiGetResult(currentUser, dispatch, axiosJWT);
-        apiAdmin.apiGetHandle(currentUser, dispatch, axiosJWT);
-        apiAdmin.getAllTopics({
-            user: currentUser,
-            dispatch: dispatch,
-            axiosJWT: axiosJWT,
-        });
-        apiAdmin.getAllStudents({
-            user: currentUser,
-            dispatch: dispatch,
-            axiosJWT: axiosJWT,
-        });
-        apiAdmin.getAllLecturers({
-            user: currentUser,
-            dispatch: dispatch,
-            axiosJWT: axiosJWT,
-        });
-        apiAdmin.getAllThesisSessions({
-            user: currentUser,
-            dispatch: dispatch,
-            axiosJWT: axiosJWT,
-        });
-        apiAdmin.getAllCouncils({
-            user: currentUser,
-            dispatch: dispatch,
-            axiosJWT: axiosJWT,
-        });
+        apiStudent.apiGetResult(currentUser, dispatch, axiosJWT);
+        apiStudent.apiGetHandle(currentUser, dispatch, axiosJWT);
+        // apiStudent.getAllTopics({
+        //     user: currentUser,
+        //     dispatch: dispatch,
+        //     axiosJWT: axiosJWT,
+        // });
+        // apiStudent.getAllStudents({
+        //     user: currentUser,
+        //     dispatch: dispatch,
+        //     axiosJWT: axiosJWT,
+        // });
+        // apiStudent.getAllLecturers({
+        //     user: currentUser,
+        //     dispatch: dispatch,
+        //     axiosJWT: axiosJWT,
+        // });
+        // apiStudent.getAllThesisSessions({
+        //     user: currentUser,
+        //     dispatch: dispatch,
+        //     axiosJWT: axiosJWT,
+        // });
+        // apiStudent.getAllCouncils({
+        //     user: currentUser,
+        //     dispatch: dispatch,
+        //     axiosJWT: axiosJWT,
+        // });
         if (id) {
-            apiAdmin
+            apiStudent
                 .getThesisById({
                     user: currentUser,
                     id: id,
@@ -293,60 +270,25 @@ const AddThesis = ({ type }) => {
                         let convert = [];
 
                         setValue("id", res?.result?.id);
-                        setValue(
-                            "result",
-                            results.filter(
-                                (value) => value?.value == res?.result?.resultId
-                            )
-                        );
-                        setValue(
-                            "student",
-                            codeStudent.filter(
-                                (value) =>
-                                    value?.value == res?.result?.studentId
-                            )
-                        );
-                        setValue(
-                            "topic",
-                            codeTopic.filter(
-                                (value) => value?.value == res?.result?.topicId
-                            )
-                        );
+                        setValue("result", res?.result?.resultData?.valueVi);
+                        setValue("student", res?.result?.studentData?.fullName);
+                        setValue("topic", res?.result?.topicData.name);
                         setValue(
                             "thesisAdvisor",
-                            codeThesisAdvisor.filter(
-                                (value) =>
-                                    value?.value == res?.result?.thesisAdvisorId
-                            )
+                            res?.result?.thesisAdvisorData.fullName
                         );
                         setValue(
                             "thesisAdvisorStatus",
-                            thesisAdvisorStatus.filter(
-                                (value) =>
-                                    value?.value ==
-                                    res?.result?.thesisAdvisorStatusId
-                            )
+                            res?.result?.thesisAdvisorStatusData.valueVi
                         );
                         setValue(
                             "thesisSession",
-                            codeThesisSession.filter(
-                                (value) =>
-                                    value?.value == res?.result?.thesisSessionId
-                            )
+                            res?.result?.thesisSessionData.name
                         );
-                        setValue(
-                            "council",
-                            codeCouncil.filter(
-                                (value) =>
-                                    value?.value == res?.result?.councilId
-                            )
-                        );
+                        setValue("council", res?.result?.councilData.name);
                         setValue(
                             "councilStatus",
-                            councilStatus.filter(
-                                (value) =>
-                                    value?.value == res?.result?.councilStatusId
-                            )
+                            res?.result?.councilStatusData.valueVi
                         );
 
                         setValue("startDate", res?.result?.startDate);
@@ -488,7 +430,7 @@ const AddThesis = ({ type }) => {
                         </div>
                         <div className="col w-full">
                             <label className="labelInput">Result</label>
-                            <Controller
+                            {/* <Controller
                                 name="result"
                                 control={control}
                                 {...register("result", {
@@ -498,18 +440,32 @@ const AddThesis = ({ type }) => {
                                     <Select
                                         styles={customSelectStyles}
                                         {...field}
-                                        options={results}
+                                        // options={results}
                                         isClearable={true}
                                         isDisabled={true}
                                     />
                                 )}
+                            /> */}
+                            <input
+                                className={`input ${
+                                    type == "detail" ? "disabled" : ""
+                                }`}
+                                disabled={type == "detail" ? true : false}
+                                {...register("result", {
+                                    required: "Number phone is required",
+                                })}
                             />
+                            {errors.result?.type && (
+                                <p className=" text-normal text-red-500">
+                                    {errors.result?.message}
+                                </p>
+                            )}
                         </div>
                     </div>
                     <div className="row flex justify-center items-center gap-2">
                         <div className="col w-full">
                             <label className="labelInput">Student</label>
-                            <Controller
+                            {/* <Controller
                                 name="student"
                                 control={control}
                                 {...register("student", {
@@ -519,13 +475,22 @@ const AddThesis = ({ type }) => {
                                     <Select
                                         styles={customSelectStyles}
                                         {...field}
-                                        options={codeStudent}
+                                        // options={codeStudent}
                                         isClearable={true}
                                         isDisabled={
                                             type == "detail" ? true : false
                                         }
                                     />
                                 )}
+                            /> */}
+                            <input
+                                className={`input ${
+                                    type == "detail" ? "disabled" : ""
+                                }`}
+                                disabled={type == "detail" ? true : false}
+                                {...register("student", {
+                                    required: "Number phone is required",
+                                })}
                             />
                             {errors.student?.type && (
                                 <p className=" text-normal text-red-500">
@@ -535,7 +500,7 @@ const AddThesis = ({ type }) => {
                         </div>
                         <div className="col w-full">
                             <label className="labelInput">Topic</label>
-                            <Controller
+                            {/* <Controller
                                 name="topic"
                                 control={control}
                                 {...register("topic", {
@@ -545,13 +510,22 @@ const AddThesis = ({ type }) => {
                                     <Select
                                         styles={customSelectStyles}
                                         {...field}
-                                        options={codeTopic}
+                                        // options={codeTopic}
                                         isClearable={true}
                                         isDisabled={
                                             type == "detail" ? true : false
                                         }
                                     />
                                 )}
+                            /> */}
+                            <input
+                                className={`input ${
+                                    type == "detail" ? "disabled" : ""
+                                }`}
+                                disabled={type == "detail" ? true : false}
+                                {...register("topic", {
+                                    required: "Number phone is required",
+                                })}
                             />
                             {errors.topic?.type && (
                                 <p className=" text-normal text-red-500">
@@ -563,7 +537,7 @@ const AddThesis = ({ type }) => {
                     <div className="row flex justify-center items-center gap-2">
                         <div className="col w-full">
                             <label className="labelInput">Thesis Advisor</label>
-                            <Controller
+                            {/* <Controller
                                 name="thesisAdvisor"
                                 control={control}
                                 {...register("thesisAdvisor", {
@@ -573,13 +547,22 @@ const AddThesis = ({ type }) => {
                                     <Select
                                         styles={customSelectStyles}
                                         {...field}
-                                        options={codeThesisAdvisor}
+                                        // options={codeThesisAdvisor}
                                         isClearable={true}
                                         isDisabled={
                                             type == "detail" ? true : false
                                         }
                                     />
                                 )}
+                            /> */}
+                            <input
+                                className={`input ${
+                                    type == "detail" ? "disabled" : ""
+                                }`}
+                                disabled={type == "detail" ? true : false}
+                                {...register("thesisAdvisor", {
+                                    required: "Number phone is required",
+                                })}
                             />
                             {errors.thesisAdvisor?.type && (
                                 <p className=" text-normal text-red-500">
@@ -591,7 +574,7 @@ const AddThesis = ({ type }) => {
                             <label className="labelInput">
                                 Thesis Advisor Status
                             </label>
-                            <Controller
+                            {/* <Controller
                                 name="thesisAdvisorStatus"
                                 control={control}
                                 {...register("thesisAdvisorStatus", {
@@ -601,13 +584,22 @@ const AddThesis = ({ type }) => {
                                     <Select
                                         styles={customSelectStyles}
                                         {...field}
-                                        options={thesisAdvisorStatus}
+                                        // options={thesisAdvisorStatus}
                                         isClearable={true}
                                         isDisabled={
                                             type == "detail" ? true : false
                                         }
                                     />
                                 )}
+                            /> */}
+                            <input
+                                className={`input ${
+                                    type == "detail" ? "disabled" : ""
+                                }`}
+                                disabled={type == "detail" ? true : false}
+                                {...register("thesisAdvisorStatus", {
+                                    required: "Number phone is required",
+                                })}
                             />
                             {errors.thesisAdvisorStatus?.type && (
                                 <p className=" text-normal text-red-500">
@@ -643,7 +635,7 @@ const AddThesis = ({ type }) => {
                         </div>
                         <div className="col w-full">
                             <label className="labelInput">Thesis Session</label>
-                            <Controller
+                            {/* <Controller
                                 name="thesisSession"
                                 control={control}
                                 {...register("thesisSession", {
@@ -653,13 +645,22 @@ const AddThesis = ({ type }) => {
                                     <Select
                                         styles={customSelectStyles}
                                         {...field}
-                                        options={codeThesisSession}
+                                        // options={codeThesisSession}
                                         isClearable={true}
                                         isDisabled={
                                             type == "detail" ? true : false
                                         }
                                     />
                                 )}
+                            /> */}
+                            <input
+                                className={`input ${
+                                    type == "detail" ? "disabled" : ""
+                                }`}
+                                disabled={type == "detail" ? true : false}
+                                {...register("thesisSession", {
+                                    required: "Number phone is required",
+                                })}
                             />
                             {errors.thesisSession?.type && (
                                 <p className=" text-normal text-red-500">
@@ -671,7 +672,7 @@ const AddThesis = ({ type }) => {
                     <div className="row flex justify-center items-center gap-2">
                         <div className="col w-full">
                             <label className="labelInput">Council</label>
-                            <Controller
+                            {/* <Controller
                                 name="council"
                                 control={control}
                                 {...register("council", {
@@ -681,13 +682,22 @@ const AddThesis = ({ type }) => {
                                     <Select
                                         styles={customSelectStyles}
                                         {...field}
-                                        options={codeCouncil}
+                                        // options={codeCouncil}
                                         isClearable={true}
                                         isDisabled={
                                             type == "detail" ? true : false
                                         }
                                     />
                                 )}
+                            /> */}
+                            <input
+                                className={`input ${
+                                    type == "detail" ? "disabled" : ""
+                                }`}
+                                disabled={type == "detail" ? true : false}
+                                {...register("council", {
+                                    required: "Number phone is required",
+                                })}
                             />
                             {errors.council?.type && (
                                 <p className=" text-normal text-red-500">
@@ -697,7 +707,7 @@ const AddThesis = ({ type }) => {
                         </div>
                         <div className="col w-full">
                             <label className="labelInput">Council Status</label>
-                            <Controller
+                            {/* <Controller
                                 name="councilStatus"
                                 control={control}
                                 {...register("councilStatus", {
@@ -707,13 +717,22 @@ const AddThesis = ({ type }) => {
                                     <Select
                                         styles={customSelectStyles}
                                         {...field}
-                                        options={councilStatus}
+                                        // options={councilStatus}
                                         isClearable={true}
                                         isDisabled={
                                             type == "detail" ? true : false
                                         }
                                     />
                                 )}
+                            /> */}
+                            <input
+                                className={`input ${
+                                    type == "detail" ? "disabled" : ""
+                                }`}
+                                disabled={type == "detail" ? true : false}
+                                {...register("councilStatus", {
+                                    required: "Number phone is required",
+                                })}
                             />
                             {errors.councilStatus?.type && (
                                 <p className=" text-normal text-red-500">
@@ -905,4 +924,4 @@ const AddThesis = ({ type }) => {
     );
 };
 
-export default AddThesis;
+export default AddThesisStudent;

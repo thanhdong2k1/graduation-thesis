@@ -221,6 +221,7 @@ const Lecturer = () => {
     const tableData = [
         {
             header: "#",
+            hide: true,
             // width: "w-[10px]",
             // maxWidth: "max-w-[10px]",
             column: "id",
@@ -274,7 +275,7 @@ const Lecturer = () => {
             header: "Chức vụ",
             width: "w-[300px]",
             maxWidth: "max-w-[300px]",
-            columnData: "roleData",
+            columnData: "roleData.valueVi",
             column: "roleId",
             // hide: true,
         },
@@ -282,7 +283,7 @@ const Lecturer = () => {
             header: "Giới tính",
             width: "w-[300px]",
             maxWidth: "max-w-[300px]",
-            columnData: "genderData",
+            columnData: "genderData.valueVi",
             column: "genderId",
             // hide: true,
         },
@@ -290,7 +291,7 @@ const Lecturer = () => {
             header: "Khoa",
             width: "w-[300px]",
             maxWidth: "max-w-[300px]",
-            columnData: "departmentData",
+            columnData: "departmentData.name",
             column: "departmentId",
             // hide: true,
         },
@@ -298,11 +299,10 @@ const Lecturer = () => {
             header: "Trạng thái",
             width: "w-[300px]",
             maxWidth: "max-w-[300px]",
-            columnData: "statusData",
+            columnData: "statusData.valueVi",
             column: "statusId",
             // hide: true,
             isStatus: true,
-            actions: actionsDetail(handleDetail),
         },
         {
             header: "Hành động",
@@ -442,7 +442,7 @@ const Lecturer = () => {
             </div> */}
             <div>
                 <ModalPopup
-                    title={"Confim Delete"}
+                    title={"Xác nhận xóa"}
                     showModal={showModal}
                     setShowModal={setShowModal}
                     result={result}

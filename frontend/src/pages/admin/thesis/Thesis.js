@@ -221,6 +221,7 @@ const Thesis = () => {
     const tableData = [
         {
             header: "#",
+            hide: true,
             // width: "w-[10px]",
             // maxWidth: "max-w-[10px]",
             column: "id",
@@ -230,49 +231,53 @@ const Thesis = () => {
             width: "w-[300px]",
             maxWidth: "max-w-[300px]",
             column: "studentId",
-            columnData: "studentData",
+            columnData: "studentData.fullName",
         },
         {
             header: "Giảng viên hướng dẫn",
             width: "w-[300px]",
             maxWidth: "max-w-[300px]",
             column: "thesisAdvisorId",
-            columnData: "thesisAdvisorData",
+            columnData: "thesisAdvisorData.fullName",
         },
         {
             header: "Tên đề tài",
             width: "w-[300px]",
             maxWidth: "max-w-[300px]",
             column: "topicId",
-            columnData: "topicData",
+            columnData: "topicData.name",
         },
         {
             header: "Giảng viên xác nhận",
             width: "w-[300px]",
             maxWidth: "max-w-[300px]",
             column: "thesisAdvisorStatusId",
-            columnData: "thesisAdvisorStatusData",
+            columnData: "thesisAdvisorStatusData.valueVi",
+            isStatus: true,
+            // actions: actionsDetail(handleDetail),
         },
         {
             header: "Khóa luận",
             width: "w-[300px]",
             maxWidth: "max-w-[300px]",
             column: "thesisSessionId",
-            columnData: "thesisSessionData",
+            columnData: "thesisSessionData.name",
         },
         {
             header: "Hội đồng",
             width: "w-[300px]",
             maxWidth: "max-w-[300px]",
             column: "councilId",
-            columnData: "councilData",
+            columnData: "councilData.name",
         },
         {
             header: "Trạng thái điểm",
             width: "w-[300px]",
             maxWidth: "max-w-[300px]",
             column: "councilStatusId",
-            columnData: "councilStatusData",
+            columnData: "councilStatusData.valueVi",
+            isStatus: true,
+            // actions: actionsDetail(handleDetail),
         },
         {
             header: "Tổng điểm hội đồng",
@@ -285,7 +290,9 @@ const Thesis = () => {
             width: "w-[300px]",
             maxWidth: "max-w-[300px]",
             column: "resultId",
-            columnData: "resultData",
+            columnData: "resultData.valueVi",
+            isStatus: true,
+            // actions: actionsDetail(handleDetail),
         },
         {
             header: "Ngày thực hiện",
@@ -355,7 +362,9 @@ const Thesis = () => {
         apiAdmin.getAllTheses({
             user: currentUser,
             inputSearch: defineTable.inputSearch,
-            filterSearch: defineTable.filterSearch,
+            filterSearch: defineTable.filterSearch.split(".")
+                ? defineTable.filterSearch.split(".")[0]
+                : defineTable.filterSearch,
             dispatch: dispatch,
             axiosJWT: axiosJWT,
         });
@@ -366,7 +375,10 @@ const Thesis = () => {
         apiAdmin.getAllTheses({
             user: currentUser,
             inputSearch: defineTable.inputSearch,
-            filterSearch: defineTable.filterSearch,
+            filterSearch: defineTable.filterSearch.split(".")
+                ? defineTable.filterSearch.split(".")[0]
+                : defineTable.filterSearch,
+
             dispatch: dispatch,
             axiosJWT: axiosJWT,
         });
@@ -458,7 +470,7 @@ const Thesis = () => {
             </div> */}
             <div>
                 <ModalPopup
-                    title={"Confim Delete"}
+                    title={"Xác nhận xóa"}
                     showModal={showModal}
                     setShowModal={setShowModal}
                     result={result}

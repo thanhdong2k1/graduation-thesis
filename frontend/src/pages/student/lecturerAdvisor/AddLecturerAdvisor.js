@@ -18,21 +18,21 @@ import ButtonConfirm from "../../../components/button/ButtonConfirm";
 import { useParams } from "react-router-dom";
 import ModalPopup from "../../../components/ModelPopup/ModalPopup";
 
-const AddLecturer = ({ type }, params) => {
+const AddLecturerAdvisor = ({ type }, params) => {
     let { id } = useParams();
     console.log("type", type, id);
 
     const currentUser = useSelector((state) => state.auth.currentUser);
     const dispatch = useDispatch();
     let axiosJWT = createAxios(currentUser, dispatch, logginSuccess);
-    const status = useSelector((state) => state.admin.status);
-    const gender = useSelector((state) => state.admin.gender);
-    const role = useSelector((state) => state.admin.role);
-    const permissions = useSelector((state) => state.admin.permissions);
-    const departments = useSelector((state) => state.admin.departments);
-    let codeDepartment = departments.map((v) => {
-        return { value: v.id, label: `${v.id} | ${v.name}` };
-    });
+    // const status = useSelector((state) => state.admin.status);
+    // const gender = useSelector((state) => state.admin.gender);
+    // const role = useSelector((state) => state.admin.role);
+    // const permissions = useSelector((state) => state.admin.permissions);
+    // const departments = useSelector((state) => state.admin.departments);
+    // let codeDepartment = departments.map((v) => {
+    //     return { value: v.id, label: `${v.id} | ${v.name}` };
+    // });
     const [isRtl, setIsRtl] = useState(false);
     const [showModal, setShowModal] = useState(false);
     const [result, setResult] = useState(null);
@@ -218,15 +218,6 @@ const AddLecturer = ({ type }, params) => {
     };
     useEffect(() => {
         async function fetchData() {
-            await apiAdmin.apiGetRole(currentUser, dispatch, axiosJWT);
-            await apiAdmin.apiGetStatus(currentUser, dispatch, axiosJWT);
-            await apiAdmin.apiGetPermissions(currentUser, dispatch, axiosJWT);
-            await apiAdmin.apiGetGender(currentUser, dispatch, axiosJWT);
-            await apiAdmin.getAllDepartments({
-                user: currentUser,
-                dispatch: dispatch,
-                axiosJWT: axiosJWT,
-            });
             if (id) {
                 await apiAdmin
                     .getLecturerById({
@@ -246,40 +237,6 @@ const AddLecturer = ({ type }, params) => {
                             });
                         } else {
                             console.log(res);
-                            let convert = [];
-                            if (res?.result?.roleId === "R1") {
-                                permissions.forEach((obj) => {
-                                    if (obj.value === "PERF") {
-                                        convert.push({ ...obj, isFixed: true });
-                                    }
-                                });
-                            } else if (res?.result?.roleId === "R2") {
-                                permissions.forEach((obj) => {
-                                    if (
-                                        obj.value !== "PERD" &&
-                                        obj.value !== "PERF"
-                                    ) {
-                                        convert.push({ ...obj, isFixed: true });
-                                    }
-                                });
-                            } else {
-                                permissions.forEach((obj) => {
-                                    if (
-                                        obj.value === "PERU" ||
-                                        obj.value === "PERR"
-                                    ) {
-                                        convert.push({ ...obj, isFixed: true });
-                                    }
-                                });
-                            }
-                            const array = res?.result?.permissions
-                                ?.toString()
-                                .split(",");
-                            permissions.forEach((obj) => {
-                                if (array?.includes(obj.value)) {
-                                    convert.push(obj);
-                                }
-                            });
                             setValue("id", res?.result?.id);
                             setValue("fullName", res?.result?.fullName);
                             setValue("email", res?.result?.email);
@@ -292,37 +249,11 @@ const AddLecturer = ({ type }, params) => {
                             }
 
                             setValue("code", res?.result?.code);
-                            setValue(
-                                "role",
-                                role.filter(
-                                    (role) =>
-                                        role?.value === res?.result?.roleId
-                                )
-                            );
-                            setValue(
-                                "department",
-                                codeDepartment.filter(
-                                    (value) =>
-                                        value?.value ==
-                                        res?.result?.departmentId
-                                )
-                            );
-                            setValue("permissions", convert);
+                            setValue("role", res?.result?.roleData?.valueVi);
+                            setValue("department", res?.result?.departmentData?.name);
                             // console.log(res?.result?.birthday,moment(res?.result?.birthday, "DD/MM/YYYY").toString());
-                            setValue(
-                                "gender",
-                                gender.filter(
-                                    (gender) =>
-                                        gender?.value === res?.result?.genderId
-                                )
-                            );
-                            setValue(
-                                "status",
-                                status.filter(
-                                    (status) =>
-                                        status?.value === res?.result?.statusId
-                                )
-                            );
+                            setValue("gender", res?.result?.genderData?.valueVi);
+                            setValue("status", res?.result?.statusData?.valueVi);
                             toast.update(id, {
                                 render: res?.errMessage,
                                 type: "success",
@@ -347,7 +278,7 @@ const AddLecturer = ({ type }, params) => {
                     });
             }
         }
-        fetchData()
+        fetchData();
     }, [currentUser]);
 
     return (
@@ -491,7 +422,7 @@ const AddLecturer = ({ type }, params) => {
                         </div>
                         <div className="col w-full">
                             <label className="labelInput">Gender</label>
-                            <Controller
+                            {/* <Controller
                                 name="gender"
                                 control={control}
                                 {...register("gender", {
@@ -508,6 +439,15 @@ const AddLecturer = ({ type }, params) => {
                                         }
                                     />
                                 )}
+                            /> */}
+                            <input
+                                className={`input ${
+                                    type == "detail" ? "disabled" : ""
+                                }`}
+                                disabled={type == "detail" ? true : false}
+                                {...register("gender", {
+                                    required: "Number phone is required",
+                                })}
                             />
                             {errors.gender?.type && (
                                 <p className=" text-normal text-red-500">
@@ -520,65 +460,8 @@ const AddLecturer = ({ type }, params) => {
 
                     <div className="row flex justify-center items-center gap-2">
                         <div className="col w-full">
-                            <label className="labelInput">Code</label>
-                            <div className="flex gap-2">
-                                <input
-                                    className={`input ${
-                                        type == "detail" ? "disabled" : ""
-                                    }`}
-                                    disabled={type == "detail" ? true : false}
-                                    {...register("code", {})}
-                                />
-                                {type == "update" && (
-                                    <div className="col group">
-                                        <div
-                                            className="buttonDiv button h-full"
-                                            // disabled
-                                            onClick={onResetPassword}
-                                        >
-                                            <MdLockReset className="" />
-                                            <span
-                                                className={`hidden no-underline group-hover:block group-hover:absolute -translate-x-[50%] -translate-y-[170%] text-whiteColor bg-textColor shadow-lg p-1 z-10 rounded-lg text-smallestFontSize`}
-                                            >
-                                                Reset Password
-                                            </span>
-                                        </div>
-                                    </div>
-                                )}
-                            </div>
-                        </div>
-                        <div className="col w-full">
-                            <label className="labelInput">Role</label>
-                            <Controller
-                                name="role"
-                                control={control}
-                                {...register("role", {
-                                    // required: "Full name is required",
-                                })}
-                                render={({ field }) => (
-                                    <Select
-                                        styles={customSelectStyles}
-                                        {...field}
-                                        options={role}
-                                        isClearable={true}
-                                        isDisabled={
-                                            type == "detail" ? true : false
-                                        }
-                                    />
-                                )}
-                            />
-                            {errors.role?.type && (
-                                <p className=" text-normal text-red-500">
-                                    {errors.role?.message}
-                                </p>
-                            )}
-                        </div>
-                    </div>
-
-                    <div className="row flex justify-center items-center gap-2">
-                        <div className="col w-full">
                             <label className="labelInput">Department</label>
-                            <Controller
+                            {/* <Controller
                                 name="department"
                                 control={control}
                                 {...register("department", {
@@ -595,6 +478,16 @@ const AddLecturer = ({ type }, params) => {
                                         }
                                     />
                                 )}
+                            /> */}
+                            .
+                            <input
+                                className={`input ${
+                                    type == "detail" ? "disabled" : ""
+                                }`}
+                                disabled={type == "detail" ? true : false}
+                                {...register("department", {
+                                    required: "Number phone is required",
+                                })}
                             />
                             {errors.department?.type && (
                                 <p className=" text-normal text-red-500">
@@ -603,33 +496,43 @@ const AddLecturer = ({ type }, params) => {
                             )}
                         </div>
                         <div className="col w-full">
-                            <label className="labelInput">Status</label>
-                            <Controller
-                                name="status"
+                            <label className="labelInput">Role</label>
+                            {/* <Controller
+                                name="role"
                                 control={control}
-                                {...register("status", {
+                                {...register("role", {
                                     // required: "Full name is required",
                                 })}
                                 render={({ field }) => (
                                     <Select
                                         styles={customSelectStyles}
                                         {...field}
-                                        options={status}
+                                        options={role}
                                         isClearable={true}
                                         isDisabled={
                                             type == "detail" ? true : false
                                         }
                                     />
                                 )}
+                            /> */}
+                            <input
+                                className={`input ${
+                                    type == "detail" ? "disabled" : ""
+                                }`}
+                                disabled={type == "detail" ? true : false}
+                                {...register("role", {
+                                    required: "Number phone is required",
+                                })}
                             />
-                            {errors.status?.type && (
+                            {errors.role?.type && (
                                 <p className=" text-normal text-red-500">
-                                    {errors.status?.message}
+                                    {errors.role?.message}
                                 </p>
                             )}
                         </div>
                     </div>
-                    <div className="row flex justify-center items-center gap-2">
+
+                    {/* <div className="row flex justify-center items-center gap-2">
                         <div className="col w-full">
                             <label className="labelInput">Permissions</label>
                             <Controller
@@ -654,21 +557,8 @@ const AddLecturer = ({ type }, params) => {
                                     />
                                 )}
                             />
-                            {/* <input className="input disabled:bg-whiteColor" disabled defaultValue={} /> */}
-                            {/* <Select
-                            styles={customSelectStylesMulti}
-                            isRtl={isRtl}
-                            defaultValue={defaultSelect}
-                            isMulti
-                            name="colors"
-                            isClearable={false}
-                            isDisabled={true}
-                            options={permissions}
-                            className="basic-multi-select "
-                            classNamePrefix="select"
-                        /> */}
                         </div>
-                    </div>
+                    </div> */}
                     {/* code, roleId, departmentId, permissions */}
 
                     <ButtonConfirm type={type} />
@@ -687,4 +577,4 @@ const AddLecturer = ({ type }, params) => {
     );
 };
 
-export default AddLecturer;
+export default AddLecturerAdvisor;

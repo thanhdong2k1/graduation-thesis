@@ -20,17 +20,16 @@ import {
 import ButtonConfirm from "../../../components/button/ButtonConfirm";
 import { useParams } from "react-router-dom";
 
-const AddThesisSession = ({ type }, params) => {
+const AddTopicStudent = ({ type }, params) => {
     let { id } = useParams();
     console.log("type", type, id);
 
     const currentUser = useSelector((state) => state.auth.currentUser);
     const dispatch = useDispatch();
     let axiosJWT = createAxios(currentUser, dispatch, logginSuccess);
-    const evaluationMethods = useSelector(
-        (state) => state.admin.evaluationMethods
-    );
-    let codeEvaluationMethod = evaluationMethods.map((v) => {
+    const status = useSelector((state) => state.admin.handle);
+    const departments = useSelector((state) => state.admin.departments);
+    let codeDepartments = departments.map((v) => {
         return { value: v.id, label: `${v.id} | ${v.name}` };
     });
     const [isRtl, setIsRtl] = useState(false);
@@ -46,27 +45,12 @@ const AddThesisSession = ({ type }, params) => {
     } = useForm();
     const onSubmit = async (data) => {
         const id = toast.loading("Please wait...");
-        // console.log(
-        //     new Date(getValues("startDate")).toLocaleDateString("vi-VN")
-        // );
-
-        let startDate =
-            data.startDate && new Date(data.startDate).toLocaleString("vi-VN");
-        let endDate =
-            data.endDate && new Date(data.endDate).toLocaleString("vi-VN");
-
-        console.log("startDate,endDate", startDate, endDate);
-        const datasend = {
-            ...data,
-            startDate: startDate,
-            endDate: endDate,
-        };
         console.log(data);
         type == "add"
             ? await apiAdmin
-                  .apiAddThesisSession({
+                  .apiAddTopic({
                       user: currentUser,
-                      data: datasend,
+                      data: data,
                       axiosJWT: axiosJWT,
                   })
                   .then((res) => {
@@ -90,7 +74,7 @@ const AddThesisSession = ({ type }, params) => {
                               autoClose: 1500,
                               pauseOnFocusLoss: true,
                           });
-                          setValue("evaluationMethod", "");
+                          setValue("department", "");
                           setValue("status", "");
                           reset();
                       }
@@ -107,9 +91,9 @@ const AddThesisSession = ({ type }, params) => {
                       });
                   })
             : await apiAdmin
-                  .apiUpdateThesisSession({
+                  .apiUpdateTopic({
                       user: currentUser,
-                      data: datasend,
+                      data: data,
                       axiosJWT: axiosJWT,
                   })
                   .then((res) => {
@@ -133,7 +117,7 @@ const AddThesisSession = ({ type }, params) => {
                               autoClose: 1500,
                               pauseOnFocusLoss: true,
                           });
-                          //   setValue("evaluationMethod", "");
+                          //   setValue("department", "");
                           //   setValue("status", "");
                           //   reset();
                       }
@@ -150,16 +134,16 @@ const AddThesisSession = ({ type }, params) => {
                       });
                   });
     };
-
     useEffect(() => {
-        apiAdmin.getAllEvaluationMethods({
-            user: currentUser,
-            dispatch: dispatch,
-            axiosJWT: axiosJWT,
-        });
+        // apiAdmin.apiGetHandle(currentUser, dispatch, axiosJWT);
+        // apiAdmin.getAllDepartments({
+        //     user: currentUser,
+        //     dispatch: dispatch,
+        //     axiosJWT: axiosJWT,
+        // });
         if (id) {
             apiAdmin
-                .getThesisSessionById({
+                .getTopicById({
                     user: currentUser,
                     id: id,
                     axiosJWT: axiosJWT,
@@ -179,18 +163,8 @@ const AddThesisSession = ({ type }, params) => {
                         setValue("id", res?.result?.id);
                         setValue("name", res?.result?.name);
                         setValue("description", res?.result?.description);
-                        setValue("startDate", res?.result?.startDate);
-                        setValue("endDate", res?.result?.endDate);
-                        setValue("validPoint", res?.result?.validPoint);
-                        setValue(
-                            "evaluationMethod",
-                            codeEvaluationMethod.filter(
-                                (value) =>
-                                    value?.value ==
-                                    res?.result?.evaluationMethodId
-                            )
-                        );
-                        console.log(getValues());
+                        setValue("department", res?.result?.departmentData?.name);
+                        setValue("status", res?.result?.statusData?.valueVi);
                         toast.update(id, {
                             render: res?.errMessage,
                             type: "success",
@@ -219,7 +193,7 @@ const AddThesisSession = ({ type }, params) => {
     return (
         <div className="changeInformationDiv flex flex-col justify-center items-center gap-2">
             <div className=" font-semibold text-h1FontSize">
-                {type=="add"?"Thêm":"Sửa"} khóa luận
+                {type=="add"?"Thêm":"Sửa"} đề tài
             </div>
             <form
                 onSubmit={handleSubmit(onSubmit)}
@@ -289,129 +263,73 @@ const AddThesisSession = ({ type }, params) => {
 
                 <div className="row flex justify-center items-center gap-2">
                     <div className="col w-full">
-                        <label className="labelInput">EvaluationMethod</label>
-                        <Controller
-                            name="evaluationMethod"
+                        <label className="labelInput">Department</label>
+                        {/* <Controller
+                            name="department"
                             control={control}
-                            {...register("evaluationMethod", {
+                            {...register("department", {
                                 // required: "Full name is required",
                             })}
                             render={({ field }) => (
                                 <Select
                                     styles={customSelectStyles}
                                     {...field}
-                                    options={codeEvaluationMethod}
+                                    options={codeDepartments}
                                     isClearable={true}
                                     isDisabled={type == "detail" ? true : false}
                                 />
                             )}
-                        />
-                        {errors.evaluationMethod?.type && (
-                            <p className=" text-normal text-red-500">
-                                {errors.evaluationMethod?.message}
-                            </p>
-                        )}
-                    </div>
-                    <div className="col w-full">
-                        <label className="labelInput">Valid point</label>
+                        /> */}
                         <input
                             className={`input ${
                                 type == "detail" ? "disabled" : ""
                             }`}
-                            type="number"
-                            step="0.1"
                             disabled={type == "detail" ? true : false}
-                            {...register("validPoint", {
-                                required: "Valid point is required",
+                            {...register("department", {
+                                required: "Number phone is required",
                             })}
                         />
-                        {errors.validPoint?.type && (
+                        {errors.department?.type && (
                             <p className=" text-normal text-red-500">
-                                {errors.validPoint?.message}
+                                {errors.department?.message}
+                            </p>
+                        )}
+                    </div>
+                    <div className="col w-full">
+                        <label className="labelInput">Status</label>
+                        {/* <Controller
+                            name="status"
+                            control={control}
+                            {...register("status", {
+                                // required: "Full name is required",
+                            })}
+                            render={({ field }) => (
+                                <Select
+                                    styles={customSelectStyles}
+                                    {...field}
+                                    options={status}
+                                    isClearable={true}
+                                    isDisabled={type == "detail" ? true : false}
+                                />
+                            )}
+                        /> */}
+                        <input
+                            className={`input ${
+                                type == "detail" ? "disabled" : ""
+                            }`}
+                            disabled={type == "detail" ? true : false}
+                            {...register("status", {
+                                required: "Number phone is required",
+                            })}
+                        />
+                        {errors.status?.type && (
+                            <p className=" text-normal text-red-500">
+                                {errors.status?.message}
                             </p>
                         )}
                     </div>
                 </div>
-
-                <div className="row flex justify-center items-center gap-2">
-                    <div className="col w-full flex flex-col">
-                        <label className="labelInput">Start date</label>
-                        <Controller
-                            name="startDate"
-                            control={control}
-                            {...register("startDate", {
-                                // required: "Full name is required",
-                            })}
-                            render={({ field: { onChange, value } }) => (
-                                <DatePicker
-                                    className={`input ${
-                                        type == "detail" ? "disabled" : ""
-                                    }`}
-                                    disabled={type == "detail" ? true : false}
-                                    dateFormat="H:mm dd/MM/yyyy"
-                                    timeInputLabel="Time:"
-                                    showTimeInput
-                                    selected={
-                                        value
-                                            ? new Date(
-                                                  moment(
-                                                      value,
-                                                      "H:mm DD/MM/YYYY"
-                                                  ).toString()
-                                              )
-                                            : null
-                                    }
-                                    // closeOnScroll={true}
-                                    onChange={onChange}
-                                />
-                            )}
-                        />
-                        {errors.startDate?.type && (
-                            <p className=" text-normal text-red-500">
-                                {errors.startDate?.message}
-                            </p>
-                        )}
-                    </div>
-                    <div className="col w-full flex flex-col">
-                        <label className="labelInput">End date</label>
-                        <Controller
-                            name="endDate"
-                            control={control}
-                            {...register("endDate", {
-                                // required: "Full name is required",
-                            })}
-                            render={({ field: { onChange, value } }) => (
-                                <DatePicker
-                                    className={`input ${
-                                        type == "detail" ? "disabled" : ""
-                                    }`}
-                                    disabled={type == "detail" ? true : false}
-                                    dateFormat="H:mm dd/MM/yyyy"
-                                    timeInputLabel="Time:"
-                                    showTimeInput
-                                    selected={
-                                        value
-                                            ? new Date(
-                                                  moment(
-                                                      value,
-                                                      "H:mm DD/MM/YYYY"
-                                                  ).toString()
-                                              )
-                                            : null
-                                    }
-                                    // closeOnScroll={true}
-                                    onChange={onChange}
-                                />
-                            )}
-                        />
-                        {errors.endDate?.type && (
-                            <p className=" text-normal text-red-500">
-                                {errors.endDate?.message}
-                            </p>
-                        )}
-                    </div>
-                </div>
-                {/* code, roleId, evaluationMethodId, permissions */}
+                {/* code, roleId, departmentId, permissions */}
 
                 <ButtonConfirm type={type} />
             </form>
@@ -419,4 +337,4 @@ const AddThesisSession = ({ type }, params) => {
     );
 };
 
-export default AddThesisSession;
+export default AddTopicStudent;

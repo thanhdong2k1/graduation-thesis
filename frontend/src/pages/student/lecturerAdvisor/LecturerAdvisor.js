@@ -1,10 +1,11 @@
 import { Link, useNavigate } from "react-router-dom";
-import { apiAdmin } from "../../../redux/apiRequest";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import {
+    actionsCustom,
     actionsDetail,
     actionsEdit,
+    actionsRegister,
     actionsRemove,
 } from "../../../utils/actionsTable";
 import Table from "../../../components/table/Table";
@@ -18,16 +19,18 @@ import {
 import { createAxios } from "../../../utils/createInstance";
 import { logginSuccess } from "../../../redux/authSlice";
 import ModalPopup from "../../../components/ModelPopup/ModalPopup";
+import { apiStudent } from "../../../redux/apiRequest";
 
-const Student = () => {
+const LecturerAdvisor = () => {
     const dispatch = useDispatch();
     const navigate = useNavigate();
-    const students = useSelector((state) => state.admin.students);
-    const totalRecords = useSelector((state) => state.admin.totalRecords);
+    const lecturers = useSelector((state) => state.student.lecturers);
+    const totalRecords = useSelector((state) => state.student.totalRecords);
     const currentUser = useSelector((state) => state.auth.currentUser);
+    const information = useSelector((state) => state.student.information);
     let axiosJWT = createAxios(currentUser, dispatch, logginSuccess);
 
-    console.log("students", students);
+    console.log("lecturers", lecturers);
     const [defineTable, setDefineTable] = useState({
         inputSearch: "",
         filterSearch: "",
@@ -42,7 +45,7 @@ const Student = () => {
 
     // Handle
     const handleAdd = () => {
-        navigate(`../${pathRoutes.R1.addStudent}`, { replace: true });
+        navigate(`../${pathRoutes.R1.addLecturer}`, { replace: true });
     };
     const handleImport = () => {
         console.log("handleImport");
@@ -51,26 +54,88 @@ const Student = () => {
         console.log("handleExport");
     };
     const handleEdit = (data) => {
-        navigate(`../${pathRoutes.R1.updateStudent}/${data.id}`, {
+        navigate(`../${pathRoutes.R1.updateLecturer}/${data.id}`, {
             replace: true,
         });
     };
     const handleDetail = (data) => {
-        navigate(`../${pathRoutes.R1.studentDetail}/${data.id}`, {
+        navigate(`../${pathRoutes.R1.lecturerDetail}/${data.id}`, {
             replace: true,
         });
     };
 
-    const onDelete = (data) => {
-        console.log("onDelete", data);
+    const handleDelete = (data) => {
+        console.log("handleDelete", data);
         setShowModal(true);
         setResult(data);
     };
 
-    const handleDelete = async () => {
+    const handleRegister = async (data) => {
         const id = toast.loading("Please wait...");
-        await apiAdmin
-            .apiDeleteStudent({
+        await apiStudent
+            .apiRegisterAdvisor({
+                user: currentUser,
+                id: data.id,
+                axiosJWT: axiosJWT,
+            })
+            .then((res) => {
+                if (res?.errCode == 0) {
+                    // console.log(res);
+                    toast.update(id, {
+                        render: res?.errMessage,
+                        type: "success",
+                        isLoading: false,
+                        closeButton: true,
+                        autoClose: 1500,
+                        pauseOnFocusLoss: true,
+                    });
+                    // reset();
+                    apiStudent.getAllLecturers({
+                        user: currentUser,
+                        majorId: information?.classData?.majorId,
+                        inputSearch: defineTable.inputSearch,
+                        filterSearch: defineTable.filterSearch,
+                        dispatch: dispatch,
+                        axiosJWT: axiosJWT,
+                    });
+                } else if (res?.errCode > 0) {
+                    // console.log(res);
+                    toast.update(id, {
+                        render: res?.errMessage,
+                        type: "error",
+                        isLoading: false,
+                        closeButton: true,
+                        autoClose: 1500,
+                        pauseOnFocusLoss: true,
+                    });
+                } else if (res?.errCode < 0) {
+                    toast.update(id, {
+                        render: "Dữ liệu lỗi, vui lòng kiểm tra lại dữ liệu",
+                        type: "error",
+                        isLoading: false,
+                        closeButton: true,
+                        autoClose: 1500,
+                        pauseOnFocusLoss: true,
+                    });
+                }
+            })
+            .catch((err) => {
+                console.log(err);
+                toast.update(id, {
+                    render: "Đã xảy ra lỗi, vui lòng thử lại sau",
+                    type: "error",
+                    isLoading: false,
+                    closeButton: true,
+                    autoClose: 1500,
+                    pauseOnFocusLoss: true,
+                });
+            });
+    };
+
+    const onDelete = async () => {
+        const id = toast.loading("Please wait...");
+        await apiStudent
+            .apiDeleteLecturer({
                 user: currentUser,
                 data: result,
                 axiosJWT: axiosJWT,
@@ -87,8 +152,9 @@ const Student = () => {
                         pauseOnFocusLoss: true,
                     });
                     // reset();
-                    apiAdmin.getAllStudents({
+                    apiStudent.getAllLecturers({
                         user: currentUser,
+                        majorId: information?.classData?.majorId,
                         inputSearch: defineTable.inputSearch,
                         filterSearch: defineTable.filterSearch,
                         dispatch: dispatch,
@@ -145,8 +211,8 @@ const Student = () => {
         // });
         // console.log("convertImport", convertImport);
         // console.log("convertImport", data);
-        await apiAdmin
-            .importStudents({
+        await apiStudent
+            .importLecturers({
                 user: currentUser,
                 data: data,
                 axiosJWT: axiosJWT,
@@ -163,7 +229,7 @@ const Student = () => {
                         pauseOnFocusLoss: true,
                     });
                     // reset();
-                    apiAdmin.getAllStudents({
+                    apiStudent.getAllLecturers({
                         user: currentUser,
                         inputSearch: defineTable.inputSearch,
                         filterSearch: defineTable.filterSearch,
@@ -227,13 +293,13 @@ const Student = () => {
             column: "id",
         },
         {
-            header: "Mã sinh viên",
+            header: "Mã giảng viên",
             width: "w-[250px]",
             maxWidth: "max-w-[250px]",
             column: "code",
         },
         {
-            header: "Tên sinh viên",
+            header: "Tên giảng viên",
             width: "w-[300px]",
             maxWidth: "max-w-[300px]",
             column: "fullName",
@@ -277,7 +343,7 @@ const Student = () => {
             maxWidth: "max-w-[300px]",
             columnData: "roleData.valueVi",
             column: "roleId",
-            // hide: true,
+            hide: true,
         },
         {
             header: "Giới tính",
@@ -288,22 +354,23 @@ const Student = () => {
             // hide: true,
         },
         {
-            header: "Lớp",
+            header: "Khoa",
             width: "w-[300px]",
             maxWidth: "max-w-[300px]",
-            columnData: "classData.name",
-            column: "classId",
-            // hide: true,
+            columnData: "departmentData.name",
+            column: "departmentId",
+            hide: true,
         },
         {
-            header: "Trạng thái",
+            header: "Đăng ký",
             width: "w-[300px]",
             maxWidth: "max-w-[300px]",
-            columnData: "statusData.valueVi",
-            column: "statusId",
+            // columnData: "statusData.valueVi",
+            // column: "statusId",
             // hide: true,
+            customContent: true,
             isStatus: true,
-            // actions: actionsDetail(handleDetail),
+            actions: [actionsCustom(handleRegister,"Đăng ký")],
         },
         {
             header: "Hành động",
@@ -314,7 +381,7 @@ const Student = () => {
                     ? [
                           actionsDetail(handleDetail),
                           actionsEdit(handleEdit),
-                          actionsRemove(onDelete),
+                          actionsRemove(handleDelete),
                       ]
                     : [
                           actionsDetail(handleDetail),
@@ -325,7 +392,7 @@ const Student = () => {
                               currentUser?.permissions
                                   ?.split(",")
                                   ?.includes("PERD")) &&
-                              actionsRemove(onDelete),
+                              actionsRemove(handleDelete),
                       ],
         },
     ];
@@ -337,8 +404,10 @@ const Student = () => {
             inputSearch: "",
             isSearched: false,
         }));
-        apiAdmin.getAllStudents({
+        console.log(information);
+        apiStudent.getAllLecturers({
             user: currentUser,
+            majorId: information?.classData?.majorId,
             inputSearch: defineTable.inputSearch,
             filterSearch: defineTable.filterSearch,
             dispatch: dispatch,
@@ -348,8 +417,9 @@ const Student = () => {
 
     useEffect(() => {
         // console.log("inputSearch", defineTable.inputSearch);
-        apiAdmin.getAllStudents({
+        apiStudent.getAllLecturers({
             user: currentUser,
+            majorId: information?.classData?.majorId,
             inputSearch: defineTable.inputSearch,
             filterSearch: defineTable.filterSearch,
             dispatch: dispatch,
@@ -367,7 +437,7 @@ const Student = () => {
             ...prevState,
             currentPage: 1,
         }));
-        // apiAdmin.getAllStudents(
+        // apiStudent.getAllLecturers(
         //     defineTable.inputSearch,
         //     (defineTable.currentPage - 1) * defineTable.limit,
         //     defineTable.limit,
@@ -375,57 +445,10 @@ const Student = () => {
         // );
     }, [defineTable.limit]);
 
-    // useEffect(() => {
-    //     console.log("currentpage effect");
-    //     apiAdmin.getAllStudents(
-    //         defineTable.inputSearch,
-    //         (defineTable.currentPage - 1) * defineTable.limit,
-    //         defineTable.limit,
-    //         dispatch
-    //     );
-    // }, [defineTable.currentPage]);
-
-    // const [isRtl, setIsRtl] = useState(false);
-    // const colourOptions = [
-    //     {
-    //         value: "F",
-    //         label: "Nữ",
-    //     },
-    //     {
-    //         value: "M",
-    //         label: "Nam",
-    //     },
-    //     {
-    //         value: "O",
-    //         label: "Khác",
-    //     },
-    // ];
-
-    // const gender = useSelector((state) => state.admin.gender);
-    // const handleChangeLimit = (e) => {
-    //     // console.log(e);
-    //     const permissions = [];
-    //     e.map((obj) => {
-    //         console.log(obj.value);
-    //         permissions.push(obj.value);
-    //     });
-
-    //     // console.log(permissions.toString(), permissions.toString().split(","));
-
-    //     const convert = [];
-    //     const array = permissions.toString().split(",");
-    //     gender.map((obj) => {
-    //         console.log(obj);
-    //         if (array.includes(obj.value)) {
-    //             convert.push(obj);
-    //         }
-    //     });
-    //     console.log(convert, convert);
-    // };
     return (
         <>
             {/* <div>
-                <div>Hello Student</div>
+                <div>Hello Lecturer</div>
                 <Link to={"1"}>Detail 1</Link>
                 <Select
                     styles={customSelectStylesMulti}
@@ -441,15 +464,15 @@ const Student = () => {
                     }}
                 />
             </div> */}
-            <div>
+            {/* <div>
                 <ModalPopup
                     title={"Xác nhận xóa"}
                     showModal={showModal}
                     setShowModal={setShowModal}
                     result={result}
-                    setResult={handleDelete}
+                    setResult={onDelete}
                 />
-            </div>
+            </div> */}
             <div>
                 <Table
                     handleAdd={handleAdd}
@@ -459,7 +482,7 @@ const Student = () => {
                     defineTable={defineTable}
                     setDefineTable={setDefineTable}
                     tableData={tableData}
-                    datas={students}
+                    datas={lecturers}
                     totalRecords={totalRecords}
                     functionsModule={true}
                 />
@@ -468,4 +491,4 @@ const Student = () => {
     );
 };
 
-export default Student;
+export default LecturerAdvisor;

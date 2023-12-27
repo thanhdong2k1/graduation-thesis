@@ -11,7 +11,7 @@ import "react-datepicker/dist/react-datepicker.css";
 import moment from "moment/moment";
 import { createAxios } from "../../../utils/createInstance";
 import { logginSuccess } from "../../../redux/authSlice";
-import { apiAdmin } from "../../../redux/apiRequest";
+import { apiAdmin, apiLecturer } from "../../../redux/apiRequest";
 import ModalPopup from "../../../components/ModelPopup/ModalPopup";
 import {
     customSelectStyles,
@@ -23,9 +23,10 @@ import { TbTablePlus } from "react-icons/tb";
 import { MdAdd } from "react-icons/md";
 import { HiArrowDown, HiArrowUp } from "react-icons/hi";
 
-const AddEvaluationMethod = ({ type }, params) => {
-    let { id } = useParams();
-    console.log("type", type, id);
+const MarkEvaluationMethod = ({ type }) => {
+    // let { id } = useParams();
+    let { thesisSessionId, coundilId, thesisId } = useParams();
+    console.log("type", type, coundilId, thesisId);
 
     const currentUser = useSelector((state) => state.auth.currentUser);
     const dispatch = useDispatch();
@@ -138,56 +139,18 @@ const AddEvaluationMethod = ({ type }, params) => {
                   });
     };
     useEffect(() => {
-        if (id) {
-            apiAdmin
-                .getEvaluationMethodById({
-                    user: currentUser,
-                    id: id,
-                    axiosJWT: axiosJWT,
-                })
-                .then((res) => {
-                    if (res?.errCode > 0) {
-                        toast.update(id, {
-                            render: res?.errMessage,
-                            type: "error",
-                            isLoading: false,
-                            closeButton: true,
-                            autoClose: 1500,
-                            pauseOnFocusLoss: true,
-                        });
-                    } else {
-                        console.log(res);
-                        setValue("id", res?.result?.id);
-                        setValue("name", res?.result?.name);
-                        toast.update(id, {
-                            render: res?.errMessage,
-                            type: "success",
-                            isLoading: false,
-                            closeButton: true,
-                            autoClose: 1500,
-                            pauseOnFocusLoss: true,
-                        });
-                        // reset();
-                    }
-                })
-                .catch((error) => {
-                    // console.log(error);
-                    toast.update(id, {
-                        render: "Đã xảy ra lỗi, vui lòng thử lại sau",
-                        type: "error",
-                        isLoading: false,
-                        closeButton: true,
-                        autoClose: 1500,
-                        pauseOnFocusLoss: true,
-                    });
-                });
+        console.log("thesisSessionId", thesisSessionId);
+        if (thesisSessionId) {
             async function fetchData() {
                 try {
-                    const response = await apiAdmin.getAllEvaluationCriterias({
-                        user: currentUser,
-                        id: id,
-                        axiosJWT: axiosJWT,
-                    });
+                    const response =
+                        await apiLecturer.getEvaluationCriteriaByThesisSessionId(
+                            {
+                                user: currentUser,
+                                id: thesisSessionId,
+                                axiosJWT: axiosJWT,
+                            }
+                        );
                     console.log(response);
                     setCriterias(response.result);
                 } catch (e) {
@@ -202,66 +165,13 @@ const AddEvaluationMethod = ({ type }, params) => {
 
     const [totalScore, setTotalScore] = useState(0);
 
-    const addItem = (level) => {
-        setCriterias([
-            ...criterias,
-            {
-                level,
-                title: "",
-                weight: level == 1 ? "0" : "",
-                order: criterias.length + 1,
-            },
-        ]);
-        console.log(criterias);
-    };
-
-    const removeItem = (index) => {
-        const updatedItems = [...criterias];
-        updatedItems.splice(index, 1);
-        setCriterias(updatedItems);
-    };
-
-    const moveUpItem = (index) => {
-        if (index > 0) {
-            const updatedItems = [...criterias];
-            const currentItem = updatedItems[index];
-            const previousItem = updatedItems[index - 1];
-
-            // Swap the order values
-            currentItem.order = previousItem.order;
-            previousItem.order = currentItem.order + 1;
-
-            // Swap the criterias in the array
-            updatedItems[index] = previousItem;
-            updatedItems[index - 1] = currentItem;
-
-            setCriterias(updatedItems);
-        }
-    };
-    const moveDownItem = (index) => {
-        if (index < criterias.length - 1) {
-            const updatedItems = [...criterias];
-            const currentItem = updatedItems[index];
-            const nextItem = updatedItems[index + 1];
-
-            // Swap the order values
-            currentItem.order = nextItem.order;
-            nextItem.order = currentItem.order - 1;
-
-            // Swap the criterias in the array
-            updatedItems[index] = nextItem;
-            updatedItems[index + 1] = currentItem;
-
-            setCriterias(updatedItems);
-        }
-    };
-
     const updateItem = (index, field, value) => {
         const updatedItems = [...criterias];
         updatedItems[index][field] = value;
         updatedItems[index][field] = value;
         setCriterias(updatedItems);
     };
+
     useEffect(() => {
         // const isLengthColumn = criterias.length;
         // const isFilled = criterias.filter(
@@ -274,23 +184,23 @@ const AddEvaluationMethod = ({ type }, params) => {
         // console.log(isLengthColumn, isFilled);
         let total = 0;
         criterias.map((item) => {
-            total = total + +item.weight;
+            item.weight >= 1
+                ? (total += +item.mark ? +item.mark * (item.weight / 10) : 0)
+                : (total += +item.mark ? +item.mark * item.weight : 0);
         });
         // setTotalScore(total);
-        setValue("total",total);
+        setValue("total", total);
         console.log(criterias, total);
     }, [criterias]);
 
     return (
         <div className="changeInformationDiv flex flex-col justify-center items-center gap-2">
-            <div className=" font-semibold text-h1FontSize">
-                {type=="add"?"Thêm":"Sửa"} phương pháp đánh giá
-            </div>
+            <div className=" font-semibold text-h1FontSize">Chấm điểm</div>
             <form
                 onSubmit={handleSubmit(onSubmit)}
                 className="formDiv flex flex-col gap-2  media-min-md:w-[80%]"
             >
-                <div className="row flex justify-center items-center gap-2">
+                {/* <div className="row flex justify-center items-center gap-2">
                     <div className="col w-1/5">
                         <label className="labelInput">ID</label>
                         <input
@@ -323,119 +233,118 @@ const AddEvaluationMethod = ({ type }, params) => {
                             </p>
                         )}
                     </div>
-                </div>
+                </div> */}
                 {criterias &&
                     criterias?.map((item, index) => (
                         <div
                             className="row flex justify-center items-center gap-2"
                             key={index}
                         >
-                            <div className="col w-1/3">
+                            <div className="col w-full">
                                 <div className="row flex justify-center items-center gap-2">
                                     {index != 0 && item.level == "2" && (
-                                        <div className="col w-full media-max-md:w-1/4"></div>
+                                        <div className="col w-1/4 media-max-md:w-1/4"></div>
                                     )}
                                     <div className="col w-full">
                                         {index == 0 && (
                                             <label className="labelInput">
-                                                ID
+                                                Tiêu chí đánh giá
                                             </label>
                                         )}
                                         <input
-                                            className="input disabled"
+                                            className={`input ${
+                                                type == "detail"
+                                                    ? "disabled"
+                                                    : ""
+                                            }`}
                                             disabled
-                                            value={item?.id}
-                                            // {...register("idCriteria", {
-                                            //     // required: "Full name is required",
+                                            // {...register("nameCriteria", {
+                                            //     required: "Name is required",
                                             // })}
+                                            value={item.name}
                                         />
                                     </div>
-                                    {/* {errors.idCriteria?.type && (
-                                    <p className=" text-normal text-red-500">
-                                        {errors.idCriteria?.message}
-                                    </p>
-                                )} */}
+                                    {errors.idCriteria?.type && (
+                                        <p className=" text-normal text-red-500">
+                                            {errors.idCriteria?.message}
+                                        </p>
+                                    )}
                                 </div>
                             </div>
-                            <div className="col w-3/4 media-min-md:w-full">
-                                {index == 0 && (
-                                    <label className="labelInput">
-                                        Name Criteria
-                                    </label>
-                                )}
-                                <input
-                                    className={`input ${
-                                        type == "detail" ? "disabled" : ""
-                                    }`}
-                                    disabled={type == "detail" ? true : false}
-                                    // {...register("nameCriteria", {
-                                    //     required: "Name is required",
-                                    // })}
-                                    value={item.name}
-                                    onChange={(e) =>
-                                        updateItem(
-                                            index,
-                                            "name",
-                                            e.target.value
-                                        )
-                                    }
-                                />
-                                {/* {errors.nameCriteria?.type && (
-                                <p className=" text-normal text-red-500">
-                                    {errors.nameCriteria?.message}
-                                </p>
-                            )} */}
-                            </div>
-                            <div className="col w-full media-min-md:w-1/2">
+                            <div className="col w-1/5 media-min-md:w-1/2">
                                 {index == 0 && (
                                     <>
                                         <label className="labelInput flex justify-between">
-                                            <span>Weight Criteria</span>
+                                            <span>Trọng số</span>
                                             {/* <span>Total: {totalScore}</span> */}
                                         </label>
                                     </>
                                 )}
 
                                 <div className="flex flex-row gap-2">
-                                    <input
-                                        className={`input ${
-                                            type == "detail" ? "disabled" : ""
-                                        }`}
-                                        type="number"
-                                        step={0.1}
-                                        disabled={
-                                            type == "detail" ? true : false
-                                        }
-                                        // {...register("weightCriteria", {
-                                        //     required: "Name is required",
-                                        // })}
-                                        value={item.weight}
-                                        onChange={(e) =>
-                                            updateItem(
-                                                index,
-                                                "weight",
-                                                e.target.value
-                                            )
-                                        }
-                                    />
-                                    <div
-                                        className="button"
-                                        onClick={() => moveUpItem(index)}
-                                    >
-                                        <HiArrowUp className="hover:text-PrimaryColor" />
-                                    </div>
-                                    <div
-                                        className="button"
-                                        onClick={() => moveDownItem(index)}
-                                    >
-                                        <HiArrowDown className="hover:text-PrimaryColor" />
-                                    </div>
-                                    <div
-                                        className="button"
-                                        onClick={() => removeItem(index)}
-                                    >
-                                        <FaRegTrashAlt className="hover:text-PrimaryColor" />
-                                    </div>
+                                    {item.weight && item.weight != 0 && (
+                                        <input
+                                            className={`input ${
+                                                type == "detail"
+                                                    ? "disabled"
+                                                    : ""
+                                            }`}
+                                            type="number"
+                                            step={0.1}
+                                            disabled
+                                            // {...register("weightCriteria", {
+                                            //     required: "Name is required",
+                                            // })}
+                                            value={item.weight}
+                                        />
+                                    )}
+                                </div>
+                                {/* {errors.weightCriteria?.type && (
+                                <p className=" text-normal text-red-500">
+                                    {errors.weightCriteria?.message}
+                                </p>
+                            )} */}
+                            </div>
+                            <div className="col w-1/5 media-min-md:w-1/2">
+                                {index == 0 && (
+                                    <>
+                                        <label className="labelInput flex justify-between">
+                                            <span>Điểm</span>
+                                            {/* <span>Total: {totalScore}</span> */}
+                                        </label>
+                                    </>
+                                )}
+
+                                <div className="flex flex-row gap-2">
+                                    {item.weight && item.weight != 0 && (
+                                        <input
+                                            className={`input ${
+                                                type == "detail"
+                                                    ? "disabled"
+                                                    : ""
+                                            }`}
+                                            type="number"
+                                            step={0.1}
+                                            max={10}
+                                            min={0}
+                                            disabled={
+                                                !item.weight || item.weight == 0
+                                                    ? true
+                                                    : false
+                                            }
+                                            // {...register("weightCriteria", {
+                                            //     required: "Name is required",
+                                            // })}
+                                            value={item.mark}
+                                            onChange={(e) =>
+                                                updateItem(
+                                                    index,
+                                                    "mark",
+                                                    e.target.value
+                                                )
+                                            }
+                                        />
+                                    )}
                                 </div>
                                 {/* {errors.weightCriteria?.type && (
                                 <p className=" text-normal text-red-500">
@@ -449,18 +358,22 @@ const AddEvaluationMethod = ({ type }, params) => {
                     <div className="col w-full"></div>
                     <div className="col w-full">
                         <label className="labelInput flex justify-end">
-                            Total Weight
+                            Tổng điểm
                         </label>
                     </div>
                     <div className="col w-full">
                         <input
                             className={`input disabled`}
                             type="number"
-                            disabled={true}
+                            // max={10}
+                            // min={0}
                             {...register("total", {
                                 validate: (value) => {
-                                    return value == "10" || "The total weight must be 1 or 10!";
-                                  }
+                                    return (
+                                        (value <= "10" && value >= "0") ||
+                                        "Tổng điểm phải lớn hơn 0 bé hơn 10!"
+                                    );
+                                },
                             })}
                             // value={totalScore}
                         />
@@ -469,16 +382,6 @@ const AddEvaluationMethod = ({ type }, params) => {
                                 {errors.total?.message}
                             </p>
                         )}
-                    </div>
-                </div>
-                <div className="flex justify-end items-center gap-2">
-                    <div className="button gap-1" onClick={() => addItem(1)}>
-                        <MdAdd className="" />
-                        <span>Big Criteria</span>
-                    </div>
-                    <div className="button gap-1" onClick={() => addItem(2)}>
-                        <MdAdd className="" />
-                        <span>Small Criteria</span>
                     </div>
                 </div>
                 {/* <button onClick={handleSubmit}>Submit</button> */}
@@ -538,4 +441,4 @@ const AddEvaluationMethod = ({ type }, params) => {
     );
 };
 
-export default AddEvaluationMethod;
+export default MarkEvaluationMethod;

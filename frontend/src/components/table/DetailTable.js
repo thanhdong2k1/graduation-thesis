@@ -51,6 +51,43 @@ const DetailTable = ({ tableData, datas }) => {
     //     });
     // });
 
+//     datas?.map((data) => {
+//         tableData?.map((table, indexTable) => {
+//             if (!table?.actions) {
+//                 console.log(
+//                     "data map",
+//                     // table?.columnData
+//                     //     ? data[table?.columnData?.split(".")[0]][
+//                     //           table?.columnData?.split(".")[1]
+//                     //       ]
+//                     //     : data[table?.column]
+
+//                     // table?.columnData?.split(".")[1]
+
+// //                     table?.columnData
+// // ?data[table?.columnData?.split(".")[0]][table?.columnData?.split(".")[1]][table?.columnData?.split(".")[2]][table?.columnData?.split(".")[3]]
+// // 	?data[table?.columnData?.split(".")[0]][table?.columnData?.split(".")[1]][table?.columnData?.split(".")[2]][table?.columnData?.split(".")[3]]
+// // 	:data[table?.columnData?.split(".")[0]][table?.columnData?.split(".")[1]][table?.columnData?.split(".")[2]]
+// // 		?data[table?.columnData?.split(".")[0]][table?.columnData?.split(".")[1]][table?.columnData?.split(".")[2]]
+// // 		:data[table?.columnData?.split(".")[0]][table?.columnData?.split(".")[1]]
+// // 		: data[table?.column]
+
+//                     data[table?.columnData?.split(".")[0]][table?.columnData?.split(".")[1]][table?.columnData?.split(".")[2]][table?.columnData?.split(".")[3]]
+//                 );
+//             } else {
+//                 // console.log(
+//                 //     "data map",
+//                 //     table
+//                 //     // ? data[table?.columnData?.split(".")[0]][
+//                 //     //       table?.columnData?.split(".")[1]
+//                 //     //   ]
+//                 //     // : data[table?.column]
+//                 //     // table?.columnData?.split(".")[1]
+//                 // );
+//             }
+//         });
+//     });
+
     // datas?.map((data) => {
     //     tableData?.map((table, indexTable) => {
     //         // console.log("data, table", data, typeof data[table?.column] === 'object'?data[table?.column]?.valueVi:data[table?.column]);
@@ -159,7 +196,7 @@ const DetailTable = ({ tableData, datas }) => {
                     </tr>
                 </thead>
                 <tbody className="relative">
-                    {datas?.length > 0 ? (
+                    {datas && datas?.length > 0 ? (
                         datas?.map((data, indexData) => (
                             <tr
                                 className={`${
@@ -175,86 +212,154 @@ const DetailTable = ({ tableData, datas }) => {
                                     (table, indexTable) =>
                                         !table?.hide &&
                                         (!table?.actions ? (
-                                            <td
-                                                className={`${
-                                                    indexData != datas?.length
-                                                        ? "border-r"
-                                                        : ""
-                                                } whitespace-nowrap px-2 py-1 ${
-                                                    table?.width
-                                                } ${table?.maxWidth}
-                                                ${
-                                                    table?.isCenter
-                                                        ? "text-center"
-                                                        : ""
-                                                } ${
-                                                    table?.isRight
-                                                        ? "text-right"
-                                                        : ""
-                                                } ${
-                                                    table?.isCenter
-                                                        ? "text-center"
-                                                        : ""
-                                                } ${
-                                                    table?.isRight
-                                                        ? "text-right"
-                                                        : ""
-                                                }  overflow-hidden text-ellipsis group`}
-                                            >
-                                                {data[table?.columnData]
-                                                    ? data[table?.columnData]
-                                                          ?.valueVi
-                                                        ? `${
-                                                              data[
-                                                                  table
-                                                                      ?.columnData
-                                                              ]?.code
-                                                          } | ${
-                                                              data[
-                                                                  table
-                                                                      ?.columnData
-                                                              ]?.valueVi
-                                                          }`
-                                                        : data[
-                                                              table?.columnData
-                                                          ]?.name
-                                                        ? `${
-                                                              data[
-                                                                  table
-                                                                      ?.columnData
-                                                              ]?.id
-                                                          } | ${
-                                                              data[
-                                                                  table
-                                                                      ?.columnData
-                                                              ]?.name
-                                                          }`
-                                                        : data[
-                                                              table?.columnData
-                                                          ]?.fullName
-                                                        ? `${
-                                                              data[
-                                                                  table
-                                                                      ?.columnData
-                                                              ]?.id
-                                                          } | ${
-                                                              data[
-                                                                  table
-                                                                      ?.columnData
-                                                              ]?.fullName
-                                                          }`
-                                                        : null
-                                                    : data[table?.column]}
-
-                                                {table?.tooltip && (
+                                            table?.isStatus ? (
+                                                <td
+                                                    className={`${
+                                                        indexData !=
+                                                        datas?.length
+                                                            ? "border-r"
+                                                            : ""
+                                                    } whitespace-nowrap px-2 py-1 ${
+                                                        table?.width
+                                                    } ${
+                                                        table?.maxWidth
+                                                    }
+                                                    ${
+                                                        table?.isCenter
+                                                            ? "text-center"
+                                                            : ""
+                                                    } ${
+                                                        table?.isRight
+                                                            ? "text-right"
+                                                            : ""
+                                                    } ${
+                                                        table?.isCenter
+                                                            ? "text-center"
+                                                            : ""
+                                                    } ${
+                                                        table?.isRight
+                                                            ? "text-right"
+                                                            : ""
+                                                    } text-center overflow-hidden text-ellipsis group`}
+                                                >
                                                     <span
-                                                        className={`hidden no-underline group-hover:block group-hover:absolute -translate-y-[200%] text-whiteColor bg-textColor shadow-lg p-1 z-10 rounded-lg text-smallestFontSize whitespace-break-spaces`}
+                                                        className={`buttonTable ${
+                                                            data[
+                                                                table?.column
+                                                            ] == "H1"
+                                                                ? "bg-inputColor"
+                                                                : data[
+                                                                      table
+                                                                          ?.column
+                                                                  ] == "H2"
+                                                                ? "bg-amber-300"
+                                                                : data[
+                                                                      table
+                                                                          ?.column
+                                                                  ] == "H3" ||
+                                                                  data[
+                                                                      table
+                                                                          ?.column
+                                                                  ] == "S1" ||
+                                                                  data[
+                                                                      table
+                                                                          ?.column
+                                                                  ] == "RS1"
+                                                                ? "bg-emerald-300"
+                                                                : data[
+                                                                      table
+                                                                          ?.column
+                                                                  ] == "H4" ||
+                                                                  data[
+                                                                      table
+                                                                          ?.column
+                                                                  ] == "S0" ||
+                                                                  data[
+                                                                      table
+                                                                          ?.column
+                                                                  ] == "RS0"
+                                                                ? "bg-red-300"
+                                                                : ""
+                                                        }`}
+                                                        onClick={() => {
+                                                            table.actions?.handle(
+                                                                data
+                                                            );
+                                                        }}
                                                     >
-                                                        {/* {data[table?.column]} */}
+                                                        {table?.columnData
+                                                            ? data[
+                                                                  table?.columnData?.split(
+                                                                      "."
+                                                                  )[0]
+                                                              ][
+                                                                  table?.columnData?.split(
+                                                                      "."
+                                                                  )[1]
+                                                              ]
+                                                            : data[
+                                                                  table?.column
+                                                              ]}
                                                     </span>
-                                                )}
-                                            </td>
-                                        ) : table.column && table.actions ? (
+
+                                                    {table?.tooltip && (
+                                                        <span
+                                                            className={`hidden no-underline group-hover:block group-hover:absolute -translate-y-[200%] text-whiteColor bg-textColor shadow-lg p-1 z-10 rounded-lg text-smallestFontSize whitespace-break-spaces`}
+                                                        >
+                                                            {/* {data[table?.column]} */}
+                                                        </span>
+                                                    )}
+                                                </td>
+                                            ) : (
+                                                <td
+                                                    className={`${
+                                                        indexData !=
+                                                        datas?.length
+                                                            ? "border-r"
+                                                            : ""
+                                                    } whitespace-nowrap px-2 py-1 ${
+                                                        table?.width
+                                                    } ${table?.maxWidth}
+                                                    ${
+                                                        table?.isCenter
+                                                            ? "text-center"
+                                                            : ""
+                                                    } ${
+                                                        table?.isRight
+                                                            ? "text-right"
+                                                            : ""
+                                                    } ${
+                                                        table?.isCenter
+                                                            ? "text-center"
+                                                            : ""
+                                                    } ${
+                                                        table?.isRight
+                                                            ? "text-right"
+                                                            : ""
+                                                    }  overflow-hidden text-ellipsis group`}
+                                                >
+                                                    {table?.columnData
+                                                        ? data[
+                                                              table?.columnData?.split(
+                                                                  "."
+                                                              )[0]
+                                                          ][
+                                                              table?.columnData?.split(
+                                                                  "."
+                                                              )[1]
+                                                          ]
+                                                        : data[table?.column]}
+                                                    {table?.tooltip && (
+                                                        <span
+                                                            className={`hidden no-underline group-hover:block group-hover:absolute -translate-y-[200%] text-whiteColor bg-textColor shadow-lg p-1 z-10 rounded-lg text-smallestFontSize whitespace-break-spaces`}
+                                                        >
+                                                            {/* {data[table?.column]} */}
+                                                        </span>
+                                                    )}
+                                                </td>
+                                            )
+                                        ) : table.customContent &&
+                                          table.actions ? (
                                             <td
                                                 className={`${
                                                     indexData != datas?.length
@@ -264,133 +369,52 @@ const DetailTable = ({ tableData, datas }) => {
                                                     table?.width
                                                 } ${
                                                     table?.maxWidth
+                                                } ${
+                                                    table?.isCenter
+                                                        ? "text-center"
+                                                        : ""
+                                                } ${
+                                                    table?.isRight
+                                                        ? "text-right"
+                                                        : ""
+                                                } ${
+                                                    table?.isCenter
+                                                        ? "text-center"
+                                                        : ""
+                                                } ${
+                                                    table?.isRight
+                                                        ? "text-right"
+                                                        : ""
                                                 } text-center overflow-hidden text-ellipsis group`}
                                             >
-                                                <span
-                                                    className={`buttonTable ${
-                                                        data[table?.column] ==
-                                                        "H1"
-                                                            ? "bg-inputColor"
-                                                            : data[
-                                                                  table?.column
-                                                              ] == "H2"
-                                                            ? "bg-amber-300"
-                                                            : data[
-                                                                  table?.column
-                                                              ] == "H3" ||
-                                                              data[
-                                                                  table?.column
-                                                              ] == "S1" ||
-                                                              data[
-                                                                  table?.column
-                                                              ] == "RS1"
-                                                            ? "bg-emerald-300"
-                                                            : data[
-                                                                  table?.column
-                                                              ] == "H4" ||
-                                                              data[
-                                                                  table?.column
-                                                              ] == "S0" ||
-                                                              data[
-                                                                  table?.column
-                                                              ] == "RS0"
-                                                            ? "bg-red-300"
-                                                            : ""
-                                                    }`}
-                                                    onClick={() => {
-                                                        table.actions?.handle(
-                                                            data
-                                                        );
-                                                    }}
-                                                >
-                                                    {/* {data[table?.columnData]
-                                                        ? data[
-                                                              table?.columnData
-                                                          ]?.valueVi
-                                                            ? `${
-                                                                  data[
+                                                {table?.actions?.map(
+                                                    (action) => (
+                                                        <span
+                                                            className={`buttonTable ${action?.color}`}
+                                                            onClick={() => {
+                                                                action?.handle(
+                                                                    data
+                                                                );
+                                                            }}
+                                                        >
+                                                            {table?.columnData
+                                                                ? data[
+                                                                      table?.columnData?.split(
+                                                                          "."
+                                                                      )[0]
+                                                                  ][
+                                                                      table?.columnData?.split(
+                                                                          "."
+                                                                      )[1]
+                                                                  ]
+                                                                : table.column
+                                                                ? data[
                                                                       table
-                                                                          ?.columnData
-                                                                  ]?.code
-                                                              } | ${
-                                                                  data[
-                                                                      table
-                                                                          ?.columnData
-                                                                  ]?.valueVi
-                                                              }`
-                                                            : data[
-                                                                  table
-                                                                      ?.columnData
-                                                              ]?.name
-                                                            ? `${
-                                                                  data[
-                                                                      table
-                                                                          ?.columnData
-                                                                  ]?.id
-                                                              } | ${
-                                                                  data[
-                                                                      table
-                                                                          ?.columnData
-                                                                  ]?.name
-                                                              }`
-                                                            : data[
-                                                                  table
-                                                                      ?.columnData
-                                                              ]?.fullName
-                                                            ? `${
-                                                                  data[
-                                                                      table
-                                                                          ?.columnData
-                                                                  ]?.id
-                                                              } | ${
-                                                                  data[
-                                                                      table
-                                                                          ?.columnData
-                                                                  ]?.fullName
-                                                              }`
-                                                            : null
-                                                        : data[table?.column]} */}
-
-                                                    {data[table?.columnData]
-                                                        ? data[
-                                                              table?.columnData
-                                                          ]?.valueVi
-                                                            ? `${
-                                                                  data[
-                                                                      table
-                                                                          ?.columnData
-                                                                  ]?.valueVi
-                                                              }`
-                                                            : data[
-                                                                  table
-                                                                      ?.columnData
-                                                              ]?.name
-                                                            ? `${
-                                                                  data[
-                                                                      table
-                                                                          ?.columnData
-                                                                  ]?.name
-                                                              }`
-                                                            : data[
-                                                                  table
-                                                                      ?.columnData
-                                                              ]?.fullName
-                                                            ? `${
-                                                                  data[
-                                                                      table
-                                                                          ?.columnData
-                                                                  ]?.fullName
-                                                              }`
-                                                            : null
-                                                        : data[table?.column]}
-                                                </span>
-
-                                                {table?.tooltip && (
-                                                    <span
-                                                        className={`hidden no-underline group-hover:block group-hover:absolute -translate-y-[200%] text-whiteColor bg-textColor shadow-lg p-1 z-10 rounded-lg text-smallestFontSize whitespace-break-spaces`}
-                                                    >
-                                                        {/* {data[table?.column]} */}
-                                                    </span>
+                                                                          ?.column
+                                                                  ]
+                                                                : action?.content}
+                                                        </span>
+                                                    )
                                                 )}
                                             </td>
                                         ) : (
@@ -419,7 +443,7 @@ const DetailTable = ({ tableData, datas }) => {
                                                         </span>
                                                     ) : currentUser?.permissions ? (
                                                         currentUser?.permissions
-                                                            .split(",")
+                                                            ?.split(",")
                                                             .includes(
                                                                 "PERF"
                                                             ) ? (
@@ -559,8 +583,7 @@ const DetailTable = ({ tableData, datas }) => {
                                 ) : error ? (
                                     <>
                                         <span>
-                                            Có lỗi, kiểm tra kết nối mạng và thử
-                                            lại sau
+                                            Đã xảy ra lỗi, vui lòng thử lại sau!
                                         </span>
                                     </>
                                 ) : (

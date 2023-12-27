@@ -350,8 +350,8 @@ const AddStudent = ({ type }) => {
     return (
         <>
             <div className="changeInformationDiv flex flex-col justify-center items-center gap-2">
-                <div className="capitalize font-semibold text-h1FontSize">
-                    {type} Student
+                <div className=" font-semibold text-h1FontSize">
+                    {type=="add"?"Thêm":"Sửa"} sinh viên
                 </div>
                 <form
                     onSubmit={handleSubmit(onSubmit)}

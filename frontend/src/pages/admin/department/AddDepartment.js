@@ -44,13 +44,17 @@ const AddDepartment = ({ type }, params) => {
     } = useForm();
     const onSubmit = async (data) => {
         const id = toast.loading("Please wait...");
+
+        let founding = data.founding && new Date(data.founding).toLocaleDateString("vi-VN");
+
+        console.log(founding);
+
         const datasend = {
             ...data,
-            founding: new Date(
-                moment(data.founding, "DD/MM/YYYY")
-            ).toLocaleDateString("vi-VN"),
+            founding: founding,
         };
         console.log(datasend);
+
         type == "add"
             ? await apiAdmin
                   .apiAddDepartment({
@@ -167,6 +171,10 @@ const AddDepartment = ({ type }, params) => {
                         setValue("name", res?.result?.name);
                         setValue("description", res?.result?.description);
                         setValue("founding", res?.result?.founding);
+                        console.log(
+                            "res?.result?.founding",
+                            res?.result?.founding
+                        );
                         setValue(
                             "dean",
                             codeDean.filter(
@@ -200,8 +208,8 @@ const AddDepartment = ({ type }, params) => {
 
     return (
         <div className="changeInformationDiv flex flex-col justify-center items-center gap-2">
-            <div className="capitalize font-semibold text-h1FontSize">
-                {type} Department
+            <div className=" font-semibold text-h1FontSize">
+                {type=="add"?"Thêm":"Sửa"} khoa
             </div>
             <form
                 onSubmit={handleSubmit(onSubmit)}

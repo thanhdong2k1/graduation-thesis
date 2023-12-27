@@ -78,6 +78,9 @@ module.exports = (sequelize, DataTypes) => {
         targetKey: "code",
         as: "roleData",
       });
+      Lecturer.hasMany(models.CouncilDetail, {
+        foreignKey: "lecturerId",
+      });
     }
   }
   Lecturer.init(
