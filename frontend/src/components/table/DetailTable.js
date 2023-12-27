@@ -338,7 +338,7 @@ const DetailTable = ({ tableData, datas }) => {
                                                             : ""
                                                     }  overflow-hidden text-ellipsis group`}
                                                 >
-                                                    {table?.columnData
+                                                    {table?.columnData && table?.columnData
                                                         ? data[
                                                               table?.columnData?.split(
                                                                   "."

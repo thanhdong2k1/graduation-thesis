@@ -217,7 +217,7 @@ const AddClass = ({ type }, params) => {
                 className="formDiv flex flex-col gap-2  media-min-md:w-[80%]"
             >
                 <div className="row flex justify-center items-center gap-2">
-                    <div className="col w-1/5">
+                    {/* <div className="col w-1/5">
                         <label className="labelInput">ID</label>
                         <input
                             className="input disabled"
@@ -231,9 +231,9 @@ const AddClass = ({ type }, params) => {
                                 {errors.id?.message}
                             </p>
                         )}
-                    </div>
+                    </div> */}
                     <div className="col w-full">
-                        <label className="labelInput">Name</label>
+                        <label className="labelInput">Tên</label>
                         <input
                             className={`input ${
                                 type == "detail" ? "disabled" : ""
@@ -252,7 +252,7 @@ const AddClass = ({ type }, params) => {
                 </div>
                 <div className="row flex justify-center items-center gap-2">
                     <div className="col w-full">
-                        <label className="labelInput">Description</label>
+                        <label className="labelInput">Mô tả</label>
                         <textarea
                             className={`resize-none input ${
                                 type == "detail" ? "disabled" : ""
@@ -280,7 +280,7 @@ const AddClass = ({ type }, params) => {
 
                 <div className="row flex justify-center items-center gap-2">
                     <div className="col w-full">
-                        <label className="labelInput">Block</label>
+                        <label className="labelInput">Khối</label>
                         <Controller
                             name="block"
                             control={control}
@@ -288,7 +288,7 @@ const AddClass = ({ type }, params) => {
                                 // required: "Full name is required",
                             })}
                             render={({ field }) => (
-                                <Select
+                                <Select placeholder="Chọn..."
                                     styles={customSelectStyles}
                                     {...field}
                                     options={codeBlock}
@@ -304,7 +304,7 @@ const AddClass = ({ type }, params) => {
                         )}
                     </div>
                     <div className="col w-full">
-                        <label className="labelInput">Major</label>
+                        <label className="labelInput">Ngành</label>
                         <Controller
                             name="major"
                             control={control}
@@ -312,7 +312,7 @@ const AddClass = ({ type }, params) => {
                                 // required: "Full name is required",
                             })}
                             render={({ field }) => (
-                                <Select
+                                <Select placeholder="Chọn..."
                                     styles={customSelectStyles}
                                     {...field}
                                     options={codeMajor}

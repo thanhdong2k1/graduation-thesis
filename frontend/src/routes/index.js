@@ -146,7 +146,7 @@ export const routes = [
             // Major
             {
                 //   icon: <HomeIcon {...icon} />,
-                name: "Chuyên ngành",
+                name: "Ngành",
                 path: pathRoutes.R1.major,
                 element: <Major />,
             },

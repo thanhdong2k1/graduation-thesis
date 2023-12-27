@@ -24,7 +24,7 @@ const ButtonConfirm = ({ type }) => {
     // );
     return (
         <div className="flex justify-center">
-            <div className="listButton flex justify-evenly items-center w-[50%] media-max-md:w-[70%]">
+            <div className="listButton flex justify-evenly items-center w-[50%] media-max-md:w-[75%]">
                 {arrPath.length == 1 && (
                     <Link
                         to={`/${arrPath[0]}`}

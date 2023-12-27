@@ -28,8 +28,8 @@ const TopHome = () => {
                     />
                 </div>
                 <div className="textDiv basis-3/4 font-bold media-max-lg:font-semibold">
-                    <div className="text-biggestFontSize media-max-lg:text-h3FontSize">
-                        TRƯỜNG ĐẠI HỌC THỦY LỢI
+                    <div className="text-biggestFontSize media-max-lg:text-h3FontSize media-max-sm:text-smallFontSize">
+                        PHÂN HIỆU TRƯỜNG ĐẠI HỌC THỦY LỢI
                     </div>
                     <div className="text-h2FontSize media-max-lg:text-smallestFontSize whitespace-nowrap overflow-hidden">
                         HỆ THỐNG QUẢN LÝ LUẬN VĂN TỐT NGHIỆP

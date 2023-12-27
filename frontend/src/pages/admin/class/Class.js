@@ -233,7 +233,7 @@ const Class = () => {
             // hide: true,
         },
         {
-            header: "Chuyên ngành",
+            header: "Ngành",
             // width: "w-[300px]",
             // maxWidth: "max-w-[300px]",
             column: "majorId",
@@ -362,7 +362,7 @@ const Class = () => {
             {/* <div>
                 <div>Hello Class</div>
                 <Link to={"1"}>Detail 1</Link>
-                <Select
+                <Select placeholder="Chọn..."
                     styles={customSelectStylesMulti}
                     isRtl={isRtl}
                     defaultValue={[colourOptions[1], colourOptions[2]]}

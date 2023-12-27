@@ -359,7 +359,7 @@ const EvaluationMethod = () => {
             {/* <div>
                 <div>Hello EvaluationMethod</div>
                 <Link to={"1"}>Detail 1</Link>
-                <Select
+                <Select placeholder="Chọn..."
                     styles={customSelectStylesMulti}
                     isRtl={isRtl}
                     defaultValue={[colourOptions[1], colourOptions[2]]}

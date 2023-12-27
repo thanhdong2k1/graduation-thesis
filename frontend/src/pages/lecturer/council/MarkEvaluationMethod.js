@@ -217,7 +217,7 @@ const MarkEvaluationMethod = ({ type }) => {
                         )}
                     </div>
                     <div className="col w-full">
-                        <label className="labelInput">Name</label>
+                        <label className="labelInput">Tên</label>
                         <input
                             className={`input ${
                                 type == "detail" ? "disabled" : ""

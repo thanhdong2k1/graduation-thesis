@@ -49,7 +49,7 @@ const authController = {
       if (!req.body.email || !req.body.password) {
         return res
           .status(401)
-          .json({ errCode: -1, message: "Missing inputs parameter!" });
+          .json({ errCode: -1, message: "Thiếu tham số đầu vào!" });
       }
       //   findOne
       let user = await db.Lecturer.findOne({
@@ -95,12 +95,12 @@ const authController = {
         } else {
           return res
             .status(200)
-            .json({ errCode: 1, errMessage: "Wrong password" });
+            .json({ errCode: 1, errMessage: "Sai mật khẩu" });
         }
       } else {
         return res.status(404).json({
           errCode: 2,
-          errMessage: `Your's Email isn't exist in the system. Plz try other email`,
+          errMessage: `Email của bạn không tồn tại trong hệ thống. Vui lòng thử email khác!`,
         });
       }
     } catch (error) {
@@ -114,14 +114,14 @@ const authController = {
     const refreshToken = req.cookies.refreshToken;
     // console.log("check refresh refreshTokens:", refreshToken, refreshTokens);
 
-    if (!refreshToken) return res.status(401).json("You're not authenticated");
+    if (!refreshToken) return res.status(401).json("Bạn chưa được xác thực, vui lòng đăng nhập!");
     if (!refreshTokens.includes(refreshToken)) {
-      return res.status(403).json("Refresh token is not invalid");
+      return res.status(403).json("Mã thông báo làm mới không hợp lệ!");
     }
     // console.log(2, refreshTokens.includes(refreshToken));
     jwt.verify(refreshToken, process.env.JWT_REFRESH_KEY, (err, user) => {
       if (err) {
-        return res.status(403).json("Token is not valid");
+        return res.status(403).json("Mã thông báo không hợp lệ!");
       }
       delete user.exp;
       delete user.iat;
@@ -144,7 +144,7 @@ const authController = {
       (token) => token !== req.cookies.refreshToken
     );
     res.clearCookie("refreshToken");
-    return res.status(200).json("Logout is successfully");
+    return res.status(200).json("Đăng xuất thành công.");
   },
 };
 module.exports = authController;
@@ -202,7 +202,7 @@ module.exports = authController;
 //       if (!req?.body?.email || !req?.body?.password) {
 //         return res
 //           .status(401)
-//           .json({ errCode: -1, message: "Missing inputs parameter!" });
+//           .json({ errCode: -1, message: "Thiếu tham số đầu vào!" });
 //       }
 //       //   findOne
 //       let user = await db.Lecturer.findOne({
@@ -263,12 +263,12 @@ module.exports = authController;
 //         } else {
 //           return res
 //             .status(200)
-//             .json({ errCode: 1, errMessage: "Wrong password" });
+//             .json({ errCode: 1, errMessage: "Sai mật khẩu" });
 //         }
 //       } else {
 //         return res.status(404).json({
 //           errCode: 2,
-//           errMessage: `Your's Email isn't exist in the system. Plz try other email`,
+//           errMessage: `Email của bạn không tồn tại trong hệ thống. Vui lòng thử email khác!`,
 //         });
 //       }
 //     } catch (error) {
@@ -283,7 +283,7 @@ module.exports = authController;
 //     // console.log("check refresh refreshTokens:", refreshToken, refreshTokens);
 //     console.log("check refresh refreshTokens:",refreshToken)
 
-//     if (!refreshToken) return res.status(401).json("You're not authenticated");
+//     if (!refreshToken) return res.status(401).json("Bạn chưa được xác thực, vui lòng đăng nhập!");
 
 //     let isRole = "";
 //     let user = null;
@@ -301,12 +301,12 @@ module.exports = authController;
 //     console.log("user",user)
 //     console.log("đã tới",user.refreshToken,refreshToken)
 //     if (user && user.refreshToken != refreshToken) {
-//       return res.status(403).json("Refresh token is not invalid");
+//       return res.status(403).json("Mã thông báo làm mới không hợp lệ!");
 //     }
 //     // console.log(2, refreshTokens.includes(refreshToken));
 //     jwt.verify(refreshToken, process.env.JWT_REFRESH_KEY, async(err, user) => {
 //       if (err) {
-//         return res.status(403).json("Token is not valid");
+//         return res.status(403).json("Mã thông báo không hợp lệ!");
 //       }
 //       delete user.exp;
 //       delete user.iat;
@@ -338,7 +338,7 @@ module.exports = authController;
 //       (token) => token !== req?.cookies.refreshToken
 //     );
 //     res.clearCookie("refreshToken");
-//     return res.status(200).json("Logout is successfully");
+//     return res.status(200).json("Đăng xuất thành công.");
 //   },
 // };
 // module.exports = authController;

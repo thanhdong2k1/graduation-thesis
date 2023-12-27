@@ -197,14 +197,14 @@ const AddMajor = ({ type }, params) => {
     return (
         <div className="changeInformationDiv flex flex-col justify-center items-center gap-2">
             <div className=" font-semibold text-h1FontSize">
-                {type=="add"?"Thêm":"Sửa"} chuyên ngành
+                {type=="add"?"Thêm":"Sửa"} ngành
             </div>
             <form
                 onSubmit={handleSubmit(onSubmit)}
                 className="formDiv flex flex-col gap-2  media-min-md:w-[80%]"
             >
                 <div className="row flex justify-center items-center gap-2">
-                    <div className="col w-1/5">
+                    {/* <div className="col w-1/5">
                         <label className="labelInput">ID</label>
                         <input
                             className="input disabled"
@@ -218,9 +218,9 @@ const AddMajor = ({ type }, params) => {
                                 {errors.id?.message}
                             </p>
                         )}
-                    </div>
+                    </div> */}
                     <div className="col w-full">
-                        <label className="labelInput">Name</label>
+                        <label className="labelInput">Tên</label>
                         <input
                             className={`input ${
                                 type == "detail" ? "disabled" : ""
@@ -239,7 +239,7 @@ const AddMajor = ({ type }, params) => {
                 </div>
                 <div className="row flex justify-center items-center gap-2">
                     <div className="col w-full">
-                        <label className="labelInput">Description</label>
+                        <label className="labelInput">Mô tả</label>
                         <textarea
                             className={`resize-none input ${
                                 type == "detail" ? "disabled" : ""
@@ -267,7 +267,7 @@ const AddMajor = ({ type }, params) => {
 
                 <div className="row flex justify-center items-center gap-2">
                     <div className="col w-full">
-                        <label className="labelInput">Department</label>
+                        <label className="labelInput">Khoa</label>
                         <Controller
                             name="department"
                             control={control}
@@ -275,7 +275,7 @@ const AddMajor = ({ type }, params) => {
                                 // required: "Full name is required",
                             })}
                             render={({ field }) => (
-                                <Select
+                                <Select placeholder="Chọn..."
                                     styles={customSelectStyles}
                                     {...field}
                                     options={codeDepartment}

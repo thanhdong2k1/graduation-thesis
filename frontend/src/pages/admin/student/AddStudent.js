@@ -358,7 +358,7 @@ const AddStudent = ({ type }) => {
                     className="formDiv flex flex-col gap-2  media-min-md:w-[80%]"
                 >
                     <div className="row flex justify-center items-center gap-2">
-                        <div className="col w-1/5">
+                        {/* <div className="col w-1/5">
                             <label className="labelInput">ID</label>
                             <input
                                 className="input disabled"
@@ -372,7 +372,7 @@ const AddStudent = ({ type }) => {
                                     {errors.id?.message}
                                 </p>
                             )}
-                        </div>
+                        </div> */}
                         <div className="col w-full">
                             <label className="labelInput">Email</label>
                             <input
@@ -393,7 +393,7 @@ const AddStudent = ({ type }) => {
                     </div>
                     <div className="row flex justify-center items-center gap-2">
                         <div className="col w-full">
-                            <label className="labelInput">Full name</label>
+                            <label className="labelInput">Họ tên</label>
                             <input
                                 className={`input ${
                                     type == "detail" ? "disabled" : ""
@@ -410,7 +410,7 @@ const AddStudent = ({ type }) => {
                             )}
                         </div>
                         <div className="col w-full">
-                            <label className="labelInput">Number phone</label>
+                            <label className="labelInput">Điện thoại</label>
                             <input
                                 className={`input ${
                                     type == "detail" ? "disabled" : ""
@@ -429,7 +429,7 @@ const AddStudent = ({ type }) => {
                     </div>
                     <div className="row flex justify-center items-center gap-2">
                         <div className="col w-full">
-                            <label className="labelInput">Address</label>
+                            <label className="labelInput">Địa chỉ</label>
                             <textarea
                                 className={`resize-none input ${
                                     type == "detail" ? "disabled" : ""
@@ -449,7 +449,7 @@ const AddStudent = ({ type }) => {
 
                     <div className="row flex justify-center items-center gap-2">
                         <div className="col w-full flex flex-col">
-                            <label className="labelInput">Birthday</label>
+                            <label className="labelInput">Ngày sinh</label>
                             <Controller
                                 name="birthday"
                                 control={control}
@@ -487,7 +487,7 @@ const AddStudent = ({ type }) => {
                             )}
                         </div>
                         <div className="col w-full">
-                            <label className="labelInput">Gender</label>
+                            <label className="labelInput">Giới tính</label>
                             <Controller
                                 name="gender"
                                 control={control}
@@ -495,7 +495,7 @@ const AddStudent = ({ type }) => {
                                     // required: "Full name is required",
                                 })}
                                 render={({ field }) => (
-                                    <Select
+                                    <Select placeholder="Chọn..."
                                         styles={customSelectStyles}
                                         {...field}
                                         options={gender}
@@ -517,7 +517,7 @@ const AddStudent = ({ type }) => {
 
                     <div className="row flex justify-center items-center gap-2">
                         <div className="col w-full">
-                            <label className="labelInput">Code</label>
+                            <label className="labelInput">Mã</label>
                             <div className="flex gap-2">
                                 <input
                                     className={`input ${
@@ -545,7 +545,7 @@ const AddStudent = ({ type }) => {
                             </div>
                         </div>
                         <div className="col w-full">
-                            <label className="labelInput">Role</label>
+                            <label className="labelInput">Vai trò</label>
                             <Controller
                                 name="role"
                                 control={control}
@@ -553,7 +553,7 @@ const AddStudent = ({ type }) => {
                                     // required: "Full name is required",
                                 })}
                                 render={({ field }) => (
-                                    <Select
+                                    <Select placeholder="Chọn..."
                                         styles={customSelectStyles}
                                         {...field}
                                         options={role}
@@ -572,7 +572,7 @@ const AddStudent = ({ type }) => {
 
                     <div className="row flex justify-center items-center gap-2">
                         <div className="col w-full">
-                            <label className="labelInput">Class</label>
+                            <label className="labelInput">Lớp</label>
                             <Controller
                                 name="class"
                                 control={control}
@@ -580,7 +580,7 @@ const AddStudent = ({ type }) => {
                                     // required: "Full name is required",
                                 })}
                                 render={({ field }) => (
-                                    <Select
+                                    <Select placeholder="Chọn..."
                                         styles={customSelectStyles}
                                         {...field}
                                         options={codeClass}
@@ -598,7 +598,7 @@ const AddStudent = ({ type }) => {
                             )}
                         </div>
                         <div className="col w-full">
-                            <label className="labelInput">Status</label>
+                            <label className="labelInput">Trạng thái</label>
                             <Controller
                                 name="status"
                                 control={control}
@@ -606,7 +606,7 @@ const AddStudent = ({ type }) => {
                                     // required: "Full name is required",
                                 })}
                                 render={({ field }) => (
-                                    <Select
+                                    <Select placeholder="Chọn..."
                                         styles={customSelectStyles}
                                         {...field}
                                         options={status}
@@ -626,7 +626,7 @@ const AddStudent = ({ type }) => {
                     </div>
                     <div className="row flex justify-center items-center gap-2">
                         <div className="col w-full">
-                            <label className="labelInput">Permissions</label>
+                            <label className="labelInput">Quyền</label>
                             <Controller
                                 name="permissions"
                                 control={control}
@@ -634,7 +634,7 @@ const AddStudent = ({ type }) => {
                                     // required: "Full name is required",
                                 })}
                                 render={({ field }) => (
-                                    <Select
+                                    <Select placeholder="Chọn..."
                                         styles={customSelectStylesMulti}
                                         {...field}
                                         isRtl={isRtl}
@@ -650,7 +650,7 @@ const AddStudent = ({ type }) => {
                                 )}
                             />
                             {/* <input className="input disabled:bg-whiteColor" disabled defaultValue={} /> */}
-                            {/* <Select
+                            {/* <Select placeholder="Chọn..."
                             styles={customSelectStylesMulti}
                             isRtl={isRtl}
                             defaultValue={defaultSelect}

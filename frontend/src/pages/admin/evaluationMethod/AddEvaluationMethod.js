@@ -291,7 +291,7 @@ const AddEvaluationMethod = ({ type }, params) => {
                 className="formDiv flex flex-col gap-2  media-min-md:w-[80%]"
             >
                 <div className="row flex justify-center items-center gap-2">
-                    <div className="col w-1/5">
+                    {/* <div className="col w-1/5">
                         <label className="labelInput">ID</label>
                         <input
                             className="input disabled"
@@ -305,9 +305,9 @@ const AddEvaluationMethod = ({ type }, params) => {
                                 {errors.id?.message}
                             </p>
                         )}
-                    </div>
+                    </div> */}
                     <div className="col w-full">
-                        <label className="labelInput">Name</label>
+                        <label className="labelInput">Tên</label>
                         <input
                             className={`input ${
                                 type == "detail" ? "disabled" : ""
@@ -330,67 +330,42 @@ const AddEvaluationMethod = ({ type }, params) => {
                             className="row flex justify-center items-center gap-2"
                             key={index}
                         >
-                            <div className="col w-1/3">
+                            <div className="col w-full">
                                 <div className="row flex justify-center items-center gap-2">
                                     {index != 0 && item.level == "2" && (
-                                        <div className="col w-full media-max-md:w-1/4"></div>
+                                        <div className="col w-1/4 media-max-md:w-1/4"></div>
                                     )}
                                     <div className="col w-full">
                                         {index == 0 && (
                                             <label className="labelInput">
-                                                ID
+                                                Tiêu chí đánh giá
                                             </label>
                                         )}
                                         <input
-                                            className="input disabled"
+                                            className={`input ${
+                                                type == "detail"
+                                                    ? "disabled"
+                                                    : ""
+                                            }`}
                                             disabled
-                                            value={item?.id}
-                                            // {...register("idCriteria", {
-                                            //     // required: "Full name is required",
+                                            // {...register("nameCriteria", {
+                                            //     required: "Name is required",
                                             // })}
+                                            value={item.name}
                                         />
                                     </div>
-                                    {/* {errors.idCriteria?.type && (
-                                    <p className=" text-normal text-red-500">
-                                        {errors.idCriteria?.message}
-                                    </p>
-                                )} */}
+                                    {errors.idCriteria?.type && (
+                                        <p className=" text-normal text-red-500">
+                                            {errors.idCriteria?.message}
+                                        </p>
+                                    )}
                                 </div>
-                            </div>
-                            <div className="col w-3/4 media-min-md:w-full">
-                                {index == 0 && (
-                                    <label className="labelInput">
-                                        Name Criteria
-                                    </label>
-                                )}
-                                <input
-                                    className={`input ${
-                                        type == "detail" ? "disabled" : ""
-                                    }`}
-                                    disabled={type == "detail" ? true : false}
-                                    // {...register("nameCriteria", {
-                                    //     required: "Name is required",
-                                    // })}
-                                    value={item.name}
-                                    onChange={(e) =>
-                                        updateItem(
-                                            index,
-                                            "name",
-                                            e.target.value
-                                        )
-                                    }
-                                />
-                                {/* {errors.nameCriteria?.type && (
-                                <p className=" text-normal text-red-500">
-                                    {errors.nameCriteria?.message}
-                                </p>
-                            )} */}
                             </div>
                             <div className="col w-full media-min-md:w-1/2">
                                 {index == 0 && (
                                     <>
                                         <label className="labelInput flex justify-between">
-                                            <span>Weight Criteria</span>
+                                            <span>Trọng số</span>
                                             {/* <span>Total: {totalScore}</span> */}
                                         </label>
                                     </>
@@ -449,7 +424,7 @@ const AddEvaluationMethod = ({ type }, params) => {
                     <div className="col w-full"></div>
                     <div className="col w-full">
                         <label className="labelInput flex justify-end">
-                            Total Weight
+                            Tổng trọng số
                         </label>
                     </div>
                     <div className="col w-full">
@@ -474,11 +449,11 @@ const AddEvaluationMethod = ({ type }, params) => {
                 <div className="flex justify-end items-center gap-2">
                     <div className="button gap-1" onClick={() => addItem(1)}>
                         <MdAdd className="" />
-                        <span>Big Criteria</span>
+                        <span>Tiêu chí lớn</span>
                     </div>
                     <div className="button gap-1" onClick={() => addItem(2)}>
                         <MdAdd className="" />
-                        <span>Small Criteria</span>
+                        <span>Tiêu chí nhỏ</span>
                     </div>
                 </div>
                 {/* <button onClick={handleSubmit}>Submit</button> */}

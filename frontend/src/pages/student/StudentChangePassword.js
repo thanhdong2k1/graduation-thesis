@@ -82,7 +82,7 @@ const StudentChangePassword = () => {
         <div className="changePasswordDiv flex justify-center items-center ">
             <form
                 onSubmit={handleSubmit(onSubmit)}
-                className="formDiv flex flex-col gap-2 media-min-md:w-[35%] w-[100%]"
+                className="formDiv flex flex-col gap-2 media-min-md:w-[45%] w-[100%]"
             >
                 {/* <div>
                     <label className="labelInput">

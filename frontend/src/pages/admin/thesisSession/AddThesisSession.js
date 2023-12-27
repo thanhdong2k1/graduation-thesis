@@ -226,7 +226,7 @@ const AddThesisSession = ({ type }, params) => {
                 className="formDiv flex flex-col gap-2  media-min-md:w-[80%]"
             >
                 <div className="row flex justify-center items-center gap-2">
-                    <div className="col w-1/5">
+                    {/* <div className="col w-1/5">
                         <label className="labelInput">ID</label>
                         <input
                             className="input disabled"
@@ -240,9 +240,9 @@ const AddThesisSession = ({ type }, params) => {
                                 {errors.id?.message}
                             </p>
                         )}
-                    </div>
+                    </div> */}
                     <div className="col w-full">
-                        <label className="labelInput">Name</label>
+                        <label className="labelInput">Tên</label>
                         <input
                             className={`input ${
                                 type == "detail" ? "disabled" : ""
@@ -261,7 +261,7 @@ const AddThesisSession = ({ type }, params) => {
                 </div>
                 <div className="row flex justify-center items-center gap-2">
                     <div className="col w-full">
-                        <label className="labelInput">Description</label>
+                        <label className="labelInput">Mô tả</label>
                         <textarea
                             className={`resize-none input ${
                                 type == "detail" ? "disabled" : ""
@@ -289,7 +289,7 @@ const AddThesisSession = ({ type }, params) => {
 
                 <div className="row flex justify-center items-center gap-2">
                     <div className="col w-full">
-                        <label className="labelInput">EvaluationMethod</label>
+                        <label className="labelInput">PP đánh giá</label>
                         <Controller
                             name="evaluationMethod"
                             control={control}
@@ -297,7 +297,7 @@ const AddThesisSession = ({ type }, params) => {
                                 // required: "Full name is required",
                             })}
                             render={({ field }) => (
-                                <Select
+                                <Select placeholder="Chọn..."
                                     styles={customSelectStyles}
                                     {...field}
                                     options={codeEvaluationMethod}
@@ -313,7 +313,7 @@ const AddThesisSession = ({ type }, params) => {
                         )}
                     </div>
                     <div className="col w-full">
-                        <label className="labelInput">Valid point</label>
+                        <label className="labelInput">Điểm chênh lệch</label>
                         <input
                             className={`input ${
                                 type == "detail" ? "disabled" : ""
@@ -335,7 +335,7 @@ const AddThesisSession = ({ type }, params) => {
 
                 <div className="row flex justify-center items-center gap-2">
                     <div className="col w-full flex flex-col">
-                        <label className="labelInput">Start date</label>
+                        <label className="labelInput">Bắt đầu</label>
                         <Controller
                             name="startDate"
                             control={control}
@@ -373,7 +373,7 @@ const AddThesisSession = ({ type }, params) => {
                         )}
                     </div>
                     <div className="col w-full flex flex-col">
-                        <label className="labelInput">End date</label>
+                        <label className="labelInput">Kết thúc</label>
                         <Controller
                             name="endDate"
                             control={control}

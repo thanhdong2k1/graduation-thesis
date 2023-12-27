@@ -353,7 +353,7 @@ const AddCouncil = ({ type }, params) => {
                 className="formDiv flex flex-col gap-2  media-min-md:w-[80%]"
             >
                 <div className="row flex justify-center items-center gap-2">
-                    <div className="col w-1/5">
+                    {/* <div className="col w-1/5">
                         <label className="labelInput">ID</label>
                         <input
                             className="input disabled"
@@ -367,9 +367,9 @@ const AddCouncil = ({ type }, params) => {
                                 {errors.id?.message}
                             </p>
                         )}
-                    </div>
+                    </div> */}
                     <div className="col w-full">
-                        <label className="labelInput">Name</label>
+                        <label className="labelInput">Tên</label>
                         <input
                             className={`input ${
                                 type == "detail" ? "disabled" : ""
@@ -388,7 +388,7 @@ const AddCouncil = ({ type }, params) => {
                 </div>
                 <div className="row flex justify-center items-center gap-2">
                     <div className="col w-full">
-                        <label className="labelInput">Description</label>
+                        <label className="labelInput">Mô tả</label>
                         <textarea
                             className={`resize-none input ${
                                 type == "detail" ? "disabled" : ""
@@ -416,7 +416,7 @@ const AddCouncil = ({ type }, params) => {
 
                 <div className="row flex justify-center items-center gap-2">
                     <div className="col w-full">
-                        <label className="labelInput">Thesis Session</label>
+                        <label className="labelInput">Khóa luận</label>
                         <Controller
                             name="thesisSession"
                             control={control}
@@ -424,7 +424,7 @@ const AddCouncil = ({ type }, params) => {
                                 // required: "Full name is required",
                             })}
                             render={({ field }) => (
-                                <Select
+                                <Select placeholder="Chọn..."
                                     styles={customSelectStyles}
                                     {...field}
                                     options={codeThesisSessions}
@@ -440,7 +440,7 @@ const AddCouncil = ({ type }, params) => {
                         )}
                     </div>
                     <div className="col w-full">
-                        <label className="labelInput">Status</label>
+                        <label className="labelInput">Trạng thái</label>
                         <Controller
                             name="status"
                             control={control}
@@ -448,7 +448,7 @@ const AddCouncil = ({ type }, params) => {
                                 // required: "Full name is required",
                             })}
                             render={({ field }) => (
-                                <Select
+                                <Select placeholder="Chọn..."
                                     styles={customSelectStyles}
                                     {...field}
                                     options={status}
@@ -471,7 +471,7 @@ const AddCouncil = ({ type }, params) => {
                             className="row flex justify-center items-center gap-2"
                             key={index}
                         >
-                            <div className="col w-1/4">
+                            {/* <div className="col w-1/4">
                                 <div className="row flex justify-center items-center gap-2">
                                     <div className="col w-full">
                                         {index == 0 && (
@@ -488,21 +488,21 @@ const AddCouncil = ({ type }, params) => {
                                             // })}
                                         />
                                     </div>
-                                    {/* {errors.idCriteria?.type && (
+                                    {errors.idCriteria?.type && (
                                     <p className=" text-normal text-red-500">
                                         {errors.idCriteria?.message}
                                     </p>
-                                )} */}
+                                )}
                                 </div>
-                            </div>
+                            </div> */}
                             <div className="col w-full">
                                 {index == 0 && (
                                     <label className="labelInput">
-                                        Position
+                                        Chức vụ
                                     </label>
                                 )}
 
-                                <Select
+                                <Select placeholder="Chọn..."
                                     defaultValue={item?.positionId}
                                     styles={customSelectStyles}
                                     options={position}
@@ -527,13 +527,13 @@ const AddCouncil = ({ type }, params) => {
                                 {index == 0 && (
                                     <>
                                         <label className="labelInput flex justify-between">
-                                            <span>Lecturer</span>
+                                            <span>Giảng viên</span>
                                             {/* <span>Total: {totalScore}</span> */}
                                         </label>
                                     </>
                                 )}
                                 <div className="flex flex-row gap-2">
-                                    <Select
+                                    <Select placeholder="Chọn..."
                                         defaultValue={item?.lecturerId}
                                         styles={customSelectStyles}
                                         options={codeLecturers}
@@ -596,7 +596,7 @@ const AddCouncil = ({ type }, params) => {
                             onClick={() => addItemPosition(1)}
                         >
                             <MdAdd className="" />
-                            <span>Add Position</span>
+                            <span>Thêm chức vụ</span>
                         </div>
                     </div>
                 )}
@@ -617,7 +617,7 @@ const AddCouncil = ({ type }, params) => {
                                     </>
                                 )}
                                 <div className="flex flex-row gap-2">
-                                    <Select
+                                    <Select placeholder="Chọn..."
                                         defaultValue={item?.lecturerId}
                                         styles={customSelectStyles}
                                         options={codeTheses}
@@ -680,7 +680,7 @@ const AddCouncil = ({ type }, params) => {
                             onClick={() => addItemThesis(1)}
                         >
                             <MdAdd className="" />
-                            <span>Add Thesis</span>
+                            <span>Thêm đồ án</span>
                         </div>
                     </div>
                 )}

@@ -17,7 +17,7 @@ const middlewareController = {
             .status(403)
             .json({
               errCode: 403,
-              errMessage: "Authentication code is invalid, please log in again",
+              errMessage: "Mã xác thực không hợp lệ, vui lòng đăng nhập lại!",
             });
         }
         console.log("req", req.user);
@@ -29,7 +29,7 @@ const middlewareController = {
         .status(401)
         .json({
           errCode: 401,
-          errMessage: "You're not authenticated, please log in",
+          errMessage: "Bạn chưa được xác thực, vui lòng đăng nhập!",
         });
     }
   },
@@ -48,7 +48,7 @@ const middlewareController = {
           .status(403)
           .json({
             errCode: 403,
-            errMessage: "You're not allowed to import data",
+            errMessage: "Bạn không được phép nhập dữ liệu!",
           });
       }
     });
@@ -68,7 +68,7 @@ const middlewareController = {
           .status(403)
           .json({
             errCode: 403,
-            errMessage: "You're not allowed to create data",
+            errMessage: "Bạn không được phép tạo dữ liệu!",
           });
       }
     });
@@ -86,7 +86,7 @@ const middlewareController = {
       } else {
         return res
           .status(403)
-          .json({ errCode: 403, errMessage: "You're not allowed to view data" });
+          .json({ errCode: 403, errMessage: "Bạn không được phép xem dữ liệu!" });
       }
     });
   },
@@ -104,7 +104,7 @@ const middlewareController = {
           .status(403)
           .json({
             errCode: 403,
-            errMessage: "You're not allowed to update data",
+            errMessage: "Bạn không được phép cập nhật dữ liệu!",
           });
       }
     });
@@ -123,7 +123,7 @@ const middlewareController = {
           .status(403)
           .json({
             errCode: 403,
-            errMessage: "You're not allowed to delete data",
+            errMessage: "Bạn không được phép xóa dữ liệu!",
           });
       }
     });

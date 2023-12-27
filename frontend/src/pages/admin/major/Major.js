@@ -213,13 +213,13 @@ const Major = () => {
             column: "id",
         },
         {
-            header: "Tên chuyên ngành",
+            header: "Tên ngành",
             width: "w-[250px]",
             maxWidth: "max-w-[250px]",
             column: "name",
         },
         {
-            header: "Mô tả chuyên ngành",
+            header: "Mô tả ngành",
             width: "w-[300px]",
             maxWidth: "max-w-[300px]",
             column: "description",
@@ -354,7 +354,7 @@ const Major = () => {
             {/* <div>
                 <div>Hello Major</div>
                 <Link to={"1"}>Detail 1</Link>
-                <Select
+                <Select placeholder="Chọn..."
                     styles={customSelectStylesMulti}
                     isRtl={isRtl}
                     defaultValue={[colourOptions[1], colourOptions[2]]}

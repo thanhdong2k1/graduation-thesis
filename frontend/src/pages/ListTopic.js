@@ -191,7 +191,7 @@ const ListTopic = () => {
                     </div> */}
                     <div class="rounded-lg w-auto">
                         <label htmlFor="example">Khoa</label>
-                        <Select
+                        <Select placeholder="Chọn..."
                             styles={customSelectStyles}
                             className="basic-single media-max-md:text-smallFontSize"
                             classNamePrefix="select"

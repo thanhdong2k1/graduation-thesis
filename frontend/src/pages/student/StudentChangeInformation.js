@@ -266,7 +266,7 @@ const StudentChangeInformation = () => {
                 </div>
                 <div className="row flex justify-center items-center gap-2">
                     <div className="col w-full">
-                        <label className="labelInput">Full name</label>
+                        <label className="labelInput">Họ tên</label>
                         <input
                             className="input"
                             {...register("fullName", {
@@ -280,7 +280,7 @@ const StudentChangeInformation = () => {
                         )}
                     </div>
                     <div className="col w-full">
-                        <label className="labelInput">Number phone</label>
+                        <label className="labelInput">Điện thoại</label>
                         <input
                             className="input"
                             {...register("numberPhone", {
@@ -296,7 +296,7 @@ const StudentChangeInformation = () => {
                 </div>
                 <div className="row flex justify-center items-center gap-2">
                     <div className="col w-full">
-                        <label className="labelInput">Address</label>
+                        <label className="labelInput">Địa chỉ</label>
                         <textarea
                             className="input resize-none"
                             {...register("address", {
@@ -313,7 +313,7 @@ const StudentChangeInformation = () => {
 
                 <div className="row flex justify-center items-center gap-2">
                     <div className="col w-full flex flex-col">
-                        <label className="labelInput">Birthday</label>
+                        <label className="labelInput">Ngày sinh</label>
                         <Controller
                             name="birthday"
                             control={control}
@@ -346,7 +346,7 @@ const StudentChangeInformation = () => {
                         )}
                     </div>
                     <div className="col w-full">
-                        <label className="labelInput">Gender</label>
+                        <label className="labelInput">Giới tính</label>
                         <Controller
                             name="gender"
                             control={control}
@@ -354,7 +354,7 @@ const StudentChangeInformation = () => {
                                 // required: "Full name is required",
                             })}
                             render={({ field }) => (
-                                <Select
+                                <Select placeholder="Chọn..."
                                     styles={customSelectStyles}
                                     {...field}
                                     options={gender}
@@ -373,7 +373,7 @@ const StudentChangeInformation = () => {
 
                 <div className="row flex justify-center items-center gap-2">
                     <div className="col w-full">
-                        <label className="labelInput">Code</label>
+                        <label className="labelInput">Mã</label>
                         <input
                             className="input disabled:bg-whiteColor"
                             disabled
@@ -381,7 +381,7 @@ const StudentChangeInformation = () => {
                         />
                     </div>
                     <div className="col w-full">
-                        <label className="labelInput">Role</label>
+                        <label className="labelInput">Vai trò</label>
                         <input
                             className="input disabled:bg-whiteColor"
                             disabled
@@ -392,7 +392,7 @@ const StudentChangeInformation = () => {
 
                 <div className="row flex justify-center items-center gap-2">
                     <div className="col w-full">
-                        <label className="labelInput">Class</label>
+                        <label className="labelInput">Lớp</label>
                         <input
                             className="input disabled:bg-whiteColor"
                             disabled
@@ -402,7 +402,7 @@ const StudentChangeInformation = () => {
                 </div>
                 <div className="row flex justify-center items-center gap-2">
                     <div className="col w-full">
-                        <label className="labelInput">Permissions</label>
+                        <label className="labelInput">Quyền</label>
                         <Controller
                             name="permissions"
                             control={control}
@@ -410,7 +410,7 @@ const StudentChangeInformation = () => {
                                 // required: "Full name is required",
                             })}
                             render={({ field }) => (
-                                <Select
+                                <Select placeholder="Chọn..."
                                     styles={customSelectStylesMulti}
                                     {...field}
                                     isRtl={isRtl}
@@ -424,7 +424,7 @@ const StudentChangeInformation = () => {
                             )}
                         />
                         {/* <input className="input disabled:bg-whiteColor" disabled defaultValue={} /> */}
-                        {/* <Select
+                        {/* <Select placeholder="Chọn..."
                             styles={customSelectStylesMulti}
                             isRtl={isRtl}
                             defaultValue={defaultSelect}

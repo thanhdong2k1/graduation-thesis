@@ -478,7 +478,7 @@ const Table = ({
                                     />
                                 </div>
                                 <div className="w-[35%]">
-                                    <Select
+                                    <Select placeholder="Chọn..."
                                         styles={customSelectStyles}
                                         className="basic-single media-max-md:text-smallFontSize h-[35px]"
                                         classNamePrefix="select"
@@ -652,7 +652,7 @@ const Table = ({
                 <div className="paginationTableDiv">
                     <div class="flex justify-end text-sm gap-2">
                         <div className="divLimitRows">
-                            <Select
+                            <Select placeholder="Chọn..."
                                 styles={customSelectStyles}
                                 className="basic-single media-max-md:text-smallFontSize h-[35px]"
                                 classNamePrefix="select"

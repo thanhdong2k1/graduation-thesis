@@ -59,14 +59,14 @@ const Sidebar = ({ isShowSidebar, setIsShowSidebar }) => {
                     className="max-w-[35px] p-1 bg-inputColor rounded-lg"
                 />
                 <h2 className="text-h3FontSize font-bold text-PrimaryColor text-center">
-                    Trường Đại học
+                    Phân hiệu Trường 
                     <br />
-                    Thủy Lợi
+                    Đại học Thủy Lợi
                 </h2>
             </div>
             <div className="menuDiv grid gap-4">
                 <h2 className="text-h3FontSize font-bold text-blackColor text-center">
-                    QUICK MENU
+                    MENU NHANH
                 </h2>
                 <ul className="menuLists grid items-center gap-2 px-2 ">
                     {routesAdmin &&

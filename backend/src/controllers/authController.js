@@ -52,7 +52,7 @@ const authController = {
       if (!req?.body?.email || !req?.body?.password) {
         return res
           .status(401)
-          .json({ errCode: -1, message: "Missing inputs parameter!" });
+          .json({ errCode: -1, message: "Thiếu tham số đầu vào!" });
       }
 
       console.log(req.body)
@@ -153,13 +153,13 @@ const authController = {
                   if (updateRefresh) {
                     return res.status(200).json({
                       errCode: 0,
-                      errMessage: "Logged in successfully",
+                      errMessage: "Đăng nhập thành công.",
                       user: { ...userDB, accessToken },
                     });
                   } else {
                     return res.status(200).json({
                       errCode: 3,
-                      errMessage: "Plz try again late!",
+                      errMessage: "Vui lòng thử lại sau!",
                     });
                   }
                 } else {
@@ -174,7 +174,7 @@ const authController = {
                   });
                   return res.status(200).json({
                     errCode: 0,
-                    errMessage: "Logged in successfully",
+                    errMessage: "Đăng nhập thành công.",
                     user: { ...user, accessToken },
                   });
                 }
@@ -204,25 +204,25 @@ const authController = {
             if (updateRefresh) {
               return res.status(200).json({
                 errCode: 0,
-                errMessage: "Logged in successfully",
+                errMessage: "Đăng nhập thành công.",
                 user: { ...userDB, accessToken },
               });
             } else {
               return res.status(200).json({
                 errCode: 3,
-                errMessage: "Plz try again late!",
+                errMessage: "Vui lòng thử lại sau!",
               });
             }
           }
         } else {
           return res
             .status(200)
-            .json({ errCode: 1, errMessage: "Wrong password" });
+            .json({ errCode: 1, errMessage: "Sai mật khẩu!" });
         }
       } else {
         return res.status(404).json({
           errCode: 2,
-          errMessage: `Your's Email isn't exist in the system. Plz try other email`,
+          errMessage: `Email của bạn không tồn tại trong hệ thống. Vui lòng thử email khác!`,
         });
       }
     } catch (error) {
@@ -237,7 +237,7 @@ const authController = {
     // console.log("check refresh refreshTokens:", refreshToken, refreshTokens);
     console.log("check refresh refreshTokens:", refreshToken);
 
-    if (!refreshToken) return res.status(401).json("You're not authenticated");
+    if (!refreshToken) return res.status(401).json("Bạn chưa được xác thực!");
 
     let isRole = "";
     let userDB = null;
@@ -255,12 +255,12 @@ const authController = {
     console.log("userDB", userDB);
     console.log("đã tới", userDB.refreshToken, refreshToken);
     if (userDB && userDB.refreshToken != refreshToken) {
-      return res.status(403).json("Refresh token is not invalid");
+      return res.status(403).json("Mã thông báo làm mới không hợp lệ!");
     }
     // console.log(2, refreshTokens.includes(refreshToken));
     jwt.verify(refreshToken, process.env.JWT_REFRESH_KEY, async (err, user) => {
       if (err) {
-        return res.status(403).json("Token is not valid");
+        return res.status(403).json("Mã thông báo không hợp lệ!");
       }
       delete user.exp;
       delete user.iat;
@@ -294,9 +294,9 @@ const authController = {
     }
     if (userDB) {
       res.clearCookie("refreshToken");
-      return res.status(200).json("Logout is successfully");
+      return res.status(200).json("Đăng xuất thành công.");
     } else {
-      return res.status(400).json("Đã xảy ra lỗi");
+      return res.status(400).json("Đã xảy ra lỗi!");
     }
   },
 };

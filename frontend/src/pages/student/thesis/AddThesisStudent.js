@@ -338,7 +338,7 @@ const AddThesisStudent = ({ type }) => {
                     {/* 
                     <div className="row flex justify-center items-center gap-2">
                         <div className="col w-full">
-                            <label className="labelInput">Full name</label>
+                            <label className="labelInput">Họ tên</label>
                             <input
                                 className={`input ${
                                     type == "detail" ? "disabled" : ""
@@ -355,7 +355,7 @@ const AddThesisStudent = ({ type }) => {
                             )}
                         </div>
                         <div className="col w-full">
-                            <label className="labelInput">Number phone</label>
+                            <label className="labelInput">Điện thoại</label>
                             <input
                                 className={`input ${
                                     type == "detail" ? "disabled" : ""
@@ -374,7 +374,7 @@ const AddThesisStudent = ({ type }) => {
                     </div>
                     <div className="row flex justify-center items-center gap-2">
                         <div className="col w-full">
-                            <label className="labelInput">Address</label>
+                            <label className="labelInput">Địa chỉ</label>
                             <textarea
                                 className={`resize-none input ${
                                     type == "detail" ? "disabled" : ""
@@ -392,7 +392,7 @@ const AddThesisStudent = ({ type }) => {
                         </div>
                     </div> */}
                     <div className="row flex justify-center items-center gap-2">
-                        <div className="col w-1/5">
+                        {/* <div className="col w-1/5">
                             <label className="labelInput">ID</label>
                             <input
                                 className="input disabled"
@@ -406,9 +406,9 @@ const AddThesisStudent = ({ type }) => {
                                     {errors.id?.message}
                                 </p>
                             )}
-                        </div>
+                        </div> */}
                         <div className="col w-3/5">
-                            <label className="labelInput">Total Score</label>
+                            <label className="labelInput">Tổng điểm</label>
                             <input
                                 // className={`input ${
                                 //     type == "detail" ? "disabled" : ""
@@ -429,7 +429,7 @@ const AddThesisStudent = ({ type }) => {
                             )}
                         </div>
                         <div className="col w-full">
-                            <label className="labelInput">Result</label>
+                            <label className="labelInput">Kết quả</label>
                             {/* <Controller
                                 name="result"
                                 control={control}
@@ -437,7 +437,7 @@ const AddThesisStudent = ({ type }) => {
                                     // required: "Full name is required",
                                 })}
                                 render={({ field }) => (
-                                    <Select
+                                    <Select placeholder="Chọn..."
                                         styles={customSelectStyles}
                                         {...field}
                                         // options={results}
@@ -464,7 +464,7 @@ const AddThesisStudent = ({ type }) => {
                     </div>
                     <div className="row flex justify-center items-center gap-2">
                         <div className="col w-full">
-                            <label className="labelInput">Student</label>
+                            <label className="labelInput">Sinh viên</label>
                             {/* <Controller
                                 name="student"
                                 control={control}
@@ -472,7 +472,7 @@ const AddThesisStudent = ({ type }) => {
                                     // required: "Full name is required",
                                 })}
                                 render={({ field }) => (
-                                    <Select
+                                    <Select placeholder="Chọn..."
                                         styles={customSelectStyles}
                                         {...field}
                                         // options={codeStudent}
@@ -499,7 +499,7 @@ const AddThesisStudent = ({ type }) => {
                             )}
                         </div>
                         <div className="col w-full">
-                            <label className="labelInput">Topic</label>
+                            <label className="labelInput">Đề tài</label>
                             {/* <Controller
                                 name="topic"
                                 control={control}
@@ -507,7 +507,7 @@ const AddThesisStudent = ({ type }) => {
                                     // required: "Full name is required",
                                 })}
                                 render={({ field }) => (
-                                    <Select
+                                    <Select placeholder="Chọn..."
                                         styles={customSelectStyles}
                                         {...field}
                                         // options={codeTopic}
@@ -536,7 +536,7 @@ const AddThesisStudent = ({ type }) => {
                     </div>
                     <div className="row flex justify-center items-center gap-2">
                         <div className="col w-full">
-                            <label className="labelInput">Thesis Advisor</label>
+                            <label className="labelInput">Người hướng dẫn</label>
                             {/* <Controller
                                 name="thesisAdvisor"
                                 control={control}
@@ -544,7 +544,7 @@ const AddThesisStudent = ({ type }) => {
                                     // required: "Full name is required",
                                 })}
                                 render={({ field }) => (
-                                    <Select
+                                    <Select placeholder="Chọn..."
                                         styles={customSelectStyles}
                                         {...field}
                                         // options={codeThesisAdvisor}
@@ -571,9 +571,7 @@ const AddThesisStudent = ({ type }) => {
                             )}
                         </div>
                         <div className="col w-full">
-                            <label className="labelInput">
-                                Thesis Advisor Status
-                            </label>
+                            <label className="labelInput">Xác nhận hướng dẫn</label>
                             {/* <Controller
                                 name="thesisAdvisorStatus"
                                 control={control}
@@ -581,7 +579,7 @@ const AddThesisStudent = ({ type }) => {
                                     // required: "Full name is required",
                                 })}
                                 render={({ field }) => (
-                                    <Select
+                                    <Select placeholder="Chọn..."
                                         styles={customSelectStyles}
                                         {...field}
                                         // options={thesisAdvisorStatus}
@@ -621,7 +619,7 @@ const AddThesisStudent = ({ type }) => {
                                 // onChange={importFile}
                             /> */}
                             <label className="labelInput" for="file_input">
-                                Report
+                                Báo cáo
                             </label>
                             <a
                                 className="button"
@@ -630,11 +628,11 @@ const AddThesisStudent = ({ type }) => {
                                 underline="none"
                                 // download
                             >
-                                Download Resume
+                                Tải xuống báo cáo
                             </a>
                         </div>
                         <div className="col w-full">
-                            <label className="labelInput">Thesis Session</label>
+                            <label className="labelInput">Khóa luận</label>
                             {/* <Controller
                                 name="thesisSession"
                                 control={control}
@@ -642,7 +640,7 @@ const AddThesisStudent = ({ type }) => {
                                     // required: "Full name is required",
                                 })}
                                 render={({ field }) => (
-                                    <Select
+                                    <Select placeholder="Chọn..."
                                         styles={customSelectStyles}
                                         {...field}
                                         // options={codeThesisSession}
@@ -671,7 +669,7 @@ const AddThesisStudent = ({ type }) => {
                     </div>
                     <div className="row flex justify-center items-center gap-2">
                         <div className="col w-full">
-                            <label className="labelInput">Council</label>
+                            <label className="labelInput">Hội đồng</label>
                             {/* <Controller
                                 name="council"
                                 control={control}
@@ -679,7 +677,7 @@ const AddThesisStudent = ({ type }) => {
                                     // required: "Full name is required",
                                 })}
                                 render={({ field }) => (
-                                    <Select
+                                    <Select placeholder="Chọn..."
                                         styles={customSelectStyles}
                                         {...field}
                                         // options={codeCouncil}
@@ -706,7 +704,7 @@ const AddThesisStudent = ({ type }) => {
                             )}
                         </div>
                         <div className="col w-full">
-                            <label className="labelInput">Council Status</label>
+                            <label className="labelInput">Trạng thái chấm</label>
                             {/* <Controller
                                 name="councilStatus"
                                 control={control}
@@ -714,7 +712,7 @@ const AddThesisStudent = ({ type }) => {
                                     // required: "Full name is required",
                                 })}
                                 render={({ field }) => (
-                                    <Select
+                                    <Select placeholder="Chọn..."
                                         styles={customSelectStyles}
                                         {...field}
                                         // options={councilStatus}
@@ -743,7 +741,7 @@ const AddThesisStudent = ({ type }) => {
                     </div>
                     <div className="row flex justify-center items-center gap-2">
                         <div className="col w-full flex flex-col">
-                            <label className="labelInput">Start Date</label>
+                            <label className="labelInput">Bắt đầu</label>
                             <Controller
                                 name="startDate"
                                 control={control}
@@ -781,7 +779,7 @@ const AddThesisStudent = ({ type }) => {
                             )}
                         </div>
                         <div className="col w-full flex flex-col">
-                            <label className="labelInput">Complate Date</label>
+                            <label className="labelInput">Hoàn thành</label>
                             <Controller
                                 name="complateDate"
                                 control={control}
@@ -822,7 +820,7 @@ const AddThesisStudent = ({ type }) => {
                     <div className="row flex justify-center items-center gap-2">
                         <div className="col w-full flex flex-col">
                             <label className="labelInput">
-                                Thesis Start Date
+                                Bắt đầu đồ án
                             </label>
                             <Controller
                                 name="thesisStartDate"
@@ -862,7 +860,7 @@ const AddThesisStudent = ({ type }) => {
                         </div>
                         <div className="col w-full flex flex-col">
                             <label className="labelInput">
-                                Thesis End Date
+                                Kết thúc đồ án
                             </label>
                             <Controller
                                 name="thesisEndDate"

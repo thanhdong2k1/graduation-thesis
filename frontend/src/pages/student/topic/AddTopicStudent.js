@@ -200,7 +200,7 @@ const AddTopicStudent = ({ type }, params) => {
                 className="formDiv flex flex-col gap-2  media-min-md:w-[80%]"
             >
                 <div className="row flex justify-center items-center gap-2">
-                    <div className="col w-1/5">
+                    {/* <div className="col w-1/5">
                         <label className="labelInput">ID</label>
                         <input
                             className="input disabled"
@@ -214,9 +214,9 @@ const AddTopicStudent = ({ type }, params) => {
                                 {errors.id?.message}
                             </p>
                         )}
-                    </div>
+                    </div> */}
                     <div className="col w-full">
-                        <label className="labelInput">Name</label>
+                        <label className="labelInput">Tên</label>
                         <input
                             className={`input ${
                                 type == "detail" ? "disabled" : ""
@@ -235,7 +235,7 @@ const AddTopicStudent = ({ type }, params) => {
                 </div>
                 <div className="row flex justify-center items-center gap-2">
                     <div className="col w-full">
-                        <label className="labelInput">Description</label>
+                        <label className="labelInput">Mô tả</label>
                         <textarea
                             className={`resize-none input ${
                                 type == "detail" ? "disabled" : ""
@@ -263,7 +263,7 @@ const AddTopicStudent = ({ type }, params) => {
 
                 <div className="row flex justify-center items-center gap-2">
                     <div className="col w-full">
-                        <label className="labelInput">Department</label>
+                        <label className="labelInput">Khoa</label>
                         {/* <Controller
                             name="department"
                             control={control}
@@ -271,7 +271,7 @@ const AddTopicStudent = ({ type }, params) => {
                                 // required: "Full name is required",
                             })}
                             render={({ field }) => (
-                                <Select
+                                <Select placeholder="Chọn..."
                                     styles={customSelectStyles}
                                     {...field}
                                     options={codeDepartments}
@@ -296,7 +296,7 @@ const AddTopicStudent = ({ type }, params) => {
                         )}
                     </div>
                     <div className="col w-full">
-                        <label className="labelInput">Status</label>
+                        <label className="labelInput">Trạng thái</label>
                         {/* <Controller
                             name="status"
                             control={control}
@@ -304,7 +304,7 @@ const AddTopicStudent = ({ type }, params) => {
                                 // required: "Full name is required",
                             })}
                             render={({ field }) => (
-                                <Select
+                                <Select placeholder="Chọn..."
                                     styles={customSelectStyles}
                                     {...field}
                                     options={status}
