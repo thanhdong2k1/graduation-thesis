@@ -159,7 +159,7 @@ const Table = ({
         );
     }, [tableData]);
     const exportFile = useCallback(() => {
-        console.log("export datasa",datas);
+        console.log("export datasa", datas);
         const convertedItem = [];
         datas.map((item) => {
             const obj = {};
@@ -224,7 +224,7 @@ const Table = ({
         }
     };
     const handleSearch = () => {
-        console.log("Nhấn enter")
+        console.log("Nhấn enter");
         setDefineTable((prevState) => ({
             ...prevState,
             isSearched: true,
@@ -239,17 +239,17 @@ const Table = ({
     };
 
     // fetch onLoad
-    const arrPath = path.pathname
-        .split("/")
-        .splice(1, 2)
-        .filter(
+    const arrPath = path?.pathname
+        ?.split("/")
+        ?.splice(1, 2)
+        ?.filter(
             (value) =>
                 value != pathRoutes.R1.changePassword &&
                 value != pathRoutes.R1.changeInformation
         );
     const nameTable = routes
-        .filter((route) => route?.role == currentUser?.roleId)[0]
-        ?.pages.filter((page) => page.path == arrPath[1])[0]?.name;
+        ?.filter((route) => route?.role == currentUser?.roleId)[0]
+        ?.pages?.filter((page) => page.path == arrPath[1])[0]?.name;
     const tableDataImport = tableData.filter((data) => !data.actions);
     tableDataImport.push({
         header: "Hành động",
@@ -478,7 +478,8 @@ const Table = ({
                                     />
                                 </div>
                                 <div className="w-[35%]">
-                                    <Select placeholder="Chọn..."
+                                    <Select
+                                        placeholder="Chọn..."
                                         styles={customSelectStyles}
                                         className="basic-single media-max-md:text-smallFontSize h-[35px]"
                                         classNamePrefix="select"
@@ -652,7 +653,8 @@ const Table = ({
                 <div className="paginationTableDiv">
                     <div class="flex justify-end text-sm gap-2">
                         <div className="divLimitRows">
-                            <Select placeholder="Chọn..."
+                            <Select
+                                placeholder="Chọn..."
                                 styles={customSelectStyles}
                                 className="basic-single media-max-md:text-smallFontSize h-[35px]"
                                 classNamePrefix="select"

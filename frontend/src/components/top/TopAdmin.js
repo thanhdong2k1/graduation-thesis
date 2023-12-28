@@ -16,7 +16,7 @@ import pathRoutes from "../../utils/pathRoutes";
 const TopAdmin = ({ isShowSidebar, setIsShowSidebar }) => {
     const navigate = useNavigate();
     const path = useLocation();
-    const arrPath = path.pathname.split("/").splice(1, 2);
+    const arrPath = path?.pathname?.split("/")?.splice(1, 2);
     const currentUser = useSelector((state) => state.auth.currentUser);
     const dispatch = useDispatch();
     let axiosJWT = createAxios(currentUser, dispatch, logginSuccess);

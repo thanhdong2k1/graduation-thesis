@@ -4,22 +4,19 @@ import { FaCheck, FaXmark } from "react-icons/fa6";
 
 const ButtonConfirm = ({ type }) => {
     const path = useLocation();
-    const arrPath = path.pathname
-        .split("/")
-        .splice(1, 2)
-        .filter(
+    const arrPath = path?.pathname?.split("/")?.splice(1, 2)?.filter(
             (value) =>
-                value != pathRoutes.R1.changePassword &&
-                value != pathRoutes.R1.changeInformation
+                value != pathRoutes?.R1?.changePassword &&
+                value != pathRoutes?.R1?.changeInformation
         );
     // console.log(
-    //     path.pathname
+    //     path?.pathname?
     //         .split("/")
     //         .splice(1, 2)
     //         .filter(
     //             (value) =>
-    //                 value != pathRoutes.R1.changePassword &&
-    //                 value != pathRoutes.R1.changeInformation
+    //                 value != pathRoutes?.R1?.changePassword &&
+    //                 value != pathRoutes?.R1?.changeInformation
     //         ).length
     // );
     return (
