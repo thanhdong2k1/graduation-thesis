@@ -14,7 +14,10 @@ import { createAxios } from "../../utils/createInstance";
 import { logginSuccess } from "../../redux/authSlice";
 import { apiAdmin } from "../../redux/apiRequest";
 import ModalPopup from "../../components/ModelPopup/ModalPopup";
-import { customSelectStyles, customSelectStylesMulti } from "../../utils/customStyleReactSelect";
+import {
+    customSelectStyles,
+    customSelectStylesMulti,
+} from "../../utils/customStyleReactSelect";
 import ButtonConfirm from "../../components/button/ButtonConfirm";
 
 const AdminChangeInformation = () => {
@@ -23,6 +26,7 @@ const AdminChangeInformation = () => {
     const dispatch = useDispatch();
     let axiosJWT = createAxios(currentUser, dispatch, logginSuccess);
     const gender = useSelector((state) => state?.admin?.gender);
+    const role = useSelector((state) => state?.admin?.role);
     const informationUser = useSelector((state) => state?.admin?.information);
     const [showModal, setShowModal] = useState(false);
     const [srcImg, setSrcImg] = useState(
@@ -70,7 +74,11 @@ const AdminChangeInformation = () => {
                         pauseOnFocusLoss: true,
                     });
                     // reset();
-                    apiAdmin.apiAdminGetInformation(currentUser, dispatch, axiosJWT);
+                    apiAdmin.apiAdminGetInformation(
+                        currentUser,
+                        dispatch,
+                        axiosJWT
+                    );
                 }
             })
             .catch((error) => {
@@ -190,8 +198,8 @@ const AdminChangeInformation = () => {
         setValue("address", informationUser?.address);
         setValue("birthday", informationUser?.birthday);
         setValue("code", informationUser?.code);
-        setValue("role", informationUser?.roleData.valueVi);
-        setValue("department", informationUser?.departmentData.name);
+        setValue("role", informationUser?.roleData?.valueVi);
+        setValue("department", informationUser?.departmentData?.name);
         setValue("permissions", convert);
         // console.log(informationUser?.birthday,moment(informationUser?.birthday, "DD/MM/YYYY").toString());
         setValue(
@@ -354,7 +362,8 @@ const AdminChangeInformation = () => {
                                 // required: "Full name is required",
                             })}
                             render={({ field }) => (
-                                <Select placeholder="Chọn..."
+                                <Select
+                                    placeholder="Chọn..."
                                     styles={customSelectStyles}
                                     {...field}
                                     options={gender}
@@ -410,7 +419,8 @@ const AdminChangeInformation = () => {
                                 // required: "Full name is required",
                             })}
                             render={({ field }) => (
-                                <Select placeholder="Chọn..."
+                                <Select
+                                    placeholder="Chọn..."
                                     styles={customSelectStylesMulti}
                                     {...field}
                                     isRtl={isRtl}
