@@ -5,7 +5,7 @@
 # .env
 /package-lock.json
 /frontend/build
-/frontend/.env
+# /frontend/.env
 /material-tailwind-dashboard-react
 /plantdashboard
 /React-Admin-Dashboard
