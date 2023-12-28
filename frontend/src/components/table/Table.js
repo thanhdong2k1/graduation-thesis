@@ -30,7 +30,7 @@ const Table = ({
     saveDataImport,
 }) => {
     // redux
-    const currentUser = useSelector((state) => state.auth.currentUser);
+    const currentUser = useSelector((state) => state?.auth?.currentUser);
     const path = useLocation();
 
     const orderedPermissions = [
@@ -58,30 +58,30 @@ const Table = ({
 
     // Handle
     const handleDeleteImport = (dataDelete) => {
-        setDataImport(dataImport.filter((data) => data != dataDelete));
+        setDataImport(dataImport?.filter((data) => data != dataDelete));
     };
 
     const importFile = async (e) => {
         /* get data as an ArrayBuffer */
         let file = e?.target?.files[0];
         if (file) {
-            const data = await file.arrayBuffer();
+            const data = await file?.arrayBuffer();
 
             /* parse and load first worksheet */
             const wb = readFile(data);
-            const ws = wb.Sheets[wb.SheetNames[0]];
-            const dataImport = utils.sheet_to_json(ws);
+            const ws = wb?.Sheets[wb?.SheetNames[0]];
+            const dataImport = utils?.sheet_to_json(ws);
             // console.log("dataImport", dataImport);
             const convertedItem = [];
-            dataImport.map((item) => {
+            dataImport?.map((item) => {
                 const obj = {};
-                const headerImport = Object.keys(item).splice(1);
+                const headerImport = Object.keys(item)?.splice(1);
                 // console.log(headerImport, item, dataImport);
-                tableData.forEach((headerItem) => {
+                tableData?.forEach((headerItem) => {
                     // console.log("headerItem", headerItem);
-                    if (headerImport.includes(headerItem.header)) {
+                    if (headerImport?.includes(headerItem?.header)) {
                         // console.log("header trùng", headerItem);
-                        if (!headerItem.actions) {
+                        if (!headerItem?.actions) {
                             const { header, column } = headerItem;
                             // console.log("check:", column, header, item[header]);
                             if (column === "id") {
@@ -90,15 +90,15 @@ const Table = ({
                                 obj[column] = item[header];
                             }
 
-                            // const columnName = headerItem.column;
-                            // const columnValue = item[headerItem.header];
+                            // const columnName = headerItem?.column;
+                            // const columnValue = item[headerItem?.header];
                             // obj[columnName] = columnValue;
 
                             // if (column === "id") {
                             //     obj[column] = null;
                             // } else {
                             //     if(column.includes("Data")){
-                            //         obj[column.replace("Data","Id")] = item[header];
+                            //         obj[column?.replace("Data","Id")] = item[header];
                             //     }
                             //     else{
                             //         obj[column] = item[header];
@@ -107,8 +107,8 @@ const Table = ({
                         }
                     }
                 });
-                if (Object.keys(obj).length != 0) {
-                    convertedItem.push(obj);
+                if (Object.keys(obj)?.length != 0) {
+                    convertedItem?.push(obj);
                 }
             });
 
@@ -139,18 +139,18 @@ const Table = ({
     const exportSample = useCallback(() => {
         const convertedItem = [];
         const obj = {};
-        tableData.map((data) => {
-            if (!data.actions) {
+        tableData?.map((data) => {
+            if (!data?.actions) {
                 const { header } = data;
                 obj[header] = `${header} mẫu`;
             }
         });
         // console.log(convertedItem);
-        convertedItem.push(obj);
-        const ws = utils.json_to_sheet(convertedItem);
+        convertedItem?.push(obj);
+        const ws = utils?.json_to_sheet(convertedItem);
         // console.log("wordsheet", ws);
-        const wb = utils.book_new();
-        utils.book_append_sheet(wb, ws, "Data");
+        const wb = utils?.book_new();
+        utils?.book_append_sheet(wb, ws, "Data");
         writeFileXLSX(
             wb,
             `Export Sample ${nameTable} ${new Date().toLocaleDateString(
@@ -161,10 +161,10 @@ const Table = ({
     const exportFile = useCallback(() => {
         console.log("export datasa", datas);
         const convertedItem = [];
-        datas.map((item) => {
+        datas?.map((item) => {
             const obj = {};
-            tableData.forEach((headerData) => {
-                if (!headerData.actions) {
+            tableData?.forEach((headerData) => {
+                if (!headerData?.actions) {
                     const { header, column } = headerData;
                     console.log("header, item[column]", header, item[column]);
                     if (typeof item[column] === "object") {
@@ -176,13 +176,13 @@ const Table = ({
                     }
                 }
             });
-            convertedItem.push(obj);
+            convertedItem?.push(obj);
             console.log(convertedItem);
         });
-        const ws = utils.json_to_sheet(convertedItem);
+        const ws = utils?.json_to_sheet(convertedItem);
         // console.log("wordsheet", ws);
-        const wb = utils.book_new();
-        utils.book_append_sheet(wb, ws, "Data");
+        const wb = utils?.book_new();
+        utils?.book_append_sheet(wb, ws, "Data");
         writeFileXLSX(
             wb,
             `Export ${nameTable} ${new Date().toLocaleDateString(
@@ -244,14 +244,14 @@ const Table = ({
         ?.splice(1, 2)
         ?.filter(
             (value) =>
-                value != pathRoutes.R1.changePassword &&
-                value != pathRoutes.R1.changeInformation
+                value != pathRoutes?.R1?.changePassword &&
+                value != pathRoutes?.R1?.changeInformation
         );
     const nameTable = routes
         ?.filter((route) => route?.role == currentUser?.roleId)[0]
-        ?.pages?.filter((page) => page.path == arrPath[1])[0]?.name;
-    const tableDataImport = tableData.filter((data) => !data.actions);
-    tableDataImport.push({
+        ?.pages?.filter((page) => page?.path == arrPath[1])[0]?.name;
+    const tableDataImport = tableData?.filter((data) => !data?.actions);
+    tableDataImport?.push({
         header: "Hành động",
         actions: [actionsRemove(handleDeleteImport)],
     });
@@ -262,28 +262,28 @@ const Table = ({
         { label: "20 rows", value: 20 },
     ];
     const filterSearch = [];
-    tableData.map((data) => {
+    tableData?.map((data) => {
         const obj = {};
-        if (!data.actions) {
+        if (!data?.actions) {
             const { header, column, columnData } = data;
             if (columnData) {
                 obj["label"] = header;
                 obj["value"] = columnData;
-                filterSearch.push(obj);
+                filterSearch?.push(obj);
             } else {
                 obj["label"] = header;
                 obj["value"] = column;
-                filterSearch.push(obj);
+                filterSearch?.push(obj);
             }
         }
     });
 
     const pagination = [];
-    if (defineTable?.pages > 3 && defineTable?.currentPage == 1) {
+    if (defineTable.pages > 3 && defineTable.currentPage == 1) {
         // console.log("page > 3");
         for (
-            let page = defineTable?.currentPage - 2;
-            page < defineTable?.currentPage + 2;
+            let page = defineTable.currentPage - 2;
+            page < defineTable.currentPage + 2;
             page++
         ) {
             // console.log("page", page);
@@ -293,7 +293,7 @@ const Table = ({
                         <button
                             onClick={() => handleChangePage(page + 1)}
                             className={`flex items-center justify-center w-6 h-[35px] border border-gray-300 ${
-                                page + 1 === defineTable?.currentPage
+                                page + 1 === defineTable.currentPage
                                     ? "text-PrimaryColor bg-paleBlue hover:bg-paleBlue hover:text-PrimaryColor"
                                     : "leading-tight text-gray-500 bg-white hover:bg-gray-100 hover:text-gray-700"
                             }`}
@@ -305,12 +305,12 @@ const Table = ({
             }
         }
     } else if (
-        defineTable?.pages > 3 &&
-        defineTable?.pages == defineTable?.currentPage
+        defineTable.pages > 3 &&
+        defineTable.pages == defineTable.currentPage
     ) {
         for (
-            let page = defineTable?.currentPage - 2;
-            page < defineTable?.currentPage;
+            let page = defineTable.currentPage - 2;
+            page < defineTable.currentPage;
             page++
         ) {
             // console.log("page", page);
@@ -320,7 +320,7 @@ const Table = ({
                         <button
                             onClick={() => handleChangePage(page + 1)}
                             className={`flex items-center justify-center w-6 h-[35px] border border-gray-300 ${
-                                page + 1 === defineTable?.currentPage
+                                page + 1 === defineTable.currentPage
                                     ? "text-PrimaryColor bg-paleBlue hover:bg-paleBlue hover:text-PrimaryColor"
                                     : "leading-tight text-gray-500 bg-white hover:bg-gray-100 hover:text-gray-700"
                             }`}
@@ -331,10 +331,10 @@ const Table = ({
                 );
             }
         }
-    } else if (defineTable?.pages > 3) {
+    } else if (defineTable.pages > 3) {
         for (
-            let page = defineTable?.currentPage - 2;
-            page < defineTable?.currentPage + 1;
+            let page = defineTable.currentPage - 2;
+            page < defineTable.currentPage + 1;
             page++
         ) {
             // console.log("page", page);
@@ -344,7 +344,7 @@ const Table = ({
                         <button
                             onClick={() => handleChangePage(page + 1)}
                             className={`flex items-center justify-center w-6 h-[35px] border border-gray-300 ${
-                                page + 1 === defineTable?.currentPage
+                                page + 1 === defineTable.currentPage
                                     ? "text-PrimaryColor bg-paleBlue hover:bg-paleBlue hover:text-PrimaryColor"
                                     : "leading-tight text-gray-500 bg-white hover:bg-gray-100 hover:text-gray-700"
                             }`}
@@ -355,8 +355,8 @@ const Table = ({
                 );
             }
         }
-    } else if (defineTable?.pages <= 3) {
-        for (let page = 0; page < defineTable?.pages; page++) {
+    } else if (defineTable.pages <= 3) {
+        for (let page = 0; page < defineTable.pages; page++) {
             // console.log("page", page);
             if (page >= 0) {
                 pagination?.push(
@@ -364,7 +364,7 @@ const Table = ({
                         <button
                             onClick={() => handleChangePage(page + 1)}
                             className={`flex items-center justify-center w-6 h-[35px] border border-gray-300 ${
-                                page + 1 === defineTable?.currentPage
+                                page + 1 === defineTable.currentPage
                                     ? "text-PrimaryColor bg-paleBlue hover:bg-paleBlue hover:text-PrimaryColor"
                                     : "leading-tight text-gray-500 bg-white hover:bg-gray-100 hover:text-gray-700"
                             }`}
@@ -381,7 +381,7 @@ const Table = ({
     useEffect(() => {
         setDefineTable((prevState) => ({
             ...prevState,
-            filterSearch: filterSearch[1].value,
+            filterSearch: filterSearch[1]?.value,
             offset: 0,
             currentPage: 1,
         }));
@@ -391,10 +391,10 @@ const Table = ({
         setDefineTable((prevState) => ({
             ...prevState,
             pages:
-                Math.round(totalRecords / defineTable?.limit) <
-                totalRecords / defineTable?.limit
-                    ? Math.round(totalRecords / defineTable?.limit) + 1
-                    : Math.round(totalRecords / defineTable?.limit),
+                Math.round(totalRecords / defineTable.limit) <
+                totalRecords / defineTable.limit
+                    ? Math.round(totalRecords / defineTable.limit) + 1
+                    : Math.round(totalRecords / defineTable.limit),
         }));
         // offset:bỏ qua 5 10          0 0
         // limit: số lượng lấy 5 10      5 10
@@ -402,24 +402,24 @@ const Table = ({
         // currentPage: trang hiện tại 2   1
         // console.log(
         //     "defineTable.offset",
-        //     defineTable?.offset,
-        //     defineTable?.limit * defineTable?.currentPage
+        //     defineTable.offset,
+        //     defineTable.limit * defineTable.currentPage
         // );
         const dataFilter = [];
         datas?.map((data, index) => {
             if (
-                index >= defineTable?.offset &&
-                index < defineTable?.limit * defineTable?.currentPage
+                index >= defineTable.offset &&
+                index < defineTable.limit * defineTable.currentPage
             ) {
-                dataFilter.push(data);
+                dataFilter?.push(data);
             }
         });
         setDataShow(dataFilter);
     }, [
         datas,
-        defineTable?.currentPage,
-        defineTable?.isSearched,
-        defineTable?.limit,
+        defineTable.currentPage,
+        defineTable.isSearched,
+        defineTable.limit,
     ]);
     useEffect(() => {
         setDefineTableImport((prevState) => ({
@@ -463,7 +463,7 @@ const Table = ({
                                         type="text"
                                         id="username"
                                         placeholder="Nhập từ khóa tìm kiếm"
-                                        value={defineTable?.inputSearch}
+                                        value={defineTable.inputSearch}
                                         onChange={handleChangeInput}
                                         onKeyDown={(e) => {
                                             if (e.key === "Enter") {
@@ -525,9 +525,7 @@ const Table = ({
                                         </button>
                                     </>
                                 ) : currentUser?.permissions ? (
-                                    currentUser?.permissions
-                                        .split(",")
-                                        .includes("PERF") ? (
+                                    currentUser?.permissions?.split(",")?.includes("PERF") ? (
                                         <>
                                             <button
                                                 className="importDiv button"
@@ -554,11 +552,9 @@ const Table = ({
                                             </button>
                                         </>
                                     ) : (
-                                        orderedPermissions.map((permission) => {
+                                        orderedPermissions?.map((permission) => {
                                             if (
-                                                currentUser?.permissions
-                                                    .split(",")
-                                                    .includes(permission)
+                                                currentUser?.permissions?.split(",")?.includes(permission)
                                             ) {
                                                 if (permission === "PERE") {
                                                     return (
@@ -677,8 +673,8 @@ const Table = ({
                                     {/* <FaAngleLeft /> */}
                                 </button>
                             </div>
-                            {defineTable?.currentPage > 2 &&
-                                defineTable?.pages > 3 && (
+                            {defineTable.currentPage > 2 &&
+                                defineTable.pages > 3 && (
                                     <div>
                                         <button
                                             className={`flex items-center justify-center w-6 h-[35px] border border-gray-300 leading-tight text-gray-500 bg-white hover:bg-gray-100 hover:text-gray-700"
@@ -689,9 +685,9 @@ const Table = ({
                                     </div>
                                 )}
                             {pagination && pagination}
-                            {defineTable?.currentPage <
-                                defineTable?.pages - 1 &&
-                                defineTable?.pages > 3 && (
+                            {defineTable.currentPage <
+                                defineTable.pages - 1 &&
+                                defineTable.pages > 3 && (
                                     <div>
                                         <button
                                             className={`flex items-center justify-center w-6 h-[35px] border border-gray-300 leading-tight text-gray-500 bg-white hover:bg-gray-100 hover:text-gray-700"
@@ -704,7 +700,7 @@ const Table = ({
                             <div>
                                 <button
                                     onClick={() =>
-                                        handleChangePage(defineTable?.pages)
+                                        handleChangePage(defineTable.pages)
                                     }
                                     class="flex items-center justify-center w-6 h-[35px] leading-tight text-gray-500 bg-white border border-gray-300 rounded-r-lg hover:bg-gray-100 hover:text-gray-700"
                                 >
@@ -748,7 +744,7 @@ const Table = ({
                             setDefineTable={setDefineTableImport}
                             tableData={tableDataImport}
                             datas={dataImport}
-                            totalRecords={dataImport.length}
+                            totalRecords={dataImport?.length}
                         />
                     ) : (
                         <div className="warningData flex flex-col justify-center items-center rounded-lg shadow-md px-4 py-3 text-h3FontSize font-semibold media-max-md:text-smallFontSize">

@@ -24,11 +24,11 @@ const AddDepartment = ({ type }, params) => {
     let { id } = useParams();
     console.log("type", type, id);
 
-    const currentUser = useSelector((state) => state.auth.currentUser);
+    const currentUser = useSelector((state) => state?.auth?.currentUser);
     const dispatch = useDispatch();
     let axiosJWT = createAxios(currentUser, dispatch, logginSuccess);
-    const deans = useSelector((state) => state.admin.lecturers);
-    let codeDean = deans.map((v) => {
+    const deans = useSelector((state) => state?.admin?.lecturers);
+    let codeDean = deans?.map((v) => {
         return { value: v.id, label: `${v.id} | ${v.fullName}` };
     });
     const [isRtl, setIsRtl] = useState(false);
@@ -45,7 +45,7 @@ const AddDepartment = ({ type }, params) => {
     const onSubmit = async (data) => {
         const id = toast.loading("Please wait...");
 
-        let founding = data.founding && new Date(data.founding).toLocaleDateString("vi-VN");
+        let founding = data?.founding && new Date(data?.founding).toLocaleDateString("vi-VN");
 
         console.log(founding);
 
@@ -177,7 +177,7 @@ const AddDepartment = ({ type }, params) => {
                         );
                         setValue(
                             "dean",
-                            codeDean.filter(
+                            codeDean?.filter(
                                 (value) => value?.value == res?.result?.deanId
                             )
                         );
@@ -225,9 +225,9 @@ const AddDepartment = ({ type }, params) => {
                                 // required: "Full name is required",
                             })}
                         />
-                        {errors.id?.type && (
+                        {errors?.id?.type && (
                             <p className=" text-normal text-red-500">
-                                {errors.id?.message}
+                                {errors?.id?.message}
                             </p>
                         )}
                     </div> */}
@@ -242,9 +242,9 @@ const AddDepartment = ({ type }, params) => {
                                 required: "Name is required",
                             })}
                         />
-                        {errors.name?.type && (
+                        {errors?.name?.type && (
                             <p className=" text-normal text-red-500">
-                                {errors.name?.message}
+                                {errors?.name?.message}
                             </p>
                         )}
                     </div>
@@ -269,9 +269,9 @@ const AddDepartment = ({ type }, params) => {
                                 // required: "Full name is required",
                             })}
                         /> */}
-                        {errors.description?.type && (
+                        {errors?.description?.type && (
                             <p className=" text-normal text-red-500">
-                                {errors.description?.message}
+                                {errors?.description?.message}
                             </p>
                         )}
                     </div>
@@ -308,9 +308,9 @@ const AddDepartment = ({ type }, params) => {
                                 />
                             )}
                         />
-                        {errors.founding?.type && (
+                        {errors?.founding?.type && (
                             <p className=" text-normal text-red-500">
-                                {errors.founding?.message}
+                                {errors?.founding?.message}
                             </p>
                         )}
                     </div>
@@ -332,9 +332,9 @@ const AddDepartment = ({ type }, params) => {
                                 />
                             )}
                         />
-                        {errors.dean?.type && (
+                        {errors?.dean?.type && (
                             <p className=" text-normal text-red-500">
-                                {errors.dean?.message}
+                                {errors?.dean?.message}
                             </p>
                         )}
                     </div>

@@ -362,9 +362,7 @@ const Thesis = () => {
         apiAdmin.getAllTheses({
             user: currentUser,
             inputSearch: defineTable.inputSearch,
-            filterSearch: defineTable.filterSearch.split(".")
-                ? defineTable.filterSearch.split(".")[0]
-                : defineTable.filterSearch,
+            filterSearch: defineTable.filterSearch,
             dispatch: dispatch,
             axiosJWT: axiosJWT,
         });
@@ -375,10 +373,7 @@ const Thesis = () => {
         apiAdmin.getAllTheses({
             user: currentUser,
             inputSearch: defineTable.inputSearch,
-            filterSearch: defineTable.filterSearch.split(".")
-                ? defineTable.filterSearch.split(".")[0]
-                : defineTable.filterSearch,
-
+            filterSearch: defineTable.filterSearch,
             dispatch: dispatch,
             axiosJWT: axiosJWT,
         });

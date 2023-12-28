@@ -101,7 +101,7 @@ export const apiAuth = {
             });
             // console.log(res);
             if (res?.data?.errCode == 0) {
-                // setShowMessage(res.data.errMessage);
+                // setShowMessage(res.data?.errMessage);
                 dispatch(logginSuccess(res?.data?.user));
                 return res?.data;
             } else {
@@ -169,7 +169,7 @@ export const apiUser = {
             dispatch(getDepartmentsStart());
             let options = [];
             const res = await axios.post("/api/user/departments");
-            options = res?.data?.departments.map((v) => {
+            options = res?.data?.departments?.map((v) => {
                 return { value: v.id, label: v.name };
             });
             // console.log("option",options)
@@ -284,7 +284,7 @@ export const apiAdmin = {
                     },
                 }
             );
-            code = res?.data?.code.map((v) => {
+            code = res?.data?.code?.map((v) => {
                 return { value: v.code, label: `${v.valueVi}` };
             });
             // console.log(res);
@@ -312,7 +312,7 @@ export const apiAdmin = {
                     },
                 }
             );
-            code = res?.data?.code.map((v) => {
+            code = res?.data?.code?.map((v) => {
                 return { value: v.code, label: `${v.valueVi}` };
             });
             // console.log(res);
@@ -340,7 +340,7 @@ export const apiAdmin = {
                     },
                 }
             );
-            code = res?.data?.code.map((v) => {
+            code = res?.data?.code?.map((v) => {
                 return { value: v.code, label: `${v.valueVi}` };
             });
             // console.log(res);
@@ -368,7 +368,7 @@ export const apiAdmin = {
                     },
                 }
             );
-            code = res?.data?.code.map((v) => {
+            code = res?.data?.code?.map((v) => {
                 return { value: v.code, label: `${v.valueVi}` };
             });
             // console.log(res);
@@ -396,7 +396,7 @@ export const apiAdmin = {
                     },
                 }
             );
-            code = res?.data?.code.map((v) => {
+            code = res?.data?.code?.map((v) => {
                 return { value: v.code, label: `${v.valueVi}` };
             });
             // console.log(res);
@@ -424,7 +424,7 @@ export const apiAdmin = {
                     },
                 }
             );
-            code = res?.data?.code.map((v) => {
+            code = res?.data?.code?.map((v) => {
                 return { value: v.code, label: `${v.valueVi}` };
             });
             // console.log(res);
@@ -452,7 +452,7 @@ export const apiAdmin = {
                     },
                 }
             );
-            code = res?.data?.code.map((v) => {
+            code = res?.data?.code?.map((v) => {
                 return { value: v.code, label: `${v.valueVi}` };
             });
             // console.log(res);
@@ -579,7 +579,7 @@ export const apiAdmin = {
     apiUpdateCouncil: async ({ user, data, councilDetails, axiosJWT }) => {
         try {
             const res = await axiosJWT.put(
-                `/api/admin/update-council/${data.id}`,
+                `/api/admin/update-council/${data?.id}`,
                 {
                     name: data?.name,
                     description: data?.description,
@@ -612,7 +612,7 @@ export const apiAdmin = {
     apiDeleteCouncil: async ({ user, data, axiosJWT }) => {
         try {
             const res = await axiosJWT.delete(
-                `/api/admin/delete-council/${data.id}`,
+                `/api/admin/delete-council/${data?.id}`,
                 {
                     headers: {
                         token: `Bearer ${user?.accessToken}`,
@@ -720,7 +720,7 @@ export const apiAdmin = {
     apiUpdateDepartment: async ({ user, data, axiosJWT }) => {
         try {
             const res = await axiosJWT.put(
-                `/api/admin/update-department/${data.id}`,
+                `/api/admin/update-department/${data?.id}`,
                 {
                     name: data?.name,
                     description: data?.description,
@@ -748,7 +748,7 @@ export const apiAdmin = {
     apiDeleteDepartment: async ({ user, data, axiosJWT }) => {
         try {
             const res = await axiosJWT.delete(
-                `/api/admin/delete-department/${data.id}`,
+                `/api/admin/delete-department/${data?.id}`,
                 {
                     headers: {
                         token: `Bearer ${user?.accessToken}`,
@@ -875,7 +875,7 @@ export const apiAdmin = {
     apiUpdateLecturer: async ({ user, data, axiosJWT }) => {
         try {
             const res = await axiosJWT.put(
-                `/api/admin/update-lecturer/${data.id}`,
+                `/api/admin/update-lecturer/${data?.id}`,
                 {
                     email: data?.email,
                     fullName: data?.fullName,
@@ -922,7 +922,7 @@ export const apiAdmin = {
     apiDeleteLecturer: async ({ user, data, axiosJWT }) => {
         try {
             const res = await axiosJWT.delete(
-                `/api/admin/delete-lecturer/${data.id}`,
+                `/api/admin/delete-lecturer/${data?.id}`,
                 {
                     headers: {
                         token: `Bearer ${user?.accessToken}`,
@@ -1024,7 +1024,7 @@ export const apiAdmin = {
     apiUpdateBlock: async ({ user, data, axiosJWT }) => {
         try {
             const res = await axiosJWT.put(
-                `/api/admin/update-block/${data.id}`,
+                `/api/admin/update-block/${data?.id}`,
                 {
                     name: data?.name,
                     description: data?.description,
@@ -1046,7 +1046,7 @@ export const apiAdmin = {
     apiDeleteBlock: async ({ user, data, axiosJWT }) => {
         try {
             const res = await axiosJWT.delete(
-                `/api/admin/delete-block/${data.id}`,
+                `/api/admin/delete-block/${data?.id}`,
                 {
                     headers: {
                         token: `Bearer ${user?.accessToken}`,
@@ -1171,7 +1171,7 @@ export const apiAdmin = {
     apiUpdateEvaluationMethod: async ({ user, data, criterias, axiosJWT }) => {
         try {
             const res = await axiosJWT.put(
-                `/api/admin/update-evaluation-method/${data.id}`,
+                `/api/admin/update-evaluation-method/${data?.id}`,
                 {
                     name: data?.name,
                     description: data?.description,
@@ -1194,7 +1194,7 @@ export const apiAdmin = {
     apiDeleteEvaluationMethod: async ({ user, data, axiosJWT }) => {
         try {
             const res = await axiosJWT.delete(
-                `/api/admin/delete-evaluation-method/${data.id}`,
+                `/api/admin/delete-evaluation-method/${data?.id}`,
                 {
                     headers: {
                         token: `Bearer ${user?.accessToken}`,
@@ -1301,7 +1301,7 @@ export const apiAdmin = {
     apiUpdateMajor: async ({ user, data, axiosJWT }) => {
         try {
             const res = await axiosJWT.put(
-                `/api/admin/update-major/${data.id}`,
+                `/api/admin/update-major/${data?.id}`,
                 {
                     name: data?.name,
                     description: data?.description,
@@ -1328,7 +1328,7 @@ export const apiAdmin = {
     apiDeleteMajor: async ({ user, data, axiosJWT }) => {
         try {
             const res = await axiosJWT.delete(
-                `/api/admin/delete-major/${data.id}`,
+                `/api/admin/delete-major/${data?.id}`,
                 {
                     headers: {
                         token: `Bearer ${user?.accessToken}`,
@@ -1440,7 +1440,7 @@ export const apiAdmin = {
     apiUpdateClass: async ({ user, data, axiosJWT }) => {
         try {
             const res = await axiosJWT.put(
-                `/api/admin/update-class/${data.id}`,
+                `/api/admin/update-class/${data?.id}`,
                 {
                     name: data?.name,
                     description: data?.description,
@@ -1472,7 +1472,7 @@ export const apiAdmin = {
     apiDeleteClass: async ({ user, data, axiosJWT }) => {
         try {
             const res = await axiosJWT.delete(
-                `/api/admin/delete-class/${data.id}`,
+                `/api/admin/delete-class/${data?.id}`,
                 {
                     headers: {
                         token: `Bearer ${user?.accessToken}`,
@@ -1599,7 +1599,7 @@ export const apiAdmin = {
     apiUpdateStudent: async ({ user, data, axiosJWT }) => {
         try {
             const res = await axiosJWT.put(
-                `/api/admin/update-student/${data.id}`,
+                `/api/admin/update-student/${data?.id}`,
                 {
                     email: data?.email,
                     fullName: data?.fullName,
@@ -1646,7 +1646,7 @@ export const apiAdmin = {
     apiResetPasswordStudent: async ({ user, data, axiosJWT }) => {
         try {
             const res = await axiosJWT.put(
-                `/api/admin/reset-password/${data.id}`,
+                `/api/admin/reset-password/${data?.id}`,
                 {
                     code: data?.code,
                 },
@@ -1667,7 +1667,7 @@ export const apiAdmin = {
     apiResetPasswordLecturer: async ({ user, data, axiosJWT }) => {
         try {
             const res = await axiosJWT.put(
-                `/api/admin/reset-password-lecturer/${data.id}`,
+                `/api/admin/reset-password-lecturer/${data?.id}`,
                 {
                     code: data?.code,
                 },
@@ -1687,7 +1687,7 @@ export const apiAdmin = {
     },
     apiDeleteStudent: async ({ user, data, axiosJWT }) => {
         try {
-            const res = await axiosJWT.delete(`/api/admin/delete/${data.id}`, {
+            const res = await axiosJWT.delete(`/api/admin/delete/${data?.id}`, {
                 headers: {
                     token: `Bearer ${user?.accessToken}`,
                 },
@@ -1832,7 +1832,7 @@ export const apiAdmin = {
     apiUpdateThesis: async ({ user, data, axiosJWT }) => {
         try {
             const res = await axiosJWT.put(
-                `/api/admin/update-thesis/${data.id}`,
+                `/api/admin/update-thesis/${data?.id}`,
                 {
                     startDate: data?.startDate,
                     complateDate: data?.complateDate,
@@ -1898,7 +1898,7 @@ export const apiAdmin = {
     apiDeleteThesis: async ({ user, data, axiosJWT }) => {
         try {
             const res = await axiosJWT.delete(
-                `/api/admin/delete-thesis/${data.id}`,
+                `/api/admin/delete-thesis/${data?.id}`,
                 {
                     headers: {
                         token: `Bearer ${user?.accessToken}`,
@@ -2011,7 +2011,7 @@ export const apiAdmin = {
     apiUpdateTopic: async ({ user, data, axiosJWT }) => {
         try {
             const res = await axiosJWT.put(
-                `/api/admin/update-topic/${data.id}`,
+                `/api/admin/update-topic/${data?.id}`,
                 {
                     name: data?.name,
                     description: data?.description,
@@ -2043,7 +2043,7 @@ export const apiAdmin = {
     apiDeleteTopic: async ({ user, data, axiosJWT }) => {
         try {
             const res = await axiosJWT.delete(
-                `/api/admin/delete-topic/${data.id}`,
+                `/api/admin/delete-topic/${data?.id}`,
                 {
                     headers: {
                         token: `Bearer ${user?.accessToken}`,
@@ -2156,7 +2156,7 @@ export const apiAdmin = {
     apiUpdateThesisSession: async ({ user, data, axiosJWT }) => {
         try {
             const res = await axiosJWT.put(
-                `/api/admin/update-thesis-session/${data.id}`,
+                `/api/admin/update-thesis-session/${data?.id}`,
                 {
                     name: data?.name,
                     description: data?.description,
@@ -2186,7 +2186,7 @@ export const apiAdmin = {
     apiDeleteThesisSession: async ({ user, data, axiosJWT }) => {
         try {
             const res = await axiosJWT.delete(
-                `/api/admin/delete-thesis-session/${data.id}`,
+                `/api/admin/delete-thesis-session/${data?.id}`,
                 {
                     headers: {
                         token: `Bearer ${user?.accessToken}`,
@@ -2301,7 +2301,7 @@ export const apiLecturer = {
                     },
                 }
             );
-            code = res?.data?.code.map((v) => {
+            code = res?.data?.code?.map((v) => {
                 return { value: v.code, label: `${v.valueVi}` };
             });
             // console.log(res);
@@ -2329,7 +2329,7 @@ export const apiLecturer = {
                     },
                 }
             );
-            code = res?.data?.code.map((v) => {
+            code = res?.data?.code?.map((v) => {
                 return { value: v.code, label: `${v.valueVi}` };
             });
             // console.log(res);
@@ -2357,7 +2357,7 @@ export const apiLecturer = {
                     },
                 }
             );
-            code = res?.data?.code.map((v) => {
+            code = res?.data?.code?.map((v) => {
                 return { value: v.code, label: `${v.valueVi}` };
             });
             // console.log(res);
@@ -2385,7 +2385,7 @@ export const apiLecturer = {
                     },
                 }
             );
-            code = res?.data?.code.map((v) => {
+            code = res?.data?.code?.map((v) => {
                 return { value: v.code, label: `${v.valueVi}` };
             });
             // console.log(res);
@@ -2413,7 +2413,7 @@ export const apiLecturer = {
                     },
                 }
             );
-            code = res?.data?.code.map((v) => {
+            code = res?.data?.code?.map((v) => {
                 return { value: v.code, label: `${v.valueVi}` };
             });
             // console.log(res);
@@ -2441,7 +2441,7 @@ export const apiLecturer = {
                     },
                 }
             );
-            code = res?.data?.code.map((v) => {
+            code = res?.data?.code?.map((v) => {
                 return { value: v.code, label: `${v.valueVi}` };
             });
             // console.log(res);
@@ -2469,7 +2469,7 @@ export const apiLecturer = {
                     },
                 }
             );
-            code = res?.data?.code.map((v) => {
+            code = res?.data?.code?.map((v) => {
                 return { value: v.code, label: `${v.valueVi}` };
             });
             // console.log(res);
@@ -2580,7 +2580,7 @@ export const apiLecturer = {
     apiUpdateCouncil: async ({ user, data, councilDetails, axiosJWT }) => {
         try {
             const res = await axiosJWT.put(
-                `/api/lecturer/update-council/${data.id}`,
+                `/api/lecturer/update-council/${data?.id}`,
                 {
                     name: data?.name,
                     description: data?.description,
@@ -2613,7 +2613,7 @@ export const apiLecturer = {
     apiDeleteCouncil: async ({ user, data, axiosJWT }) => {
         try {
             const res = await axiosJWT.delete(
-                `/api/lecturer/delete-council/${data.id}`,
+                `/api/lecturer/delete-council/${data?.id}`,
                 {
                     headers: {
                         token: `Bearer ${user?.accessToken}`,
@@ -2769,7 +2769,7 @@ export const apiStudent = {
                     },
                 }
             );
-            code = res?.data?.code.map((v) => {
+            code = res?.data?.code?.map((v) => {
                 return { value: v.code, label: `${v.valueVi}` };
             });
             // console.log(res);
@@ -2797,7 +2797,7 @@ export const apiStudent = {
                     },
                 }
             );
-            code = res?.data?.code.map((v) => {
+            code = res?.data?.code?.map((v) => {
                 return { value: v.code, label: `${v.valueVi}` };
             });
             // console.log(res);
@@ -2825,7 +2825,7 @@ export const apiStudent = {
                     },
                 }
             );
-            code = res?.data?.code.map((v) => {
+            code = res?.data?.code?.map((v) => {
                 return { value: v.code, label: `${v.valueVi}` };
             });
             // console.log(res);
@@ -2853,7 +2853,7 @@ export const apiStudent = {
                     },
                 }
             );
-            code = res?.data?.code.map((v) => {
+            code = res?.data?.code?.map((v) => {
                 return { value: v.code, label: `${v.valueVi}` };
             });
             // console.log(res);
@@ -2881,7 +2881,7 @@ export const apiStudent = {
                     },
                 }
             );
-            code = res?.data?.code.map((v) => {
+            code = res?.data?.code?.map((v) => {
                 return { value: v.code, label: `${v.valueVi}` };
             });
             // console.log(res);
@@ -2909,7 +2909,7 @@ export const apiStudent = {
                     },
                 }
             );
-            code = res?.data?.code.map((v) => {
+            code = res?.data?.code?.map((v) => {
                 return { value: v.code, label: `${v.valueVi}` };
             });
             // console.log(res);
@@ -2937,7 +2937,7 @@ export const apiStudent = {
                     },
                 }
             );
-            code = res?.data?.code.map((v) => {
+            code = res?.data?.code?.map((v) => {
                 return { value: v.code, label: `${v.valueVi}` };
             });
             // console.log(res);
@@ -3094,7 +3094,7 @@ export const apiStudent = {
     apiUpdateThesis: async ({ user, data, axiosJWT }) => {
         try {
             const res = await axiosJWT.put(
-                `/api/student/update-thesis/${data.id}`,
+                `/api/student/update-thesis/${data?.id}`,
                 {
                     startDate: data?.startDate,
                     complateDate: data?.complateDate,

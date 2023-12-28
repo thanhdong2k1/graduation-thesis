@@ -25,21 +25,21 @@ const AddCouncil = ({ type }, params) => {
     let { id } = useParams();
     console.log("type", type, id);
 
-    const currentUser = useSelector((state) => state.auth.currentUser);
+    const currentUser = useSelector((state) => state?.auth?.currentUser);
     const dispatch = useDispatch();
     let axiosJWT = createAxios(currentUser, dispatch, logginSuccess);
-    const status = useSelector((state) => state.admin.status);
-    const thesisSessions = useSelector((state) => state.admin.thesisSessions);
-    const position = useSelector((state) => state.admin.position);
-    const lecturers = useSelector((state) => state.admin.lecturers);
-    const theses = useSelector((state) => state.admin.theses);
-    let codeLecturers = lecturers.map((v) => {
+    const status = useSelector((state) => state?.admin?.status);
+    const thesisSessions = useSelector((state) => state?.admin?.thesisSessions);
+    const position = useSelector((state) => state?.admin?.position);
+    const lecturers = useSelector((state) => state?.admin?.lecturers);
+    const theses = useSelector((state) => state?.admin?.theses);
+    let codeLecturers = lecturers?.map((v) => {
         return { value: v.id, label: `${v.id} | ${v.fullName}` };
     });
-    let codeThesisSessions = thesisSessions.map((v) => {
+    let codeThesisSessions = thesisSessions?.map((v) => {
         return { value: v.id, label: `${v.id} | ${v.name}` };
     });
-    let codeTheses = theses.map((v) => {
+    let codeTheses = theses?.map((v) => {
         return { value: v.id, label: `${v.id} | ${v.topicData.name}` };
     });
     const [isRtl, setIsRtl] = useState(false);
@@ -58,11 +58,11 @@ const AddCouncil = ({ type }, params) => {
         console.log(data);
         let councilDetailsFilter = [];
         councilDetails?.map((item) => {
-            councilDetailsFilter.push({
+            councilDetailsFilter?.push({
                 id: item?.id,
                 positionId: item?.positionId?.value,
                 lecturerId: item?.lecturerId?.value,
-                // positionId: item.filter(
+                // positionId: item?.filter(
                 //     (value) =>
                 //         value?.value == res?.result?.positionId
                 // )
@@ -201,14 +201,14 @@ const AddCouncil = ({ type }, params) => {
                         setValue("description", res?.result?.description);
                         setValue(
                             "thesisSession",
-                            codeThesisSessions.filter(
+                            codeThesisSessions?.filter(
                                 (value) =>
                                     value?.value == res?.result?.thesisSessionId
                             )
                         );
                         setValue(
                             "status",
-                            status.filter(
+                            status?.filter(
                                 (value) => value?.value == res?.result?.statusId
                             )
                         );
@@ -243,7 +243,7 @@ const AddCouncil = ({ type }, params) => {
                     });
                     let filter = [];
                     response?.result?.map((item) => {
-                        filter.push({
+                        filter?.push({
                             id: item?.id,
                             positionId: position?.filter(
                                 (value) => value?.value == item?.positionId
@@ -251,7 +251,7 @@ const AddCouncil = ({ type }, params) => {
                             lecturerId: codeLecturers?.filter(
                                 (value) => value?.value == item?.lecturerId
                             )[0],
-                            // positionId: item.filter(
+                            // positionId: item?.filter(
                             //     (value) =>
                             //         value?.value == res?.result?.positionId
                             // )
@@ -326,13 +326,13 @@ const AddCouncil = ({ type }, params) => {
     //             ...prev,
     //             {
     //                 id: item?.id,
-    //                 positionId: position.filter(
+    //                 positionId: position?.filter(
     //                     (value) => value?.value == item?.positionId
     //                 )[0],
-    //                 lecturerId: codeLecturers.filter(
+    //                 lecturerId: codeLecturers?.filter(
     //                     (value) => value?.value == item?.lecturerId
     //                 )[0],
-    //                 // positionId: item.filter(
+    //                 // positionId: item?.filter(
     //                 //     (value) =>
     //                 //         value?.value == res?.result?.positionId
     //                 // )
@@ -362,9 +362,9 @@ const AddCouncil = ({ type }, params) => {
                                 // required: "Full name is required",
                             })}
                         />
-                        {errors.id?.type && (
+                        {errors?.id?.type && (
                             <p className=" text-normal text-red-500">
-                                {errors.id?.message}
+                                {errors?.id?.message}
                             </p>
                         )}
                     </div> */}
@@ -379,9 +379,9 @@ const AddCouncil = ({ type }, params) => {
                                 required: "Name is required",
                             })}
                         />
-                        {errors.name?.type && (
+                        {errors?.name?.type && (
                             <p className=" text-normal text-red-500">
-                                {errors.name?.message}
+                                {errors?.name?.message}
                             </p>
                         )}
                     </div>
@@ -406,9 +406,9 @@ const AddCouncil = ({ type }, params) => {
                                 // required: "Full name is required",
                             })}
                         /> */}
-                        {errors.description?.type && (
+                        {errors?.description?.type && (
                             <p className=" text-normal text-red-500">
-                                {errors.description?.message}
+                                {errors?.description?.message}
                             </p>
                         )}
                     </div>
@@ -433,9 +433,9 @@ const AddCouncil = ({ type }, params) => {
                                 />
                             )}
                         />
-                        {errors.thesisSession?.type && (
+                        {errors?.thesisSession?.type && (
                             <p className=" text-normal text-red-500">
-                                {errors.thesisSession?.message}
+                                {errors?.thesisSession?.message}
                             </p>
                         )}
                     </div>
@@ -457,9 +457,9 @@ const AddCouncil = ({ type }, params) => {
                                 />
                             )}
                         />
-                        {errors.status?.type && (
+                        {errors?.status?.type && (
                             <p className=" text-normal text-red-500">
-                                {errors.status?.message}
+                                {errors?.status?.message}
                             </p>
                         )}
                     </div>
@@ -488,9 +488,9 @@ const AddCouncil = ({ type }, params) => {
                                             // })}
                                         />
                                     </div>
-                                    {errors.idCriteria?.type && (
+                                    {errors?.idCriteria?.type && (
                                     <p className=" text-normal text-red-500">
-                                        {errors.idCriteria?.message}
+                                        {errors?.idCriteria?.message}
                                     </p>
                                 )}
                                 </div>
@@ -517,9 +517,9 @@ const AddCouncil = ({ type }, params) => {
                                         )
                                     }
                                 />
-                                {/* {errors.nameCriteria?.type && (
+                                {/* {errors?.nameCriteria?.type && (
                                 <p className=" text-normal text-red-500">
-                                    {errors.nameCriteria?.message}
+                                    {errors?.nameCriteria?.message}
                                 </p>
                             )} */}
                             </div>
@@ -581,9 +581,9 @@ const AddCouncil = ({ type }, params) => {
                                     )}
                                 </div>
                             </div>
-                            {/* {errors.weightCriteria?.type && (
+                            {/* {errors?.weightCriteria?.type && (
                                 <p className=" text-normal text-red-500">
-                                    {errors.weightCriteria?.message}
+                                    {errors?.weightCriteria?.message}
                                 </p>
                             )} */}
                         </div>
@@ -665,9 +665,9 @@ const AddCouncil = ({ type }, params) => {
                                     )}
                                 </div>
                             </div>
-                            {/* {errors.weightCriteria?.type && (
+                            {/* {errors?.weightCriteria?.type && (
                                 <p className=" text-normal text-red-500">
-                                    {errors.weightCriteria?.message}
+                                    {errors?.weightCriteria?.message}
                                 </p>
                             )} */}
                         </div>

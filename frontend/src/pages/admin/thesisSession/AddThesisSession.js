@@ -24,13 +24,13 @@ const AddThesisSession = ({ type }, params) => {
     let { id } = useParams();
     console.log("type", type, id);
 
-    const currentUser = useSelector((state) => state.auth.currentUser);
+    const currentUser = useSelector((state) => state?.auth?.currentUser);
     const dispatch = useDispatch();
     let axiosJWT = createAxios(currentUser, dispatch, logginSuccess);
     const evaluationMethods = useSelector(
-        (state) => state.admin.evaluationMethods
+        (state) => state?.admin?.evaluationMethods
     );
-    let codeEvaluationMethod = evaluationMethods.map((v) => {
+    let codeEvaluationMethod = evaluationMethods?.map((v) => {
         return { value: v.id, label: `${v.id} | ${v.name}` };
     });
     const [isRtl, setIsRtl] = useState(false);
@@ -51,9 +51,9 @@ const AddThesisSession = ({ type }, params) => {
         // );
 
         let startDate =
-            data.startDate && new Date(data.startDate).toLocaleString("vi-VN");
+            data?.startDate && new Date(data?.startDate).toLocaleString("vi-VN");
         let endDate =
-            data.endDate && new Date(data.endDate).toLocaleString("vi-VN");
+            data?.endDate && new Date(data?.endDate).toLocaleString("vi-VN");
 
         console.log("startDate,endDate", startDate, endDate);
         const datasend = {
@@ -184,7 +184,7 @@ const AddThesisSession = ({ type }, params) => {
                         setValue("validPoint", res?.result?.validPoint);
                         setValue(
                             "evaluationMethod",
-                            codeEvaluationMethod.filter(
+                            codeEvaluationMethod?.filter(
                                 (value) =>
                                     value?.value ==
                                     res?.result?.evaluationMethodId
@@ -235,9 +235,9 @@ const AddThesisSession = ({ type }, params) => {
                                 // required: "Full name is required",
                             })}
                         />
-                        {errors.id?.type && (
+                        {errors?.id?.type && (
                             <p className=" text-normal text-red-500">
-                                {errors.id?.message}
+                                {errors?.id?.message}
                             </p>
                         )}
                     </div> */}
@@ -252,9 +252,9 @@ const AddThesisSession = ({ type }, params) => {
                                 required: "Name is required",
                             })}
                         />
-                        {errors.name?.type && (
+                        {errors?.name?.type && (
                             <p className=" text-normal text-red-500">
-                                {errors.name?.message}
+                                {errors?.name?.message}
                             </p>
                         )}
                     </div>
@@ -279,9 +279,9 @@ const AddThesisSession = ({ type }, params) => {
                                 // required: "Full name is required",
                             })}
                         /> */}
-                        {errors.description?.type && (
+                        {errors?.description?.type && (
                             <p className=" text-normal text-red-500">
-                                {errors.description?.message}
+                                {errors?.description?.message}
                             </p>
                         )}
                     </div>
@@ -306,9 +306,9 @@ const AddThesisSession = ({ type }, params) => {
                                 />
                             )}
                         />
-                        {errors.evaluationMethod?.type && (
+                        {errors?.evaluationMethod?.type && (
                             <p className=" text-normal text-red-500">
-                                {errors.evaluationMethod?.message}
+                                {errors?.evaluationMethod?.message}
                             </p>
                         )}
                     </div>
@@ -325,9 +325,9 @@ const AddThesisSession = ({ type }, params) => {
                                 required: "Valid point is required",
                             })}
                         />
-                        {errors.validPoint?.type && (
+                        {errors?.validPoint?.type && (
                             <p className=" text-normal text-red-500">
-                                {errors.validPoint?.message}
+                                {errors?.validPoint?.message}
                             </p>
                         )}
                     </div>
@@ -366,9 +366,9 @@ const AddThesisSession = ({ type }, params) => {
                                 />
                             )}
                         />
-                        {errors.startDate?.type && (
+                        {errors?.startDate?.type && (
                             <p className=" text-normal text-red-500">
-                                {errors.startDate?.message}
+                                {errors?.startDate?.message}
                             </p>
                         )}
                     </div>
@@ -404,9 +404,9 @@ const AddThesisSession = ({ type }, params) => {
                                 />
                             )}
                         />
-                        {errors.endDate?.type && (
+                        {errors?.endDate?.type && (
                             <p className=" text-normal text-red-500">
-                                {errors.endDate?.message}
+                                {errors?.endDate?.message}
                             </p>
                         )}
                     </div>

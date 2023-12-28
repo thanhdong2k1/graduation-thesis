@@ -27,8 +27,8 @@ const CardAuth = () => {
     const [showMessage, setShowMessage] = useState("");
     const [showPassword, setShowPassword] = useState(false);
     const navigate = useNavigate();
-    const currentUser = useSelector((state) => state.auth.currentUser);
-    const stateAuth = useSelector((state) => state.auth);
+    const currentUser = useSelector((state) => state?.auth?.currentUser);
+    const stateAuth = useSelector((state) => state?.auth);
     const rolePath =
         currentUser?.roleId == "R1"
             ? "admin"
@@ -162,9 +162,9 @@ const CardAuth = () => {
                                 className="bg-transparent outline-none border-none w-[200px] media-max-md:w-full"
                             />
                         </div>
-                        {errors.email?.type && (
+                        {errors?.email?.type && (
                             <p className=" text-normal text-red-500">
-                                {errors.email?.message}
+                                {errors?.email?.message}
                             </p>
                         )}
                     </div>
@@ -202,9 +202,9 @@ const CardAuth = () => {
                                 />
                             )}
                         </div>
-                        {errors.password?.type && (
+                        {errors?.password?.type && (
                             <p className=" text-normal text-red-500">
-                                {errors.password?.message}
+                                {errors?.password?.message}
                             </p>
                         )}
                     </div>

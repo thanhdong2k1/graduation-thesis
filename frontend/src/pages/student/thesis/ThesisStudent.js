@@ -22,9 +22,9 @@ import { apiStudent } from "../../../redux/apiRequest";
 const ThesisStudent = () => {
     const dispatch = useDispatch();
     const navigate = useNavigate();
-    const theses = useSelector((state) => state.student.theses);
-    const totalRecords = useSelector((state) => state.student.totalRecords);
-    const currentUser = useSelector((state) => state.auth.currentUser);
+    const theses = useSelector((state) => state?.student.theses);
+    const totalRecords = useSelector((state) => state?.student.totalRecords);
+    const currentUser = useSelector((state) => state?.auth?.currentUser);
     let axiosJWT = createAxios(currentUser, dispatch, logginSuccess);
 
     console.log("theses", theses);
@@ -42,7 +42,7 @@ const ThesisStudent = () => {
 
     // Handle
     const handleAdd = () => {
-        navigate(`../${pathRoutes.R1.addStudent}`, { replace: true });
+        navigate(`../${pathRoutes?.R1?.addStudent}`, { replace: true });
     };
     const handleImport = () => {
         console.log("handleImport");
@@ -51,12 +51,12 @@ const ThesisStudent = () => {
         console.log("handleExport");
     };
     const handleEdit = (data) => {
-        navigate(`../${pathRoutes.R1.updateThesis}/${data.id}`, {
+        navigate(`../${pathRoutes?.R1?.updateThesis}/${data?.id}`, {
             replace: true,
         });
     };
     const handleDetail = (data) => {
-        navigate(`../${pathRoutes.R1.thesisDetail}/${data.id}`, {
+        navigate(`../${pathRoutes?.R1?.thesisDetail}/${data?.id}`, {
             replace: true,
         });
     };
@@ -134,14 +134,14 @@ const ThesisStudent = () => {
         //     const convertedObj = {};
         //     for (const key in obj) {
         //         console.log("key,obj", key, obj);
-        //         if (key.includes("Data")) {
-        //             const newKey = key.replace("Data", "Id");
+        //         if (key?.includes("Data")) {
+        //             const newKey = key?.replace("Data", "Id");
         //             convertedObj[newKey] = obj[key];
         //         } else {
         //             convertedObj[key] = obj[key];
         //         }
         //     }
-        //     convertImport.push(convertedObj);
+        //     convertImport?.push(convertedObj);
         // });
         // console.log("convertImport", convertImport);
         // console.log("convertImport", data);
@@ -362,7 +362,7 @@ const ThesisStudent = () => {
         apiStudent.getAllTheses({
             user: currentUser,
             inputSearch: defineTable.inputSearch,
-            filterSearch: defineTable.filterSearch.split(".")?defineTable.filterSearch.split(".")[0]:defineTable.filterSearch,
+            filterSearch: defineTable.filterSearch,
             dispatch: dispatch,
             axiosJWT: axiosJWT,
         });
@@ -373,7 +373,7 @@ const ThesisStudent = () => {
         apiStudent.getAllTheses({
             user: currentUser,
             inputSearch: defineTable.inputSearch,
-            filterSearch: defineTable.filterSearch.split(".")?defineTable.filterSearch.split(".")[0]:defineTable.filterSearch,
+            filterSearch: defineTable.filterSearch,
             dispatch: dispatch,
             axiosJWT: axiosJWT,
         });
@@ -423,23 +423,23 @@ const ThesisStudent = () => {
     //     },
     // ];
 
-    // const gender = useSelector((state) => state.admin.gender);
+    // const gender = useSelector((state) => state?.admin?.gender);
     // const handleChangeLimit = (e) => {
     //     // console.log(e);
     //     const permissions = [];
     //     e.map((obj) => {
     //         console.log(obj.value);
-    //         permissions.push(obj.value);
+    //         permissions?.push(obj.value);
     //     });
 
-    //     // console.log(permissions.toString(), permissions.toString().split(","));
+    //     // console.log(permissions.toString(), permissions.toString()?.split(","));
 
     //     const convert = [];
-    //     const array = permissions.toString().split(",");
+    //     const array = permissions.toString()?.split(",");
     //     gender.map((obj) => {
     //         console.log(obj);
-    //         if (array.includes(obj.value)) {
-    //             convert.push(obj);
+    //         if (array?.includes(obj.value)) {
+    //             convert?.push(obj);
     //         }
     //     });
     //     console.log(convert, convert);

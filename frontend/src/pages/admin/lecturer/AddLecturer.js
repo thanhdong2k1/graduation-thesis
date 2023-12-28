@@ -22,15 +22,15 @@ const AddLecturer = ({ type }, params) => {
     let { id } = useParams();
     console.log("type", type, id);
 
-    const currentUser = useSelector((state) => state.auth.currentUser);
+    const currentUser = useSelector((state) => state?.auth?.currentUser);
     const dispatch = useDispatch();
     let axiosJWT = createAxios(currentUser, dispatch, logginSuccess);
-    const status = useSelector((state) => state.admin.status);
-    const gender = useSelector((state) => state.admin.gender);
-    const role = useSelector((state) => state.admin.role);
-    const permissions = useSelector((state) => state.admin.permissions);
-    const departments = useSelector((state) => state.admin.departments);
-    let codeDepartment = departments.map((v) => {
+    const status = useSelector((state) => state?.admin?.status);
+    const gender = useSelector((state) => state?.admin?.gender);
+    const role = useSelector((state) => state?.admin?.role);
+    const permissions = useSelector((state) => state?.admin?.permissions);
+    const departments = useSelector((state) => state?.admin?.departments);
+    let codeDepartment = departments?.map((v) => {
         return { value: v.id, label: `${v.id} | ${v.name}` };
     });
     const [isRtl, setIsRtl] = useState(false);
@@ -115,7 +115,7 @@ const AddLecturer = ({ type }, params) => {
             ?.filter((value) => !value.isFixed)
             ?.map((obj) => {
                 console.log(obj?.value);
-                permissions.push(obj?.value);
+                permissions?.push(obj?.value);
             });
         const datasend = {
             ...data,
@@ -125,7 +125,7 @@ const AddLecturer = ({ type }, params) => {
             permissions: permissions.toString(),
             //     e.map((obj) => {
             //         console.log(obj.value);
-            //         permissions.push(obj.value);
+            //         permissions?.push(obj.value);
             //     });,
         };
         console.log(datasend);
@@ -250,7 +250,7 @@ const AddLecturer = ({ type }, params) => {
                             if (res?.result?.roleId === "R1") {
                                 permissions.forEach((obj) => {
                                     if (obj.value === "PERF") {
-                                        convert.push({ ...obj, isFixed: true });
+                                        convert?.push({ ...obj, isFixed: true });
                                     }
                                 });
                             } else if (res?.result?.roleId === "R2") {
@@ -259,7 +259,7 @@ const AddLecturer = ({ type }, params) => {
                                         obj.value !== "PERD" &&
                                         obj.value !== "PERF"
                                     ) {
-                                        convert.push({ ...obj, isFixed: true });
+                                        convert?.push({ ...obj, isFixed: true });
                                     }
                                 });
                             } else {
@@ -268,16 +268,15 @@ const AddLecturer = ({ type }, params) => {
                                         obj.value === "PERU" ||
                                         obj.value === "PERR"
                                     ) {
-                                        convert.push({ ...obj, isFixed: true });
+                                        convert?.push({ ...obj, isFixed: true });
                                     }
                                 });
                             }
                             const array = res?.result?.permissions
-                                ?.toString()
-                                .split(",");
+                                ?.toString()?.split(",");
                             permissions.forEach((obj) => {
                                 if (array?.includes(obj.value)) {
-                                    convert.push(obj);
+                                    convert?.push(obj);
                                 }
                             });
                             setValue("id", res?.result?.id);
@@ -294,14 +293,14 @@ const AddLecturer = ({ type }, params) => {
                             setValue("code", res?.result?.code);
                             setValue(
                                 "role",
-                                role.filter(
+                                role?.filter(
                                     (role) =>
                                         role?.value === res?.result?.roleId
                                 )
                             );
                             setValue(
                                 "department",
-                                codeDepartment.filter(
+                                codeDepartment?.filter(
                                     (value) =>
                                         value?.value ==
                                         res?.result?.departmentId
@@ -311,14 +310,14 @@ const AddLecturer = ({ type }, params) => {
                             // console.log(res?.result?.birthday,moment(res?.result?.birthday, "DD/MM/YYYY").toString());
                             setValue(
                                 "gender",
-                                gender.filter(
+                                gender?.filter(
                                     (gender) =>
                                         gender?.value === res?.result?.genderId
                                 )
                             );
                             setValue(
                                 "status",
-                                status.filter(
+                                status?.filter(
                                     (status) =>
                                         status?.value === res?.result?.statusId
                                 )
@@ -370,9 +369,9 @@ const AddLecturer = ({ type }, params) => {
                                     // required: "Full name is required",
                                 })}
                             />
-                            {errors.id?.type && (
+                            {errors?.id?.type && (
                                 <p className=" text-normal text-red-500">
-                                    {errors.id?.message}
+                                    {errors?.id?.message}
                                 </p>
                             )}
                         </div> */}
@@ -387,9 +386,9 @@ const AddLecturer = ({ type }, params) => {
                                     required: "Email is required",
                                 })}
                             />
-                            {errors.email?.type && (
+                            {errors?.email?.type && (
                                 <p className=" text-normal text-red-500">
-                                    {errors.email?.message}
+                                    {errors?.email?.message}
                                 </p>
                             )}
                         </div>
@@ -406,9 +405,9 @@ const AddLecturer = ({ type }, params) => {
                                     required: "Full name is required",
                                 })}
                             />
-                            {errors.fullName?.type && (
+                            {errors?.fullName?.type && (
                                 <p className=" text-normal text-red-500">
-                                    {errors.fullName?.message}
+                                    {errors?.fullName?.message}
                                 </p>
                             )}
                         </div>
@@ -423,9 +422,9 @@ const AddLecturer = ({ type }, params) => {
                                     required: "Number phone is required",
                                 })}
                             />
-                            {errors.numberPhone?.type && (
+                            {errors?.numberPhone?.type && (
                                 <p className=" text-normal text-red-500">
-                                    {errors.numberPhone?.message}
+                                    {errors?.numberPhone?.message}
                                 </p>
                             )}
                         </div>
@@ -442,9 +441,9 @@ const AddLecturer = ({ type }, params) => {
                                     // required: "Full name is required",
                                 })}
                             />
-                            {errors.address?.type && (
+                            {errors?.address?.type && (
                                 <p className=" text-normal text-red-500">
-                                    {errors.address?.message}
+                                    {errors?.address?.message}
                                 </p>
                             )}
                         </div>
@@ -483,9 +482,9 @@ const AddLecturer = ({ type }, params) => {
                                     />
                                 )}
                             />
-                            {errors.birthday?.type && (
+                            {errors?.birthday?.type && (
                                 <p className=" text-normal text-red-500">
-                                    {errors.birthday?.message}
+                                    {errors?.birthday?.message}
                                 </p>
                             )}
                         </div>
@@ -509,9 +508,9 @@ const AddLecturer = ({ type }, params) => {
                                     />
                                 )}
                             />
-                            {errors.gender?.type && (
+                            {errors?.gender?.type && (
                                 <p className=" text-normal text-red-500">
-                                    {errors.gender?.message}
+                                    {errors?.gender?.message}
                                 </p>
                             )}
                         </div>
@@ -567,9 +566,9 @@ const AddLecturer = ({ type }, params) => {
                                     />
                                 )}
                             />
-                            {errors.role?.type && (
+                            {errors?.role?.type && (
                                 <p className=" text-normal text-red-500">
-                                    {errors.role?.message}
+                                    {errors?.role?.message}
                                 </p>
                             )}
                         </div>
@@ -596,9 +595,9 @@ const AddLecturer = ({ type }, params) => {
                                     />
                                 )}
                             />
-                            {errors.department?.type && (
+                            {errors?.department?.type && (
                                 <p className=" text-normal text-red-500">
-                                    {errors.department?.message}
+                                    {errors?.department?.message}
                                 </p>
                             )}
                         </div>
@@ -622,9 +621,9 @@ const AddLecturer = ({ type }, params) => {
                                     />
                                 )}
                             />
-                            {errors.status?.type && (
+                            {errors?.status?.type && (
                                 <p className=" text-normal text-red-500">
-                                    {errors.status?.message}
+                                    {errors?.status?.message}
                                 </p>
                             )}
                         </div>

@@ -25,9 +25,9 @@ const ThesisCouncilLecturer = () => {
     console.log("type", id);
     const dispatch = useDispatch();
     const navigate = useNavigate();
-    const theses = useSelector((state) => state.admin.theses);
-    const totalRecords = useSelector((state) => state.admin.totalRecords);
-    const currentUser = useSelector((state) => state.auth.currentUser);
+    const theses = useSelector((state) => state?.admin?.theses);
+    const totalRecords = useSelector((state) => state?.admin?.totalRecords);
+    const currentUser = useSelector((state) => state?.auth?.currentUser);
     let axiosJWT = createAxios(currentUser, dispatch, logginSuccess);
 
     console.log("theses", theses);
@@ -45,7 +45,7 @@ const ThesisCouncilLecturer = () => {
 
     // Handle
     const handleAdd = () => {
-        navigate(`../${pathRoutes.R1.addThesis}`, { replace: true });
+        navigate(`../${pathRoutes?.R1?.addThesis}`, { replace: true });
     };
     const handleImport = () => {
         console.log("handleImport");
@@ -56,7 +56,7 @@ const ThesisCouncilLecturer = () => {
     const handleEdit = (data) => {
         console.log(
             navigate(
-                `../council/detail-council/${thesisSessionId}/${id}/mark/${data.id}`,
+                `../council/detail-council/${thesisSessionId}/${id}/mark/${data?.id}`,
                 {
                     replace: true,
                 }
@@ -64,7 +64,7 @@ const ThesisCouncilLecturer = () => {
         );
     };
     const handleDetail = (data) => {
-        navigate(`../${pathRoutes.R1.theseDetail}/${data.id}`, {
+        navigate(`../${pathRoutes?.R1?.theseDetail}/${data?.id}`, {
             replace: true,
         });
     };
@@ -142,14 +142,14 @@ const ThesisCouncilLecturer = () => {
         //     const convertedObj = {};
         //     for (const key in obj) {
         //         console.log("key,obj", key, obj);
-        //         if (key.includes("Data")) {
-        //             const newKey = key.replace("Data", "Id");
+        //         if (key?.includes("Data")) {
+        //             const newKey = key?.replace("Data", "Id");
         //             convertedObj[newKey] = obj[key];
         //         } else {
         //             convertedObj[key] = obj[key];
         //         }
         //     }
-        //     convertImport.push(convertedObj);
+        //     convertImport?.push(convertedObj);
         // });
         // console.log("convertImport", convertImport);
         // console.log("convertImport", data);
@@ -382,9 +382,8 @@ const ThesisCouncilLecturer = () => {
                 id: id,
                 user: currentUser,
                 inputSearch: defineTable.inputSearch,
-                filterSearch: defineTable.filterSearch.split(".")
-                    ? defineTable.filterSearch.split(".")[0]
-                    : defineTable.filterSearch,
+                filterSearch: defineTable.filterSearch,
+
                 dispatch: dispatch,
                 axiosJWT: axiosJWT,
             });
@@ -397,9 +396,7 @@ const ThesisCouncilLecturer = () => {
             id: id,
             user: currentUser,
             inputSearch: defineTable.inputSearch,
-            filterSearch: defineTable.filterSearch.split(".")
-                ? defineTable.filterSearch.split(".")[0]
-                : defineTable.filterSearch,
+            filterSearch: defineTable.filterSearch,
 
             dispatch: dispatch,
             axiosJWT: axiosJWT,
@@ -450,23 +447,23 @@ const ThesisCouncilLecturer = () => {
     //     },
     // ];
 
-    // const gender = useSelector((state) => state.admin.gender);
+    // const gender = useSelector((state) => state?.admin?.gender);
     // const handleChangeLimit = (e) => {
     //     // console.log(e);
     //     const permissions = [];
     //     e.map((obj) => {
     //         console.log(obj.value);
-    //         permissions.push(obj.value);
+    //         permissions?.push(obj.value);
     //     });
 
-    //     // console.log(permissions.toString(), permissions.toString().split(","));
+    //     // console.log(permissions.toString(), permissions.toString()?.split(","));
 
     //     const convert = [];
-    //     const array = permissions.toString().split(",");
+    //     const array = permissions.toString()?.split(",");
     //     gender.map((obj) => {
     //         console.log(obj);
-    //         if (array.includes(obj.value)) {
-    //             convert.push(obj);
+    //         if (array?.includes(obj.value)) {
+    //             convert?.push(obj);
     //         }
     //     });
     //     console.log(convert, convert);

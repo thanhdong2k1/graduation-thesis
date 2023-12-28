@@ -24,10 +24,10 @@ const AddBlock = ({ type }, params) => {
     let { id } = useParams();
     console.log("type", type, id);
 
-    const currentUser = useSelector((state) => state.auth.currentUser);
+    const currentUser = useSelector((state) => state?.auth?.currentUser);
     const dispatch = useDispatch();
     let axiosJWT = createAxios(currentUser, dispatch, logginSuccess);
-    const status = useSelector((state) => state.admin.status);
+    const status = useSelector((state) => state?.admin?.status);
     const [isRtl, setIsRtl] = useState(false);
 
     const {
@@ -197,9 +197,9 @@ const AddBlock = ({ type }, params) => {
                                 // required: "Full name is required",
                             })}
                         />
-                        {errors.id?.type && (
+                        {errors?.id?.type && (
                             <p className=" text-normal text-red-500">
-                                {errors.id?.message}
+                                {errors?.id?.message}
                             </p>
                         )}
                     </div> */}
@@ -214,9 +214,9 @@ const AddBlock = ({ type }, params) => {
                                 required: "Name is required",
                             })}
                         />
-                        {errors.name?.type && (
+                        {errors?.name?.type && (
                             <p className=" text-normal text-red-500">
-                                {errors.name?.message}
+                                {errors?.name?.message}
                             </p>
                         )}
                     </div>
@@ -241,9 +241,9 @@ const AddBlock = ({ type }, params) => {
                                 // required: "Full name is required",
                             })}
                         /> */}
-                        {errors.description?.type && (
+                        {errors?.description?.type && (
                             <p className=" text-normal text-red-500">
-                                {errors.description?.message}
+                                {errors?.description?.message}
                             </p>
                         )}
                     </div>
@@ -268,9 +268,9 @@ const AddBlock = ({ type }, params) => {
                                 />
                             )}
                         />
-                        {errors.thesisSession?.type && (
+                        {errors?.thesisSession?.type && (
                             <p className=" text-normal text-red-500">
-                                {errors.thesisSession?.message}
+                                {errors?.thesisSession?.message}
                             </p>
                         )}
                     </div>
@@ -292,9 +292,9 @@ const AddBlock = ({ type }, params) => {
                                 />
                             )}
                         />
-                        {errors.status?.type && (
+                        {errors?.status?.type && (
                             <p className=" text-normal text-red-500">
-                                {errors.status?.message}
+                                {errors?.status?.message}
                             </p>
                         )}
                     </div>

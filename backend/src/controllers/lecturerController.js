@@ -2,6 +2,7 @@ const bcrypt = require("bcryptjs");
 const db = require("../models");
 const { Op, where } = require("sequelize");
 const evaluationCriteria = require("../models/evaluationCriteria");
+const userController = require("./userController");
 const salt = bcrypt.genSaltSync(10);
 
 const lecturerController = {
@@ -182,32 +183,13 @@ const lecturerController = {
   // Api Council
   getCouncils: async (req, res) => {
     try {
-      console.log(req.body);
-      const searchTerms = `%${
-        req?.body?.inputSearch ? req?.body?.inputSearch?.trim() : ""
-      }%`?.replace(/\s/g, "%");
-      console.log(searchTerms);
-      const whereClause = {};
-      console.log(req?.body?.inputSearch?.toLowerCase());
-      console.log("req?.body?.length", Object.keys(req?.body).length);
-      if (Object.keys(req?.body).length > 0) {
-        console.log("Đã vào");
-        if (!req?.body?.filterSearch?.includes("Data")) {
-          if (searchTerms?.toLowerCase() != "%null%") {
-            whereClause[req?.body?.filterSearch] = {
-              [Op.like]: searchTerms,
-            };
-          } else {
-            whereClause[req?.body?.filterSearch] = {
-              [Op.is]: null,
-            };
-          }
-        }
-        // whereClause[req?.body?.filterSearch?.replace("Data", "Id")] = {
-        //   [Op.is]: null,
-        // };
-        whereClause["lecturerId"] = req?.user?.id;
-      }
+      let whereClause = userController.whereClause(req?.body);
+
+      whereClause = {
+        [Op.or]: whereClause,
+      };
+      whereClause["lecturerId"] = req?.user?.id;
+
       console.log("whereClause", whereClause);
 
       const queryOptions = {
@@ -246,7 +228,7 @@ const lecturerController = {
 
       if (Object.keys(whereClause).length > 0) {
         queryOptions.where = {
-          [Op.or]: whereClause,
+          [Op.and]: whereClause,
         };
       }
 
@@ -286,7 +268,8 @@ const lecturerController = {
       } else {
         return res.status(200).json({
           errCode: 1,
-          errMessage: "Đã xảy ra lỗi trong quá trình tìm, vui lòng thử lại sau!",
+          errMessage:
+            "Đã xảy ra lỗi trong quá trình tìm, vui lòng thử lại sau!",
         });
       }
     } catch (error) {
@@ -441,84 +424,8 @@ const lecturerController = {
   // Api Thesis
   getThesisCouncils: async (req, res) => {
     try {
-      console.log(req.body);
-      const searchTerms = `%${
-        req?.body?.inputSearch ? req?.body?.inputSearch?.trim() : ""
-      }%`?.replace(/\s/g, "%");
-      console.log(searchTerms);
-      const whereClause = {};
-      console.log(req?.body?.inputSearch?.toLowerCase());
-      console.log("req?.body?.length", Object.keys(req?.body).length);
-      if (Object.keys(req?.body).length > 0) {
-        console.log("Đã vào");
-        // if (!req?.body?.filterSearch?.includes("Data")) {
-        //   if (searchTerms?.toLowerCase() != "%null%") {
-        //     whereClause[req?.body?.filterSearch] = {
-        //       [Op.like]: searchTerms,
-        //     };
-        //   } else {
-        //     whereClause[req?.body?.filterSearch] = {
-        //       [Op.is]: null,
-        //     };
-        //   }
-        // } else {
-        //   // councilStatusData,
-        //   // thesisAdvisorStatusData,
-        //   // resultData,
-        //   // topicData,
-        //   // studentData,
-        //   // thesisAdvisorData,
-        //   // thesisSessionData,
-        //   // councilData,
-        //   if (searchTerms?.toLowerCase() != "%null%") {
-        //     console.log(req?.body?.filterSearch);
-        //     if (req?.body?.filterSearch == "topicData") {
-        //       whereClause["$topicData.name$"] = {
-        //         [Op.like]: searchTerms,
-        //       };
-        //     } else if (req?.body?.filterSearch == "studentData") {
-        //       whereClause["$studentData.fullName$"] = {
-        //         [Op.like]: searchTerms,
-        //       };
-        //     } else if (req?.body?.filterSearch == "thesisAdvisorData") {
-        //       whereClause["$thesisAdvisorData.fullName$"] = {
-        //         [Op.like]: searchTerms,
-        //       };
-        //     } else if (req?.body?.filterSearch == "thesisSessionData") {
-        //       whereClause["$thesisSessionData.name$"] = {
-        //         [Op.like]: searchTerms,
-        //       };
-        //     } else if (req?.body?.filterSearch == "councilData") {
-        //       whereClause["$councilData.name$"] = {
-        //         [Op.like]: searchTerms,
-        //       };
-        //     } else if (req?.body?.filterSearch == "councilStatusData") {
-        //       whereClause["$councilStatusData.valueVi$"] = {
-        //         [Op.like]: searchTerms,
-        //       };
-        //     } else if (req?.body?.filterSearch == "thesisAdvisorStatusData") {
-        //       whereClause["$thesisAdvisorStatusData.valueVi$"] = {
-        //         [Op.like]: searchTerms,
-        //       };
-        //     } else if (req?.body?.filterSearch == "resultData") {
-        //       whereClause["$resultData.valueVi$"] = {
-        //         [Op.like]: searchTerms,
-        //       };
-        //     }
-        //     // theo id
-        //     whereClause[req?.body?.filterSearch.replace("Data", "Id")] = {
-        //       [Op.like]: searchTerms,
-        //     };
-        //   } else {
-        //     whereClause[req?.body?.filterSearch?.replace("Data", "Id")] = {
-        //       [Op.is]: null,
-        //     };
-        //   }
-        // }
-        whereClause["councilId"] = {
-          [Op.eq]: req?.body?.id,
-        };
-      }
+      const whereClause = userController.whereClause(req?.body);
+
       console.log("whereClause", whereClause);
 
       const queryOptions = {
@@ -626,7 +533,8 @@ const lecturerController = {
       } else {
         return res.status(200).json({
           errCode: 1,
-          errMessage: "Đã xảy ra lỗi trong quá trình tìm, vui lòng thử lại sau!",
+          errMessage:
+            "Đã xảy ra lỗi trong quá trình tìm, vui lòng thử lại sau!",
         });
       }
     } catch (error) {
@@ -843,7 +751,8 @@ const lecturerController = {
       } else {
         return res.status(200).json({
           errCode: 1,
-          errMessage: "Đã xảy ra lỗi trong quá trình tìm, vui lòng thử lại sau!",
+          errMessage:
+            "Đã xảy ra lỗi trong quá trình tìm, vui lòng thử lại sau!",
         });
       }
     } catch (error) {
@@ -946,7 +855,8 @@ const lecturerController = {
       } else {
         return res.status(200).json({
           errCode: 1,
-          errMessage: "Đã xảy ra lỗi trong quá trình tìm, vui lòng thử lại sau!",
+          errMessage:
+            "Đã xảy ra lỗi trong quá trình tìm, vui lòng thử lại sau!",
         });
       }
     } catch (error) {
@@ -1215,7 +1125,8 @@ const lecturerController = {
       } else {
         return res.status(200).json({
           errCode: 1,
-          errMessage: "Đã xảy ra lỗi trong quá trình tìm, vui lòng thử lại sau!",
+          errMessage:
+            "Đã xảy ra lỗi trong quá trình tìm, vui lòng thử lại sau!",
         });
       }
     } catch (error) {
@@ -1431,7 +1342,8 @@ const lecturerController = {
       } else {
         return res.status(200).json({
           errCode: 1,
-          errMessage: "Đã xảy ra lỗi trong quá trình tìm, vui lòng thử lại sau!",
+          errMessage:
+            "Đã xảy ra lỗi trong quá trình tìm, vui lòng thử lại sau!",
         });
       }
     } catch (error) {
@@ -1657,7 +1569,8 @@ const lecturerController = {
       } else {
         return res.status(200).json({
           errCode: 1,
-          errMessage: "Đã xảy ra lỗi trong quá trình tìm, vui lòng thử lại sau!",
+          errMessage:
+            "Đã xảy ra lỗi trong quá trình tìm, vui lòng thử lại sau!",
         });
       }
     } catch (error) {
@@ -1876,7 +1789,8 @@ const lecturerController = {
       } else {
         return res.status(200).json({
           errCode: 1,
-          errMessage: "Đã xảy ra lỗi trong quá trình tìm, vui lòng thử lại sau!",
+          errMessage:
+            "Đã xảy ra lỗi trong quá trình tìm, vui lòng thử lại sau!",
         });
       }
     } catch (error) {
@@ -2165,9 +2079,11 @@ const lecturerController = {
           nest: true,
         });
         if (result) {
-          return res
-            .status(200)
-            .json({ errCode: 0, errMessage: "Tìm dữ liệu thành công.", result });
+          return res.status(200).json({
+            errCode: 0,
+            errMessage: "Tìm dữ liệu thành công.",
+            result,
+          });
         } else {
           return res.status(200).json({
             errCode: 1,
@@ -2178,7 +2094,8 @@ const lecturerController = {
       } else {
         return res.status(200).json({
           errCode: 1,
-          errMessage: "Đã xảy ra lỗi trong quá trình tìm, vui lòng thử lại sau!",
+          errMessage:
+            "Đã xảy ra lỗi trong quá trình tìm, vui lòng thử lại sau!",
         });
       }
     } catch (error) {
@@ -2444,7 +2361,8 @@ const lecturerController = {
       } else {
         return res.status(200).json({
           errCode: 1,
-          errMessage: "Đã xảy ra lỗi trong quá trình tìm, vui lòng thử lại sau!",
+          errMessage:
+            "Đã xảy ra lỗi trong quá trình tìm, vui lòng thử lại sau!",
         });
       }
     } catch (error) {
@@ -2810,7 +2728,8 @@ const lecturerController = {
       } else {
         return res.status(200).json({
           errCode: 1,
-          errMessage: "Đã xảy ra lỗi trong quá trình tìm, vui lòng thử lại sau!",
+          errMessage:
+            "Đã xảy ra lỗi trong quá trình tìm, vui lòng thử lại sau!",
         });
       }
     } catch (error) {
@@ -3144,7 +3063,8 @@ const lecturerController = {
       } else {
         return res.status(200).json({
           errCode: 1,
-          errMessage: "Đã xảy ra lỗi trong quá trình tìm, vui lòng thử lại sau!",
+          errMessage:
+            "Đã xảy ra lỗi trong quá trình tìm, vui lòng thử lại sau!",
         });
       }
     } catch (error) {
@@ -3360,7 +3280,8 @@ const lecturerController = {
       } else {
         return res.status(200).json({
           errCode: 1,
-          errMessage: "Đã xảy ra lỗi trong quá trình tìm, vui lòng thử lại sau!",
+          errMessage:
+            "Đã xảy ra lỗi trong quá trình tìm, vui lòng thử lại sau!",
         });
       }
     } catch (error) {

@@ -37,7 +37,7 @@ const adminSlice = createSlice({
         },
         getInformationSuccess: (state, action) => {
             state.isFetching = false;
-            state.information = action.payload?.information;
+            state.information = action?.payload.information;
             state.error = false;
         },
         getInformationFailed: (state) => {
@@ -49,7 +49,7 @@ const adminSlice = createSlice({
         },
         getGenderSuccess: (state, action) => {
             state.isFetching = false;
-            state.gender = action.payload?.code;
+            state.gender = action?.payload.code;
             state.error = false;
         },
         getGenderFailed: (state) => {
@@ -61,7 +61,7 @@ const adminSlice = createSlice({
         },
         getPositionSuccess: (state, action) => {
             state.isFetching = false;
-            state.position = action.payload?.code;
+            state.position = action?.payload.code;
             state.error = false;
         },
         getPositionFailed: (state) => {
@@ -73,7 +73,7 @@ const adminSlice = createSlice({
         },
         getRoleSuccess: (state, action) => {
             state.isFetching = false;
-            state.role = action.payload?.code;
+            state.role = action?.payload.code;
             state.error = false;
         },
         getRoleFailed: (state) => {
@@ -85,7 +85,7 @@ const adminSlice = createSlice({
         },
         getStatusSuccess: (state, action) => {
             state.isFetching = false;
-            state.status = action.payload?.code;
+            state.status = action?.payload.code;
             state.error = false;
         },
         getStatusFailed: (state) => {
@@ -97,7 +97,7 @@ const adminSlice = createSlice({
         },
         getHandleSuccess: (state, action) => {
             state.isFetching = false;
-            state.handle = action.payload?.code;
+            state.handle = action?.payload.code;
             state.error = false;
         },
         getHandleFailed: (state) => {
@@ -109,7 +109,7 @@ const adminSlice = createSlice({
         },
         getResultSuccess: (state, action) => {
             state.isFetching = false;
-            state.result = action.payload?.code;
+            state.result = action?.payload.code;
             state.error = false;
         },
         getResultFailed: (state) => {
@@ -121,7 +121,7 @@ const adminSlice = createSlice({
         },
         getPermissionsSuccess: (state, action) => {
             state.isFetching = false;
-            state.permissions = action.payload?.code;
+            state.permissions = action?.payload.code;
             state.error = false;
         },
         getPermissionsFailed: (state) => {
@@ -130,8 +130,8 @@ const adminSlice = createSlice({
         },
 
         getAdminCouncilsSuccess: (state, action) => {
-            state.councils = action.payload.councils;
-            state.totalRecords = action.payload.totalRecords;
+            state.councils = action?.payload.councils;
+            state.totalRecords = action?.payload.totalRecords;
             state.isFetching = false;
             state.error = false;
         },
@@ -145,8 +145,8 @@ const adminSlice = createSlice({
         },
 
         getAdminDepartmentsSuccess: (state, action) => {
-            state.departments = action.payload.departments;
-            state.totalRecords = action.payload.totalRecords;
+            state.departments = action?.payload.departments;
+            state.totalRecords = action?.payload.totalRecords;
             state.isFetching = false;
             state.error = false;
         },
@@ -160,8 +160,8 @@ const adminSlice = createSlice({
         },
 
         getAdminBlocksSuccess: (state, action) => {
-            state.blocks = action.payload.blocks;
-            state.totalRecords = action.payload.totalRecords;
+            state.blocks = action?.payload.blocks;
+            state.totalRecords = action?.payload.totalRecords;
             state.isFetching = false;
             state.error = false;
         },
@@ -175,8 +175,8 @@ const adminSlice = createSlice({
         },
 
         getAdminEvaluationMethodsSuccess: (state, action) => {
-            state.evaluationMethods = action.payload.evaluationMethods;
-            state.totalRecords = action.payload.totalRecords;
+            state.evaluationMethods = action?.payload.evaluationMethods;
+            state.totalRecords = action?.payload.totalRecords;
             state.isFetching = false;
             state.error = false;
         },
@@ -190,7 +190,7 @@ const adminSlice = createSlice({
         },
 
         getAdminEvaluationCriteriasSuccess: (state, action) => {
-            state.evaluationCriterias = action.payload.result;
+            state.evaluationCriterias = action?.payload.result;
             state.isFetching = false;
             state.error = false;
         },
@@ -204,8 +204,8 @@ const adminSlice = createSlice({
         },
 
         getAdminLecturersSuccess: (state, action) => {
-            state.lecturers = action.payload.lecturers;
-            state.totalRecords = action.payload.totalRecords;
+            state.lecturers = action?.payload.lecturers;
+            state.totalRecords = action?.payload.totalRecords;
             state.isFetching = false;
             state.error = false;
         },
@@ -219,8 +219,8 @@ const adminSlice = createSlice({
         },
 
         getAdminThesesSuccess: (state, action) => {
-            state.theses = action.payload.theses;
-            state.totalRecords = action.payload.totalRecords;
+            state.theses = action?.payload.theses;
+            state.totalRecords = action?.payload.totalRecords;
             state.isFetching = false;
             state.error = false;
         },
@@ -234,8 +234,8 @@ const adminSlice = createSlice({
         },
 
         getAdminMajorsSuccess: (state, action) => {
-            state.majors = action.payload.majors;
-            state.totalRecords = action.payload.totalRecords;
+            state.majors = action?.payload.majors;
+            state.totalRecords = action?.payload.totalRecords;
             state.isFetching = false;
             state.error = false;
         },
@@ -249,8 +249,8 @@ const adminSlice = createSlice({
         },
 
         getAdminClassesSuccess: (state, action) => {
-            state.classes = action.payload.classes;
-            state.totalRecords = action.payload.totalRecords;
+            state.classes = action?.payload.classes;
+            state.totalRecords = action?.payload.totalRecords;
             state.isFetching = false;
             state.error = false;
         },
@@ -264,8 +264,8 @@ const adminSlice = createSlice({
         },
 
         getAdminStudentsSuccess: (state, action) => {
-            state.students = action.payload.students;
-            state.totalRecords = action.payload.totalRecords;
+            state.students = action?.payload.students;
+            state.totalRecords = action?.payload.totalRecords;
             state.isFetching = false;
             state.error = false;
         },
@@ -279,8 +279,8 @@ const adminSlice = createSlice({
         },
 
         getAdminTopicsSuccess: (state, action) => {
-            state.topics = action.payload.topics;
-            state.totalRecords = action.payload.totalRecords;
+            state.topics = action?.payload.topics;
+            state.totalRecords = action?.payload.totalRecords;
             state.isFetching = false;
             state.error = false;
         },
@@ -294,8 +294,8 @@ const adminSlice = createSlice({
         },
 
         getAdminThesisSessionsSuccess: (state, action) => {
-            state.thesisSessions = action.payload.thesisSessions;
-            state.totalRecords = action.payload.totalRecords;
+            state.thesisSessions = action?.payload.thesisSessions;
+            state.totalRecords = action?.payload.totalRecords;
             state.isFetching = false;
             state.error = false;
         },

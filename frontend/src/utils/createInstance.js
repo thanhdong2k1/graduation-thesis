@@ -25,10 +25,10 @@ export const createAxios = (user, dispatch, stateSuccess) => {
                     console.log("Token đã được reset");
                     const refreshUser = {
                         ...user,
-                        accessToken: data.accessToken,
+                        accessToken: data?.accessToken,
                     };
                     dispatch(stateSuccess(refreshUser));
-                    config.headers["token"] = "Bearer " + data.accessToken;
+                    config.headers["token"] = "Bearer " + data?.accessToken;
                 } else {
                     console.log("Server đã reset và mất refreshToken");
                     dispatch(

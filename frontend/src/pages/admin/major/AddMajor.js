@@ -24,12 +24,12 @@ const AddMajor = ({ type }, params) => {
     let { id } = useParams();
     console.log("type", type, id);
 
-    const currentUser = useSelector((state) => state.auth.currentUser);
+    const currentUser = useSelector((state) => state?.auth?.currentUser);
     const dispatch = useDispatch();
     let axiosJWT = createAxios(currentUser, dispatch, logginSuccess);
-    const status = useSelector((state) => state.admin.status);
-    const departments = useSelector((state) => state.admin.departments);
-    let codeDepartment = departments.map((v) => {
+    const status = useSelector((state) => state?.admin?.status);
+    const departments = useSelector((state) => state?.admin?.departments);
+    let codeDepartment = departments?.map((v) => {
         return { value: v.id, label: `${v.id} | ${v.name}` };
     });
     const [isRtl, setIsRtl] = useState(false);
@@ -164,7 +164,7 @@ const AddMajor = ({ type }, params) => {
                         setValue("description", res?.result?.description);
                         setValue(
                             "department",
-                            codeDepartment.filter(
+                            codeDepartment?.filter(
                                 (value) =>
                                     value?.value == res?.result?.departmentId
                             )
@@ -213,9 +213,9 @@ const AddMajor = ({ type }, params) => {
                                 // required: "Full name is required",
                             })}
                         />
-                        {errors.id?.type && (
+                        {errors?.id?.type && (
                             <p className=" text-normal text-red-500">
-                                {errors.id?.message}
+                                {errors?.id?.message}
                             </p>
                         )}
                     </div> */}
@@ -230,9 +230,9 @@ const AddMajor = ({ type }, params) => {
                                 required: "Name is required",
                             })}
                         />
-                        {errors.name?.type && (
+                        {errors?.name?.type && (
                             <p className=" text-normal text-red-500">
-                                {errors.name?.message}
+                                {errors?.name?.message}
                             </p>
                         )}
                     </div>
@@ -257,9 +257,9 @@ const AddMajor = ({ type }, params) => {
                                 // required: "Full name is required",
                             })}
                         /> */}
-                        {errors.description?.type && (
+                        {errors?.description?.type && (
                             <p className=" text-normal text-red-500">
-                                {errors.description?.message}
+                                {errors?.description?.message}
                             </p>
                         )}
                     </div>
@@ -284,9 +284,9 @@ const AddMajor = ({ type }, params) => {
                                 />
                             )}
                         />
-                        {errors.department?.type && (
+                        {errors?.department?.type && (
                             <p className=" text-normal text-red-500">
-                                {errors.department?.message}
+                                {errors?.department?.message}
                             </p>
                         )}
                     </div>

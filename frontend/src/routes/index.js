@@ -49,19 +49,19 @@ export const routes = [
             {
                 //   icon: <HomeIcon {...icon} />,
                 name: "Trang chủ",
-                path: pathRoutes.R1.home,
+                path: pathRoutes?.R1?.home,
                 element: <AdminHomePage />,
             },
             {
                 //   icon: <HomeIcon {...icon} />,
                 name: "Đổi thông tin",
-                path: pathRoutes.R1.changeInformation,
+                path: pathRoutes?.R1?.changeInformation,
                 element: <AdminChangeInformation />,
             },
             {
                 //   icon: <HomeIcon {...icon} />,
                 name: "Đổi mật khẩu",
-                path: pathRoutes.R1.changePassword,
+                path: pathRoutes?.R1?.changePassword,
                 element: <AdminChangePassword />,
             },
 
@@ -69,25 +69,25 @@ export const routes = [
             {
                 //   icon: <HomeIcon {...icon} />,
                 name: "Hội đồng",
-                path: pathRoutes.R1.council,
+                path: pathRoutes?.R1?.council,
                 element: <Council />,
             },
             {
                 //   icon: <HomeIcon {...icon} />,
                 name: "Add Council",
-                path: pathRoutes.R1.addCouncil,
+                path: pathRoutes?.R1?.addCouncil,
                 element: <AddCouncil type={"add"} />,
             },
             {
                 //   icon: <HomeIcon {...icon} />,
                 name: "Update Council",
-                path: pathRoutes.R1.updateCouncilId,
+                path: pathRoutes?.R1?.updateCouncilId,
                 element: <AddCouncil type={"update"} />,
             },
             {
                 //   icon: <HomeIcon {...icon} />,
                 name: "Council Detail",
-                path: pathRoutes.R1.councilDetailId,
+                path: pathRoutes?.R1?.councilDetailId,
                 element: <AddCouncil type={"detail"} />,
             },
 
@@ -95,25 +95,25 @@ export const routes = [
             {
                 //   icon: <HomeIcon {...icon} />,
                 name: "Khoa",
-                path: pathRoutes.R1.department,
+                path: pathRoutes?.R1?.department,
                 element: <Department />,
             },
             {
                 //   icon: <HomeIcon {...icon} />,
                 name: "Add Department",
-                path: pathRoutes.R1.addDepartment,
+                path: pathRoutes?.R1?.addDepartment,
                 element: <AddDepartment type={"add"} />,
             },
             {
                 //   icon: <HomeIcon {...icon} />,
                 name: "Update Department",
-                path: pathRoutes.R1.updateDepartmentId,
+                path: pathRoutes?.R1?.updateDepartmentId,
                 element: <AddDepartment type={"update"} />,
             },
             {
                 //   icon: <HomeIcon {...icon} />,
                 name: "Department Detail",
-                path: pathRoutes.R1.departmentDetailId,
+                path: pathRoutes?.R1?.departmentDetailId,
                 element: <AddDepartment type={"detail"} />,
             },
 
@@ -121,25 +121,25 @@ export const routes = [
             {
                 //   icon: <HomeIcon {...icon} />,
                 name: "Khối",
-                path: pathRoutes.R1.block,
+                path: pathRoutes?.R1?.block,
                 element: <Block />,
             },
             {
                 //   icon: <HomeIcon {...icon} />,
                 name: "Add Block",
-                path: pathRoutes.R1.addBlock,
+                path: pathRoutes?.R1?.addBlock,
                 element: <AddBlock type={"add"} />,
             },
             {
                 //   icon: <HomeIcon {...icon} />,
                 name: "Update Block",
-                path: pathRoutes.R1.updateBlockId,
+                path: pathRoutes?.R1?.updateBlockId,
                 element: <AddBlock type={"update"} />,
             },
             {
                 //   icon: <HomeIcon {...icon} />,
                 name: "Block Detail",
-                path: pathRoutes.R1.blockDetailId,
+                path: pathRoutes?.R1?.blockDetailId,
                 element: <AddBlock type={"detail"} />,
             },
 
@@ -147,25 +147,25 @@ export const routes = [
             {
                 //   icon: <HomeIcon {...icon} />,
                 name: "Ngành",
-                path: pathRoutes.R1.major,
+                path: pathRoutes?.R1?.major,
                 element: <Major />,
             },
             {
                 //   icon: <HomeIcon {...icon} />,
                 name: "Add Major",
-                path: pathRoutes.R1.addMajor,
+                path: pathRoutes?.R1?.addMajor,
                 element: <AddMajor type={"add"} />,
             },
             {
                 //   icon: <HomeIcon {...icon} />,
                 name: "Update Major",
-                path: pathRoutes.R1.updateMajorId,
+                path: pathRoutes?.R1?.updateMajorId,
                 element: <AddMajor type={"update"} />,
             },
             {
                 //   icon: <HomeIcon {...icon} />,
                 name: "Major Detail",
-                path: pathRoutes.R1.majorDetailId,
+                path: pathRoutes?.R1?.majorDetailId,
                 element: <AddMajor type={"detail"} />,
             },
 
@@ -173,25 +173,25 @@ export const routes = [
             {
                 //   icon: <HomeIcon {...icon} />,
                 name: "Lớp",
-                path: pathRoutes.R1.class,
+                path: pathRoutes?.R1?.class,
                 element: <Class />,
             },
             {
                 //   icon: <HomeIcon {...icon} />,
                 name: "Add Class",
-                path: pathRoutes.R1.addClass,
+                path: pathRoutes?.R1?.addClass,
                 element: <AddClass type={"add"} />,
             },
             {
                 //   icon: <HomeIcon {...icon} />,
                 name: "Update Class",
-                path: pathRoutes.R1.updateClassId,
+                path: pathRoutes?.R1?.updateClassId,
                 element: <AddClass type={"update"} />,
             },
             {
                 //   icon: <HomeIcon {...icon} />,
                 name: "Class Detail",
-                path: pathRoutes.R1.classDetailId,
+                path: pathRoutes?.R1?.classDetailId,
                 element: <AddClass type={"detail"} />,
             },
 
@@ -199,25 +199,25 @@ export const routes = [
             {
                 //   icon: <HomeIcon {...icon} />,
                 name: "Giảng viên",
-                path: pathRoutes.R1.lecturer,
+                path: pathRoutes?.R1?.lecturer,
                 element: <Lecturer />,
             },
             {
                 //   icon: <HomeIcon {...icon} />,
                 name: "Add Lecturer",
-                path: pathRoutes.R1.addLecturer,
+                path: pathRoutes?.R1?.addLecturer,
                 element: <AddLecturer type={"add"} />,
             },
             {
                 //   icon: <HomeIcon {...icon} />,
                 name: "Update Lecturer",
-                path: pathRoutes.R1.updateLecturerId,
+                path: pathRoutes?.R1?.updateLecturerId,
                 element: <AddLecturer type={"update"} />,
             },
             {
                 //   icon: <HomeIcon {...icon} />,
                 name: "Lecturer Detail",
-                path: pathRoutes.R1.lecturerDetailId,
+                path: pathRoutes?.R1?.lecturerDetailId,
                 element: <AddLecturer type={"detail"} />,
             },
 
@@ -225,25 +225,25 @@ export const routes = [
             {
                 //   icon: <HomeIcon {...icon} />,
                 name: "Sinh viên",
-                path: pathRoutes.R1.student,
+                path: pathRoutes?.R1?.student,
                 element: <Student />,
             },
             {
                 //   icon: <HomeIcon {...icon} />,
                 name: "Add Student",
-                path: pathRoutes.R1.addStudent,
+                path: pathRoutes?.R1?.addStudent,
                 element: <AddStudent type={"add"} />,
             },
             {
                 //   icon: <HomeIcon {...icon} />,
                 name: "Update Student",
-                path: pathRoutes.R1.updateStudentId,
+                path: pathRoutes?.R1?.updateStudentId,
                 element: <AddStudent type={"update"} />,
             },
             {
                 //   icon: <HomeIcon {...icon} />,
                 name: "Student Detail",
-                path: pathRoutes.R1.studentDetailId,
+                path: pathRoutes?.R1?.studentDetailId,
                 element: <AddStudent type={"detail"} />,
             },
 
@@ -251,25 +251,25 @@ export const routes = [
             {
                 //   icon: <HomeIcon {...icon} />,
                 name: "Đề tài",
-                path: pathRoutes.R1.topic,
+                path: pathRoutes?.R1?.topic,
                 element: <Topic />,
             },
             {
                 //   icon: <HomeIcon {...icon} />,
                 name: "Add Topic",
-                path: pathRoutes.R1.addTopic,
+                path: pathRoutes?.R1?.addTopic,
                 element: <AddTopic type={"add"} />,
             },
             {
                 //   icon: <HomeIcon {...icon} />,
                 name: "Update Topic",
-                path: pathRoutes.R1.updateTopicId,
+                path: pathRoutes?.R1?.updateTopicId,
                 element: <AddTopic type={"update"} />,
             },
             {
                 //   icon: <HomeIcon {...icon} />,
                 name: "Topic Detail",
-                path: pathRoutes.R1.topicDetailId,
+                path: pathRoutes?.R1?.topicDetailId,
                 element: <AddTopic type={"detail"} />,
             },
 
@@ -278,25 +278,25 @@ export const routes = [
             {
                 //   icon: <HomeIcon {...icon} />,
                 name: "Khóa luận",
-                path: pathRoutes.R1.thesisSession,
+                path: pathRoutes?.R1?.thesisSession,
                 element: <ThesisSession />,
             },
             {
                 //   icon: <HomeIcon {...icon} />,
                 name: "Add Thesis Session",
-                path: pathRoutes.R1.addThesisSession,
+                path: pathRoutes?.R1?.addThesisSession,
                 element: <AddThesisSession type={"add"} />,
             },
             {
                 //   icon: <HomeIcon {...icon} />,
                 name: "Update Thesis Session",
-                path: pathRoutes.R1.updateThesisSessionId,
+                path: pathRoutes?.R1?.updateThesisSessionId,
                 element: <AddThesisSession type={"update"} />,
             },
             {
                 //   icon: <HomeIcon {...icon} />,
                 name: "Thesis Session Detail",
-                path: pathRoutes.R1.thesisSessionDetailId,
+                path: pathRoutes?.R1?.thesisSessionDetailId,
                 element: <AddThesisSession type={"detail"} />,
             },
 
@@ -304,25 +304,25 @@ export const routes = [
             {
                 //   icon: <HomeIcon {...icon} />,
                 name: "Đồ án",
-                path: pathRoutes.R1.thesis,
+                path: pathRoutes?.R1?.thesis,
                 element: <Thesis />,
             },
             {
                 //   icon: <HomeIcon {...icon} />,
                 name: "Add Thesis",
-                path: pathRoutes.R1.addThesis,
+                path: pathRoutes?.R1?.addThesis,
                 element: <AddThesis type={"add"} />,
             },
             {
                 //   icon: <HomeIcon {...icon} />,
                 name: "Update Thesis",
-                path: pathRoutes.R1.updateThesisId,
+                path: pathRoutes?.R1?.updateThesisId,
                 element: <AddThesis type={"update"} />,
             },
             {
                 //   icon: <HomeIcon {...icon} />,
                 name: "Thesis Detail",
-                path: pathRoutes.R1.thesisDetailId,
+                path: pathRoutes?.R1?.thesisDetailId,
                 element: <AddThesis type={"detail"} />,
             },
 
@@ -330,25 +330,25 @@ export const routes = [
             {
                 //   icon: <HomeIcon {...icon} />,
                 name: "PP đánh giá",
-                path: pathRoutes.R1.evaluationMethod,
+                path: pathRoutes?.R1?.evaluationMethod,
                 element: <EvaluationMethod />,
             },
             {
                 //   icon: <HomeIcon {...icon} />,
                 name: "Add Evaluation Method",
-                path: pathRoutes.R1.addEvaluationMethod,
+                path: pathRoutes?.R1?.addEvaluationMethod,
                 element: <AddEvaluationMethod type={"add"} />,
             },
             {
                 //   icon: <HomeIcon {...icon} />,
                 name: "Update Evaluation Method",
-                path: pathRoutes.R1.updateEvaluationMethodId,
+                path: pathRoutes?.R1?.updateEvaluationMethodId,
                 element: <AddEvaluationMethod type={"update"} />,
             },
             {
                 //   icon: <HomeIcon {...icon} />,
                 name: "Evaluation Method Detail",
-                path: pathRoutes.R1.evaluationMethodDetailId,
+                path: pathRoutes?.R1?.evaluationMethodDetailId,
                 element: <AddEvaluationMethod type={"detail"} />,
             },
         ],
@@ -366,19 +366,19 @@ export const routes = [
             {
                 //   icon: <HomeIcon {...icon} />,
                 name: "Đổi thông tin",
-                path: pathRoutes.R1.changeInformation,
+                path: pathRoutes?.R1?.changeInformation,
                 element: <AdminChangeInformation />,
             },
             {
                 //   icon: <HomeIcon {...icon} />,
                 name: "Đổi mật khẩu",
-                path: pathRoutes.R1.changePassword,
+                path: pathRoutes?.R1?.changePassword,
                 element: <AdminChangePassword />,
             },
             {
                 //   icon: <HomeIcon {...icon} />,
                 name: "Hội đồng",
-                path: pathRoutes.R1.council,
+                path: pathRoutes?.R1?.council,
                 element: <Council />,
             },
         ],
@@ -396,13 +396,13 @@ export const routes = [
             {
                 //   icon: <HomeIcon {...icon} />,
                 name: "Đổi thông tin",
-                path: pathRoutes.R1.changeInformation,
+                path: pathRoutes?.R1?.changeInformation,
                 element: <AdminChangeInformation />,
             },
             {
                 //   icon: <HomeIcon {...icon} />,
                 name: "Đổi mật khẩu",
-                path: pathRoutes.R1.changePassword,
+                path: pathRoutes?.R1?.changePassword,
                 element: <AdminChangePassword />,
             },
             {
@@ -414,19 +414,19 @@ export const routes = [
             {
                 //   icon: <HomeIcon {...icon} />,
                 name: "Hội đồng",
-                path: pathRoutes.R3.council,
+                path: pathRoutes?.R3?.council,
                 element: <CouncilLecturer />,
             },
             {
                 //   icon: <HomeIcon {...icon} />,
                 name: "CouncilDetail",
-                path: pathRoutes.R3.councilDetailId,
+                path: pathRoutes?.R3?.councilDetailId,
                 element: <ThesisCouncilLecturer />,
             },
             {
                 //   icon: <HomeIcon {...icon} />,
                 name: "CouncilDetailThesis",
-                path: pathRoutes.R3.councilDetailThesisId,
+                path: pathRoutes?.R3?.councilDetailThesisId,
                 element: <MarkEvaluationMethod />,
             },
         ],
@@ -443,13 +443,13 @@ export const routes = [
             {
                 //   icon: <HomeIcon {...icon} />,
                 name: "Đổi thông tin",
-                path: pathRoutes.R1.changeInformation,
+                path: pathRoutes?.R1?.changeInformation,
                 element: <StudentChangeInformation />,
             },
             {
                 //   icon: <HomeIcon {...icon} />,
                 name: "Đổi mật khẩu",
-                path: pathRoutes.R1.changePassword,
+                path: pathRoutes?.R1?.changePassword,
                 element: <StudentChangePassword />,
             },
 
@@ -457,13 +457,13 @@ export const routes = [
             {
                 //   icon: <HomeIcon {...icon} />,
                 name: "Đề tài",
-                path: pathRoutes.R1.topic,
+                path: pathRoutes?.R1?.topic,
                 element: <TopicStudent />,
             },
             {
                 //   icon: <HomeIcon {...icon} />,
                 name: "Topic Detail",
-                path: pathRoutes.R1.topicDetailId,
+                path: pathRoutes?.R1?.topicDetailId,
                 element: <AddTopicStudent type={"detail"} />,
             },
             
@@ -471,38 +471,38 @@ export const routes = [
             {
                 //   icon: <HomeIcon {...icon} />,
                 name: "Giảng viên hướng dẫn",
-                path: pathRoutes.R1.lecturer,
+                path: pathRoutes?.R1?.lecturer,
                 element: <LecturerAdvisor />,
             },
             {
                 //   icon: <HomeIcon {...icon} />,
                 name: "Lecturer Detail",
-                path: pathRoutes.R1.lecturerDetailId,
+                path: pathRoutes?.R1?.lecturerDetailId,
                 element: <AddLecturerAdvisor type={"detail"} />,
             },
             // Thesis
             {
                 //   icon: <HomeIcon {...icon} />,
                 name: "Đồ án",
-                path: pathRoutes.R1.thesis,
+                path: pathRoutes?.R1?.thesis,
                 element: <ThesisStudent />,
             },
             {
                 //   icon: <HomeIcon {...icon} />,
                 name: "Add Thesis",
-                path: pathRoutes.R1.addThesis,
+                path: pathRoutes?.R1?.addThesis,
                 element: <AddThesisStudent type={"add"} />,
             },
             {
                 //   icon: <HomeIcon {...icon} />,
                 name: "Update Thesis",
-                path: pathRoutes.R1.updateThesisId,
+                path: pathRoutes?.R1?.updateThesisId,
                 element: <AddThesisStudent type={"update"} />,
             },
             {
                 //   icon: <HomeIcon {...icon} />,
                 name: "Thesis Detail",
-                path: pathRoutes.R1.thesisDetailId,
+                path: pathRoutes?.R1?.thesisDetailId,
                 element: <AddThesisStudent type={"detail"} />,
             },
 

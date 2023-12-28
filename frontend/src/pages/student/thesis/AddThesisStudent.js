@@ -26,7 +26,7 @@ const AddThesisStudent = ({ type }) => {
     let { id } = useParams();
     console.log("type", type, id);
 
-    const currentUser = useSelector((state) => state.auth.currentUser);
+    const currentUser = useSelector((state) => state?.auth?.currentUser);
     const dispatch = useDispatch();
     let axiosJWT = createAxios(currentUser, dispatch, logginSuccess);
 
@@ -112,24 +112,24 @@ const AddThesisStudent = ({ type }) => {
             ?.filter((value) => !value.isFixed)
             ?.map((obj) => {
                 console.log(obj.value);
-                permissions.push(obj.value);
+                permissions?.push(obj.value);
             });
         const datasend = {
             ...data,
             startDate: new Date(
-                moment(data.startDate, "DD/MM/YYYY")
+                moment(data?.startDate, "DD/MM/YYYY")
             ).toLocaleDateString("vi-VN"),
             complateDate: new Date(
-                moment(data.complateDate, "DD/MM/YYYY")
+                moment(data?.complateDate, "DD/MM/YYYY")
             ).toLocaleDateString("vi-VN"),
             thesisStartDate: new Date(
-                moment(data.thesisStartDate, "DD/MM/YYYY")
+                moment(data?.thesisStartDate, "DD/MM/YYYY")
             ).toLocaleDateString("vi-VN"),
             thesisEndDate: new Date(
-                moment(data.thesisEndDate, "DD/MM/YYYY")
+                moment(data?.thesisEndDate, "DD/MM/YYYY")
             ).toLocaleDateString("vi-VN"),
             //         console.log(obj.value);
-            //         permissions.push(obj.value);
+            //         permissions?.push(obj.value);
             //     });,
         };
         console.log(datasend);
@@ -270,8 +270,8 @@ const AddThesisStudent = ({ type }) => {
                         let convert = [];
 
                         setValue("id", res?.result?.id);
-                        setValue("result", res?.result?.resultData?.valueVi);
-                        setValue("student", res?.result?.studentData?.fullName);
+                        setValue("result", res?.result?.resultData.valueVi);
+                        setValue("student", res?.result?.studentData.fullName);
                         setValue("topic", res?.result?.topicData.name);
                         setValue(
                             "thesisAdvisor",
@@ -348,9 +348,9 @@ const AddThesisStudent = ({ type }) => {
                                     required: "Full name is required",
                                 })}
                             />
-                            {errors.fullName?.type && (
+                            {errors?.fullName?.type && (
                                 <p className=" text-normal text-red-500">
-                                    {errors.fullName?.message}
+                                    {errors?.fullName?.message}
                                 </p>
                             )}
                         </div>
@@ -365,9 +365,9 @@ const AddThesisStudent = ({ type }) => {
                                     required: "Number phone is required",
                                 })}
                             />
-                            {errors.numberPhone?.type && (
+                            {errors?.numberPhone?.type && (
                                 <p className=" text-normal text-red-500">
-                                    {errors.numberPhone?.message}
+                                    {errors?.numberPhone?.message}
                                 </p>
                             )}
                         </div>
@@ -384,9 +384,9 @@ const AddThesisStudent = ({ type }) => {
                                     // required: "Full name is required",
                                 })}
                             />
-                            {errors.address?.type && (
+                            {errors?.address?.type && (
                                 <p className=" text-normal text-red-500">
-                                    {errors.address?.message}
+                                    {errors?.address?.message}
                                 </p>
                             )}
                         </div>
@@ -401,9 +401,9 @@ const AddThesisStudent = ({ type }) => {
                                     // required: "Full name is required",
                                 })}
                             />
-                            {errors.id?.type && (
+                            {errors?.id?.type && (
                                 <p className=" text-normal text-red-500">
-                                    {errors.id?.message}
+                                    {errors?.id?.message}
                                 </p>
                             )}
                         </div> */}
@@ -422,9 +422,9 @@ const AddThesisStudent = ({ type }) => {
                                     // required: "Full name is required",
                                 })}
                             />
-                            {errors.totalScore?.type && (
+                            {errors?.totalScore?.type && (
                                 <p className=" text-normal text-red-500">
-                                    {errors.totalScore?.message}
+                                    {errors?.totalScore?.message}
                                 </p>
                             )}
                         </div>
@@ -455,9 +455,9 @@ const AddThesisStudent = ({ type }) => {
                                     required: "Number phone is required",
                                 })}
                             />
-                            {errors.result?.type && (
+                            {errors?.result?.type && (
                                 <p className=" text-normal text-red-500">
-                                    {errors.result?.message}
+                                    {errors?.result?.message}
                                 </p>
                             )}
                         </div>
@@ -492,9 +492,9 @@ const AddThesisStudent = ({ type }) => {
                                     required: "Number phone is required",
                                 })}
                             />
-                            {errors.student?.type && (
+                            {errors?.student?.type && (
                                 <p className=" text-normal text-red-500">
-                                    {errors.student?.message}
+                                    {errors?.student?.message}
                                 </p>
                             )}
                         </div>
@@ -527,9 +527,9 @@ const AddThesisStudent = ({ type }) => {
                                     required: "Number phone is required",
                                 })}
                             />
-                            {errors.topic?.type && (
+                            {errors?.topic?.type && (
                                 <p className=" text-normal text-red-500">
-                                    {errors.topic?.message}
+                                    {errors?.topic?.message}
                                 </p>
                             )}
                         </div>
@@ -564,9 +564,9 @@ const AddThesisStudent = ({ type }) => {
                                     required: "Number phone is required",
                                 })}
                             />
-                            {errors.thesisAdvisor?.type && (
+                            {errors?.thesisAdvisor?.type && (
                                 <p className=" text-normal text-red-500">
-                                    {errors.thesisAdvisor?.message}
+                                    {errors?.thesisAdvisor?.message}
                                 </p>
                             )}
                         </div>
@@ -599,9 +599,9 @@ const AddThesisStudent = ({ type }) => {
                                     required: "Number phone is required",
                                 })}
                             />
-                            {errors.thesisAdvisorStatus?.type && (
+                            {errors?.thesisAdvisorStatus?.type && (
                                 <p className=" text-normal text-red-500">
-                                    {errors.thesisAdvisorStatus?.message}
+                                    {errors?.thesisAdvisorStatus?.message}
                                 </p>
                             )}
                         </div>
@@ -660,9 +660,9 @@ const AddThesisStudent = ({ type }) => {
                                     required: "Number phone is required",
                                 })}
                             />
-                            {errors.thesisSession?.type && (
+                            {errors?.thesisSession?.type && (
                                 <p className=" text-normal text-red-500">
-                                    {errors.thesisSession?.message}
+                                    {errors?.thesisSession?.message}
                                 </p>
                             )}
                         </div>
@@ -697,9 +697,9 @@ const AddThesisStudent = ({ type }) => {
                                     required: "Number phone is required",
                                 })}
                             />
-                            {errors.council?.type && (
+                            {errors?.council?.type && (
                                 <p className=" text-normal text-red-500">
-                                    {errors.council?.message}
+                                    {errors?.council?.message}
                                 </p>
                             )}
                         </div>
@@ -732,9 +732,9 @@ const AddThesisStudent = ({ type }) => {
                                     required: "Number phone is required",
                                 })}
                             />
-                            {errors.councilStatus?.type && (
+                            {errors?.councilStatus?.type && (
                                 <p className=" text-normal text-red-500">
-                                    {errors.councilStatus?.message}
+                                    {errors?.councilStatus?.message}
                                 </p>
                             )}
                         </div>
@@ -772,9 +772,9 @@ const AddThesisStudent = ({ type }) => {
                                     />
                                 )}
                             />
-                            {errors.startDate?.type && (
+                            {errors?.startDate?.type && (
                                 <p className=" text-normal text-red-500">
-                                    {errors.startDate?.message}
+                                    {errors?.startDate?.message}
                                 </p>
                             )}
                         </div>
@@ -810,9 +810,9 @@ const AddThesisStudent = ({ type }) => {
                                     />
                                 )}
                             />
-                            {errors.complateDate?.type && (
+                            {errors?.complateDate?.type && (
                                 <p className=" text-normal text-red-500">
-                                    {errors.complateDate?.message}
+                                    {errors?.complateDate?.message}
                                 </p>
                             )}
                         </div>
@@ -852,9 +852,9 @@ const AddThesisStudent = ({ type }) => {
                                     />
                                 )}
                             />
-                            {errors.thesisStartDate?.type && (
+                            {errors?.thesisStartDate?.type && (
                                 <p className=" text-normal text-red-500">
-                                    {errors.thesisStartDate?.message}
+                                    {errors?.thesisStartDate?.message}
                                 </p>
                             )}
                         </div>
@@ -892,9 +892,9 @@ const AddThesisStudent = ({ type }) => {
                                     />
                                 )}
                             />
-                            {errors.thesisEndDate?.type && (
+                            {errors?.thesisEndDate?.type && (
                                 <p className=" text-normal text-red-500">
-                                    {errors.thesisEndDate?.message}
+                                    {errors?.thesisEndDate?.message}
                                 </p>
                             )}
                         </div>

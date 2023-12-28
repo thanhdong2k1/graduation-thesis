@@ -12,7 +12,7 @@ import ButtonConfirm from "../../components/button/ButtonConfirm";
 
 const AdminChangePassword = () => {
 
-    const currentUser = useSelector((state) => state.auth.currentUser);
+    const currentUser = useSelector((state) => state?.auth?.currentUser);
     const dispatch = useDispatch();
     let axiosJWT = createAxios(currentUser, dispatch, logginSuccess);
     
@@ -32,8 +32,8 @@ const AdminChangePassword = () => {
         await apiAdmin
             .apiAdminChangePassword(
                 currentUser,
-                data.oldPassword,
-                data.confirmPassword,
+                data?.oldPassword,
+                data?.confirmPassword,
                 axiosJWT
             )
             .then((res) => {
@@ -94,9 +94,9 @@ const AdminChangePassword = () => {
                             required: "Old password is required",
                         })}
                     />
-                    {errors.oldPassword?.type && (
+                    {errors?.oldPassword?.type && (
                         <p className=" text-normal text-red-500">
-                            {errors.oldPassword?.message}
+                            {errors?.oldPassword?.message}
                         </p>
                     )}
                 </div>
@@ -110,9 +110,9 @@ const AdminChangePassword = () => {
                             required: "New password is required",
                         })}
                     />
-                    {errors.newPassword?.type && (
+                    {errors?.newPassword?.type && (
                         <p className=" text-normal text-red-500">
-                            {errors.newPassword?.message}
+                            {errors?.newPassword?.message}
                         </p>
                     )}
                 </div>
@@ -131,9 +131,9 @@ const AdminChangePassword = () => {
                             },
                         })}
                     />
-                    {errors.confirmPassword?.type && (
+                    {errors?.confirmPassword?.type && (
                         <p className=" text-normal text-red-500">
-                            {errors.confirmPassword?.message}
+                            {errors?.confirmPassword?.message}
                         </p>
                     )}
                 </div> */}
@@ -165,9 +165,9 @@ const AdminChangePassword = () => {
                             />
                         )}
                     </div>
-                    {errors.oldPassword?.type && (
+                    {errors?.oldPassword?.type && (
                         <p className=" text-normal text-red-500">
-                            {errors.oldPassword?.message}
+                            {errors?.oldPassword?.message}
                         </p>
                     )}
                 </div>
@@ -199,9 +199,9 @@ const AdminChangePassword = () => {
                             />
                         )}
                     </div>
-                    {errors.newPassword?.type && (
+                    {errors?.newPassword?.type && (
                         <p className=" text-normal text-red-500">
-                            {errors.newPassword?.message}
+                            {errors?.newPassword?.message}
                         </p>
                     )}
                 </div>
@@ -237,9 +237,9 @@ const AdminChangePassword = () => {
                             />
                         )}
                     </div>
-                    {errors.confirmPassword?.type && (
+                    {errors?.confirmPassword?.type && (
                         <p className=" text-normal text-red-500">
-                            {errors.confirmPassword?.message}
+                            {errors?.confirmPassword?.message}
                         </p>
                     )}
                 </div>

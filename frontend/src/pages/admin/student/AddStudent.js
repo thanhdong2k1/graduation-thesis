@@ -25,15 +25,15 @@ const AddStudent = ({ type }) => {
     let { id } = useParams();
     console.log("type", type, id);
 
-    const currentUser = useSelector((state) => state.auth.currentUser);
+    const currentUser = useSelector((state) => state?.auth?.currentUser);
     const dispatch = useDispatch();
     let axiosJWT = createAxios(currentUser, dispatch, logginSuccess);
-    const status = useSelector((state) => state.admin.status);
-    const gender = useSelector((state) => state.admin.gender);
-    const role = useSelector((state) => state.admin.role);
-    const permissions = useSelector((state) => state.admin.permissions);
-    const classes = useSelector((state) => state.admin.classes);
-    let codeClass = classes.map((v) => {
+    const status = useSelector((state) => state?.admin?.status);
+    const gender = useSelector((state) => state?.admin?.gender);
+    const role = useSelector((state) => state?.admin?.role);
+    const permissions = useSelector((state) => state?.admin?.permissions);
+    const classes = useSelector((state) => state?.admin?.classes);
+    let codeClass = classes?.map((v) => {
         return { value: v.id, label: `${v.id} | ${v.name}` };
     });
     const [isRtl, setIsRtl] = useState(false);
@@ -118,17 +118,17 @@ const AddStudent = ({ type }) => {
             ?.filter((value) => !value.isFixed)
             ?.map((obj) => {
                 console.log(obj.value);
-                permissions.push(obj.value);
+                permissions?.push(obj.value);
             });
         const datasend = {
             ...data,
             birthday: new Date(
-                moment(data.birthday, "DD/MM/YYYY")
+                moment(data?.birthday, "DD/MM/YYYY")
             ).toLocaleDateString("vi-VN"),
             permissions: permissions?.toString(),
             //     e.map((obj) => {
             //         console.log(obj.value);
-            //         permissions.push(obj.value);
+            //         permissions?.push(obj.value);
             //     });,
         };
         console.log(datasend);
@@ -231,7 +231,7 @@ const AddStudent = ({ type }) => {
         apiAdmin.apiGetGender(currentUser, dispatch, axiosJWT);
         setValue(
             "role",
-            role.filter((role) => role?.value == "R4")
+            role?.filter((role) => role?.value == "R4")
         );
         if (id) {
             apiAdmin
@@ -256,7 +256,7 @@ const AddStudent = ({ type }) => {
                         if (res?.result?.roleId === "R1") {
                             permissions.forEach((obj) => {
                                 if (obj.value === "PERF") {
-                                    convert.push({ ...obj, isFixed: true });
+                                    convert?.push({ ...obj, isFixed: true });
                                 }
                             });
                         } else if (res?.result?.roleId === "R2") {
@@ -265,7 +265,7 @@ const AddStudent = ({ type }) => {
                                     obj.value !== "PERD" &&
                                     obj.value !== "PERF"
                                 ) {
-                                    convert.push({ ...obj, isFixed: true });
+                                    convert?.push({ ...obj, isFixed: true });
                                 }
                             });
                         } else {
@@ -274,16 +274,15 @@ const AddStudent = ({ type }) => {
                                     obj.value === "PERU" ||
                                     obj.value === "PERR"
                                 ) {
-                                    convert.push({ ...obj, isFixed: true });
+                                    convert?.push({ ...obj, isFixed: true });
                                 }
                             });
                         }
                         const array = res?.result?.permissions
-                            ?.toString()
-                            .split(",");
+                            ?.toString()?.split(",");
                         permissions.forEach((obj) => {
                             if (array?.includes(obj.value)) {
-                                convert.push(obj);
+                                convert?.push(obj);
                             }
                         });
                         setValue("id", res?.result?.id);
@@ -298,11 +297,11 @@ const AddStudent = ({ type }) => {
                         setValue("code", res?.result?.code);
                         setValue(
                             "role",
-                            role.filter((role) => role?.value == "R4")
+                            role?.filter((role) => role?.value == "R4")
                         );
                         setValue(
                             "class",
-                            codeClass.filter(
+                            codeClass?.filter(
                                 (value) => value?.value == res?.result?.classId
                             )
                         );
@@ -310,14 +309,14 @@ const AddStudent = ({ type }) => {
                         // console.log(res?.result?.birthday,moment(res?.result?.birthday, "DD/MM/YYYY").toString());
                         setValue(
                             "gender",
-                            gender.filter(
+                            gender?.filter(
                                 (gender) =>
                                     gender?.value === res?.result?.genderId
                             )
                         );
                         setValue(
                             "status",
-                            status.filter(
+                            status?.filter(
                                 (status) =>
                                     status?.value === res?.result?.statusId
                             )
@@ -367,9 +366,9 @@ const AddStudent = ({ type }) => {
                                     // required: "Full name is required",
                                 })}
                             />
-                            {errors.id?.type && (
+                            {errors?.id?.type && (
                                 <p className=" text-normal text-red-500">
-                                    {errors.id?.message}
+                                    {errors?.id?.message}
                                 </p>
                             )}
                         </div> */}
@@ -384,9 +383,9 @@ const AddStudent = ({ type }) => {
                                     required: "Email is required",
                                 })}
                             />
-                            {errors.email?.type && (
+                            {errors?.email?.type && (
                                 <p className=" text-normal text-red-500">
-                                    {errors.email?.message}
+                                    {errors?.email?.message}
                                 </p>
                             )}
                         </div>
@@ -403,9 +402,9 @@ const AddStudent = ({ type }) => {
                                     required: "Full name is required",
                                 })}
                             />
-                            {errors.fullName?.type && (
+                            {errors?.fullName?.type && (
                                 <p className=" text-normal text-red-500">
-                                    {errors.fullName?.message}
+                                    {errors?.fullName?.message}
                                 </p>
                             )}
                         </div>
@@ -420,9 +419,9 @@ const AddStudent = ({ type }) => {
                                     required: "Number phone is required",
                                 })}
                             />
-                            {errors.numberPhone?.type && (
+                            {errors?.numberPhone?.type && (
                                 <p className=" text-normal text-red-500">
-                                    {errors.numberPhone?.message}
+                                    {errors?.numberPhone?.message}
                                 </p>
                             )}
                         </div>
@@ -439,9 +438,9 @@ const AddStudent = ({ type }) => {
                                     // required: "Full name is required",
                                 })}
                             />
-                            {errors.address?.type && (
+                            {errors?.address?.type && (
                                 <p className=" text-normal text-red-500">
-                                    {errors.address?.message}
+                                    {errors?.address?.message}
                                 </p>
                             )}
                         </div>
@@ -480,9 +479,9 @@ const AddStudent = ({ type }) => {
                                     />
                                 )}
                             />
-                            {errors.birthday?.type && (
+                            {errors?.birthday?.type && (
                                 <p className=" text-normal text-red-500">
-                                    {errors.birthday?.message}
+                                    {errors?.birthday?.message}
                                 </p>
                             )}
                         </div>
@@ -506,9 +505,9 @@ const AddStudent = ({ type }) => {
                                     />
                                 )}
                             />
-                            {errors.gender?.type && (
+                            {errors?.gender?.type && (
                                 <p className=" text-normal text-red-500">
-                                    {errors.gender?.message}
+                                    {errors?.gender?.message}
                                 </p>
                             )}
                         </div>
@@ -562,9 +561,9 @@ const AddStudent = ({ type }) => {
                                     />
                                 )}
                             />
-                            {errors.role?.type && (
+                            {errors?.role?.type && (
                                 <p className=" text-normal text-red-500">
-                                    {errors.role?.message}
+                                    {errors?.role?.message}
                                 </p>
                             )}
                         </div>
@@ -591,9 +590,9 @@ const AddStudent = ({ type }) => {
                                     />
                                 )}
                             />
-                            {errors.class?.type && (
+                            {errors?.class?.type && (
                                 <p className=" text-normal text-red-500">
-                                    {errors.class?.message}
+                                    {errors?.class?.message}
                                 </p>
                             )}
                         </div>
@@ -617,9 +616,9 @@ const AddStudent = ({ type }) => {
                                     />
                                 )}
                             />
-                            {errors.status?.type && (
+                            {errors?.status?.type && (
                                 <p className=" text-normal text-red-500">
-                                    {errors.status?.message}
+                                    {errors?.status?.message}
                                 </p>
                             )}
                         </div>

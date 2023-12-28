@@ -22,9 +22,9 @@ import ModalPopup from "../../../components/ModelPopup/ModalPopup";
 const Block = () => {
     const dispatch = useDispatch();
     const navigate = useNavigate();
-    const blocks = useSelector((state) => state.admin.blocks);
-    const totalRecords = useSelector((state) => state.admin.totalRecords);
-    const currentUser = useSelector((state) => state.auth.currentUser);
+    const blocks = useSelector((state) => state?.admin?.blocks);
+    const totalRecords = useSelector((state) => state?.admin?.totalRecords);
+    const currentUser = useSelector((state) => state?.auth?.currentUser);
     let axiosJWT = createAxios(currentUser, dispatch, logginSuccess);
 
     const [defineTable, setDefineTable] = useState({
@@ -41,7 +41,7 @@ const Block = () => {
 
     // Handle
     const handleAdd = () => {
-        navigate(`../${pathRoutes.R1.addBlock}`, { replace: true });
+        navigate(`../${pathRoutes?.R1?.addBlock}`, { replace: true });
     };
     const handleImport = () => {
         console.log("handleImport");
@@ -50,12 +50,12 @@ const Block = () => {
         console.log("handleExport");
     };
     const handleEdit = (data) => {
-        navigate(`../${pathRoutes.R1.updateBlock}/${data.id}`, {
+        navigate(`../${pathRoutes?.R1?.updateBlock}/${data?.id}`, {
             replace: true,
         });
     };
     const handleDetail = (data) => {
-        navigate(`../${pathRoutes.R1.blockDetail}/${data.id}`, {
+        navigate(`../${pathRoutes?.R1?.blockDetail}/${data?.id}`, {
             replace: true,
         });
     };
@@ -133,14 +133,14 @@ const Block = () => {
         //     const convertedObj = {};
         //     for (const key in obj) {
         //         console.log("key,obj", key, obj);
-        //         if (key.includes("Data")) {
-        //             const newKey = key.replace("Data", "Id");
+        //         if (key?.includes("Data")) {
+        //             const newKey = key?.replace("Data", "Id");
         //             convertedObj[newKey] = obj[key];
         //         } else {
         //             convertedObj[key] = obj[key];
         //         }
         //     }
-        //     convertImport.push(convertedObj);
+        //     convertImport?.push(convertedObj);
         // });
         // console.log("convertImport", convertImport);
         // console.log("convertImport", data);
@@ -333,23 +333,23 @@ const Block = () => {
     //     },
     // ];
 
-    // const gender = useSelector((state) => state.admin.gender);
+    // const gender = useSelector((state) => state?.admin?.gender);
     // const handleChangeLimit = (e) => {
     //     // console.log(e);
     //     const permissions = [];
-    //     e.map((obj) => {
+    //     e?.map((obj) => {
     //         console.log(obj.value);
-    //         permissions.push(obj.value);
+    //         permissions?.push(obj.value);
     //     });
 
-    //     // console.log(permissions.toString(), permissions.toString().split(","));
+    //     // console.log(permissions.toString(), permissions.toString()?.split(","));
 
     //     const convert = [];
-    //     const array = permissions.toString().split(",");
-    //     gender.map((obj) => {
+    //     const array = permissions.toString()?.split(",");
+    //     gender?.map((obj) => {
     //         console.log(obj);
-    //         if (array.includes(obj.value)) {
-    //             convert.push(obj);
+    //         if (array?.includes(obj.value)) {
+    //             convert?.push(obj);
     //         }
     //     });
     //     console.log(convert, convert);

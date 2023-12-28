@@ -17,26 +17,24 @@ const TopAdmin = ({ isShowSidebar, setIsShowSidebar }) => {
     const navigate = useNavigate();
     const path = useLocation();
     const arrPath = path?.pathname?.split("/")?.splice(1, 2);
-    const currentUser = useSelector((state) => state.auth.currentUser);
+    const currentUser = useSelector((state) => state?.auth?.currentUser);
     const dispatch = useDispatch();
     let axiosJWT = createAxios(currentUser, dispatch, logginSuccess);
 
     // console.log(path, arrPath[2]);
     const logoutHandle = async () => {
-        if (currentUser.accessToken) {
+        if (currentUser?.accessToken) {
             // axiosJWT.post()
             apiAuth.logoutUser(currentUser, dispatch, navigate, axiosJWT);
         }
     };
     // console.log(
     //     routes
-    //         .filter((route) => route.role == currentUser?.roleId)[0]
-    //         ?.pages?.filter((route) => route.path == arrPath[1]),
+    //         ?.filter((route) => route?.role == currentUser?.roleId)[0]
+    //         ?.pages?.filter((route) => route?.path == arrPath[1]),
     //     currentUser?.roleId
     // );
-    const routeNameLv1 = routes
-        .filter((route) => route.role == currentUser?.roleId)[0]
-        ?.pages?.filter((route) => route.path == arrPath[1])[0];
+    const routeNameLv1 = routes?.filter((route) => route?.role == currentUser?.roleId)[0]?.pages?.filter((route) => route?.path == arrPath[1])[0];
     return (
         <div className="topDiv flex justify-between items-center">
             <div className="leftDiv font-medium">
@@ -100,7 +98,7 @@ const TopAdmin = ({ isShowSidebar, setIsShowSidebar }) => {
                         <ul class="py-2 text-sm text-gray-700 dark:text-gray-200">
                             <li>
                                 <Link
-                                    to={pathRoutes.R1.changeInformation}
+                                    to={pathRoutes?.R1?.changeInformation}
                                     class="block px-4 py-2 font-medium text-textColor hover:bg-gray-100"
                                 >
                                     Đổi thông tin
@@ -108,7 +106,7 @@ const TopAdmin = ({ isShowSidebar, setIsShowSidebar }) => {
                             </li>
                             <li>
                                 <Link
-                                    to={pathRoutes.R1.changePassword}
+                                    to={pathRoutes?.R1?.changePassword}
                                     class="block px-4 py-2 font-medium text-textColor hover:bg-gray-100"
                                 >
                                     Đổi mật khẩu

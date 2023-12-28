@@ -5,7 +5,7 @@ import { logginSuccess } from "../../redux/authSlice";
 import { createAxios } from "../../utils/createInstance";
 
 const StudentHomePage = () => {
-    const currentUser = useSelector((state) => state.auth.currentUser);
+    const currentUser = useSelector((state) => state?.auth?.currentUser);
     const dispatch = useDispatch();
     let axiosJWT = createAxios(currentUser, dispatch, logginSuccess);
     useEffect(() => {

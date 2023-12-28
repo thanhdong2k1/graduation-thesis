@@ -27,12 +27,12 @@ const AddEvaluationMethod = ({ type }, params) => {
     let { id } = useParams();
     console.log("type", type, id);
 
-    const currentUser = useSelector((state) => state.auth.currentUser);
+    const currentUser = useSelector((state) => state?.auth?.currentUser);
     const dispatch = useDispatch();
     let axiosJWT = createAxios(currentUser, dispatch, logginSuccess);
-    const status = useSelector((state) => state.admin.status);
-    const thesisSessions = useSelector((state) => state.admin.thesisSessions);
-    let codeThesisSessions = thesisSessions.map((v) => {
+    const status = useSelector((state) => state?.admin?.status);
+    const thesisSessions = useSelector((state) => state?.admin?.thesisSessions);
+    let codeThesisSessions = thesisSessions?.map((v) => {
         return { value: v.id, label: `${v.id} | ${v.name}` };
     });
     const [isRtl, setIsRtl] = useState(false);
@@ -189,7 +189,7 @@ const AddEvaluationMethod = ({ type }, params) => {
                         axiosJWT: axiosJWT,
                     });
                     console.log(response);
-                    setCriterias(response.result);
+                    setCriterias(response?.result);
                 } catch (e) {
                     console.error(e);
                 }
@@ -264,7 +264,7 @@ const AddEvaluationMethod = ({ type }, params) => {
     };
     useEffect(() => {
         // const isLengthColumn = criterias.length;
-        // const isFilled = criterias.filter(
+        // const isFilled = criterias?.filter(
         //     (item) => item.weight == "0" || item.score
         // ).length;
         // if (isFilled == isLengthColumn) {
@@ -273,7 +273,7 @@ const AddEvaluationMethod = ({ type }, params) => {
         // }
         // console.log(isLengthColumn, isFilled);
         let total = 0;
-        criterias.map((item) => {
+        criterias?.map((item) => {
             total = total + +item.weight;
         });
         // setTotalScore(total);
@@ -300,9 +300,9 @@ const AddEvaluationMethod = ({ type }, params) => {
                                 // required: "Full name is required",
                             })}
                         />
-                        {errors.id?.type && (
+                        {errors?.id?.type && (
                             <p className=" text-normal text-red-500">
-                                {errors.id?.message}
+                                {errors?.id?.message}
                             </p>
                         )}
                     </div> */}
@@ -317,9 +317,9 @@ const AddEvaluationMethod = ({ type }, params) => {
                                 required: "Name is required",
                             })}
                         />
-                        {errors.name?.type && (
+                        {errors?.name?.type && (
                             <p className=" text-normal text-red-500">
-                                {errors.name?.message}
+                                {errors?.name?.message}
                             </p>
                         )}
                     </div>
@@ -354,9 +354,9 @@ const AddEvaluationMethod = ({ type }, params) => {
                                             value={item.name}
                                         />
                                     </div>
-                                    {errors.idCriteria?.type && (
+                                    {errors?.idCriteria?.type && (
                                         <p className=" text-normal text-red-500">
-                                            {errors.idCriteria?.message}
+                                            {errors?.idCriteria?.message}
                                         </p>
                                     )}
                                 </div>
@@ -412,9 +412,9 @@ const AddEvaluationMethod = ({ type }, params) => {
                                         <FaRegTrashAlt className="hover:text-PrimaryColor" />
                                     </div>
                                 </div>
-                                {/* {errors.weightCriteria?.type && (
+                                {/* {errors?.weightCriteria?.type && (
                                 <p className=" text-normal text-red-500">
-                                    {errors.weightCriteria?.message}
+                                    {errors?.weightCriteria?.message}
                                 </p>
                             )} */}
                             </div>
@@ -439,9 +439,9 @@ const AddEvaluationMethod = ({ type }, params) => {
                             })}
                             // value={totalScore}
                         />
-                        {errors.total?.type && (
+                        {errors?.total?.type && (
                             <p className=" text-normal text-red-500">
-                                {errors.total?.message}
+                                {errors?.total?.message}
                             </p>
                         )}
                     </div>
@@ -459,7 +459,7 @@ const AddEvaluationMethod = ({ type }, params) => {
                 {/* <button onClick={handleSubmit}>Submit</button> */}
 
                 {/* <div>
-                        {criterias.map((item, index) => (
+                        {criterias?.map((item, index) => (
                             <div key={index}>
                                 <input
                                     type="text"

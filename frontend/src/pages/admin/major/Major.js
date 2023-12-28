@@ -22,9 +22,9 @@ import ModalPopup from "../../../components/ModelPopup/ModalPopup";
 const Major = () => {
     const dispatch = useDispatch();
     const navigate = useNavigate();
-    const majors = useSelector((state) => state.admin.majors);
-    const totalRecords = useSelector((state) => state.admin.totalRecords);
-    const currentUser = useSelector((state) => state.auth.currentUser);
+    const majors = useSelector((state) => state?.admin?.majors);
+    const totalRecords = useSelector((state) => state?.admin?.totalRecords);
+    const currentUser = useSelector((state) => state?.auth?.currentUser);
     let axiosJWT = createAxios(currentUser, dispatch, logginSuccess);
 
     const [defineTable, setDefineTable] = useState({
@@ -41,7 +41,7 @@ const Major = () => {
 
     // Handle
     const handleAdd = () => {
-        navigate(`../${pathRoutes.R1.addMajor}`, { replace: true });
+        navigate(`../${pathRoutes?.R1?.addMajor}`, { replace: true });
     };
     const handleImport = () => {
         console.log("handleImport");
@@ -50,13 +50,13 @@ const Major = () => {
         console.log("handleExport");
     };
     const handleEdit = (data) => {
-        navigate(`../${pathRoutes.R1.updateMajor}/${data.id}`, {
+        navigate(`../${pathRoutes?.R1?.updateMajor}/${data?.id}`, {
             replace: true,
         });
     };
     const handleDetail = (data) => {
-        console.log(pathRoutes.R1.majorDetail)
-        navigate(`../${pathRoutes.R1.majorDetail}/${data.id}`, {
+        console.log(pathRoutes?.R1?.majorDetail)
+        navigate(`../${pathRoutes?.R1?.majorDetail}/${data?.id}`, {
             replace: true,
         });
     };
@@ -134,14 +134,14 @@ const Major = () => {
         //     const convertedObj = {};
         //     for (const key in obj) {
         //         console.log("key,obj", key, obj);
-        //         if (key.includes("Data")) {
-        //             const newKey = key.replace("Data", "Id");
+        //         if (key?.includes("Data")) {
+        //             const newKey = key?.replace("Data", "Id");
         //             convertedObj[newKey] = obj[key];
         //         } else {
         //             convertedObj[key] = obj[key];
         //         }
         //     }
-        //     convertImport.push(convertedObj);
+        //     convertImport?.push(convertedObj);
         // });
         // console.log("convertImport", convertImport);
         // console.log("convertImport", data);
@@ -328,23 +328,23 @@ const Major = () => {
     //     },
     // ];
 
-    // const gender = useSelector((state) => state.admin.gender);
+    // const gender = useSelector((state) => state?.admin?.gender);
     // const handleChangeLimit = (e) => {
     //     // console.log(e);
     //     const permissions = [];
     //     e.map((obj) => {
     //         console.log(obj.value);
-    //         permissions.push(obj.value);
+    //         permissions?.push(obj.value);
     //     });
 
-    //     // console.log(permissions.toString(), permissions.toString().split(","));
+    //     // console.log(permissions.toString(), permissions.toString()?.split(","));
 
     //     const convert = [];
-    //     const array = permissions.toString().split(",");
+    //     const array = permissions.toString()?.split(",");
     //     gender.map((obj) => {
     //         console.log(obj);
-    //         if (array.includes(obj.value)) {
-    //             convert.push(obj);
+    //         if (array?.includes(obj.value)) {
+    //             convert?.push(obj);
     //         }
     //     });
     //     console.log(convert, convert);

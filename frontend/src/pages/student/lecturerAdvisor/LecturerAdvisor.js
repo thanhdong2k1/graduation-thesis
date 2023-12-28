@@ -24,10 +24,10 @@ import { apiStudent } from "../../../redux/apiRequest";
 const LecturerAdvisor = () => {
     const dispatch = useDispatch();
     const navigate = useNavigate();
-    const lecturers = useSelector((state) => state.student.lecturers);
-    const totalRecords = useSelector((state) => state.student.totalRecords);
-    const currentUser = useSelector((state) => state.auth.currentUser);
-    const information = useSelector((state) => state.student.information);
+    const lecturers = useSelector((state) => state?.student.lecturers);
+    const totalRecords = useSelector((state) => state?.student.totalRecords);
+    const currentUser = useSelector((state) => state?.auth?.currentUser);
+    const information = useSelector((state) => state?.student.information);
     let axiosJWT = createAxios(currentUser, dispatch, logginSuccess);
 
     console.log("lecturers", lecturers);
@@ -45,7 +45,7 @@ const LecturerAdvisor = () => {
 
     // Handle
     const handleAdd = () => {
-        navigate(`../${pathRoutes.R1.addLecturer}`, { replace: true });
+        navigate(`../${pathRoutes?.R1?.addLecturer}`, { replace: true });
     };
     const handleImport = () => {
         console.log("handleImport");
@@ -54,12 +54,12 @@ const LecturerAdvisor = () => {
         console.log("handleExport");
     };
     const handleEdit = (data) => {
-        navigate(`../${pathRoutes.R1.updateLecturer}/${data.id}`, {
+        navigate(`../${pathRoutes?.R1?.updateLecturer}/${data?.id}`, {
             replace: true,
         });
     };
     const handleDetail = (data) => {
-        navigate(`../${pathRoutes.R1.lecturerDetail}/${data.id}`, {
+        navigate(`../${pathRoutes?.R1?.lecturerDetail}/${data?.id}`, {
             replace: true,
         });
     };
@@ -75,7 +75,7 @@ const LecturerAdvisor = () => {
         await apiStudent
             .apiRegisterAdvisor({
                 user: currentUser,
-                id: data.id,
+                id: data?.id,
                 axiosJWT: axiosJWT,
             })
             .then((res) => {
@@ -200,14 +200,14 @@ const LecturerAdvisor = () => {
         //     const convertedObj = {};
         //     for (const key in obj) {
         //         console.log("key,obj", key, obj);
-        //         if (key.includes("Data")) {
-        //             const newKey = key.replace("Data", "Id");
+        //         if (key?.includes("Data")) {
+        //             const newKey = key?.replace("Data", "Id");
         //             convertedObj[newKey] = obj[key];
         //         } else {
         //             convertedObj[key] = obj[key];
         //         }
         //     }
-        //     convertImport.push(convertedObj);
+        //     convertImport?.push(convertedObj);
         // });
         // console.log("convertImport", convertImport);
         // console.log("convertImport", data);

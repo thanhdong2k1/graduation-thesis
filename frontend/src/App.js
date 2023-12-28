@@ -44,8 +44,8 @@ import { getErrMessageSuccess } from "./redux/adminSlice";
 function App() {
     const navigate = useNavigate();
     const dispatch = useDispatch();
-    const currentUser = useSelector((state) => state.auth.currentUser);
-    const errMessage = useSelector((state) => state.admin.errMessage);
+    const currentUser = useSelector((state) => state?.auth?.currentUser);
+    const errMessage = useSelector((state) => state?.admin?.errMessage);
     const rolePath =
         currentUser?.roleId == "R1"
             ? "admin"
@@ -56,8 +56,8 @@ function App() {
             : currentUser?.roleId == "R4"
             ? "student"
             : null;
-    const route = routes.filter((route) => route.role == currentUser?.roleId)[0]
-        ? routes.filter((route) => route.role == currentUser?.roleId)[0]
+    const route = routes?.filter((route) => route?.role == currentUser?.roleId)[0]
+        ? routes?.filter((route) => route?.role == currentUser?.roleId)[0]
         : "";
     let axiosJWT = createAxios(currentUser, dispatch, logginSuccess);
     useEffect(() => {
@@ -81,8 +81,8 @@ function App() {
                     route?.pages?.map((route, index) => (
                         <Route
                             key={index}
-                            path={route.path}
-                            element={route.element}
+                            path={route?.path}
+                            element={route?.element}
                         />
                     ))}
                 {/* <Route path="" element={<Navigate to="home" replace />} /> */}

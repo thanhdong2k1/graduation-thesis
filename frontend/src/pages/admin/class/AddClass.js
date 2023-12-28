@@ -24,15 +24,15 @@ const AddClass = ({ type }, params) => {
     let { id } = useParams();
     console.log("type", type, id);
 
-    const currentUser = useSelector((state) => state.auth.currentUser);
+    const currentUser = useSelector((state) => state?.auth?.currentUser);
     const dispatch = useDispatch();
     let axiosJWT = createAxios(currentUser, dispatch, logginSuccess);
-    const majors = useSelector((state) => state.admin.majors);
-    const blocks = useSelector((state) => state.admin.blocks);
-    let codeMajor = majors.map((v) => {
+    const majors = useSelector((state) => state?.admin?.majors);
+    const blocks = useSelector((state) => state?.admin?.blocks);
+    let codeMajor = majors?.map((v) => {
         return { value: v.id, label: `${v.id} | ${v.name}` };
     });
-    let codeBlock = blocks.map((v) => {
+    let codeBlock = blocks?.map((v) => {
         return { value: v.id, label: `${v.id} | ${v.name}` };
     });
     const [isRtl, setIsRtl] = useState(false);
@@ -172,13 +172,13 @@ const AddClass = ({ type }, params) => {
                         setValue("description", res?.result?.description);
                         setValue(
                             "major",
-                            codeMajor.filter(
+                            codeMajor?.filter(
                                 (value) => value?.value == res?.result?.majorId
                             )
                         );
                         setValue(
                             "block",
-                            codeBlock.filter(
+                            codeBlock?.filter(
                                 (value) => value?.value == res?.result?.blockId
                             )
                         );
@@ -226,9 +226,9 @@ const AddClass = ({ type }, params) => {
                                 // required: "Full name is required",
                             })}
                         />
-                        {errors.id?.type && (
+                        {errors?.id?.type && (
                             <p className=" text-normal text-red-500">
-                                {errors.id?.message}
+                                {errors?.id?.message}
                             </p>
                         )}
                     </div> */}
@@ -243,9 +243,9 @@ const AddClass = ({ type }, params) => {
                                 required: "Name is required",
                             })}
                         />
-                        {errors.name?.type && (
+                        {errors?.name?.type && (
                             <p className=" text-normal text-red-500">
-                                {errors.name?.message}
+                                {errors?.name?.message}
                             </p>
                         )}
                     </div>
@@ -270,9 +270,9 @@ const AddClass = ({ type }, params) => {
                                 // required: "Full name is required",
                             })}
                         /> */}
-                        {errors.description?.type && (
+                        {errors?.description?.type && (
                             <p className=" text-normal text-red-500">
-                                {errors.description?.message}
+                                {errors?.description?.message}
                             </p>
                         )}
                     </div>
@@ -297,9 +297,9 @@ const AddClass = ({ type }, params) => {
                                 />
                             )}
                         />
-                        {errors.block?.type && (
+                        {errors?.block?.type && (
                             <p className=" text-normal text-red-500">
-                                {errors.block?.message}
+                                {errors?.block?.message}
                             </p>
                         )}
                     </div>
@@ -321,9 +321,9 @@ const AddClass = ({ type }, params) => {
                                 />
                             )}
                         />
-                        {errors.major?.type && (
+                        {errors?.major?.type && (
                             <p className=" text-normal text-red-500">
-                                {errors.major?.message}
+                                {errors?.major?.message}
                             </p>
                         )}
                     </div>

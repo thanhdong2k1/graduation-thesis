@@ -1,9 +1,9 @@
 import { useSelector } from "react-redux";
 
 const DetailTable = ({ tableData, datas }) => {
-    const currentUser = useSelector((state) => state.auth.currentUser);
-    const isFetching = useSelector((state) => state.user.isFetching);
-    const error = useSelector((state) => state.user.error);
+    const currentUser = useSelector((state) => state?.auth?.currentUser);
+    const isFetching = useSelector((state) => state?.user?.isFetching);
+    const error = useSelector((state) => state?.user?.error);
     // console.log("datas", datas, isFetching, error);
 
     // datas?.map((data) => {
@@ -184,7 +184,7 @@ const DetailTable = ({ tableData, datas }) => {
                                     <th
                                         scope="col"
                                         className={`${
-                                            index != tableData.length - 1
+                                            index != tableData?.length - 1
                                                 ? "border-r"
                                                 : ""
                                         } text-ellipsis text-center whitespace-nowrap px-2 py-1 overflow-hidden`}
@@ -206,7 +206,7 @@ const DetailTable = ({ tableData, datas }) => {
                                 } relative transition duration-300 ease-in-out hover:bg-neutral-100`}
                             >
                                 {/* <td className="whitespace-nowrap px-2 py-1 font-medium">
-                        {data.tableData[index].column}
+                        {data?.tableData[index].column}
                     </td> */}
                                 {tableData?.map(
                                     (table, indexTable) =>
@@ -282,7 +282,7 @@ const DetailTable = ({ tableData, datas }) => {
                                                                 : ""
                                                         }`}
                                                         onClick={() => {
-                                                            table.actions?.handle(
+                                                            table?.actions?.handle(
                                                                 data
                                                             );
                                                         }}
@@ -358,8 +358,8 @@ const DetailTable = ({ tableData, datas }) => {
                                                     )}
                                                 </td>
                                             )
-                                        ) : table.customContent &&
-                                          table.actions ? (
+                                        ) : table?.customContent &&
+                                          table?.actions ? (
                                             <td
                                                 className={`${
                                                     indexData != datas?.length
@@ -407,7 +407,7 @@ const DetailTable = ({ tableData, datas }) => {
                                                                           "."
                                                                       )[1]
                                                                   ]
-                                                                : table.column
+                                                                : table?.column
                                                                 ? data[
                                                                       table
                                                                           ?.column
@@ -442,9 +442,7 @@ const DetailTable = ({ tableData, datas }) => {
                                                             </span>
                                                         </span>
                                                     ) : currentUser?.permissions ? (
-                                                        currentUser?.permissions
-                                                            ?.split(",")
-                                                            .includes(
+                                                        currentUser?.permissions?.split(",")?.includes(
                                                                 "PERF"
                                                             ) ? (
                                                             <span
@@ -464,9 +462,7 @@ const DetailTable = ({ tableData, datas }) => {
                                                                     }
                                                                 </span>
                                                             </span>
-                                                        ) : currentUser?.permissions
-                                                              .split(",")
-                                                              .includes(
+                                                        ) : currentUser?.permissions?.split(",")?.includes(
                                                                   action?.permissions
                                                               ) ? (
                                                             <span
@@ -556,7 +552,7 @@ const DetailTable = ({ tableData, datas }) => {
                     ) : (
                         <tr>
                             <td
-                                colSpan={tableData.length}
+                                colSpan={tableData?.length}
                                 className="text-center text-h3FontSize font-medium"
                             >
                                 {isFetching ? (

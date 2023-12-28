@@ -18,12 +18,12 @@ import { customSelectStyles, customSelectStylesMulti } from "../../utils/customS
 import ButtonConfirm from "../../components/button/ButtonConfirm";
 
 const AdminChangeInformation = () => {
-    const currentUser = useSelector((state) => state.auth.currentUser);
-    const permissions = useSelector((state) => state.admin.permissions);
+    const currentUser = useSelector((state) => state?.auth?.currentUser);
+    const permissions = useSelector((state) => state?.admin?.permissions);
     const dispatch = useDispatch();
     let axiosJWT = createAxios(currentUser, dispatch, logginSuccess);
-    const gender = useSelector((state) => state.admin.gender);
-    const informationUser = useSelector((state) => state.admin.information);
+    const gender = useSelector((state) => state?.admin?.gender);
+    const informationUser = useSelector((state) => state?.admin?.information);
     const [showModal, setShowModal] = useState(false);
     const [srcImg, setSrcImg] = useState(
         "https://png.pngtree.com/png-vector/20191026/ourlarge/pngtree-avatar-vector-icon-white-background-png-image_1870181.jpg"
@@ -90,7 +90,7 @@ const AdminChangeInformation = () => {
         const datasend = {
             ...data,
             birthday: new Date(
-                moment(data.birthday, "DD/MM/YYYY")
+                moment(data?.birthday, "DD/MM/YYYY")
             ).toLocaleDateString("vi-VN"),
         };
         const { role, permissions, department, code, ...dataFilter } = datasend;
@@ -149,26 +149,26 @@ const AdminChangeInformation = () => {
     if (informationUser?.roleId === "R1") {
         permissions?.forEach((obj) => {
             if (obj?.value === "PERF") {
-                convert.push({ ...obj, isFixed: true });
+                convert?.push({ ...obj, isFixed: true });
             }
         });
-    } else if (informationUser.roleId === "R2") {
+    } else if (informationUser?.roleId === "R2") {
         permissions?.forEach((obj) => {
             if (obj?.value !== "PERD" && obj?.value !== "PERF") {
-                convert.push({ ...obj, isFixed: true });
+                convert?.push({ ...obj, isFixed: true });
             }
         });
     } else {
         permissions?.forEach((obj) => {
             if (obj?.value === "PERU" || obj?.value === "PERR") {
-                convert.push({ ...obj, isFixed: true });
+                convert?.push({ ...obj, isFixed: true });
             }
         });
     }
-    const array = informationUser?.permissions?.toString().split(",");
+    const array = informationUser?.permissions?.toString()?.split(",");
     permissions?.forEach((obj) => {
         if (array?.includes(obj?.value)) {
-            convert.push(obj);
+            convert?.push(obj);
         }
     });
     useEffect(() => {
@@ -190,13 +190,13 @@ const AdminChangeInformation = () => {
         setValue("address", informationUser?.address);
         setValue("birthday", informationUser?.birthday);
         setValue("code", informationUser?.code);
-        setValue("role", informationUser?.roleData?.valueVi);
-        setValue("department", informationUser?.departmentData?.name);
+        setValue("role", informationUser?.roleData.valueVi);
+        setValue("department", informationUser?.departmentData.name);
         setValue("permissions", convert);
         // console.log(informationUser?.birthday,moment(informationUser?.birthday, "DD/MM/YYYY").toString());
         setValue(
             "gender",
-            gender.filter(
+            gender?.filter(
                 (gender) => gender?.value === informationUser?.genderId
             )
         );
@@ -223,7 +223,7 @@ const AdminChangeInformation = () => {
                         />
                        
                     </div>
-                    {errors.oldPassword?.type && (
+                    {errors?.oldPassword?.type && (
                             <p className=" text-normal text-red-500">
                                 Old password is required
                             </p>
@@ -273,9 +273,9 @@ const AdminChangeInformation = () => {
                                 required: "Full name is required",
                             })}
                         />
-                        {errors.fullName?.type && (
+                        {errors?.fullName?.type && (
                             <p className=" text-normal text-red-500">
-                                {errors.fullName?.message}
+                                {errors?.fullName?.message}
                             </p>
                         )}
                     </div>
@@ -287,9 +287,9 @@ const AdminChangeInformation = () => {
                                 required: "Number phone is required",
                             })}
                         />
-                        {errors.numberPhone?.type && (
+                        {errors?.numberPhone?.type && (
                             <p className=" text-normal text-red-500">
-                                {errors.numberPhone?.message}
+                                {errors?.numberPhone?.message}
                             </p>
                         )}
                     </div>
@@ -303,9 +303,9 @@ const AdminChangeInformation = () => {
                                 // required: "Full name is required",
                             })}
                         />
-                        {errors.address?.type && (
+                        {errors?.address?.type && (
                             <p className=" text-normal text-red-500">
-                                {errors.address?.message}
+                                {errors?.address?.message}
                             </p>
                         )}
                     </div>
@@ -339,9 +339,9 @@ const AdminChangeInformation = () => {
                                 />
                             )}
                         />
-                        {errors.birthday?.type && (
+                        {errors?.birthday?.type && (
                             <p className=" text-normal text-red-500">
-                                {errors.birthday?.message}
+                                {errors?.birthday?.message}
                             </p>
                         )}
                     </div>
@@ -362,9 +362,9 @@ const AdminChangeInformation = () => {
                                 />
                             )}
                         />
-                        {errors.gender?.type && (
+                        {errors?.gender?.type && (
                             <p className=" text-normal text-red-500">
-                                {errors.gender?.message}
+                                {errors?.gender?.message}
                             </p>
                         )}
                     </div>

@@ -22,10 +22,10 @@ import ModalPopup from "../../../components/ModelPopup/ModalPopup";
 const TopicStudent = () => {
     const dispatch = useDispatch();
     const navigate = useNavigate();
-    const topics = useSelector((state) => state.student.topics);
-    const totalRecords = useSelector((state) => state.student.totalRecords);
-    const currentUser = useSelector((state) => state.auth.currentUser);
-    const information = useSelector((state) => state.student.information);
+    const topics = useSelector((state) => state?.student.topics);
+    const totalRecords = useSelector((state) => state?.student.totalRecords);
+    const currentUser = useSelector((state) => state?.auth?.currentUser);
+    const information = useSelector((state) => state?.student.information);
     let axiosJWT = createAxios(currentUser, dispatch, logginSuccess);
 
     const [defineTable, setDefineTable] = useState({
@@ -42,7 +42,7 @@ const TopicStudent = () => {
 
     // Handle
     const handleAdd = () => {
-        navigate(`../${pathRoutes.R1.addTopic}`, { replace: true });
+        navigate(`../${pathRoutes?.R1?.addTopic}`, { replace: true });
     };
     const handleImport = () => {
         console.log("handleImport");
@@ -51,7 +51,7 @@ const TopicStudent = () => {
         console.log("handleExport");
     };
     const handleEdit = (data) => {
-        navigate(`../${pathRoutes.R1.updateTopic}/${data.id}`, {
+        navigate(`../${pathRoutes?.R1?.updateTopic}/${data?.id}`, {
             replace: true,
         });
     };
@@ -60,8 +60,8 @@ const TopicStudent = () => {
     };
 
     const handleDetail = (data) => {
-        console.log(pathRoutes.R1.topicDetail);
-        navigate(`../${pathRoutes.R1.topicDetail}/${data.id}`, {
+        console.log(pathRoutes?.R1?.topicDetail);
+        navigate(`../${pathRoutes?.R1?.topicDetail}/${data?.id}`, {
             replace: true,
         });
     };
@@ -139,14 +139,14 @@ const TopicStudent = () => {
         //     const convertedObj = {};
         //     for (const key in obj) {
         //         console.log("key,obj", key, obj);
-        //         if (key.includes("Data")) {
-        //             const newKey = key.replace("Data", "Id");
+        //         if (key?.includes("Data")) {
+        //             const newKey = key?.replace("Data", "Id");
         //             convertedObj[newKey] = obj[key];
         //         } else {
         //             convertedObj[key] = obj[key];
         //         }
         //     }
-        //     convertImport.push(convertedObj);
+        //     convertImport?.push(convertedObj);
         // });
         // console.log("convertImport", convertImport);
         // console.log("convertImport", data);
@@ -342,23 +342,23 @@ const TopicStudent = () => {
     //     },
     // ];
 
-    // const gender = useSelector((state) => state.admin.gender);
+    // const gender = useSelector((state) => state?.admin?.gender);
     // const handleChangeLimit = (e) => {
     //     // console.log(e);
     //     const permissions = [];
     //     e.map((obj) => {
     //         console.log(obj.value);
-    //         permissions.push(obj.value);
+    //         permissions?.push(obj.value);
     //     });
 
-    //     // console.log(permissions.toString(), permissions.toString().split(","));
+    //     // console.log(permissions.toString(), permissions.toString()?.split(","));
 
     //     const convert = [];
-    //     const array = permissions.toString().split(",");
+    //     const array = permissions.toString()?.split(",");
     //     gender.map((obj) => {
     //         console.log(obj);
-    //         if (array.includes(obj.value)) {
-    //             convert.push(obj);
+    //         if (array?.includes(obj.value)) {
+    //             convert?.push(obj);
     //         }
     //     });
     //     console.log(convert, convert);

@@ -11,9 +11,9 @@ import {
 import { actionsEdit, actionsRemove } from "../utils/actionsTable";
 
 const ListTopic = () => {
-    const topics = useSelector((state) => state.user.topics);
-    const totalRecords = useSelector((state) => state.user.totalRecords);
-    const departments = useSelector((state) => state.user.departments);
+    const topics = useSelector((state) => state?.user?.topics);
+    const totalRecords = useSelector((state) => state?.user?.totalRecords);
+    const departments = useSelector((state) => state?.user?.departments);
     const [isClearable, setIsClearable] = useState(true);
     const [isSearchable, setIsSearchable] = useState(true);
     const [isDisabled, setIsDisabled] = useState(false);
@@ -117,10 +117,10 @@ const ListTopic = () => {
         });
     }, [defineTable.currentPage]);
     const handleEdit = (data) => {
-        setAbc("handleEdit" + data.id);
+        setAbc("handleEdit" + data?.id);
     };
     const handleDelete = (data) => {
-        setAbc("handleDelete" + data.id);
+        setAbc("handleDelete" + data?.id);
     };
 
     useEffect(() => {
@@ -182,7 +182,7 @@ const ListTopic = () => {
                                 hidden
                                 selected
                             ></option>
-                            {departments.map((department) => (
+                            {departments?.map((department) => (
                                 <option value={department.id}>
                                     {department.name}
                                 </option>

@@ -17,8 +17,8 @@ const HomePage = () => {
         pages: 0,
         currentPage: 1,
     });
-    const councils = useSelector((state) => state.user.councils);
-    const totalRecords = useSelector((state) => state.user.totalRecords);
+    const councils = useSelector((state) => state?.user?.councils);
+    const totalRecords = useSelector((state) => state?.user?.totalRecords);
     const dispatch = useDispatch();
     const handleAdd = () => {
         console.log("handleAdd");

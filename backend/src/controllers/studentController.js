@@ -2,6 +2,7 @@ const bcrypt = require("bcryptjs");
 const db = require("../models");
 const { Op, where } = require("sequelize");
 const evaluationCriteria = require("../models/evaluationCriteria");
+const userController = require("./userController");
 const salt = bcrypt.genSaltSync(10);
 
 const studentController = {
@@ -176,65 +177,8 @@ const studentController = {
       });
 
       if (department) {
-        console.log("departmentId", department.departmentId);
-        const searchTerms = `%${
-          req?.body?.inputSearch ? req?.body?.inputSearch?.trim() : ""
-        }%`?.replace(/\s/g, "%");
-        console.log(searchTerms);
-        const whereClause = {};
-        console.log(req?.body?.inputSearch?.toLowerCase());
-        console.log("req?.body?.length", Object.keys(req?.body).length);
-        if (Object.keys(req?.body).length > 0) {
-          console.log("Đã vào");
-          if (!req?.body?.filterSearch?.includes("Data")) {
-            if (searchTerms?.toLowerCase() != "%null%") {
-              whereClause[req?.body?.filterSearch] = {
-                [Op.like]: searchTerms,
-              };
-            } else {
-              whereClause[req?.body?.filterSearch] = {
-                [Op.is]: null,
-              };
-            }
-          } else {
-            if (searchTerms?.toLowerCase() != "%null%") {
-              console.log(req?.body?.filterSearch);
-              if (req?.body?.filterSearch == "deanData") {
-                whereClause["$deanData.fullName$"] = {
-                  [Op.like]: searchTerms,
-                };
-              }
-              if (req?.body?.filterSearch == "departmentData") {
-                whereClause["$departmentData.name$"] = {
-                  [Op.like]: searchTerms,
-                };
-              }
-              if (req?.body?.filterSearch == "roleData") {
-                whereClause["$roleData.valueVi$"] = {
-                  [Op.like]: searchTerms,
-                };
-              }
-              if (req?.body?.filterSearch == "statusData") {
-                whereClause["$statusData.valueVi$"] = {
-                  [Op.like]: searchTerms,
-                };
-              }
-              if (req?.body?.filterSearch == "genderData") {
-                whereClause["$genderData.valueVi$"] = {
-                  [Op.like]: searchTerms,
-                };
-              }
-              // theo id
-              whereClause[req?.body?.filterSearch.replace("Data", "Id")] = {
-                [Op.like]: searchTerms,
-              };
-            } else {
-              whereClause[req?.body?.filterSearch?.replace("Data", "Id")] = {
-                [Op.is]: null,
-              };
-            }
-          }
-        }
+        const whereClause = userController.whereClause(req?.body);
+
         console.log("whereClause", whereClause);
 
         const queryOptions = {
@@ -291,81 +235,8 @@ const studentController = {
   // Api Thesis
   getTheses: async (req, res) => {
     try {
-      console.log(req.body);
-      const searchTerms = `%${
-        req?.body?.inputSearch ? req?.body?.inputSearch?.trim() : ""
-      }%`?.replace(/\s/g, "%");
-      console.log(searchTerms);
-      const whereClause = {};
-      console.log(req?.body?.inputSearch?.toLowerCase());
-      console.log("req?.body?.length", Object.keys(req?.body).length);
-      if (Object.keys(req?.body).length > 0) {
-        console.log("Đã vào");
-        if (!req?.body?.filterSearch?.includes("Data")) {
-          if (searchTerms?.toLowerCase() != "%null%") {
-            whereClause[req?.body?.filterSearch] = {
-              [Op.like]: searchTerms,
-            };
-          } else {
-            whereClause[req?.body?.filterSearch] = {
-              [Op.is]: null,
-            };
-          }
-        } else {
-          // councilStatusData,
-          // thesisAdvisorStatusData,
-          // resultData,
-          // topicData,
-          // studentData,
-          // thesisAdvisorData,
-          // thesisSessionData,
-          // councilData,
-          if (searchTerms?.toLowerCase() != "%null%") {
-            console.log(req?.body?.filterSearch);
-            if (req?.body?.filterSearch == "topicData") {
-              whereClause["$topicData.name$"] = {
-                [Op.like]: searchTerms,
-              };
-            } else if (req?.body?.filterSearch == "studentData") {
-              whereClause["$studentData.fullName$"] = {
-                [Op.like]: searchTerms,
-              };
-            } else if (req?.body?.filterSearch == "thesisAdvisorData") {
-              whereClause["$thesisAdvisorData.fullName$"] = {
-                [Op.like]: searchTerms,
-              };
-            } else if (req?.body?.filterSearch == "thesisSessionData") {
-              whereClause["$thesisSessionData.name$"] = {
-                [Op.like]: searchTerms,
-              };
-            } else if (req?.body?.filterSearch == "councilData") {
-              whereClause["$councilData.name$"] = {
-                [Op.like]: searchTerms,
-              };
-            } else if (req?.body?.filterSearch == "councilStatusData") {
-              whereClause["$councilStatusData.valueVi$"] = {
-                [Op.like]: searchTerms,
-              };
-            } else if (req?.body?.filterSearch == "thesisAdvisorStatusData") {
-              whereClause["$thesisAdvisorStatusData.valueVi$"] = {
-                [Op.like]: searchTerms,
-              };
-            } else if (req?.body?.filterSearch == "resultData") {
-              whereClause["$resultData.valueVi$"] = {
-                [Op.like]: searchTerms,
-              };
-            }
-            // theo id
-            whereClause[req?.body?.filterSearch.replace("Data", "Id")] = {
-              [Op.like]: searchTerms,
-            };
-          } else {
-            whereClause[req?.body?.filterSearch?.replace("Data", "Id")] = {
-              [Op.is]: null,
-            };
-          }
-        }
-      }
+      const whereClause = userController.whereClause(req?.body);
+
       console.log("whereClause", whereClause);
 
       const queryOptions = {
@@ -685,50 +556,8 @@ const studentController = {
       });
 
       if (department) {
-        console.log(req.body);
-        const searchTerms = `%${
-          req?.body?.inputSearch ? req?.body?.inputSearch?.trim() : ""
-        }%`?.replace(/\s/g, "%");
-        console.log(searchTerms);
-        const whereClause = {};
-        console.log(req?.body?.inputSearch?.toLowerCase());
-        console.log("req?.body?.length", Object.keys(req?.body).length);
-        if (Object.keys(req?.body).length > 0) {
-          console.log("Đã vào");
-          if (!req?.body?.filterSearch?.includes("Data")) {
-            if (searchTerms?.toLowerCase() != "%null%") {
-              whereClause[req?.body?.filterSearch] = {
-                [Op.like]: searchTerms,
-              };
-            } else {
-              whereClause[req?.body?.filterSearch] = {
-                [Op.is]: null,
-              };
-            }
-          } else {
-            if (searchTerms?.toLowerCase() != "%null%") {
-              console.log(req?.body?.filterSearch);
-              if (req?.body?.filterSearch == "departmentData") {
-                whereClause["$departmentData.name$"] = {
-                  [Op.like]: searchTerms,
-                };
-              } else if (req?.body?.filterSearch == "statusData") {
-                whereClause["$statusData.valueVi$"] = {
-                  [Op.like]: searchTerms,
-                };
-              }
+        const whereClause = userController.whereClause(req?.body);
 
-              // theo id
-              whereClause[req?.body?.filterSearch.replace("Data", "Id")] = {
-                [Op.like]: searchTerms,
-              };
-            } else {
-              whereClause[req?.body?.filterSearch?.replace("Data", "Id")] = {
-                [Op.is]: null,
-              };
-            }
-          }
-        }
         console.log("whereClause", whereClause);
 
         const queryOptions = {

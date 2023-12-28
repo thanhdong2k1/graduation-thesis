@@ -23,7 +23,7 @@ export const customSelectStyles = {
     option: (base, state) => ({
         ...base,
         // borderBottom: '1px dotted pink',
-        // color: state.isSelected ? 'red' : 'blue',
+        // color: state?.isSelected ? 'red' : 'blue',
         padding: "4px 8px",
         fontWeight: "500",
     }),
@@ -65,7 +65,7 @@ export const customSelectStylesMulti = {
     option: (base, state) => ({
         ...base,
         // borderBottom: '1px dotted pink',
-        // color: state.isSelected ? 'red' : 'blue',
+        // color: state?.isSelected ? 'red' : 'blue',
         padding: "4px 8px",
         fontWeight: "500",
     }),
@@ -82,15 +82,15 @@ export const customSelectStylesMulti = {
         padding: `${(targetHeight - 20 - 1 - 1) / 2}px`,
     }),
     multiValueRemove: (base, state) => {
-        return state.data.isFixed ? { ...base, display: "none" } : base;
+        return state?.data?.isFixed ? { ...base, display: "none" } : base;
     },
     multiValue: (base, state) => {
-        return state.data.isFixed
+        return state?.data?.isFixed
             ? { ...base, backgroundColor: "#6b7280", borderRadius: "0.5rem" }
             : { ...base, backgroundColor: "#eeeff1", borderRadius: "0.5rem" };
     },
     multiValueLabel: (base, state) => {
-        return state.data.isFixed
+        return state?.data?.isFixed
             ? {
                   ...base,
                   fontWeight: "600",
@@ -105,7 +105,7 @@ export const customSelectStylesMulti = {
               };
     },
     multiValueRemove: (base, state) => {
-        return state.data.isFixed
+        return state?.data?.isFixed
             ? { ...base, display: "none" }
             : {
                   ...base,

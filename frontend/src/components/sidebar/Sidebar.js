@@ -6,7 +6,7 @@ import { routes } from "../../routes";
 import { useSelector } from "react-redux";
 import pathRoutes from "../../utils/pathRoutes";
 const Sidebar = ({ isShowSidebar, setIsShowSidebar }) => {
-    const userData = useSelector((state) => state.auth.currentUser);
+    const userData = useSelector((state) => state?.auth?.currentUser);
     const rolePath =
         userData?.roleId == "R1"
             ? "admin"
@@ -16,15 +16,14 @@ const Sidebar = ({ isShowSidebar, setIsShowSidebar }) => {
             ? "lecturer"
             : "";
     const path = useLocation();
-    const routesAdmin = routes
-        .filter((route) => route.role == userData?.roleId)[0]
+    const routesAdmin = routes?.filter((route) => route?.role == userData?.roleId)[0]
         ?.pages?.filter(
             (route) =>
-                route.path != pathRoutes.R1.changeInformation &&
-                route.path != pathRoutes.R1.changePassword &&
-                !route.name.includes("Add")&&
-                !route.name.includes("Update")&&
-                !route.name.includes("Detail")
+                route?.path != pathRoutes?.R1?.changeInformation &&
+                route?.path != pathRoutes?.R1?.changePassword &&
+                !route?.name?.includes("Add")&&
+                !route?.name?.includes("Update")&&
+                !route?.name?.includes("Detail")
         );
     // console.log("routesAdmin", routesAdmin,path?.pathname?.split("/") );
     return (
@@ -70,32 +69,32 @@ const Sidebar = ({ isShowSidebar, setIsShowSidebar }) => {
                 </h2>
                 <ul className="menuLists grid items-center gap-2 px-2 ">
                     {routesAdmin &&
-                        routesAdmin.map((route, index) => (
+                        routesAdmin?.map((route, index) => (
                             <li
                                 className={`listItem w-full relative text-greyText text-h3FontSize before:absolute before:content-[''] before:w-[5px] before:h-[0%] before:bg-PrimaryColor before:l-0 b-0 before:rounded-r-3xl group ${
                                     path?.pathname?.split("/")?.at(-1) ==
-                                    route.path
+                                    route?.path
                                         ? "before:h-full before:duration-300 before:ease-in-out before:bg-PrimaryColor text-PrimaryColor"
                                         : "hover:before:h-full hover:before:duration-300 hover:before:ease-in-out hover:before:bg-HoverColor hover:text-HoverColor"
                                 }`}
                             >
                                 <Link
-                                    to={route.path}
+                                    to={route?.path}
                                     className={`flex items-center font-medium ml-4 ${
                                         path?.pathname?.split("/")?.at(-1) ==
-                                        route.path
+                                        route?.path
                                             ? " text-PrimaryColor"
                                             : "group-hover:text-HoverColor"
                                     } `}
                                 >
                                     <IoMdSpeedometer className="icon mr-2" />
-                                    <span className="">{route.name}</span>
+                                    <span className="">{route?.name}</span>
                                 </Link>
                             </li>
                         ))}
                     {/* <li
                         className={`listItem w-full relative text-greyText text-h3FontSize before:absolute before:content-[''] before:w-[5px] before:h-[0%] before:bg-PrimaryColor before:l-0 b-0 before:rounded-r-3xl group ${
-                            path.pathname == "/abc"
+                            path.?pathname == "/abc"
                                 ? ""
                                 : "hover:before:h-full hover:before:duration-300 hover:before:ease-in-out hover:before:bg-HoverColor hover:text-HoverColor"
                         }`}
@@ -110,7 +109,7 @@ const Sidebar = ({ isShowSidebar, setIsShowSidebar }) => {
                     </li>
                     <li
                         className={`listItem w-full relative text-greyText text-h3FontSize before:absolute before:content-[''] before:w-[5px] before:h-[0%] before:bg-PrimaryColor before:l-0 b-0 before:rounded-r-3xl group ${
-                            path.pathname == "/admin"
+                            path.?pathname == "/admin"
                                 ? "before:h-full before:duration-300 before:ease-in-out before:bg-PrimaryColor text-PrimaryColor"
                                 : "hover:before:h-full hover:before:duration-300 hover:before:ease-in-out hover:before:bg-HoverColor hover:text-HoverColor"
                         }`}
@@ -118,7 +117,7 @@ const Sidebar = ({ isShowSidebar, setIsShowSidebar }) => {
                         <a
                             href=""
                             className={`flex items-center font-medium ml-4 ${
-                                path.pathname == "/admin"
+                                path.?pathname == "/admin"
                                     ? " text-PrimaryColor"
                                     : "group-hover:text-HoverColor"
                             } `}
@@ -129,7 +128,7 @@ const Sidebar = ({ isShowSidebar, setIsShowSidebar }) => {
                     </li>
                     <li
                         className={`listItem w-full relative text-greyText text-h3FontSize before:absolute before:content-[''] before:w-[5px] before:h-[0%] before:bg-PrimaryColor before:l-0 b-0 before:rounded-r-3xl group ${
-                            path.pathname == "/abc"
+                            path.?pathname == "/abc"
                                 ? ""
                                 : "hover:before:h-full hover:before:duration-300 hover:before:ease-in-out hover:before:bg-HoverColor hover:text-HoverColor"
                         }`}

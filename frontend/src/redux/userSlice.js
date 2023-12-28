@@ -12,8 +12,8 @@ const userSlice = createSlice({
     },
     reducers: {
         getTopicsSuccess: (state, action) => {
-            state.topics = action.payload.topics;
-            state.totalRecords = action.payload.totalRecords;
+            state.topics = action?.payload?.topics;
+            state.totalRecords = action?.payload?.totalRecords;
             state.isFetching = false;
             state.error = false;
         },
@@ -25,7 +25,7 @@ const userSlice = createSlice({
             state.isFetching = false;
         },
         getDepartmentsSuccess: (state, action) => {
-            state.departments = action.payload.departments;
+            state.departments = action?.payload?.departments;
             state.isFetching = false;
             state.error = false;
         },
@@ -37,8 +37,8 @@ const userSlice = createSlice({
             state.isFetching = false;
         },
         getCouncilsSuccess: (state, action) => {
-            state.councils = action.payload.councils;
-            state.totalRecords = action.payload.totalRecords;
+            state.councils = action?.payload?.councils;
+            state.totalRecords = action?.payload?.totalRecords;
             state.isFetching = false;
             state.error = false;
         },

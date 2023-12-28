@@ -28,12 +28,12 @@ const MarkEvaluationMethod = ({ type }) => {
     let { thesisSessionId, coundilId, thesisId } = useParams();
     console.log("type", type, coundilId, thesisId);
 
-    const currentUser = useSelector((state) => state.auth.currentUser);
+    const currentUser = useSelector((state) => state?.auth?.currentUser);
     const dispatch = useDispatch();
     let axiosJWT = createAxios(currentUser, dispatch, logginSuccess);
-    const status = useSelector((state) => state.admin.status);
-    const thesisSessions = useSelector((state) => state.admin.thesisSessions);
-    let codeThesisSessions = thesisSessions.map((v) => {
+    const status = useSelector((state) => state?.admin?.status);
+    const thesisSessions = useSelector((state) => state?.admin?.thesisSessions);
+    let codeThesisSessions = thesisSessions?.map((v) => {
         return { value: v.id, label: `${v.id} | ${v.name}` };
     });
     const [isRtl, setIsRtl] = useState(false);
@@ -152,7 +152,7 @@ const MarkEvaluationMethod = ({ type }) => {
                             }
                         );
                     console.log(response);
-                    setCriterias(response.result);
+                    setCriterias(response?.result);
                 } catch (e) {
                     console.error(e);
                 }
@@ -174,7 +174,7 @@ const MarkEvaluationMethod = ({ type }) => {
 
     useEffect(() => {
         // const isLengthColumn = criterias.length;
-        // const isFilled = criterias.filter(
+        // const isFilled = criterias?.filter(
         //     (item) => item.weight == "0" || item.score
         // ).length;
         // if (isFilled == isLengthColumn) {
@@ -183,7 +183,7 @@ const MarkEvaluationMethod = ({ type }) => {
         // }
         // console.log(isLengthColumn, isFilled);
         let total = 0;
-        criterias.map((item) => {
+        criterias?.map((item) => {
             item.weight >= 1
                 ? (total += +item.mark ? +item.mark * (item.weight / 10) : 0)
                 : (total += +item.mark ? +item.mark * item.weight : 0);
@@ -210,9 +210,9 @@ const MarkEvaluationMethod = ({ type }) => {
                                 // required: "Full name is required",
                             })}
                         />
-                        {errors.id?.type && (
+                        {errors?.id?.type && (
                             <p className=" text-normal text-red-500">
-                                {errors.id?.message}
+                                {errors?.id?.message}
                             </p>
                         )}
                     </div>
@@ -227,9 +227,9 @@ const MarkEvaluationMethod = ({ type }) => {
                                 required: "Name is required",
                             })}
                         />
-                        {errors.name?.type && (
+                        {errors?.name?.type && (
                             <p className=" text-normal text-red-500">
-                                {errors.name?.message}
+                                {errors?.name?.message}
                             </p>
                         )}
                     </div>
@@ -264,9 +264,9 @@ const MarkEvaluationMethod = ({ type }) => {
                                             value={item.name}
                                         />
                                     </div>
-                                    {errors.idCriteria?.type && (
+                                    {errors?.idCriteria?.type && (
                                         <p className=" text-normal text-red-500">
-                                            {errors.idCriteria?.message}
+                                            {errors?.idCriteria?.message}
                                         </p>
                                     )}
                                 </div>
@@ -299,9 +299,9 @@ const MarkEvaluationMethod = ({ type }) => {
                                         />
                                     )}
                                 </div>
-                                {/* {errors.weightCriteria?.type && (
+                                {/* {errors?.weightCriteria?.type && (
                                 <p className=" text-normal text-red-500">
-                                    {errors.weightCriteria?.message}
+                                    {errors?.weightCriteria?.message}
                                 </p>
                             )} */}
                             </div>
@@ -346,9 +346,9 @@ const MarkEvaluationMethod = ({ type }) => {
                                         />
                                     )}
                                 </div>
-                                {/* {errors.weightCriteria?.type && (
+                                {/* {errors?.weightCriteria?.type && (
                                 <p className=" text-normal text-red-500">
-                                    {errors.weightCriteria?.message}
+                                    {errors?.weightCriteria?.message}
                                 </p>
                             )} */}
                             </div>
@@ -377,9 +377,9 @@ const MarkEvaluationMethod = ({ type }) => {
                             })}
                             // value={totalScore}
                         />
-                        {errors.total?.type && (
+                        {errors?.total?.type && (
                             <p className=" text-normal text-red-500">
-                                {errors.total?.message}
+                                {errors?.total?.message}
                             </p>
                         )}
                     </div>
@@ -387,7 +387,7 @@ const MarkEvaluationMethod = ({ type }) => {
                 {/* <button onClick={handleSubmit}>Submit</button> */}
 
                 {/* <div>
-                        {criterias.map((item, index) => (
+                        {criterias?.map((item, index) => (
                             <div key={index}>
                                 <input
                                     type="text"
