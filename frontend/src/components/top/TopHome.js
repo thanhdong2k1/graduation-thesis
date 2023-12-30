@@ -1,6 +1,6 @@
 import logoMini from "../../assets/logo_Mini.png";
 import background2 from "../../assets/background2.png";
-import background1 from "../../assets/background1.png";
+import background1 from "../../assets/background1-min.png";
 
 
 const TopHome = () => {

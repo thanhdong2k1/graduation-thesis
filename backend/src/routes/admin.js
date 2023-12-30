@@ -16,6 +16,7 @@ router.post("/import-councils", middlewareController.verifyTokenImport, adminCon
 router.post("/create-council", middlewareController.verifyTokenAdd, adminController.addCouncil);
 router.put("/update-council/:id", middlewareController.verifyTokenUpdate, adminController.updateCouncil);
 router.delete("/delete-council/:id", middlewareController.verifyTokenDelete, adminController.deleteCouncil);
+router.delete("/delete-council-detail/:id", middlewareController.verifyTokenDelete, adminController.deleteCouncilDetail);
 
 // Api Council
 router.get("/council-detail/:id", middlewareController.verifyToken, adminController.getCouncilDetailByIdCouncil);

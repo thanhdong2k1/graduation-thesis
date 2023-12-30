@@ -17,7 +17,7 @@ import { logginSuccess } from "./redux/authSlice";
 import HomeLayout from "./components/layouts/HomeLayout";
 import HomePage from "./pages/HomePage";
 import ListTopic from "./pages/ListTopic";
-import { apiAuth, apiStudent, apiUser } from "./redux/apiRequest";
+import { apiAdmin, apiAuth, apiStudent, apiUser } from "./redux/apiRequest";
 import { createAxios } from "./utils/createInstance";
 import { toast } from "react-toastify";
 import { getErrMessageSuccess } from "./redux/adminSlice";
@@ -61,7 +61,10 @@ function App() {
         : "";
     let axiosJWT = createAxios(currentUser, dispatch, logginSuccess);
     useEffect(() => {
-        apiStudent.apiStudentGetInformation(currentUser, dispatch, axiosJWT);
+        async function fetchDataInfo(){
+            currentUser?.roleId=="R4"? await apiStudent.apiStudentGetInformation(currentUser, dispatch, axiosJWT):await apiAdmin.apiAdminGetInformation(currentUser, dispatch, axiosJWT);;
+        }
+        fetchDataInfo()
     }, []);
     return (
         <Routes>

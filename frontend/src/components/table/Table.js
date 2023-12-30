@@ -32,7 +32,6 @@ const Table = ({
     // redux
     const currentUser = useSelector((state) => state?.auth?.currentUser);
     const path = useLocation();
-
     const orderedPermissions = [
         "PERE", // Thứ tự ưu tiên PERE
         "PERI", // Thứ tự ưu tiên PERI
@@ -53,13 +52,35 @@ const Table = ({
     });
     const [isRtl, setIsRtl] = useState(false);
 
-    // dataState
-    const [dataShow, setDataShow] = useState([]);
-
     // Handle
     const handleDeleteImport = (dataDelete) => {
         setDataImport(dataImport?.filter((data) => data != dataDelete));
     };
+
+    // dataState
+    const [dataShow, setDataShow] = useState([]);
+
+    let tableDataImport = tableData?.filter((data) => !data?.actions);
+    // for (let i = 0; i < tableDataImport.length; i++) {
+    //     delete tableDataImport[i].columnData;
+    //   }
+    // tableDataImport?.map((header)=> delete header?.columnData ); //Nơi import data lỗi
+    tableDataImport?.push({
+        header: "Hành động",
+        actions: [actionsRemove(handleDeleteImport)],
+    });
+
+    tableDataImport = tableData.map(item => {
+        // Tạo một bản sao của đối tượng hiện tại
+        const newItem = { ...item };
+        
+        // Xóa thuộc tính 'columnData' trong đối tượng mới
+        delete newItem.columnData;
+        
+        return newItem;
+      }); //Nơi import data lỗi
+
+    console.log("tableDataImport", tableDataImport, tableData);
 
     const importFile = async (e) => {
         /* get data as an ArrayBuffer */
@@ -76,17 +97,28 @@ const Table = ({
             dataImport?.map((item) => {
                 const obj = {};
                 const headerImport = Object.keys(item)?.splice(1);
-                // console.log(headerImport, item, dataImport);
-                tableData?.forEach((headerItem) => {
+                console.log(
+                    "headerImport, item, dataImport",
+                    headerImport,
+                    item,
+                    dataImport
+                );
+                tableDataImport?.forEach((headerItem) => {
                     // console.log("headerItem", headerItem);
                     if (headerImport?.includes(headerItem?.header)) {
+                        console.log("Xuống tới 82");
                         // console.log("header trùng", headerItem);
                         if (!headerItem?.actions) {
+                            console.log("Xuống tới 85");
                             const { header, column } = headerItem;
                             // console.log("check:", column, header, item[header]);
                             if (column === "id") {
+                                console.log("Xuống tới 90");
                                 obj[column] = null;
                             } else {
+                                console.log("Xuống tới 93");
+                                // console.log("check:", column, header, item);
+                                // console.log("headerItem", headerItem);
                                 obj[column] = item[header];
                             }
 
@@ -108,16 +140,19 @@ const Table = ({
                     }
                 });
                 if (Object.keys(obj)?.length != 0) {
+                    console.log("Xuống tới 110");
+                    console.log(obj);
                     convertedItem?.push(obj);
                 }
             });
 
-            // console.log(
-            //     "check var:",
-            //     convertedItem,
-            //     Object.keys(convertedItem)
-            // );
-            if (Object.keys(convertedItem)?.length != 0) {
+            console.log("Xuống tới 110");
+            console.log(
+                "check var:",
+                convertedItem,
+                Object.keys(convertedItem)
+            );
+            if (Object.keys(convertedItem).length != 0) {
                 console.log("Có sự trùng", convertedItem);
                 setDataImport(convertedItem);
                 setDefineTableImport((prevState) => ({
@@ -136,10 +171,15 @@ const Table = ({
             }
         }
     };
+    useEffect(() => {
+        console.log("tableData", tableData);
+        console.log("tableDataImport", tableDataImport);
+        
+    }, [isImport]);
     const exportSample = useCallback(() => {
         const convertedItem = [];
         const obj = {};
-        tableData?.map((data) => {
+        tableDataImport?.map((data) => {
             if (!data?.actions) {
                 const { header } = data;
                 obj[header] = `${header} mẫu`;
@@ -157,13 +197,13 @@ const Table = ({
                 "vi-VN"
             )} ${new Date().toLocaleTimeString("vi-VN")}.xlsx`
         );
-    }, [tableData]);
+    }, [tableDataImport]);
     const exportFile = useCallback(() => {
         console.log("export datasa", datas);
         const convertedItem = [];
         datas?.map((item) => {
             const obj = {};
-            tableData?.forEach((headerData) => {
+            tableDataImport?.forEach((headerData) => {
                 if (!headerData?.actions) {
                     const { header, column } = headerData;
                     console.log("header, item[column]", header, item[column]);
@@ -250,11 +290,6 @@ const Table = ({
     const nameTable = routes
         ?.filter((route) => route?.role == currentUser?.roleId)[0]
         ?.pages?.filter((page) => page?.path == arrPath[1])[0]?.name;
-    const tableDataImport = tableData?.filter((data) => !data?.actions);
-    tableDataImport?.push({
-        header: "Hành động",
-        actions: [actionsRemove(handleDeleteImport)],
-    });
 
     const limitRecord = [
         { label: "5 rows", value: 5 },
@@ -525,7 +560,9 @@ const Table = ({
                                         </button>
                                     </>
                                 ) : currentUser?.permissions ? (
-                                    currentUser?.permissions?.split(",")?.includes("PERF") ? (
+                                    currentUser?.permissions
+                                        ?.split(",")
+                                        ?.includes("PERF") ? (
                                         <>
                                             <button
                                                 className="importDiv button"
@@ -552,50 +589,64 @@ const Table = ({
                                             </button>
                                         </>
                                     ) : (
-                                        orderedPermissions?.map((permission) => {
-                                            if (
-                                                currentUser?.permissions?.split(",")?.includes(permission)
-                                            ) {
-                                                if (permission === "PERE") {
-                                                    return (
-                                                        <button
-                                                            className="importDiv button"
-                                                            onClick={exportFile}
-                                                        >
-                                                            <span>Xuất</span>
-                                                            <TbTableExport className="icon" />
-                                                        </button>
-                                                    );
+                                        orderedPermissions?.map(
+                                            (permission) => {
+                                                if (
+                                                    currentUser?.permissions
+                                                        ?.split(",")
+                                                        ?.includes(permission)
+                                                ) {
+                                                    if (permission === "PERE") {
+                                                        return (
+                                                            <button
+                                                                className="importDiv button"
+                                                                onClick={
+                                                                    exportFile
+                                                                }
+                                                            >
+                                                                <span>
+                                                                    Xuất
+                                                                </span>
+                                                                <TbTableExport className="icon" />
+                                                            </button>
+                                                        );
+                                                    }
+                                                    if (permission === "PERI") {
+                                                        return (
+                                                            <button
+                                                                className="importDiv button"
+                                                                onClick={() => {
+                                                                    setShowModal(
+                                                                        true
+                                                                    );
+                                                                }}
+                                                            >
+                                                                <span>
+                                                                    Nhập
+                                                                </span>
+                                                                <TbTableImport className="icon" />
+                                                            </button>
+                                                        );
+                                                    }
+                                                    if (permission === "PERC") {
+                                                        return (
+                                                            <button
+                                                                className="addDiv button"
+                                                                onClick={
+                                                                    handleAdd
+                                                                }
+                                                            >
+                                                                <span>
+                                                                    Thêm
+                                                                </span>
+                                                                <TbTablePlus className="icon" />
+                                                            </button>
+                                                        );
+                                                    }
                                                 }
-                                                if (permission === "PERI") {
-                                                    return (
-                                                        <button
-                                                            className="importDiv button"
-                                                            onClick={() => {
-                                                                setShowModal(
-                                                                    true
-                                                                );
-                                                            }}
-                                                        >
-                                                            <span>Nhập</span>
-                                                            <TbTableImport className="icon" />
-                                                        </button>
-                                                    );
-                                                }
-                                                if (permission === "PERC") {
-                                                    return (
-                                                        <button
-                                                            className="addDiv button"
-                                                            onClick={handleAdd}
-                                                        >
-                                                            <span>Thêm</span>
-                                                            <TbTablePlus className="icon" />
-                                                        </button>
-                                                    );
-                                                }
+                                                return null;
                                             }
-                                            return null;
-                                        })
+                                        )
                                     )
                                 ) : null}
                                 {/* {functionsModule && handleExport && (
@@ -685,8 +736,7 @@ const Table = ({
                                     </div>
                                 )}
                             {pagination && pagination}
-                            {defineTable.currentPage <
-                                defineTable.pages - 1 &&
+                            {defineTable.currentPage < defineTable.pages - 1 &&
                                 defineTable.pages > 3 && (
                                     <div>
                                         <button
@@ -715,7 +765,7 @@ const Table = ({
             <ModalPopup
                 showModal={showModal}
                 setShowModal={setShowModal}
-                title={"Import Excel"}
+                title={"Nhập Excel"}
                 result={dataImport}
                 setResult={saveDataImport}
             >
@@ -724,7 +774,7 @@ const Table = ({
                         className="block text-sm font-medium text-gray-900 dark:text-white"
                         for="file_input"
                     >
-                        Upload file
+                        Nhập file
                     </label>
                     <input
                         className="block w-full text-sm rounded-lg bg-white shadow-md border

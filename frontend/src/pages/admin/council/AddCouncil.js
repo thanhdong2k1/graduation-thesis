@@ -40,7 +40,7 @@ const AddCouncil = ({ type }, params) => {
         return { value: v.id, label: `${v.id} | ${v.name}` };
     });
     let codeTheses = theses?.map((v) => {
-        return { value: v.id, label: `${v.id} | ${v.topicData.name}` };
+        return { value: v.id, label: `${v.topicData.name} | SV: ${v.studentData.fullName} | GV: ${v.thesisAdvisorData.fullName}` };
     });
     const [isRtl, setIsRtl] = useState(false);
 
@@ -54,14 +54,26 @@ const AddCouncil = ({ type }, params) => {
         reset,
     } = useForm();
     const onSubmit = async (data) => {
-        const id = toast.loading("Please wait...");
-        console.log(data);
+        const id = toast.loading("Vui lòng đợi...");
+        console.log(data, councilDetails, thesesDetails);
         let councilDetailsFilter = [];
         councilDetails?.map((item) => {
             councilDetailsFilter?.push({
                 id: item?.id,
                 positionId: item?.positionId?.value,
                 lecturerId: item?.lecturerId?.value,
+                // positionId: item?.filter(
+                //     (value) =>
+                //         value?.value == res?.result?.positionId
+                // )
+            });
+        });
+        let thesesDetailsFilter = [];
+
+        thesesDetails?.map((item) => {
+            thesesDetailsFilter?.push({
+                id: item?.id,
+                thesisId: item?.thesisId?.value,
                 // positionId: item?.filter(
                 //     (value) =>
                 //         value?.value == res?.result?.positionId
@@ -76,9 +88,11 @@ const AddCouncil = ({ type }, params) => {
                       data: data,
                       axiosJWT: axiosJWT,
                       councilDetails: councilDetailsFilter,
+                      thesesDetails: thesesDetailsFilter,
                   })
                   .then((res) => {
-                      if (res?.errCode > 0) {
+                      //   console.log(res);
+                      if (res?.errCode > 0 || res?.errCode < 0) {
                           // console.log(res);
                           toast.update(id, {
                               render: res?.errMessage,
@@ -88,8 +102,8 @@ const AddCouncil = ({ type }, params) => {
                               autoClose: 1500,
                               pauseOnFocusLoss: true,
                           });
+                          fetchData();
                       } else {
-                          // console.log(res);
                           toast.update(id, {
                               render: res?.errMessage,
                               type: "success",
@@ -101,10 +115,12 @@ const AddCouncil = ({ type }, params) => {
                           setValue("thesisSession", "");
                           setValue("status", "");
                           reset();
+                          fetchData();
                       }
+                      //   fetchData();
                   })
                   .catch((error) => {
-                      // console.log(error);
+                      console.log(error);
                       toast.update(id, {
                           render: "Đã xảy ra lỗi, vui lòng thử lại sau",
                           type: "error",
@@ -120,9 +136,11 @@ const AddCouncil = ({ type }, params) => {
                       data: data,
                       axiosJWT: axiosJWT,
                       councilDetails: councilDetailsFilter,
+                      thesesDetails: thesesDetailsFilter,
                   })
                   .then((res) => {
-                      if (res?.errCode > 0) {
+                      console.log(res);
+                      if (res?.errCode > 0 || res?.errCode < 0) {
                           // console.log(res);
                           toast.update(id, {
                               render: res?.errMessage,
@@ -132,7 +150,8 @@ const AddCouncil = ({ type }, params) => {
                               autoClose: 1500,
                               pauseOnFocusLoss: true,
                           });
-                      } else {
+                          fetchData();
+                        } else {
                           // console.log(res);
                           toast.update(id, {
                               render: res?.errMessage,
@@ -145,10 +164,11 @@ const AddCouncil = ({ type }, params) => {
                           //   setValue("thesisSession", "");
                           //   setValue("status", "");
                           //   reset();
+                          fetchData();
                       }
                   })
                   .catch((error) => {
-                      // console.log(error);
+                      console.log(error);
                       toast.update(id, {
                           render: "Đã xảy ra lỗi, vui lòng thử lại sau",
                           type: "error",
@@ -158,7 +178,77 @@ const AddCouncil = ({ type }, params) => {
                           pauseOnFocusLoss: true,
                       });
                   });
+        fetchData();
     };
+    async function fetchData() {
+        try {
+            apiAdmin
+                .getAllCouncilDetails({
+                    user: currentUser,
+                    id: id,
+                    axiosJWT: axiosJWT,
+                })
+                .then((res) => {
+                    console.log(res);
+                    let filter = [];
+                    res?.result?.map((item) => {
+                        filter?.push({
+                            id: item?.id,
+                            positionId: position?.filter(
+                                (value) => value?.value == item?.positionId
+                            )[0],
+                            lecturerId: codeLecturers?.filter(
+                                (value) => value?.value == item?.lecturerId
+                            )[0],
+                            // positionId: item?.filter(
+                            //     (value) =>
+                            //         value?.value == res?.result?.positionId
+                            // )
+                        });
+                    });
+
+                    setCouncilDetails(filter);
+                })
+                .catch((error) => {
+                    console.log(error);
+                });
+            apiAdmin
+                .getAllThesesNotDispatch({
+                    user: currentUser,
+                    axiosJWT: axiosJWT,
+                    filterSearch: "councilId",
+                    inputSearch: id,
+                })
+                .then((res) => {
+                    console.log(res);
+                    let filterThesis = [];
+                    res?.theses?.map((item) => {
+                        codeTheses.push({
+                            value: item?.id,
+                            label: `${item.topicData.name} | SV: ${item.studentData.fullName} | GV: ${item.thesisAdvisorData.fullName}`,
+                            // positionId: item?.filter(
+                            //     (value) =>
+                            //         value?.value == res?.result?.positionId
+                            // )
+                        });
+                        filterThesis?.push({
+                            id: item?.id,
+                            thesisId: codeTheses?.filter(
+                                (value) => value?.value == item?.id
+                            )[0],
+                        });
+                    });
+
+                    console.log(filterThesis, codeTheses);
+                    setThesesDetails(filterThesis);
+                })
+                .catch((error) => {
+                    console.log(error);
+                });
+        } catch (e) {
+            console.error(e);
+        }
+    }
     useEffect(() => {
         apiAdmin.apiGetStatus(currentUser, dispatch, axiosJWT);
         apiAdmin.apiGetPosition(currentUser, dispatch, axiosJWT);
@@ -176,6 +266,8 @@ const AddCouncil = ({ type }, params) => {
             user: currentUser,
             dispatch: dispatch,
             axiosJWT: axiosJWT,
+            filterSearch: "councilId",
+            inputSearch: "null",
         });
         if (id) {
             apiAdmin
@@ -185,7 +277,7 @@ const AddCouncil = ({ type }, params) => {
                     axiosJWT: axiosJWT,
                 })
                 .then((res) => {
-                    if (res?.errCode > 0) {
+                    if (res?.errCode > 0 || res?.errCode < 0) {
                         toast.update(id, {
                             render: res?.errMessage,
                             type: "error",
@@ -234,35 +326,6 @@ const AddCouncil = ({ type }, params) => {
                         pauseOnFocusLoss: true,
                     });
                 });
-            async function fetchData() {
-                try {
-                    const response = await apiAdmin.getAllCouncilDetails({
-                        user: currentUser,
-                        id: id,
-                        axiosJWT: axiosJWT,
-                    });
-                    let filter = [];
-                    response?.result?.map((item) => {
-                        filter?.push({
-                            id: item?.id,
-                            positionId: position?.filter(
-                                (value) => value?.value == item?.positionId
-                            )[0],
-                            lecturerId: codeLecturers?.filter(
-                                (value) => value?.value == item?.lecturerId
-                            )[0],
-                            // positionId: item?.filter(
-                            //     (value) =>
-                            //         value?.value == res?.result?.positionId
-                            // )
-                        });
-                    });
-                    console.log(filter);
-                    setCouncilDetails(filter);
-                } catch (e) {
-                    console.error(e);
-                }
-            }
             fetchData();
         }
     }, [currentUser]);
@@ -282,9 +345,58 @@ const AddCouncil = ({ type }, params) => {
         console.log(councilDetails);
     };
 
-    const removeItemPosition = (index) => {
+    const removeItemPosition = async (index, data) => {
         const updatedItems = [...councilDetails];
         updatedItems.splice(index, 1);
+        if (data.hasOwnProperty("id")) {
+            console.log(index, data);
+            const id = toast.loading("Vui lòng đợi...");
+            await apiAdmin
+                .apiDeleteCouncilDetail({
+                    user: currentUser,
+                    data: data,
+                    axiosJWT: axiosJWT,
+                })
+                .then((res) => {
+                    console.log(res);
+                    if (res?.errCode > 0 || res?.errCode < 0) {
+                        // console.log(res);
+                        toast.update(id, {
+                            render: res?.errMessage,
+                            type: "error",
+                            isLoading: false,
+                            closeButton: true,
+                            autoClose: 1500,
+                            pauseOnFocusLoss: true,
+                        });
+                    } else {
+                        // console.log(res);
+                        toast.update(id, {
+                            render: res?.errMessage,
+                            type: "success",
+                            isLoading: false,
+                            closeButton: true,
+                            autoClose: 1500,
+                            pauseOnFocusLoss: true,
+                        });
+                        //   setValue("thesisSession", "");
+                        //   setValue("status", "");
+                        //   reset();
+                    }
+                    fetchData();
+                })
+                .catch((error) => {
+                    console.log(error);
+                    toast.update(id, {
+                        render: "Đã xảy ra lỗi, vui lòng thử lại sau",
+                        type: "error",
+                        isLoading: false,
+                        closeButton: true,
+                        autoClose: 1500,
+                        pauseOnFocusLoss: true,
+                    });
+                });
+        }
         setCouncilDetails(updatedItems);
     };
 
@@ -292,6 +404,7 @@ const AddCouncil = ({ type }, params) => {
         const updatedItems = [...councilDetails];
         updatedItems[index][field] = value;
         updatedItems[index][field] = value;
+
         setCouncilDetails(updatedItems);
     };
 
@@ -299,8 +412,7 @@ const AddCouncil = ({ type }, params) => {
         setThesesDetails([
             ...thesesDetails,
             {
-                positionId: "",
-                lecturerId: "",
+                thesisId: "",
             },
         ]);
         console.log(thesesDetails);
@@ -309,6 +421,7 @@ const AddCouncil = ({ type }, params) => {
     const removeItemThesis = (index) => {
         const updatedItems = [...thesesDetails];
         updatedItems.splice(index, 1);
+        console.log("filterThesis", codeTheses);
         setThesesDetails(updatedItems);
     };
 
@@ -316,6 +429,7 @@ const AddCouncil = ({ type }, params) => {
         const updatedItems = [...thesesDetails];
         updatedItems[index][field] = value;
         updatedItems[index][field] = value;
+        console.log("filterThesis", codeTheses);
         setThesesDetails(updatedItems);
     };
     // useEffect(() => {
@@ -340,13 +454,10 @@ const AddCouncil = ({ type }, params) => {
     //         ]);
     //     });
     // }, [councilDetails]);
-    useEffect(() => {
-        console.log(councilDetails);
-    }, [councilDetails]);
     return (
         <div className="changeInformationDiv flex flex-col justify-center items-center gap-2">
             <div className=" font-semibold text-h1FontSize">
-                {type=="add"?"Thêm":"Sửa"} hội đồng
+                {type == "add" ? "Thêm" : "Sửa"} hội đồng
             </div>
             <form
                 onSubmit={handleSubmit(onSubmit)}
@@ -424,7 +535,8 @@ const AddCouncil = ({ type }, params) => {
                                 // required: "Full name is required",
                             })}
                             render={({ field }) => (
-                                <Select placeholder="Chọn..."
+                                <Select
+                                    placeholder="Chọn..."
                                     styles={customSelectStyles}
                                     {...field}
                                     options={codeThesisSessions}
@@ -448,7 +560,8 @@ const AddCouncil = ({ type }, params) => {
                                 // required: "Full name is required",
                             })}
                             render={({ field }) => (
-                                <Select placeholder="Chọn..."
+                                <Select
+                                    placeholder="Chọn..."
                                     styles={customSelectStyles}
                                     {...field}
                                     options={status}
@@ -502,7 +615,8 @@ const AddCouncil = ({ type }, params) => {
                                     </label>
                                 )}
 
-                                <Select placeholder="Chọn..."
+                                <Select
+                                    placeholder="Chọn..."
                                     defaultValue={item?.positionId}
                                     styles={customSelectStyles}
                                     options={position}
@@ -533,7 +647,8 @@ const AddCouncil = ({ type }, params) => {
                                     </>
                                 )}
                                 <div className="flex flex-row gap-2">
-                                    <Select placeholder="Chọn..."
+                                    <Select
+                                        placeholder="Chọn..."
                                         defaultValue={item?.lecturerId}
                                         styles={customSelectStyles}
                                         options={codeLecturers}
@@ -573,7 +688,7 @@ const AddCouncil = ({ type }, params) => {
                                         <div
                                             className="button"
                                             onClick={() =>
-                                                removeItemPosition(index)
+                                                removeItemPosition(index, item)
                                             }
                                         >
                                             <FaRegTrashAlt className="hover:text-PrimaryColor" />
@@ -617,8 +732,9 @@ const AddCouncil = ({ type }, params) => {
                                     </>
                                 )}
                                 <div className="flex flex-row gap-2">
-                                    <Select placeholder="Chọn..."
-                                        defaultValue={item?.lecturerId}
+                                    <Select
+                                        placeholder="Chọn..."
+                                        defaultValue={item?.thesisId}
                                         styles={customSelectStyles}
                                         options={codeTheses}
                                         isDisabled={
@@ -630,7 +746,7 @@ const AddCouncil = ({ type }, params) => {
                                             // console.log(e)
                                             updateItemThesis(
                                                 index,
-                                                "lecturerId",
+                                                "thesisId",
                                                 e
                                             )
                                         }

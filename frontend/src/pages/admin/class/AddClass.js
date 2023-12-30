@@ -47,7 +47,7 @@ const AddClass = ({ type }, params) => {
         reset,
     } = useForm();
     const onSubmit = async (data) => {
-        const id = toast.loading("Please wait...");
+        const id = toast.loading("Vui lòng đợi...");
         console.log(data);
         type == "add"
             ? await apiAdmin
@@ -57,7 +57,7 @@ const AddClass = ({ type }, params) => {
                       axiosJWT: axiosJWT,
                   })
                   .then((res) => {
-                      if (res?.errCode > 0) {
+                      if (res?.errCode > 0 || res?.errCode < 0 ) {
                           // console.log(res);
                           toast.update(id, {
                               render: res?.errMessage,
@@ -100,7 +100,7 @@ const AddClass = ({ type }, params) => {
                       axiosJWT: axiosJWT,
                   })
                   .then((res) => {
-                      if (res?.errCode > 0) {
+                      if (res?.errCode > 0 || res?.errCode < 0 ) {
                           // console.log(res);
                           toast.update(id, {
                               render: res?.errMessage,
@@ -156,7 +156,7 @@ const AddClass = ({ type }, params) => {
                     axiosJWT: axiosJWT,
                 })
                 .then((res) => {
-                    if (res?.errCode > 0) {
+                    if (res?.errCode > 0 || res?.errCode < 0 ) {
                         toast.update(id, {
                             render: res?.errMessage,
                             type: "error",

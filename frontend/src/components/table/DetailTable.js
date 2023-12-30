@@ -4,7 +4,7 @@ const DetailTable = ({ tableData, datas }) => {
     const currentUser = useSelector((state) => state?.auth?.currentUser);
     const isFetching = useSelector((state) => state?.user?.isFetching);
     const error = useSelector((state) => state?.user?.error);
-    // console.log("datas", datas, isFetching, error);
+    console.log("datas", datas, tableData);
 
     // datas?.map((data) => {
     //     tableData?.map((table, indexTable) => {
@@ -51,42 +51,42 @@ const DetailTable = ({ tableData, datas }) => {
     //     });
     // });
 
-//     datas?.map((data) => {
-//         tableData?.map((table, indexTable) => {
-//             if (!table?.actions) {
-//                 console.log(
-//                     "data map",
-//                     // table?.columnData
-//                     //     ? data[table?.columnData?.split(".")[0]][
-//                     //           table?.columnData?.split(".")[1]
-//                     //       ]
-//                     //     : data[table?.column]
+    //     datas?.map((data) => {
+    //         tableData?.map((table, indexTable) => {
+    //             if (!table?.actions) {
+    //                 console.log(
+    //                     "data map",
+    //                     // table?.columnData
+    //                     //     ? data[table?.columnData?.split(".")[0]][
+    //                     //           table?.columnData?.split(".")[1]
+    //                     //       ]
+    //                     //     : data[table?.column]
 
-//                     // table?.columnData?.split(".")[1]
+    //                     // table?.columnData?.split(".")[1]
 
-// //                     table?.columnData
-// // ?data[table?.columnData?.split(".")[0]][table?.columnData?.split(".")[1]][table?.columnData?.split(".")[2]][table?.columnData?.split(".")[3]]
-// // 	?data[table?.columnData?.split(".")[0]][table?.columnData?.split(".")[1]][table?.columnData?.split(".")[2]][table?.columnData?.split(".")[3]]
-// // 	:data[table?.columnData?.split(".")[0]][table?.columnData?.split(".")[1]][table?.columnData?.split(".")[2]]
-// // 		?data[table?.columnData?.split(".")[0]][table?.columnData?.split(".")[1]][table?.columnData?.split(".")[2]]
-// // 		:data[table?.columnData?.split(".")[0]][table?.columnData?.split(".")[1]]
-// // 		: data[table?.column]
+    // //                     table?.columnData
+    // // ?data[table?.columnData?.split(".")[0]][table?.columnData?.split(".")[1]][table?.columnData?.split(".")[2]][table?.columnData?.split(".")[3]]
+    // // 	?data[table?.columnData?.split(".")[0]][table?.columnData?.split(".")[1]][table?.columnData?.split(".")[2]][table?.columnData?.split(".")[3]]
+    // // 	:data[table?.columnData?.split(".")[0]][table?.columnData?.split(".")[1]][table?.columnData?.split(".")[2]]
+    // // 		?data[table?.columnData?.split(".")[0]][table?.columnData?.split(".")[1]][table?.columnData?.split(".")[2]]
+    // // 		:data[table?.columnData?.split(".")[0]][table?.columnData?.split(".")[1]]
+    // // 		: data[table?.column]
 
-//                     data[table?.columnData?.split(".")[0]][table?.columnData?.split(".")[1]][table?.columnData?.split(".")[2]][table?.columnData?.split(".")[3]]
-//                 );
-//             } else {
-//                 // console.log(
-//                 //     "data map",
-//                 //     table
-//                 //     // ? data[table?.columnData?.split(".")[0]][
-//                 //     //       table?.columnData?.split(".")[1]
-//                 //     //   ]
-//                 //     // : data[table?.column]
-//                 //     // table?.columnData?.split(".")[1]
-//                 // );
-//             }
-//         });
-//     });
+    //                     data[table?.columnData?.split(".")[0]][table?.columnData?.split(".")[1]][table?.columnData?.split(".")[2]][table?.columnData?.split(".")[3]]
+    //                 );
+    //             } else {
+    //                 // console.log(
+    //                 //     "data map",
+    //                 //     table
+    //                 //     // ? data[table?.columnData?.split(".")[0]][
+    //                 //     //       table?.columnData?.split(".")[1]
+    //                 //     //   ]
+    //                 //     // : data[table?.column]
+    //                 //     // table?.columnData?.split(".")[1]
+    //                 // );
+    //             }
+    //         });
+    //     });
 
     // datas?.map((data) => {
     //     tableData?.map((table, indexTable) => {
@@ -208,7 +208,7 @@ const DetailTable = ({ tableData, datas }) => {
                                 {/* <td className="whitespace-nowrap px-2 py-1 font-medium">
                         {data?.tableData[index].column}
                     </td> */}
-                                {tableData?.map(
+                                {tableData &&tableData?.map(
                                     (table, indexTable) =>
                                         !table?.hide &&
                                         (!table?.actions ? (
@@ -221,9 +221,7 @@ const DetailTable = ({ tableData, datas }) => {
                                                             : ""
                                                     } whitespace-nowrap px-2 py-1 ${
                                                         table?.width
-                                                    } ${
-                                                        table?.maxWidth
-                                                    }
+                                                    } ${table?.maxWidth}
                                                     ${
                                                         table?.isCenter
                                                             ? "text-center"
@@ -338,7 +336,8 @@ const DetailTable = ({ tableData, datas }) => {
                                                             : ""
                                                     }  overflow-hidden text-ellipsis group`}
                                                 >
-                                                    {table?.columnData && table?.columnData
+                                                    {table?.columnData &&
+                                                    table?.columnData
                                                         ? data[
                                                               table?.columnData?.split(
                                                                   "."
@@ -367,9 +366,7 @@ const DetailTable = ({ tableData, datas }) => {
                                                         : ""
                                                 } whitespace-nowrap px-2 py-1 ${
                                                     table?.width
-                                                } ${
-                                                    table?.maxWidth
-                                                } ${
+                                                } ${table?.maxWidth} ${
                                                     table?.isCenter
                                                         ? "text-center"
                                                         : ""
@@ -442,7 +439,9 @@ const DetailTable = ({ tableData, datas }) => {
                                                             </span>
                                                         </span>
                                                     ) : currentUser?.permissions ? (
-                                                        currentUser?.permissions?.split(",")?.includes(
+                                                        currentUser?.permissions
+                                                            ?.split(",")
+                                                            ?.includes(
                                                                 "PERF"
                                                             ) ? (
                                                             <span
@@ -462,7 +461,9 @@ const DetailTable = ({ tableData, datas }) => {
                                                                     }
                                                                 </span>
                                                             </span>
-                                                        ) : currentUser?.permissions?.split(",")?.includes(
+                                                        ) : currentUser?.permissions
+                                                              ?.split(",")
+                                                              ?.includes(
                                                                   action?.permissions
                                                               ) ? (
                                                             <span

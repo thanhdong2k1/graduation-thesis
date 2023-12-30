@@ -1,5 +1,5 @@
 import { FaEye, FaEyeSlash, FaUserShield } from "react-icons/fa6";
-import backgroundImage from "../../assets/background.png";
+import backgroundImage from "../../assets/background-min.png";
 import logoMini from "../../assets/logo_Mini.png";
 import { BsFillShieldLockFill } from "react-icons/bs";
 import { AiOutlineSwapRight } from "react-icons/ai";
@@ -44,7 +44,7 @@ const CardAuth = () => {
     const [password, setPassword] = useState("");
 
     const onSubmit = async (data) => {
-        const id = toast.loading("Please wait...");
+        const id = toast.loading("Vui lòng đợi...");
         console.log(data);
         await apiAuth
             .logginUser({
@@ -54,7 +54,7 @@ const CardAuth = () => {
             })
             .then((res) => {
                 // console.log(res);
-                if (res?.errCode > 0) {
+                if (res?.errCode > 0 || res?.errCode < 0 ) {
                     console.log(res);
                     toast.update(id, {
                         render: res?.errMessage,

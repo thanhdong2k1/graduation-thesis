@@ -14,7 +14,7 @@ const userController = {
       console.log(body?.inputSearch?.toLowerCase());
       console.log("body?.length", Object.keys(body).length);
       const [modelName, fieldName] = body?.filterSearch?.split(".");
-      if (Object.keys(body).length > 0) {
+      if (Object.keys(body).length > 0 && body?.filterSearch!="") {
         if (!body?.filterSearch?.includes("Data")) {
           if (searchTerms != "%null%") {
             whereClause[modelName] = {

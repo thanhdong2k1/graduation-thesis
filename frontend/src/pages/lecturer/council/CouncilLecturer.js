@@ -68,7 +68,7 @@ const CouncilLecturer = () => {
     };
 
     const onDelete = async () => {
-        const id = toast.loading("Please wait...");
+        const id = toast.loading("Vui lòng đợi...");
         await apiLecturer
             .apiDeleteCouncil({
                 user: currentUser,
@@ -94,7 +94,7 @@ const CouncilLecturer = () => {
                         dispatch: dispatch,
                         axiosJWT: axiosJWT,
                     });
-                } else if (res?.errCode > 0) {
+                } else if (res?.errCode > 0 || res?.errCode < 0 ) {
                     // console.log(res);
                     toast.update(id, {
                         render: res?.errMessage,
@@ -128,7 +128,7 @@ const CouncilLecturer = () => {
             });
     };
     const saveDataImport = async (data) => {
-        const id = toast.loading("Please wait...");
+        const id = toast.loading("Vui lòng đợi...");
         const convertImport = [];
         // data?.map((obj) => {
         //     const convertedObj = {};
@@ -170,7 +170,7 @@ const CouncilLecturer = () => {
                         dispatch: dispatch,
                         axiosJWT: axiosJWT,
                     });
-                } else if (res?.errCode > 0) {
+                } else if (res?.errCode > 0 || res?.errCode < 0 ) {
                     // console.log(res);
                     toast.update(id, {
                         render: res?.errMessage,

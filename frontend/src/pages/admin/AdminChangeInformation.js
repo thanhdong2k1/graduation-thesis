@@ -45,7 +45,7 @@ const AdminChangeInformation = () => {
         reset,
     } = useForm();
     const handleSaveImage = async () => {
-        const id = toast.loading("Please wait...");
+        const id = toast.loading("Vui lòng đợi...");
         const datasend = {
             image: previewImg,
         };
@@ -53,7 +53,7 @@ const AdminChangeInformation = () => {
         await apiAdmin
             .apiAdminChangeInformation(currentUser, datasend, axiosJWT)
             .then((res) => {
-                if (res?.errCode > 0) {
+                if (res?.errCode > 0 || res?.errCode < 0 ) {
                     // console.log(res);
                     toast.update(id, {
                         render: res?.errMessage,
@@ -94,7 +94,7 @@ const AdminChangeInformation = () => {
             });
     };
     const onSubmit = async (data) => {
-        const id = toast.loading("Please wait...");
+        const id = toast.loading("Vui lòng đợi...");
         const datasend = {
             ...data,
             birthday: new Date(
@@ -106,7 +106,7 @@ const AdminChangeInformation = () => {
         await apiAdmin
             .apiAdminChangeInformation(currentUser, dataFilter, axiosJWT)
             .then((res) => {
-                if (res?.errCode > 0) {
+                if (res?.errCode > 0 || res?.errCode < 0 ) {
                     // console.log(res);
                     toast.update(id, {
                         render: res?.errMessage,

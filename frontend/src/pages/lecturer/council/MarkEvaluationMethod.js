@@ -48,7 +48,7 @@ const MarkEvaluationMethod = ({ type }) => {
         reset,
     } = useForm();
     const onSubmit = async (data) => {
-        const id = toast.loading("Please wait...");
+        const id = toast.loading("Vui lòng đợi...");
         console.log(data);
         type == "add"
             ? await apiAdmin
@@ -59,7 +59,7 @@ const MarkEvaluationMethod = ({ type }) => {
                       axiosJWT: axiosJWT,
                   })
                   .then((res) => {
-                      if (res?.errCode > 0) {
+                      if (res?.errCode > 0 || res?.errCode < 0) {
                           // console.log(res);
                           toast.update(id, {
                               render: res?.errMessage,
@@ -101,7 +101,7 @@ const MarkEvaluationMethod = ({ type }) => {
                       axiosJWT: axiosJWT,
                   })
                   .then((res) => {
-                      if (res?.errCode > 0) {
+                      if (res?.errCode > 0 || res?.errCode < 0) {
                           // console.log(res);
                           toast.update(id, {
                               render: res?.errMessage,
@@ -159,6 +159,31 @@ const MarkEvaluationMethod = ({ type }) => {
             }
             fetchData();
         }
+        if (thesisId) {
+            apiAdmin
+                .getThesisById({
+                    user: currentUser,
+                    id: thesisId,
+                    axiosJWT: axiosJWT,
+                })
+                .then((res) => {
+                    if (res?.errCode > 0 || res?.errCode < 0 ) {
+                        
+                    } else {
+                        console.log(res);
+                        let convert = [];
+                        setValue("id", res?.result?.id);
+                        setValue("student", res?.result?.studentData?.fullName);
+                        setValue("thesisAdvisor", res?.result?.thesisAdvisorData?.fullName);
+                        setValue("topic", res?.result?.topicData?.name);
+                        // reset();
+                    }
+                })
+                .catch((error) => {
+                    console.log(error);
+                    
+                });
+        }
     }, [currentUser]);
 
     const [criterias, setCriterias] = useState([]);
@@ -169,6 +194,7 @@ const MarkEvaluationMethod = ({ type }) => {
         const updatedItems = [...criterias];
         updatedItems[index][field] = value;
         updatedItems[index][field] = value;
+        console.log(criterias);
         setCriterias(updatedItems);
     };
 
@@ -200,6 +226,123 @@ const MarkEvaluationMethod = ({ type }) => {
                 onSubmit={handleSubmit(onSubmit)}
                 className="formDiv flex flex-col gap-2  media-min-md:w-[80%]"
             >
+                {/* 
+                    <div className="row flex justify-center items-center gap-2">
+                        <div className="col w-full">
+                            <label className="labelInput">Họ tên</label>
+                            <input
+                                className={`input ${
+                                    type == "detail" ? "disabled" : ""
+                                }`}
+                                disabled={type == "detail" ? true : false}
+                                {...register("fullName", {
+                                    required: "Full name is required",
+                                })}
+                            />
+                            {errors?.fullName?.type && (
+                                <p className=" text-normal text-red-500">
+                                    {errors?.fullName?.message}
+                                </p>
+                            )}
+                        </div>
+                        <div className="col w-full">
+                            <label className="labelInput">Điện thoại</label>
+                            <input
+                                className={`input ${
+                                    type == "detail" ? "disabled" : ""
+                                }`}
+                                disabled={type == "detail" ? true : false}
+                                {...register("numberPhone", {
+                                    required: "Number phone is required",
+                                })}
+                            />
+                            {errors?.numberPhone?.type && (
+                                <p className=" text-normal text-red-500">
+                                    {errors?.numberPhone?.message}
+                                </p>
+                            )}
+                        </div>
+                    </div>
+                    <div className="row flex justify-center items-center gap-2">
+                        <div className="col w-full">
+                            <label className="labelInput">Địa chỉ</label>
+                            <textarea
+                                className={`resize-none input ${
+                                    type == "detail" ? "disabled" : ""
+                                }`}
+                                disabled={type == "detail" ? true : false}
+                                {...register("address", {
+                                    // required: "Full name is required",
+                                })}
+                            />
+                            {errors?.address?.type && (
+                                <p className=" text-normal text-red-500">
+                                    {errors?.address?.message}
+                                </p>
+                            )}
+                        </div>
+                    </div> */}
+                <div className="row flex justify-center items-center gap-2">
+                    <div className="col w-full">
+                        <label className="labelInput">Sinh viên</label>
+                        <input
+                                className={`input ${
+                                    type == "detail" ? "disabled" : ""
+                                } !bg-transparent`}
+                                disabled
+                                {...register("student", {
+                                    required: "Number phone is required",
+                                })}
+                            />
+                        {errors?.student?.type && (
+                            <p className=" text-normal text-red-500">
+                                {errors?.student?.message}
+                            </p>
+                        )}
+                    </div>
+                    <div className="col w-full">
+                        <label className="labelInput">Người hướng dẫn</label>
+                        <input
+                                className={`input ${
+                                    type == "detail" ? "disabled" : ""
+                                } !bg-transparent`}
+                                disabled
+                                {...register("thesisAdvisor", {
+                                    required: "Number phone is required",
+                                })}
+                            />
+                        {errors?.thesisAdvisor?.type && (
+                            <p className=" text-normal text-red-500">
+                                {errors?.thesisAdvisor?.message}
+                            </p>
+                        )}
+                    </div>
+                </div>
+                <div className="row flex justify-center items-center gap-2">
+                <div className="col w-full">
+                        <label className="labelInput">Đề tài</label>
+                        <input
+                                 className={`input ${
+                                    type == "detail" ? "disabled" : ""
+                                } !bg-transparent`}
+                                disabled
+                                {...register("topic", {
+                                    required: "Number phone is required",
+                                })}
+                            />
+                        {errors?.topic?.type && (
+                            <p className=" text-normal text-red-500">
+                                {errors?.topic?.message}
+                            </p>
+                        )}
+                    </div>
+                </div>
+                {/* <div>
+                        <iframe
+                            className="w-full rounded-lg"
+                            src="https://tlus.edu.vn/wp-content/uploads/2023/09/TB-80-HKP-K2-23-24_Web.pdf"
+                        ></iframe>
+                    </div> */}
                 {/* <div className="row flex justify-center items-center gap-2">
                     <div className="col w-1/5">
                         <label className="labelInput">ID</label>

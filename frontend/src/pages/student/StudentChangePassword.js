@@ -7,8 +7,8 @@ import { FaEye, FaEyeSlash } from "react-icons/fa6";
 import { useState } from "react";
 import { createAxios } from "../../utils/createInstance";
 import { logginSuccess } from "../../redux/authSlice";
-import { apiAdmin } from "../../redux/apiRequest";
 import ButtonConfirm from "../../components/button/ButtonConfirm";
+import { apiStudent } from "../../redux/apiRequest";
 
 const StudentChangePassword = () => {
 
@@ -28,16 +28,16 @@ const StudentChangePassword = () => {
         reset,
     } = useForm();
     const onSubmit = async (data) => {
-        const id = toast.loading("Please wait...");
-        await apiAdmin
-            .apiChangePassword(
+        const id = toast.loading("Vui lòng đợi...");
+        await apiStudent
+            .apiStudentChangePassword(
                 currentUser,
                 data?.oldPassword,
                 data?.confirmPassword,
                 axiosJWT
             )
             .then((res) => {
-                if (res?.errCode > 0) {
+                if (res?.errCode > 0 || res?.errCode < 0 ) {
                     // console.log(res);
                     toast.update(id, {
                         render: res?.errMessage,

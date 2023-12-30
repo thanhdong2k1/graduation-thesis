@@ -543,7 +543,7 @@ export const apiAdmin = {
             }
         }
     },
-    apiAddCouncil: async ({ user, data, councilDetails, axiosJWT }) => {
+    apiAddCouncil: async ({ user, data, councilDetails, thesesDetails, axiosJWT }) => {
         try {
             const res = await axiosJWT.post(
                 "/api/admin/create-council",
@@ -561,6 +561,7 @@ export const apiAdmin = {
                             : data?.thesisSession?.value
                         : null,
                     councilDetails: councilDetails,
+                    thesesDetails : thesesDetails,
                 },
                 {
                     headers: {
@@ -576,7 +577,7 @@ export const apiAdmin = {
             }
         }
     },
-    apiUpdateCouncil: async ({ user, data, councilDetails, axiosJWT }) => {
+    apiUpdateCouncil: async ({ user, data, councilDetails, thesesDetails, axiosJWT }) => {
         try {
             const res = await axiosJWT.put(
                 `/api/admin/update-council/${data?.id}`,
@@ -594,7 +595,26 @@ export const apiAdmin = {
                             : data?.thesisSession?.value
                         : null,
                     councilDetails: councilDetails,
+                    thesesDetails: thesesDetails
                 },
+                {
+                    headers: {
+                        token: `Bearer ${user?.accessToken}`,
+                    },
+                }
+            );
+            return res?.data;
+        } catch (error) {
+            console.log(error);
+            if (error?.response?.status) {
+                return error?.response?.data;
+            }
+        }
+    },
+    apiDeleteCouncilDetail: async ({ user, data, axiosJWT }) => {
+        try {
+            const res = await axiosJWT.delete(
+                `/api/admin/delete-council-detail/${data?.id}`,
                 {
                     headers: {
                         token: `Bearer ${user?.accessToken}`,
@@ -1729,6 +1749,30 @@ export const apiAdmin = {
             dispatch(getAdminThesesFailed());
         }
     },
+    getAllThesesNotDispatch: async ({
+        user,
+        inputSearch,
+        filterSearch,
+        axiosJWT,
+    }) => {
+        try {
+            const res = await axiosJWT.post(
+                "/api/admin/theses",
+                {
+                    inputSearch: inputSearch,
+                    filterSearch: filterSearch,
+                },
+                {
+                    headers: {
+                        token: `Bearer ${user?.accessToken}`,
+                    },
+                }
+            );
+            return res?.data;
+        } catch (error) {
+            return error?.response?.data;
+        }
+    },
     getThesisById: async ({ user, id, axiosJWT }) => {
         try {
             const res = await axiosJWT.get(`/api/admin/thesis/${id}`, {
@@ -1768,10 +1812,10 @@ export const apiAdmin = {
             const res = await axiosJWT.post(
                 "/api/admin/create-thesis",
                 {
-                    startDate: data?.startDate,
-                    complateDate: data?.complateDate,
-                    thesisStartDate: data?.thesisStartDate,
-                    thesisEndDate: data?.thesisEndDate,
+                    // startDate: data?.startDate,
+                    // complateDate: data?.complateDate,
+                    // thesisStartDate: data?.thesisStartDate,
+                    // thesisEndDate: data?.thesisEndDate,
                     reportFile: data?.reportFile,
                     totalScore: data?.totalScore,
                     resultId: data?.result
@@ -1834,10 +1878,10 @@ export const apiAdmin = {
             const res = await axiosJWT.put(
                 `/api/admin/update-thesis/${data?.id}`,
                 {
-                    startDate: data?.startDate,
-                    complateDate: data?.complateDate,
-                    thesisStartDate: data?.thesisStartDate,
-                    thesisEndDate: data?.thesisEndDate,
+                    // startDate: data?.startDate,
+                    // complateDate: data?.complateDate,
+                    // thesisStartDate: data?.thesisStartDate,
+                    // thesisEndDate: data?.thesisEndDate,
                     reportFile: data?.reportFile,
                     totalScore: data?.totalScore,
                     resultId: data?.result
@@ -2135,8 +2179,8 @@ export const apiAdmin = {
                             ? data?.evaluationMethod[0]?.value
                             : data?.evaluationMethod?.value
                         : null,
-                    startDate: data?.startDate,
-                    endDate: data?.endDate,
+                    // startDate: data?.startDate,
+                    // endDate: data?.endDate,
                     validPoint: data?.validPoint,
                 },
                 {
@@ -2165,8 +2209,8 @@ export const apiAdmin = {
                             ? data?.evaluationMethod[0]?.value
                             : data?.evaluationMethod?.value
                         : null,
-                    startDate: data?.startDate,
-                    endDate: data?.endDate,
+                    // startDate: data?.startDate,
+                    // endDate: data?.endDate,
                     validPoint: data?.validPoint,
                 },
                 {
@@ -3096,10 +3140,10 @@ export const apiStudent = {
             const res = await axiosJWT.put(
                 `/api/student/update-thesis/${data?.id}`,
                 {
-                    startDate: data?.startDate,
-                    complateDate: data?.complateDate,
-                    thesisStartDate: data?.thesisStartDate,
-                    thesisEndDate: data?.thesisEndDate,
+                    // startDate: data?.startDate,
+                    // complateDate: data?.complateDate,
+                    // thesisStartDate: data?.thesisStartDate,
+                    // thesisEndDate: data?.thesisEndDate,
                     reportFile: data?.reportFile,
                     totalScore: data?.totalScore,
                     resultId: data?.result

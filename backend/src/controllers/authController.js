@@ -32,7 +32,7 @@ const authController = {
       return res.status(200).json(user);
     } catch (error) {
       console.log(error);
-      return res.status(500).json({ errCode: -1, errMessage: error });
+      return res.status(500).json({ errCode: -1, errMessage: "Dữ liệu không mong muốn, thử lại sau hoặc dữ liệu khác!" });
     }
   },
   // GENERATE ACCESS TOKEN
@@ -226,7 +226,7 @@ const authController = {
         });
       }
     } catch (error) {
-      return res.status(500).json({ errCode: -1, errMessage: error });
+      return res.status(500).json({ errCode: -1, errMessage: "Dữ liệu không mong muốn, thử lại sau hoặc dữ liệu khác!" });
     }
   },
 

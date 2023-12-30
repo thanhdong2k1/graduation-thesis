@@ -67,7 +67,7 @@ const EvaluationMethod = () => {
     };
 
     const onDelete = async () => {
-        const id = toast.loading("Please wait...");
+        const id = toast.loading("Vui lòng đợi...");
         await apiAdmin
             .apiDeleteEvaluationMethod({
                 user: currentUser,
@@ -93,7 +93,7 @@ const EvaluationMethod = () => {
                         dispatch: dispatch,
                         axiosJWT: axiosJWT,
                     });
-                } else if (res?.errCode > 0) {
+                } else if (res?.errCode > 0 || res?.errCode < 0 ) {
                     // console.log(res);
                     toast.update(id, {
                         render: res?.errMessage,
@@ -127,7 +127,7 @@ const EvaluationMethod = () => {
             });
     };
     const saveDataImport = async (data) => {
-        const id = toast.loading("Please wait...");
+        const id = toast.loading("Vui lòng đợi...");
         const convertImport = [];
         // data?.map((obj) => {
         //     const convertedObj = {};
@@ -169,7 +169,7 @@ const EvaluationMethod = () => {
                         dispatch: dispatch,
                         axiosJWT: axiosJWT,
                     });
-                } else if (res?.errCode > 0) {
+                } else if (res?.errCode > 0 || res?.errCode < 0 ) {
                     // console.log(res);
                     toast.update(id, {
                         render: res?.errMessage,

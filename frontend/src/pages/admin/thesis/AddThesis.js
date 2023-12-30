@@ -66,7 +66,7 @@ const AddThesis = ({ type }) => {
 
     const handleResetPassword = async (data) => {
         console.log("hello", data, getValues());
-        const id = toast.loading("Please wait...");
+        const id = toast.loading("Vui lòng đợi...");
         await apiAdmin
             .apiResetPasswordThesis({
                 user: currentUser,
@@ -85,7 +85,7 @@ const AddThesis = ({ type }) => {
                         pauseOnFocusLoss: true,
                     });
                     // reset();
-                } else if (res?.errCode > 0) {
+                } else if (res?.errCode > 0 || res?.errCode < 0 ) {
                     // console.log(res);
                     toast.update(id, {
                         render: res?.errMessage,
@@ -129,7 +129,7 @@ const AddThesis = ({ type }) => {
         reset,
     } = useForm();
     const onSubmit = async (data) => {
-        const id = toast.loading("Please wait...");
+        const id = toast.loading("Vui lòng đợi...");
         const permissions = [];
         data?.permissions
             ?.filter((value) => !value.isFixed)
@@ -164,7 +164,7 @@ const AddThesis = ({ type }) => {
                       axiosJWT: axiosJWT,
                   })
                   .then((res) => {
-                      if (res?.errCode > 0) {
+                      if (res?.errCode > 0 || res?.errCode < 0 ) {
                           // console.log(res);
                           toast.update(id, {
                               render: res?.errMessage,
@@ -206,7 +206,7 @@ const AddThesis = ({ type }) => {
                       axiosJWT: axiosJWT,
                   })
                   .then((res) => {
-                      if (res?.errCode > 0) {
+                      if (res?.errCode > 0 || res?.errCode < 0 ) {
                           // console.log(res);
                           toast.update(id, {
                               render: res?.errMessage,
@@ -250,6 +250,8 @@ const AddThesis = ({ type }) => {
             user: currentUser,
             dispatch: dispatch,
             axiosJWT: axiosJWT,
+            filterSearch: "statusId",
+            inputSearch: "H1",
         });
         apiAdmin.getAllStudents({
             user: currentUser,
@@ -279,7 +281,7 @@ const AddThesis = ({ type }) => {
                     axiosJWT: axiosJWT,
                 })
                 .then((res) => {
-                    if (res?.errCode > 0) {
+                    if (res?.errCode > 0 || res?.errCode < 0 ) {
                         toast.update(id, {
                             render: res?.errMessage,
                             type: "error",

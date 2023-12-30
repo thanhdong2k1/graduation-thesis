@@ -46,7 +46,7 @@ const AddLecturerAdvisor = ({ type }, params) => {
 
     const handleResetPassword = async (data) => {
         console.log("hello", data, getValues());
-        const id = toast.loading("Please wait...");
+        const id = toast.loading("Vui lòng đợi...");
         await apiAdmin
             .apiResetPasswordLecturer({
                 user: currentUser,
@@ -65,7 +65,7 @@ const AddLecturerAdvisor = ({ type }, params) => {
                         pauseOnFocusLoss: true,
                     });
                     // reset();
-                } else if (res?.errCode > 0) {
+                } else if (res?.errCode > 0 || res?.errCode < 0 ) {
                     // console.log(res);
                     toast.update(id, {
                         render: res?.errMessage,
@@ -109,7 +109,7 @@ const AddLecturerAdvisor = ({ type }, params) => {
         reset,
     } = useForm();
     const onSubmit = async (data) => {
-        const id = toast.loading("Please wait...");
+        const id = toast.loading("Vui lòng đợi...");
         const permissions = [];
         data?.permissions
             ?.filter((value) => !value.isFixed)
@@ -137,7 +137,7 @@ const AddLecturerAdvisor = ({ type }, params) => {
                       axiosJWT: axiosJWT,
                   })
                   .then((res) => {
-                      if (res?.errCode > 0) {
+                      if (res?.errCode > 0 || res?.errCode < 0 ) {
                           // console.log(res);
                           toast.update(id, {
                               render: res?.errMessage,
@@ -179,7 +179,7 @@ const AddLecturerAdvisor = ({ type }, params) => {
                       axiosJWT: axiosJWT,
                   })
                   .then((res) => {
-                      if (res?.errCode > 0) {
+                      if (res?.errCode > 0 || res?.errCode < 0 ) {
                           // console.log(res);
                           toast.update(id, {
                               render: res?.errMessage,
@@ -226,7 +226,7 @@ const AddLecturerAdvisor = ({ type }, params) => {
                         axiosJWT: axiosJWT,
                     })
                     .then((res) => {
-                        if (res?.errCode > 0) {
+                        if (res?.errCode > 0 || res?.errCode < 0 ) {
                             toast.update(id, {
                                 render: res?.errMessage,
                                 type: "error",

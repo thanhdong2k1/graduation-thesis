@@ -19,11 +19,11 @@ import ButtonConfirm from "../../components/button/ButtonConfirm";
 
 const StudentChangeInformation = () => {
     const currentUser = useSelector((state) => state?.auth?.currentUser);
-    const permissions = useSelector((state) => state?.admin?.permissions);
+    const permissions = useSelector((state) => state?.student?.permissions);
     const dispatch = useDispatch();
     let axiosJWT = createAxios(currentUser, dispatch, logginSuccess);
-    const gender = useSelector((state) => state?.admin?.gender);
-    const informationUser = useSelector((state) => state?.admin?.information);
+    const gender = useSelector((state) => state?.student?.gender);
+    const informationUser = useSelector((state) => state?.student?.information);
     const [showModal, setShowModal] = useState(false);
     const [srcImg, setSrcImg] = useState(
         "https://png.pngtree.com/png-vector/20191026/ourlarge/pngtree-avatar-vector-icon-white-background-png-image_1870181.jpg"
@@ -41,7 +41,7 @@ const StudentChangeInformation = () => {
         reset,
     } = useForm();
     const handleSaveImage = async () => {
-        const id = toast.loading("Please wait...");
+        const id = toast.loading("Vui lòng đợi...");
         const datasend = {
             image: previewImg,
         };
@@ -49,7 +49,7 @@ const StudentChangeInformation = () => {
         await apiStudent
             .apiStudentChangeInformation(currentUser, datasend, axiosJWT)
             .then((res) => {
-                if (res?.errCode > 0) {
+                if (res?.errCode > 0 || res?.errCode < 0 ) {
                     // console.log(res);
                     toast.update(id, {
                         render: res?.errMessage,
@@ -86,7 +86,7 @@ const StudentChangeInformation = () => {
             });
     };
     const onSubmit = async (data) => {
-        const id = toast.loading("Please wait...");
+        const id = toast.loading("Vui lòng đợi...");
         const datasend = {
             ...data,
             birthday: new Date(
@@ -98,7 +98,7 @@ const StudentChangeInformation = () => {
         await apiStudent
             .apiStudentChangeInformation(currentUser, dataFilter, axiosJWT)
             .then((res) => {
-                if (res?.errCode > 0) {
+                if (res?.errCode > 0 || res?.errCode < 0 ) {
                     // console.log(res);
                     toast.update(id, {
                         render: res?.errMessage,
@@ -190,8 +190,8 @@ const StudentChangeInformation = () => {
         setValue("address", informationUser?.address);
         setValue("birthday", informationUser?.birthday);
         setValue("code", informationUser?.code);
-        setValue("role", informationUser?.roleData.valueVi);
-        setValue("class", informationUser?.classData.name);
+        setValue("role", informationUser?.roleData?.valueVi);
+        setValue("class", informationUser?.classData?.name);
         setValue("permissions", convert);
         // console.log(informationUser?.birthday,moment(informationUser?.birthday, "DD/MM/YYYY").toString());
         setValue(

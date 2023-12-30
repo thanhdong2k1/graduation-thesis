@@ -71,7 +71,7 @@ const LecturerAdvisor = () => {
     };
 
     const handleRegister = async (data) => {
-        const id = toast.loading("Please wait...");
+        const id = toast.loading("Vui lòng đợi...");
         await apiStudent
             .apiRegisterAdvisor({
                 user: currentUser,
@@ -98,7 +98,7 @@ const LecturerAdvisor = () => {
                         dispatch: dispatch,
                         axiosJWT: axiosJWT,
                     });
-                } else if (res?.errCode > 0) {
+                } else if (res?.errCode > 0 || res?.errCode < 0 ) {
                     // console.log(res);
                     toast.update(id, {
                         render: res?.errMessage,
@@ -133,7 +133,7 @@ const LecturerAdvisor = () => {
     };
 
     const onDelete = async () => {
-        const id = toast.loading("Please wait...");
+        const id = toast.loading("Vui lòng đợi...");
         await apiStudent
             .apiDeleteLecturer({
                 user: currentUser,
@@ -160,7 +160,7 @@ const LecturerAdvisor = () => {
                         dispatch: dispatch,
                         axiosJWT: axiosJWT,
                     });
-                } else if (res?.errCode > 0) {
+                } else if (res?.errCode > 0 || res?.errCode < 0 ) {
                     // console.log(res);
                     toast.update(id, {
                         render: res?.errMessage,
@@ -194,7 +194,7 @@ const LecturerAdvisor = () => {
             });
     };
     const saveDataImport = async (data) => {
-        const id = toast.loading("Please wait...");
+        const id = toast.loading("Vui lòng đợi...");
         const convertImport = [];
         // data?.map((obj) => {
         //     const convertedObj = {};
@@ -236,7 +236,7 @@ const LecturerAdvisor = () => {
                         dispatch: dispatch,
                         axiosJWT: axiosJWT,
                     });
-                } else if (res?.errCode > 0) {
+                } else if (res?.errCode > 0 || res?.errCode < 0 ) {
                     // console.log(res);
                     toast.update(id, {
                         render: res?.errMessage,

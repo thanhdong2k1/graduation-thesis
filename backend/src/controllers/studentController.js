@@ -56,7 +56,7 @@ const studentController = {
       }
     } catch (error) {
       console.log(error);
-      return res.status(500).json({ errCode: -1, errMessage: error });
+      return res.status(500).json({ errCode: -1, errMessage: "Dữ liệu không mong muốn, thử lại sau hoặc dữ liệu khác!" });
     }
   },
   changeInformationStudent: async (req, res) => {
@@ -101,7 +101,7 @@ const studentController = {
       }
     } catch (error) {
       console.log(error);
-      return res.status(500).json({ errCode: -1, errMessage: error });
+      return res.status(500).json({ errCode: -1, errMessage: "Dữ liệu không mong muốn, thử lại sau hoặc dữ liệu khác!" });
     }
   },
   getInformationStudent: async (req, res) => {
@@ -152,7 +152,7 @@ const studentController = {
       }
     } catch (error) {
       console.log("error", error);
-      return res.status(500).json({ errCode: -1, errMessage: error });
+      return res.status(500).json({ errCode: -1, errMessage: "Dữ liệu không mong muốn, thử lại sau hoặc dữ liệu khác!" });
     }
   },
 
@@ -228,7 +228,7 @@ const studentController = {
         });
       }
     } catch (error) {
-      return res.status(500).json({ errCode: -1, errMessage: error });
+      return res.status(500).json({ errCode: -1, errMessage: "Dữ liệu không mong muốn, thử lại sau hoặc dữ liệu khác!" });
     }
   },
 
@@ -292,7 +292,7 @@ const studentController = {
       const { rows: theses, count: totalRecords } = result;
       return res.status(200).json({ errCode: 0, theses, totalRecords });
     } catch (error) {
-      return res.status(500).json({ errCode: -1, errMessage: error });
+      return res.status(500).json({ errCode: -1, errMessage: "Dữ liệu không mong muốn, thử lại sau hoặc dữ liệu khác!" });
     }
   },
   getThesisById: async (req, res) => {
@@ -350,7 +350,7 @@ const studentController = {
         });
       }
     } catch (error) {
-      return res.status(500).json({ errCode: -1, errMessage: error });
+      return res.status(500).json({ errCode: -1, errMessage: "Dữ liệu không mong muốn, thử lại sau hoặc dữ liệu khác!" });
     }
   },
   getLecturerById: async (req, res) => {
@@ -397,7 +397,7 @@ const studentController = {
         });
       }
     } catch (error) {
-      return res.status(500).json({ errCode: -1, errMessage: error });
+      return res.status(500).json({ errCode: -1, errMessage: "Dữ liệu không mong muốn, thử lại sau hoặc dữ liệu khác!" });
     }
   },
 
@@ -485,7 +485,7 @@ const studentController = {
         }
       }
     } catch (error) {
-      return res.status(500).json({ errCode: -1, errMessage: error });
+      return res.status(500).json({ errCode: -1, errMessage: "Dữ liệu không mong muốn, thử lại sau hoặc dữ liệu khác!" });
     }
   },
 
@@ -533,7 +533,7 @@ const studentController = {
           .json({ errCode: 1, errMessage: "Dữ liệu không được tìm thấy" });
       }
     } catch (error) {
-      return res.status(500).json({ errCode: -1, errMessage: error });
+      return res.status(500).json({ errCode: -1, errMessage: "Dữ liệu không mong muốn, thử lại sau hoặc dữ liệu khác!" });
     }
   },
 
@@ -595,7 +595,7 @@ const studentController = {
         });
       }
     } catch (error) {
-      return res.status(500).json({ errCode: -1, errMessage: error });
+      return res.status(500).json({ errCode: -1, errMessage: "Dữ liệu không mong muốn, thử lại sau hoặc dữ liệu khác!" });
     }
   },
   getTopicById: async (req, res) => {
@@ -630,7 +630,7 @@ const studentController = {
         });
       }
     } catch (error) {
-      return res.status(500).json({ errCode: -1, errMessage: error });
+      return res.status(500).json({ errCode: -1, errMessage: "Dữ liệu không mong muốn, thử lại sau hoặc dữ liệu khác!" });
     }
   },
 };
