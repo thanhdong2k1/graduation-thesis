@@ -27,10 +27,10 @@ const sequelize = new Sequelize("graduation-thesis-full", "root", null, {
 const connectDB = async () => {
   try {
     // db.sequelize.sync({ force: true }).then(() => {
-    //   console.log("All models were synchronized successfully.");
+    // console.log("All models were synchronized successfully.");
     // });
     await sequelize.authenticate();
-    console.log("Connection has been established successfully.");
+ // console.log("Connection has been established successfully.");
   } catch (error) {
     console.error("Unable to connect to the database:", error);
   }

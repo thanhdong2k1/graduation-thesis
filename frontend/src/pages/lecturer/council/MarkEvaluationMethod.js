@@ -26,7 +26,7 @@ import { HiArrowDown, HiArrowUp } from "react-icons/hi";
 const MarkEvaluationMethod = ({ type }) => {
     // let { id } = useParams();
     let { thesisSessionId, coundilId, thesisId } = useParams();
-    console.log("type", type, coundilId, thesisId);
+  // console.log("type", type, coundilId, thesisId);
 
     const currentUser = useSelector((state) => state?.auth?.currentUser);
     const dispatch = useDispatch();
@@ -49,7 +49,7 @@ const MarkEvaluationMethod = ({ type }) => {
     } = useForm();
     const onSubmit = async (data) => {
         const id = toast.loading("Vui lòng đợi...");
-        console.log(data);
+      // console.log(data);
         type == "add"
             ? await apiAdmin
                   .apiAddEvaluationMethod({
@@ -139,7 +139,7 @@ const MarkEvaluationMethod = ({ type }) => {
                   });
     };
     useEffect(() => {
-        console.log("thesisSessionId", thesisSessionId);
+      // console.log("thesisSessionId", thesisSessionId);
         if (thesisSessionId) {
             async function fetchData() {
                 try {
@@ -151,10 +151,10 @@ const MarkEvaluationMethod = ({ type }) => {
                                 axiosJWT: axiosJWT,
                             }
                         );
-                    console.log(response);
+                  // console.log(response);
                     setCriterias(response?.result);
                 } catch (e) {
-                    console.error(e);
+                    console.log(e);
                 }
             }
             fetchData();
@@ -170,7 +170,7 @@ const MarkEvaluationMethod = ({ type }) => {
                     if (res?.errCode > 0 || res?.errCode < 0 ) {
                         
                     } else {
-                        console.log(res);
+                      // console.log(res);
                         let convert = [];
                         setValue("id", res?.result?.id);
                         setValue("student", res?.result?.studentData?.fullName);
@@ -180,7 +180,7 @@ const MarkEvaluationMethod = ({ type }) => {
                     }
                 })
                 .catch((error) => {
-                    console.log(error);
+                  // console.log(error);
                     
                 });
         }
@@ -194,7 +194,7 @@ const MarkEvaluationMethod = ({ type }) => {
         const updatedItems = [...criterias];
         updatedItems[index][field] = value;
         updatedItems[index][field] = value;
-        console.log(criterias);
+      // console.log(criterias);
         setCriterias(updatedItems);
     };
 
@@ -204,7 +204,7 @@ const MarkEvaluationMethod = ({ type }) => {
         //     (item) => item.weight == "0" || item.score
         // ).length;
         // if (isFilled == isLengthColumn) {
-        //     console.log("Đã bằng");
+        //   // console.log("Đã bằng");
         //     for (var i = 0; i < criterias.length; i++) {}
         // }
         // console.log(isLengthColumn, isFilled);
@@ -216,7 +216,7 @@ const MarkEvaluationMethod = ({ type }) => {
         });
         // setTotalScore(total);
         setValue("total", total);
-        console.log(criterias, total);
+      // console.log(criterias, total);
     }, [criterias]);
 
     return (
@@ -425,7 +425,7 @@ const MarkEvaluationMethod = ({ type }) => {
                                 )}
 
                                 <div className="flex flex-row gap-2">
-                                    {item.weight && item.weight != 0 && (
+                                    {(item.weight && item.weight != 0) ? (
                                         <input
                                             className={`input ${
                                                 type == "detail"
@@ -440,7 +440,7 @@ const MarkEvaluationMethod = ({ type }) => {
                                             // })}
                                             value={item.weight}
                                         />
-                                    )}
+                                    ):null}
                                 </div>
                                 {/* {errors?.weightCriteria?.type && (
                                 <p className=" text-normal text-red-500">
@@ -459,7 +459,7 @@ const MarkEvaluationMethod = ({ type }) => {
                                 )}
 
                                 <div className="flex flex-row gap-2">
-                                    {item.weight && item.weight != 0 && (
+                                    {(item.weight && item.weight != 0) ? (
                                         <input
                                             className={`input ${
                                                 type == "detail"
@@ -487,7 +487,7 @@ const MarkEvaluationMethod = ({ type }) => {
                                                 )
                                             }
                                         />
-                                    )}
+                                    ):null}
                                 </div>
                                 {/* {errors?.weightCriteria?.type && (
                                 <p className=" text-normal text-red-500">

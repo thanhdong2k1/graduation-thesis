@@ -4,7 +4,7 @@ const DetailTable = ({ tableData, datas }) => {
     const currentUser = useSelector((state) => state?.auth?.currentUser);
     const isFetching = useSelector((state) => state?.user?.isFetching);
     const error = useSelector((state) => state?.user?.error);
-    console.log("datas", datas, tableData);
+    // console.log("datas", datas, tableData);
 
     // datas?.map((data) => {
     //     tableData?.map((table, indexTable) => {
@@ -16,23 +16,23 @@ const DetailTable = ({ tableData, datas }) => {
     //                 currentUser?.roleId == "R1" ||
     //                 currentUser?.roleId == "R2"
     //             ) {
-    //                 console.log("actions", action);
+    //               // console.log("actions", action);
     //             } else {
     //                 if (currentUser?.permissions) {
     //                     if (
     //                         currentUser?.permissions.split(",").includes("PERF")
     //                     ) {
-    //                         console.log("actions", action);
+    //                       // console.log("actions", action);
     //                     } else {
     //                         if (
     //                             currentUser?.permissions
     //                                 .split(",")
     //                                 .includes(action?.permissions)
     //                         ) {
-    //                             console.log("actions", action);
+    //                           // console.log("actions", action);
     //                         } else {
     //                             if (data[table?.isRowPer] == currentUser?.id) {
-    //                                 console.log("actions", action);
+    //                               // console.log("actions", action);
     //                             }
     //                         }
     //                     }
@@ -41,7 +41,7 @@ const DetailTable = ({ tableData, datas }) => {
     //                         // console.log("actions", action);
     //                         if (table?.isPerR) {
     //                             if (action?.permissions == "PERR") {
-    //                                 console.log("actions", action);
+    //                               // console.log("actions", action);
     //                             }
     //                         }
     //                     }
@@ -51,42 +51,36 @@ const DetailTable = ({ tableData, datas }) => {
     //     });
     // });
 
-    //     datas?.map((data) => {
-    //         tableData?.map((table, indexTable) => {
-    //             if (!table?.actions) {
-    //                 console.log(
-    //                     "data map",
-    //                     // table?.columnData
-    //                     //     ? data[table?.columnData?.split(".")[0]][
-    //                     //           table?.columnData?.split(".")[1]
-    //                     //       ]
-    //                     //     : data[table?.column]
-
-    //                     // table?.columnData?.split(".")[1]
-
-    // //                     table?.columnData
-    // // ?data[table?.columnData?.split(".")[0]][table?.columnData?.split(".")[1]][table?.columnData?.split(".")[2]][table?.columnData?.split(".")[3]]
-    // // 	?data[table?.columnData?.split(".")[0]][table?.columnData?.split(".")[1]][table?.columnData?.split(".")[2]][table?.columnData?.split(".")[3]]
-    // // 	:data[table?.columnData?.split(".")[0]][table?.columnData?.split(".")[1]][table?.columnData?.split(".")[2]]
-    // // 		?data[table?.columnData?.split(".")[0]][table?.columnData?.split(".")[1]][table?.columnData?.split(".")[2]]
-    // // 		:data[table?.columnData?.split(".")[0]][table?.columnData?.split(".")[1]]
-    // // 		: data[table?.column]
-
-    //                     data[table?.columnData?.split(".")[0]][table?.columnData?.split(".")[1]][table?.columnData?.split(".")[2]][table?.columnData?.split(".")[3]]
-    //                 );
-    //             } else {
-    //                 // console.log(
-    //                 //     "data map",
-    //                 //     table
-    //                 //     // ? data[table?.columnData?.split(".")[0]][
-    //                 //     //       table?.columnData?.split(".")[1]
-    //                 //     //   ]
-    //                 //     // : data[table?.column]
-    //                 //     // table?.columnData?.split(".")[1]
-    //                 // );
-    //             }
-    //         });
-    //     });
+    datas?.map((data) => {
+        console.log("data map");
+        tableData?.map((table, indexTable) => {
+            // if (!table?.actions) {
+                // const columnData = table?.columnData?.split(".");
+                // const column = table?.column;
+                console.log(
+                    table?.columnData?.split(".") &&
+                        table?.columnData?.split(".").length > 0
+                        ? (() => {
+                              let result = data;
+                              for (const key of table?.columnData?.split(".")) {
+                                  result = result?.[key];
+                                  if (result === undefined) {
+                                      break;
+                                  }
+                              }
+                              return result;
+                          })()
+                        : data?.[table?.column]
+                        ? data?.[table?.column]
+                        : data?.[table?.content]
+                        ? data?.[table?.content]
+                        : null
+                );
+            // } else {
+                // console.log("data map", table);
+            // }
+        });
+    });
 
     // datas?.map((data) => {
     //     tableData?.map((table, indexTable) => {
@@ -182,6 +176,7 @@ const DetailTable = ({ tableData, datas }) => {
                             (table, index) =>
                                 !table?.hide && (
                                     <th
+                                        index={index}
                                         scope="col"
                                         className={`${
                                             index != tableData?.length - 1
@@ -208,11 +203,196 @@ const DetailTable = ({ tableData, datas }) => {
                                 {/* <td className="whitespace-nowrap px-2 py-1 font-medium">
                         {data?.tableData[index].column}
                     </td> */}
-                                {tableData &&tableData?.map(
-                                    (table, indexTable) =>
-                                        !table?.hide &&
-                                        (!table?.actions ? (
-                                            table?.isStatus ? (
+                                {tableData &&
+                                    tableData?.map(
+                                        (table, indexTable) =>
+                                            !table?.hide &&
+                                            (!table?.actions ? (
+                                                table?.isStatus ? (
+                                                    <td
+                                                        className={`${
+                                                            indexData !=
+                                                            datas?.length
+                                                                ? "border-r"
+                                                                : ""
+                                                        } whitespace-nowrap px-2 py-1 ${
+                                                            table?.width
+                                                        } ${table?.maxWidth}
+                                                    ${
+                                                        table?.isCenter
+                                                            ? "text-center"
+                                                            : ""
+                                                    } ${
+                                                            table?.isRight
+                                                                ? "text-right"
+                                                                : ""
+                                                        } ${
+                                                            table?.isCenter
+                                                                ? "text-center"
+                                                                : ""
+                                                        } ${
+                                                            table?.isRight
+                                                                ? "text-right"
+                                                                : ""
+                                                        } text-center overflow-hidden text-ellipsis group`}
+                                                    >
+                                                        <span
+                                                            className={`buttonTable ${
+                                                                data[
+                                                                    table
+                                                                        ?.column
+                                                                ] == "H1"
+                                                                    ? "bg-inputColor"
+                                                                    : data[
+                                                                          table
+                                                                              ?.column
+                                                                      ] == "H2"
+                                                                    ? "bg-amber-300"
+                                                                    : data[
+                                                                          table
+                                                                              ?.column
+                                                                      ] ==
+                                                                          "H3" ||
+                                                                      data[
+                                                                          table
+                                                                              ?.column
+                                                                      ] ==
+                                                                          "S1" ||
+                                                                      data[
+                                                                          table
+                                                                              ?.column
+                                                                      ] == "RS1"
+                                                                    ? "bg-emerald-300"
+                                                                    : data[
+                                                                          table
+                                                                              ?.column
+                                                                      ] ==
+                                                                          "H4" ||
+                                                                      data[
+                                                                          table
+                                                                              ?.column
+                                                                      ] ==
+                                                                          "S0" ||
+                                                                      data[
+                                                                          table
+                                                                              ?.column
+                                                                      ] == "RS0"
+                                                                    ? "bg-red-300"
+                                                                    : ""
+                                                            }`}
+                                                            onClick={() => {
+                                                                table?.actions?.handle(
+                                                                    data
+                                                                );
+                                                            }}
+                                                        >
+                                                            {table?.columnData?.split(
+                                                                "."
+                                                            ) &&
+                                                            table?.columnData?.split(
+                                                                "."
+                                                            ).length > 0
+                                                                ? (() => {
+                                                                      let result =
+                                                                          data;
+                                                                      for (const key of table?.columnData?.split(
+                                                                          "."
+                                                                      )) {
+                                                                          result =
+                                                                              result?.[
+                                                                                  key
+                                                                              ];
+                                                                          if (
+                                                                              result ===
+                                                                              undefined
+                                                                          ) {
+                                                                              break;
+                                                                          }
+                                                                      }
+                                                                      return result;
+                                                                  })()
+                                                                : data?.[
+                                                                      table
+                                                                          ?.column
+                                                                  ]}
+                                                        </span>
+
+                                                        {table?.tooltip && (
+                                                            <span
+                                                                className={`hidden no-underline group-hover:block group-hover:absolute -translate-y-[200%] text-whiteColor bg-textColor shadow-lg p-1 z-10 rounded-lg text-smallestFontSize whitespace-break-spaces`}
+                                                            >
+                                                                {/* {data[table?.column]} */}
+                                                            </span>
+                                                        )}
+                                                    </td>
+                                                ) : (
+                                                    <td
+                                                        className={`${
+                                                            indexData !=
+                                                            datas?.length
+                                                                ? "border-r"
+                                                                : ""
+                                                        } whitespace-nowrap px-2 py-1 ${
+                                                            table?.width
+                                                        } ${table?.maxWidth}
+                                                    ${
+                                                        table?.isCenter
+                                                            ? "text-center"
+                                                            : ""
+                                                    } ${
+                                                            table?.isRight
+                                                                ? "text-right"
+                                                                : ""
+                                                        } ${
+                                                            table?.isCenter
+                                                                ? "text-center"
+                                                                : ""
+                                                        } ${
+                                                            table?.isRight
+                                                                ? "text-right"
+                                                                : ""
+                                                        }  overflow-hidden text-ellipsis group`}
+                                                    >
+                                                        {table?.columnData &&
+                                                        table?.columnData?.split(
+                                                            "."
+                                                        ) &&
+                                                        table?.columnData?.split(
+                                                            "."
+                                                        ).length > 0
+                                                            ? (() => {
+                                                                  let result =
+                                                                      data;
+                                                                  for (const key of table?.columnData?.split(
+                                                                      "."
+                                                                  )) {
+                                                                      result =
+                                                                          result?.[
+                                                                              key
+                                                                          ];
+                                                                      if (
+                                                                          result ===
+                                                                          undefined
+                                                                      ) {
+                                                                          break;
+                                                                      }
+                                                                  }
+                                                                  return result;
+                                                              })()
+                                                            : data?.[
+                                                                  table?.column
+                                                              ]}
+                                                        {table?.tooltip && (
+                                                            <span
+                                                                className={`hidden no-underline group-hover:block group-hover:absolute -translate-y-[200%] text-whiteColor bg-textColor shadow-lg p-1 z-10 rounded-lg text-smallestFontSize whitespace-break-spaces`}
+                                                            >
+                                                                {/* {data[table?.column]} */}
+                                                            </span>
+                                                        )}
+                                                    </td>
+                                                )
+                                            ) : table?.customContent &&
+                                              table?.actions ? (
                                                 <td
                                                     className={`${
                                                         indexData !=
@@ -221,8 +401,7 @@ const DetailTable = ({ tableData, datas }) => {
                                                             : ""
                                                     } whitespace-nowrap px-2 py-1 ${
                                                         table?.width
-                                                    } ${table?.maxWidth}
-                                                    ${
+                                                    } ${table?.maxWidth} ${
                                                         table?.isCenter
                                                             ? "text-center"
                                                             : ""
@@ -240,314 +419,193 @@ const DetailTable = ({ tableData, datas }) => {
                                                             : ""
                                                     } text-center overflow-hidden text-ellipsis group`}
                                                 >
-                                                    <span
-                                                        className={`buttonTable ${
-                                                            data[
-                                                                table?.column
-                                                            ] == "H1"
-                                                                ? "bg-inputColor"
-                                                                : data[
-                                                                      table
-                                                                          ?.column
-                                                                  ] == "H2"
-                                                                ? "bg-amber-300"
-                                                                : data[
-                                                                      table
-                                                                          ?.column
-                                                                  ] == "H3" ||
-                                                                  data[
-                                                                      table
-                                                                          ?.column
-                                                                  ] == "S1" ||
-                                                                  data[
-                                                                      table
-                                                                          ?.column
-                                                                  ] == "RS1"
-                                                                ? "bg-emerald-300"
-                                                                : data[
-                                                                      table
-                                                                          ?.column
-                                                                  ] == "H4" ||
-                                                                  data[
-                                                                      table
-                                                                          ?.column
-                                                                  ] == "S0" ||
-                                                                  data[
-                                                                      table
-                                                                          ?.column
-                                                                  ] == "RS0"
-                                                                ? "bg-red-300"
-                                                                : ""
-                                                        }`}
-                                                        onClick={() => {
-                                                            table?.actions?.handle(
-                                                                data
-                                                            );
-                                                        }}
-                                                    >
-                                                        {table?.columnData
-                                                            ? data[
-                                                                  table?.columnData?.split(
-                                                                      "."
-                                                                  )[0]
-                                                              ][
-                                                                  table?.columnData?.split(
-                                                                      "."
-                                                                  )[1]
-                                                              ]
-                                                            : data[
-                                                                  table?.column
-                                                              ]}
-                                                    </span>
-
-                                                    {table?.tooltip && (
-                                                        <span
-                                                            className={`hidden no-underline group-hover:block group-hover:absolute -translate-y-[200%] text-whiteColor bg-textColor shadow-lg p-1 z-10 rounded-lg text-smallestFontSize whitespace-break-spaces`}
-                                                        >
-                                                            {/* {data[table?.column]} */}
-                                                        </span>
+                                                    {table?.actions?.map(
+                                                        (action) => (
+                                                            <span
+                                                                className={`buttonTable ${action?.color}`}
+                                                                onClick={() => {
+                                                                    action?.handle(
+                                                                        data
+                                                                    );
+                                                                }}
+                                                            >
+                                                                {table?.columnData
+                                                                    ? data[
+                                                                          table?.columnData?.split(
+                                                                              "."
+                                                                          )[0]
+                                                                      ][
+                                                                          table?.columnData?.split(
+                                                                              "."
+                                                                          )[1]
+                                                                      ]
+                                                                    : table?.column
+                                                                    ? data[
+                                                                          table
+                                                                              ?.column
+                                                                      ]
+                                                                    : action?.content}
+                                                            </span>
+                                                        )
                                                     )}
                                                 </td>
                                             ) : (
                                                 <td
-                                                    className={`${
-                                                        indexData !=
-                                                        datas?.length
-                                                            ? "border-r"
-                                                            : ""
-                                                    } whitespace-nowrap px-2 py-1 ${
-                                                        table?.width
-                                                    } ${table?.maxWidth}
-                                                    ${
-                                                        table?.isCenter
-                                                            ? "text-center"
-                                                            : ""
-                                                    } ${
-                                                        table?.isRight
-                                                            ? "text-right"
-                                                            : ""
-                                                    } ${
-                                                        table?.isCenter
-                                                            ? "text-center"
-                                                            : ""
-                                                    } ${
-                                                        table?.isRight
-                                                            ? "text-right"
-                                                            : ""
-                                                    }  overflow-hidden text-ellipsis group`}
+                                                    className={`actions flex justify-evenly items-center whitespace-nowrap px-2 py-1 relative`}
                                                 >
-                                                    {table?.columnData &&
-                                                    table?.columnData
-                                                        ? data[
-                                                              table?.columnData?.split(
-                                                                  "."
-                                                              )[0]
-                                                          ][
-                                                              table?.columnData?.split(
-                                                                  "."
-                                                              )[1]
-                                                          ]
-                                                        : data[table?.column]}
-                                                    {table?.tooltip && (
-                                                        <span
-                                                            className={`hidden no-underline group-hover:block group-hover:absolute -translate-y-[200%] text-whiteColor bg-textColor shadow-lg p-1 z-10 rounded-lg text-smallestFontSize whitespace-break-spaces`}
-                                                        >
-                                                            {/* {data[table?.column]} */}
-                                                        </span>
+                                                    {table?.actions?.map(
+                                                        (action) =>
+                                                            currentUser?.roleId ==
+                                                                "R1" ||
+                                                            currentUser?.roleId ==
+                                                                "R2" ? (
+                                                                <span
+                                                                    onClick={() => {
+                                                                        action?.handle(
+                                                                            data
+                                                                        );
+                                                                    }}
+                                                                    className="overflow-hidden group "
+                                                                >
+                                                                    {
+                                                                        action?.icon
+                                                                    }
+                                                                    <span
+                                                                        className={`hidden no-underline group-hover:block group-hover:absolute -translate-x-[50%] -translate-y-[170%] text-whiteColor bg-textColor shadow-lg p-1 z-10 rounded-lg text-smallestFontSize`}
+                                                                    >
+                                                                        {
+                                                                            action?.type
+                                                                        }
+                                                                    </span>
+                                                                </span>
+                                                            ) : currentUser?.permissions ? (
+                                                                currentUser?.permissions
+                                                                    ?.split(",")
+                                                                    ?.includes(
+                                                                        "PERF"
+                                                                    ) ? (
+                                                                    <span
+                                                                        onClick={() => {
+                                                                            action?.handle(
+                                                                                data
+                                                                            );
+                                                                        }}
+                                                                        className="overflow-hidden group "
+                                                                    >
+                                                                        {
+                                                                            action?.icon
+                                                                        }
+                                                                        <span
+                                                                            className={`hidden no-underline group-hover:block group-hover:absolute -translate-x-[50%] -translate-y-[170%] text-whiteColor bg-textColor shadow-lg p-1 z-10 rounded-lg text-smallestFontSize`}
+                                                                        >
+                                                                            {
+                                                                                action?.type
+                                                                            }
+                                                                        </span>
+                                                                    </span>
+                                                                ) : currentUser?.permissions
+                                                                      ?.split(
+                                                                          ","
+                                                                      )
+                                                                      ?.includes(
+                                                                          action?.permissions
+                                                                      ) ? (
+                                                                    <span
+                                                                        onClick={() => {
+                                                                            action?.handle(
+                                                                                data
+                                                                            );
+                                                                        }}
+                                                                        className="overflow-hidden group "
+                                                                    >
+                                                                        {
+                                                                            action?.icon
+                                                                        }
+                                                                        <span
+                                                                            className={`hidden no-underline group-hover:block group-hover:absolute -translate-x-[50%] -translate-y-[170%] text-whiteColor bg-textColor shadow-lg p-1 z-10 rounded-lg text-smallestFontSize`}
+                                                                        >
+                                                                            {
+                                                                                action?.type
+                                                                            }
+                                                                        </span>
+                                                                    </span>
+                                                                ) : data[
+                                                                      table
+                                                                          ?.isRowPer
+                                                                  ] ==
+                                                                  currentUser?.id ? (
+                                                                    <span
+                                                                        onClick={() => {
+                                                                            action?.handle(
+                                                                                data
+                                                                            );
+                                                                        }}
+                                                                        className="overflow-hidden group "
+                                                                    >
+                                                                        {
+                                                                            action?.icon
+                                                                        }
+                                                                        <span
+                                                                            className={`hidden no-underline group-hover:block group-hover:absolute -translate-x-[50%] -translate-y-[170%] text-whiteColor bg-textColor shadow-lg p-1 z-10 rounded-lg text-smallestFontSize`}
+                                                                        >
+                                                                            {
+                                                                                action?.type
+                                                                            }
+                                                                        </span>
+                                                                    </span>
+                                                                ) : null
+                                                            ) : data[
+                                                                  table
+                                                                      ?.isRowPer
+                                                              ] ==
+                                                              currentUser?.id ? (
+                                                                <span
+                                                                    onClick={() => {
+                                                                        action?.handle(
+                                                                            data
+                                                                        );
+                                                                    }}
+                                                                    className="overflow-hidden group "
+                                                                >
+                                                                    {
+                                                                        action?.icon
+                                                                    }
+                                                                    <span
+                                                                        className={`hidden no-underline group-hover:block group-hover:absolute -translate-x-[50%] -translate-y-[170%] text-whiteColor bg-textColor shadow-lg p-1 z-10 rounded-lg text-smallestFontSize`}
+                                                                    >
+                                                                        {
+                                                                            action?.type
+                                                                        }
+                                                                    </span>
+                                                                </span>
+                                                            ) : table?.isPerR ? (
+                                                                action?.permissions ==
+                                                                "PERR" ? (
+                                                                    <span
+                                                                        onClick={() => {
+                                                                            action?.handle(
+                                                                                data
+                                                                            );
+                                                                        }}
+                                                                        className="overflow-hidden group "
+                                                                    >
+                                                                        {
+                                                                            action?.icon
+                                                                        }
+                                                                        <span
+                                                                            className={`hidden no-underline group-hover:block group-hover:absolute -translate-x-[50%] -translate-y-[170%] text-whiteColor bg-textColor shadow-lg p-1 z-10 rounded-lg text-smallestFontSize`}
+                                                                        >
+                                                                            {
+                                                                                action?.type
+                                                                            }
+                                                                        </span>
+                                                                    </span>
+                                                                ) : null
+                                                            ) : null
                                                     )}
                                                 </td>
-                                            )
-                                        ) : table?.customContent &&
-                                          table?.actions ? (
-                                            <td
-                                                className={`${
-                                                    indexData != datas?.length
-                                                        ? "border-r"
-                                                        : ""
-                                                } whitespace-nowrap px-2 py-1 ${
-                                                    table?.width
-                                                } ${table?.maxWidth} ${
-                                                    table?.isCenter
-                                                        ? "text-center"
-                                                        : ""
-                                                } ${
-                                                    table?.isRight
-                                                        ? "text-right"
-                                                        : ""
-                                                } ${
-                                                    table?.isCenter
-                                                        ? "text-center"
-                                                        : ""
-                                                } ${
-                                                    table?.isRight
-                                                        ? "text-right"
-                                                        : ""
-                                                } text-center overflow-hidden text-ellipsis group`}
-                                            >
-                                                {table?.actions?.map(
-                                                    (action) => (
-                                                        <span
-                                                            className={`buttonTable ${action?.color}`}
-                                                            onClick={() => {
-                                                                action?.handle(
-                                                                    data
-                                                                );
-                                                            }}
-                                                        >
-                                                            {table?.columnData
-                                                                ? data[
-                                                                      table?.columnData?.split(
-                                                                          "."
-                                                                      )[0]
-                                                                  ][
-                                                                      table?.columnData?.split(
-                                                                          "."
-                                                                      )[1]
-                                                                  ]
-                                                                : table?.column
-                                                                ? data[
-                                                                      table
-                                                                          ?.column
-                                                                  ]
-                                                                : action?.content}
-                                                        </span>
-                                                    )
-                                                )}
-                                            </td>
-                                        ) : (
-                                            <td
-                                                className={`actions flex justify-evenly items-center whitespace-nowrap px-2 py-1 relative`}
-                                            >
-                                                {table?.actions?.map((action) =>
-                                                    currentUser?.roleId ==
-                                                        "R1" ||
-                                                    currentUser?.roleId ==
-                                                        "R2" ? (
-                                                        <span
-                                                            onClick={() => {
-                                                                action?.handle(
-                                                                    data
-                                                                );
-                                                            }}
-                                                            className="overflow-hidden group "
-                                                        >
-                                                            {action?.icon}
-                                                            <span
-                                                                className={`hidden no-underline group-hover:block group-hover:absolute -translate-x-[50%] -translate-y-[170%] text-whiteColor bg-textColor shadow-lg p-1 z-10 rounded-lg text-smallestFontSize`}
-                                                            >
-                                                                {action?.type}
-                                                            </span>
-                                                        </span>
-                                                    ) : currentUser?.permissions ? (
-                                                        currentUser?.permissions
-                                                            ?.split(",")
-                                                            ?.includes(
-                                                                "PERF"
-                                                            ) ? (
-                                                            <span
-                                                                onClick={() => {
-                                                                    action?.handle(
-                                                                        data
-                                                                    );
-                                                                }}
-                                                                className="overflow-hidden group "
-                                                            >
-                                                                {action?.icon}
-                                                                <span
-                                                                    className={`hidden no-underline group-hover:block group-hover:absolute -translate-x-[50%] -translate-y-[170%] text-whiteColor bg-textColor shadow-lg p-1 z-10 rounded-lg text-smallestFontSize`}
-                                                                >
-                                                                    {
-                                                                        action?.type
-                                                                    }
-                                                                </span>
-                                                            </span>
-                                                        ) : currentUser?.permissions
-                                                              ?.split(",")
-                                                              ?.includes(
-                                                                  action?.permissions
-                                                              ) ? (
-                                                            <span
-                                                                onClick={() => {
-                                                                    action?.handle(
-                                                                        data
-                                                                    );
-                                                                }}
-                                                                className="overflow-hidden group "
-                                                            >
-                                                                {action?.icon}
-                                                                <span
-                                                                    className={`hidden no-underline group-hover:block group-hover:absolute -translate-x-[50%] -translate-y-[170%] text-whiteColor bg-textColor shadow-lg p-1 z-10 rounded-lg text-smallestFontSize`}
-                                                                >
-                                                                    {
-                                                                        action?.type
-                                                                    }
-                                                                </span>
-                                                            </span>
-                                                        ) : data[
-                                                              table?.isRowPer
-                                                          ] ==
-                                                          currentUser?.id ? (
-                                                            <span
-                                                                onClick={() => {
-                                                                    action?.handle(
-                                                                        data
-                                                                    );
-                                                                }}
-                                                                className="overflow-hidden group "
-                                                            >
-                                                                {action?.icon}
-                                                                <span
-                                                                    className={`hidden no-underline group-hover:block group-hover:absolute -translate-x-[50%] -translate-y-[170%] text-whiteColor bg-textColor shadow-lg p-1 z-10 rounded-lg text-smallestFontSize`}
-                                                                >
-                                                                    {
-                                                                        action?.type
-                                                                    }
-                                                                </span>
-                                                            </span>
-                                                        ) : null
-                                                    ) : data[table?.isRowPer] ==
-                                                      currentUser?.id ? (
-                                                        <span
-                                                            onClick={() => {
-                                                                action?.handle(
-                                                                    data
-                                                                );
-                                                            }}
-                                                            className="overflow-hidden group "
-                                                        >
-                                                            {action?.icon}
-                                                            <span
-                                                                className={`hidden no-underline group-hover:block group-hover:absolute -translate-x-[50%] -translate-y-[170%] text-whiteColor bg-textColor shadow-lg p-1 z-10 rounded-lg text-smallestFontSize`}
-                                                            >
-                                                                {action?.type}
-                                                            </span>
-                                                        </span>
-                                                    ) : table?.isPerR ? (
-                                                        action?.permissions ==
-                                                        "PERR" ? (
-                                                            <span
-                                                                onClick={() => {
-                                                                    action?.handle(
-                                                                        data
-                                                                    );
-                                                                }}
-                                                                className="overflow-hidden group "
-                                                            >
-                                                                {action?.icon}
-                                                                <span
-                                                                    className={`hidden no-underline group-hover:block group-hover:absolute -translate-x-[50%] -translate-y-[170%] text-whiteColor bg-textColor shadow-lg p-1 z-10 rounded-lg text-smallestFontSize`}
-                                                                >
-                                                                    {
-                                                                        action?.type
-                                                                    }
-                                                                </span>
-                                                            </span>
-                                                        ) : null
-                                                    ) : null
-                                                )}
-                                            </td>
-                                        ))
-                                )}
+                                            ))
+                                    )}
                             </tr>
                         ))
                     ) : (
@@ -561,7 +619,7 @@ const DetailTable = ({ tableData, datas }) => {
                                         <svg
                                             aria-hidden="true"
                                             role="status"
-                                            class="inline mr-3 w-4 h-4 text-PrimaryColor animate-spin"
+                                            className="inline mr-3 w-4 h-4 text-PrimaryColor animate-spin"
                                             viewBox="0 0 100 101"
                                             fill="none"
                                             xmlns="http://www.w3.org/2000/svg"
@@ -575,7 +633,7 @@ const DetailTable = ({ tableData, datas }) => {
                                                 fill="currentColor"
                                             ></path>
                                         </svg>
-                                        <span>Loading...</span>
+                                        <span>Đang tải dữ liệu...</span>
                                     </>
                                 ) : error ? (
                                     <>
@@ -585,7 +643,7 @@ const DetailTable = ({ tableData, datas }) => {
                                     </>
                                 ) : (
                                     <>
-                                        <span>Dữ liệu trống</span>
+                                        <span>Dữ liệu trống!</span>
                                     </>
                                 )}
                             </td>

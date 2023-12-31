@@ -23,7 +23,7 @@ import { MdAdd } from "react-icons/md";
 
 const AddCouncil = ({ type }, params) => {
     let { id } = useParams();
-    console.log("type", type, id);
+  // console.log("type", type, id);
 
     const currentUser = useSelector((state) => state?.auth?.currentUser);
     const dispatch = useDispatch();
@@ -55,7 +55,7 @@ const AddCouncil = ({ type }, params) => {
     } = useForm();
     const onSubmit = async (data) => {
         const id = toast.loading("Vui lòng đợi...");
-        console.log(data, councilDetails, thesesDetails);
+      // console.log(data, councilDetails, thesesDetails);
         let councilDetailsFilter = [];
         councilDetails?.map((item) => {
             councilDetailsFilter?.push({
@@ -80,7 +80,7 @@ const AddCouncil = ({ type }, params) => {
                 // )
             });
         });
-        console.log("councilDetailsFilter", councilDetailsFilter);
+      // console.log("councilDetailsFilter", councilDetailsFilter);
         type == "add"
             ? await apiAdmin
                   .apiAddCouncil({
@@ -91,7 +91,7 @@ const AddCouncil = ({ type }, params) => {
                       thesesDetails: thesesDetailsFilter,
                   })
                   .then((res) => {
-                      //   console.log(res);
+                      // // console.log(res);
                       if (res?.errCode > 0 || res?.errCode < 0) {
                           // console.log(res);
                           toast.update(id, {
@@ -120,7 +120,7 @@ const AddCouncil = ({ type }, params) => {
                       //   fetchData();
                   })
                   .catch((error) => {
-                      console.log(error);
+                    // console.log(error);
                       toast.update(id, {
                           render: "Đã xảy ra lỗi, vui lòng thử lại sau",
                           type: "error",
@@ -139,7 +139,7 @@ const AddCouncil = ({ type }, params) => {
                       thesesDetails: thesesDetailsFilter,
                   })
                   .then((res) => {
-                      console.log(res);
+                    // console.log(res);
                       if (res?.errCode > 0 || res?.errCode < 0) {
                           // console.log(res);
                           toast.update(id, {
@@ -168,7 +168,7 @@ const AddCouncil = ({ type }, params) => {
                       }
                   })
                   .catch((error) => {
-                      console.log(error);
+                    // console.log(error);
                       toast.update(id, {
                           render: "Đã xảy ra lỗi, vui lòng thử lại sau",
                           type: "error",
@@ -189,7 +189,7 @@ const AddCouncil = ({ type }, params) => {
                     axiosJWT: axiosJWT,
                 })
                 .then((res) => {
-                    console.log(res);
+                  // console.log(res);
                     let filter = [];
                     res?.result?.map((item) => {
                         filter?.push({
@@ -210,7 +210,7 @@ const AddCouncil = ({ type }, params) => {
                     setCouncilDetails(filter);
                 })
                 .catch((error) => {
-                    console.log(error);
+                  // console.log(error);
                 });
             apiAdmin
                 .getAllThesesNotDispatch({
@@ -220,7 +220,7 @@ const AddCouncil = ({ type }, params) => {
                     inputSearch: id,
                 })
                 .then((res) => {
-                    console.log(res);
+                  // console.log(res);
                     let filterThesis = [];
                     res?.theses?.map((item) => {
                         codeTheses.push({
@@ -239,11 +239,11 @@ const AddCouncil = ({ type }, params) => {
                         });
                     });
 
-                    console.log(filterThesis, codeTheses);
+                  // console.log(filterThesis, codeTheses);
                     setThesesDetails(filterThesis);
                 })
                 .catch((error) => {
-                    console.log(error);
+                  // console.log(error);
                 });
         } catch (e) {
             console.error(e);
@@ -287,7 +287,7 @@ const AddCouncil = ({ type }, params) => {
                             pauseOnFocusLoss: true,
                         });
                     } else {
-                        console.log(res);
+                      // console.log(res);
                         setValue("id", res?.result?.id);
                         setValue("name", res?.result?.name);
                         setValue("description", res?.result?.description);
@@ -342,14 +342,14 @@ const AddCouncil = ({ type }, params) => {
                 lecturerId: "",
             },
         ]);
-        console.log(councilDetails);
+      // console.log(councilDetails);
     };
 
     const removeItemPosition = async (index, data) => {
         const updatedItems = [...councilDetails];
         updatedItems.splice(index, 1);
         if (data.hasOwnProperty("id")) {
-            console.log(index, data);
+          // console.log(index, data);
             const id = toast.loading("Vui lòng đợi...");
             await apiAdmin
                 .apiDeleteCouncilDetail({
@@ -358,7 +358,7 @@ const AddCouncil = ({ type }, params) => {
                     axiosJWT: axiosJWT,
                 })
                 .then((res) => {
-                    console.log(res);
+                  // console.log(res);
                     if (res?.errCode > 0 || res?.errCode < 0) {
                         // console.log(res);
                         toast.update(id, {
@@ -386,7 +386,7 @@ const AddCouncil = ({ type }, params) => {
                     fetchData();
                 })
                 .catch((error) => {
-                    console.log(error);
+                  // console.log(error);
                     toast.update(id, {
                         render: "Đã xảy ra lỗi, vui lòng thử lại sau",
                         type: "error",
@@ -415,13 +415,13 @@ const AddCouncil = ({ type }, params) => {
                 thesisId: "",
             },
         ]);
-        console.log(thesesDetails);
+      // console.log(thesesDetails);
     };
 
     const removeItemThesis = (index) => {
         const updatedItems = [...thesesDetails];
         updatedItems.splice(index, 1);
-        console.log("filterThesis", codeTheses);
+      // console.log("filterThesis", codeTheses);
         setThesesDetails(updatedItems);
     };
 
@@ -429,13 +429,13 @@ const AddCouncil = ({ type }, params) => {
         const updatedItems = [...thesesDetails];
         updatedItems[index][field] = value;
         updatedItems[index][field] = value;
-        console.log("filterThesis", codeTheses);
+      // console.log("filterThesis", codeTheses);
         setThesesDetails(updatedItems);
     };
     // useEffect(() => {
-    //     console.log(councilDetails);
+    //   // console.log(councilDetails);
     //     councilDetails?.map((item) => {
-    //         console.log(item);
+    //       // console.log(item);
     //         setCouncilDetailsFilter((prev) => [
     //             ...prev,
     //             {

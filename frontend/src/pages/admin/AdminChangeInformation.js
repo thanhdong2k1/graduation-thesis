@@ -102,7 +102,7 @@ const AdminChangeInformation = () => {
             ).toLocaleDateString("vi-VN"),
         };
         const { role, permissions, department, code, ...dataFilter } = datasend;
-        console.log(datasend, dataFilter);
+      // console.log(datasend, dataFilter);
         await apiAdmin
             .apiAdminChangeInformation(currentUser, dataFilter, axiosJWT)
             .then((res) => {

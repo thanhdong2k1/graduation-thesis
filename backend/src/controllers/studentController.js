@@ -32,7 +32,7 @@ const studentController = {
             }
           );
           if (changePassword) {
-            console.log("changePassword", changePassword);
+         // console.log("changePassword", changePassword);
             return res.status(200).json({
               errCode: 0,
               errMessage: "Mật khẩu đã được thay đổi.",
@@ -55,7 +55,7 @@ const studentController = {
           .json({ errCode: 1, errMessage: "Mật khẩu cũ không đúng!" });
       }
     } catch (error) {
-      console.log(error);
+   // console.log(error);
       return res.status(500).json({ errCode: -1, errMessage: "Dữ liệu không mong muốn, thử lại sau hoặc dữ liệu khác!" });
     }
   },
@@ -83,7 +83,7 @@ const studentController = {
           }
         );
         if (changeInformation) {
-          console.log("changeInformation", changeInformation);
+       // console.log("changeInformation", changeInformation);
           return res.status(200).json({
             errCode: 0,
             errMessage: "Thông tin đã được thay đổi.",
@@ -100,7 +100,7 @@ const studentController = {
           .json({ errCode: 1, errMessage: "Mật khẩu cũ không đúng!" });
       }
     } catch (error) {
-      console.log(error);
+   // console.log(error);
       return res.status(500).json({ errCode: -1, errMessage: "Dữ liệu không mong muốn, thử lại sau hoặc dữ liệu khác!" });
     }
   },
@@ -135,7 +135,7 @@ const studentController = {
         raw: true,
         nest: true,
       });
-      console.log("information", information);
+   // console.log("information", information);
       if (information) {
         delete information.password;
         delete information.refreshToken;
@@ -151,7 +151,7 @@ const studentController = {
         });
       }
     } catch (error) {
-      console.log("error", error);
+   // console.log("error", error);
       return res.status(500).json({ errCode: -1, errMessage: "Dữ liệu không mong muốn, thử lại sau hoặc dữ liệu khác!" });
     }
   },
@@ -159,7 +159,7 @@ const studentController = {
   // Api Lecturer
   getLecturers: async (req, res) => {
     try {
-      console.log("req.body", req.body);
+   // console.log("req.body", req.body);
 
       const department = await db.Major.findOne({
         where: {
@@ -179,7 +179,7 @@ const studentController = {
       if (department) {
         const whereClause = userController.whereClause(req?.body);
 
-        console.log("whereClause", whereClause);
+     // console.log("whereClause", whereClause);
 
         const queryOptions = {
           attributes: { exclude: ["password", "refreshToken", "image"] },
@@ -237,7 +237,7 @@ const studentController = {
     try {
       const whereClause = userController.whereClause(req?.body);
 
-      console.log("whereClause", whereClause);
+   // console.log("whereClause", whereClause);
 
       const queryOptions = {
         include: [
@@ -279,7 +279,7 @@ const studentController = {
         nest: true,
       };
 
-      console.log("req", req);
+   // console.log("req", req);
       if (Object.keys(whereClause).length > 0) {
         queryOptions.where = {
           [Op.or]: whereClause,
@@ -414,12 +414,12 @@ const studentController = {
       let dateNow = new Date().toLocaleDateString("vi-VN");
       let parts = dateNow.split("/");
       dateNow = `${parts[2]}-${parts[1]}-${parts[0]}`;
-      console.log(
-        "dateNow",
-        dateNow,
-        dateNow > "18/01/2023",
-        dateNow < "18/01/2023"
-      );
+   // console.log(
+      //   "dateNow",
+      //   dateNow,
+      //   dateNow > "18/01/2023",
+      //   dateNow < "18/01/2023"
+      // );
       let thesisSession = await db.ThesisSession.findAll({
         where: {
           [Op.and]: [
@@ -431,9 +431,9 @@ const studentController = {
         raw: true,
         nest: true,
       });
-      console.log("thesisSession", thesisSession);
+   // console.log("thesisSession", thesisSession);
 
-      console.log("result", result);
+   // console.log("result", result);
       if (result) {
         if (result.thesisAdvisorStatusId != "H3") {
           result = await db.Thesis.update(
@@ -492,7 +492,7 @@ const studentController = {
   updateThesis: async (req, res) => {
     try {
       if (req?.params?.id) {
-        console.log(req.body);
+     // console.log(req.body);
         const result = await db.Thesis.update(
           {
             startDate: req?.body?.startDate,
@@ -558,7 +558,7 @@ const studentController = {
       if (department) {
         const whereClause = userController.whereClause(req?.body);
 
-        console.log("whereClause", whereClause);
+     // console.log("whereClause", whereClause);
 
         const queryOptions = {
           include: [

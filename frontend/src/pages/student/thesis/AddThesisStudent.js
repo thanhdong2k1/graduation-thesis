@@ -24,7 +24,7 @@ import pdf from "../../../assets/540cb75550adf33f281f29132dddd14fded85bfc.pdf";
 
 const AddThesisStudent = ({ type }) => {
     let { id } = useParams();
-    console.log("type", type, id);
+  // console.log("type", type, id);
 
     const currentUser = useSelector((state) => state?.auth?.currentUser);
     const dispatch = useDispatch();
@@ -35,14 +35,14 @@ const AddThesisStudent = ({ type }) => {
     const [result, setResult] = useState(null);
 
     const onResetPassword = () => {
-        console.log(getValues("id"));
-        console.log("handleDelete", getValues("id"));
+      // console.log(getValues("id"));
+      // console.log("handleDelete", getValues("id"));
         setShowModal(true);
         setResult(getValues("id"));
     };
 
     const handleResetPassword = async (data) => {
-        console.log("hello", data, getValues());
+      // console.log("hello", data, getValues());
         const id = toast.loading("Vui lòng đợi...");
         await apiStudent
             .apiResetPasswordThesis({
@@ -84,7 +84,7 @@ const AddThesisStudent = ({ type }) => {
                 }
             })
             .catch((err) => {
-                console.log(err);
+              // console.log(err);
                 toast.update(id, {
                     render: "Đã xảy ra lỗi, vui lòng thử lại sau",
                     type: "error",
@@ -111,7 +111,7 @@ const AddThesisStudent = ({ type }) => {
         data?.permissions
             ?.filter((value) => !value.isFixed)
             ?.map((obj) => {
-                console.log(obj.value);
+              // console.log(obj.value);
                 permissions?.push(obj.value);
             });
         const datasend = {
@@ -128,11 +128,11 @@ const AddThesisStudent = ({ type }) => {
             thesisEndDate: new Date(
                 moment(data?.thesisEndDate, "DD/MM/YYYY")
             ).toLocaleDateString("vi-VN"),
-            //         console.log(obj.value);
+            //       // console.log(obj.value);
             //         permissions?.push(obj.value);
             //     });,
         };
-        console.log(datasend);
+      // console.log(datasend);
         type == "add"
             ? await apiStudent
                   .apiAddThesis({
@@ -266,7 +266,7 @@ const AddThesisStudent = ({ type }) => {
                             pauseOnFocusLoss: true,
                         });
                     } else {
-                        console.log(res);
+                      // console.log(res);
                         let convert = [];
 
                         setValue("id", res?.result?.id);

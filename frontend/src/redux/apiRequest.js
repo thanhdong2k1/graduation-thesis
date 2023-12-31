@@ -109,7 +109,7 @@ export const apiAuth = {
                 return res?.data;
             }
         } catch (error) {
-            console.log(error);
+          // console.log(error);
             dispatch(logginFailed());
             return error?.response?.data;
             // setShowMessage(res?.res?.data?.errMessage);
@@ -146,7 +146,7 @@ export const apiUser = {
             });
             dispatch(getTopicsSuccess(res?.data));
         } catch (error) {
-            console.log(error);
+          // console.log(error);
             dispatch(getTopicsFailed());
         }
     },
@@ -159,7 +159,7 @@ export const apiUser = {
             });
             dispatch(getCouncilsSuccess(res?.data));
         } catch (error) {
-            console.log(error);
+          // console.log(error);
             dispatch(getCouncilsFailed());
         }
     },
@@ -180,7 +180,7 @@ export const apiUser = {
                 })
             );
         } catch (error) {
-            console.log(error);
+          // console.log(error);
             dispatch(getDepartmentsFailed());
         }
     },
@@ -209,7 +209,7 @@ export const apiAdmin = {
             );
             return res?.data;
         } catch (error) {
-            console.log(error);
+          // console.log(error);
             if (error?.response?.status) {
                 return error?.response?.data;
             }
@@ -240,7 +240,7 @@ export const apiAdmin = {
             );
             return res?.data;
         } catch (error) {
-            console.log(error);
+          // console.log(error);
             if (error?.response?.status) {
                 return error?.response?.data;
             }
@@ -263,7 +263,7 @@ export const apiAdmin = {
             // console.log(res);
             dispatch(getInformationSuccess(res?.data));
         } catch (error) {
-            console.log(error);
+          // console.log(error);
             if (error?.response?.status) {
                 return error?.response?.data;
             }
@@ -290,7 +290,7 @@ export const apiAdmin = {
             // console.log(res);
             dispatch(getGenderSuccess({ code }));
         } catch (error) {
-            console.log(error);
+          // console.log(error);
             getGenderFailed();
             if (error?.response?.status) {
                 return error?.response?.data;
@@ -318,7 +318,7 @@ export const apiAdmin = {
             // console.log(res);
             dispatch(getHandleSuccess({ code }));
         } catch (error) {
-            console.log(error);
+          // console.log(error);
             getHandleFailed();
             if (error?.response?.status) {
                 return error?.response?.data;
@@ -346,7 +346,7 @@ export const apiAdmin = {
             // console.log(res);
             dispatch(getPositionSuccess({ code }));
         } catch (error) {
-            console.log(error);
+          // console.log(error);
             getPositionFailed();
             if (error?.response?.status) {
                 return error?.response?.data;
@@ -374,7 +374,7 @@ export const apiAdmin = {
             // console.log(res);
             dispatch(getResultSuccess({ code }));
         } catch (error) {
-            console.log(error);
+          // console.log(error);
             getResultFailed();
             if (error?.response?.status) {
                 return error?.response?.data;
@@ -402,7 +402,7 @@ export const apiAdmin = {
             // console.log(res);
             dispatch(getRoleSuccess({ code }));
         } catch (error) {
-            console.log(error);
+          // console.log(error);
             getRoleFailed();
             if (error?.response?.status) {
                 return error?.response?.data;
@@ -430,7 +430,7 @@ export const apiAdmin = {
             // console.log(res);
             dispatch(getStatusSuccess({ code }));
         } catch (error) {
-            console.log(error);
+          // console.log(error);
             getStatusFailed();
             if (error?.response?.status) {
                 return error?.response?.data;
@@ -458,7 +458,7 @@ export const apiAdmin = {
             // console.log(res);
             dispatch(getPermissionsSuccess({ code }));
         } catch (error) {
-            console.log(error);
+          // console.log(error);
             getPermissionsFailed();
             if (error?.response?.status) {
                 return error?.response?.data;
@@ -537,7 +537,7 @@ export const apiAdmin = {
             );
             return res?.data;
         } catch (error) {
-            console.log(error?.response?.data);
+          // console.log(error?.response?.data);
             if (error?.response?.status) {
                 return error?.response?.data;
             }
@@ -571,7 +571,7 @@ export const apiAdmin = {
             );
             return res?.data;
         } catch (error) {
-            console.log(error);
+          // console.log(error);
             if (error?.response?.status) {
                 return error?.response?.data;
             }
@@ -605,7 +605,7 @@ export const apiAdmin = {
             );
             return res?.data;
         } catch (error) {
-            console.log(error);
+          // console.log(error);
             if (error?.response?.status) {
                 return error?.response?.data;
             }
@@ -623,7 +623,7 @@ export const apiAdmin = {
             );
             return res?.data;
         } catch (error) {
-            console.log(error);
+          // console.log(error);
             if (error?.response?.status) {
                 return error?.response?.data;
             }
@@ -641,7 +641,7 @@ export const apiAdmin = {
             );
             return res?.data;
         } catch (error) {
-            console.log(error);
+          // console.log(error);
             if (error?.response?.status) {
                 return error?.response?.data;
             }
@@ -703,7 +703,7 @@ export const apiAdmin = {
             );
             return res?.data;
         } catch (error) {
-            console.log(error?.response?.data);
+          // console.log(error?.response?.data);
             if (error?.response?.status) {
                 return error?.response?.data;
             }
@@ -716,7 +716,7 @@ export const apiAdmin = {
                 {
                     name: data?.name,
                     description: data?.description,
-                    founding: data?.founding,
+                    // founding: data?.founding,
                     deanId: data?.dean
                         ? data?.dean[0]?.value
                             ? data?.dean[0]?.value
@@ -731,7 +731,7 @@ export const apiAdmin = {
             );
             return res?.data;
         } catch (error) {
-            console.log(error);
+          // console.log(error);
             if (error?.response?.status) {
                 return error?.response?.data;
             }
@@ -744,7 +744,7 @@ export const apiAdmin = {
                 {
                     name: data?.name,
                     description: data?.description,
-                    founding: data?.founding,
+                    // founding: data?.founding,
                     deanId: data?.dean
                         ? data?.dean[0]?.value
                             ? data?.dean[0]?.value
@@ -759,7 +759,7 @@ export const apiAdmin = {
             );
             return res?.data;
         } catch (error) {
-            console.log(error);
+          // console.log(error);
             if (error?.response?.status) {
                 return error?.response?.data;
             }
@@ -777,7 +777,7 @@ export const apiAdmin = {
             );
             return res?.data;
         } catch (error) {
-            console.log(error);
+          // console.log(error);
             if (error?.response?.status) {
                 return error?.response?.data;
             }
@@ -839,7 +839,7 @@ export const apiAdmin = {
             );
             return res?.data;
         } catch (error) {
-            console.log(error?.response?.data);
+          // console.log(error?.response?.data);
             if (error?.response?.status) {
                 return error?.response?.data;
             }
@@ -886,7 +886,7 @@ export const apiAdmin = {
             );
             return res?.data;
         } catch (error) {
-            console.log(error);
+          // console.log(error);
             if (error?.response?.status) {
                 return error?.response?.data;
             }
@@ -933,7 +933,7 @@ export const apiAdmin = {
             );
             return res?.data;
         } catch (error) {
-            console.log(error);
+          // console.log(error);
             if (error?.response?.status) {
                 return error?.response?.data;
             }
@@ -951,7 +951,7 @@ export const apiAdmin = {
             );
             return res?.data;
         } catch (error) {
-            console.log(error);
+          // console.log(error);
             if (error?.response?.status) {
                 return error?.response?.data;
             }
@@ -1013,7 +1013,7 @@ export const apiAdmin = {
             );
             return res?.data;
         } catch (error) {
-            console.log(error?.response?.data);
+          // console.log(error?.response?.data);
             if (error?.response?.status) {
                 return error?.response?.data;
             }
@@ -1035,7 +1035,7 @@ export const apiAdmin = {
             );
             return res?.data;
         } catch (error) {
-            console.log(error);
+          // console.log(error);
             if (error?.response?.status) {
                 return error?.response?.data;
             }
@@ -1057,7 +1057,7 @@ export const apiAdmin = {
             );
             return res?.data;
         } catch (error) {
-            console.log(error);
+          // console.log(error);
             if (error?.response?.status) {
                 return error?.response?.data;
             }
@@ -1075,7 +1075,7 @@ export const apiAdmin = {
             );
             return res?.data;
         } catch (error) {
-            console.log(error);
+          // console.log(error);
             if (error?.response?.status) {
                 return error?.response?.data;
             }
@@ -1159,7 +1159,7 @@ export const apiAdmin = {
             );
             return res?.data;
         } catch (error) {
-            console.log(error?.response?.data);
+          // console.log(error?.response?.data);
             if (error?.response?.status) {
                 return error?.response?.data;
             }
@@ -1182,7 +1182,7 @@ export const apiAdmin = {
             );
             return res?.data;
         } catch (error) {
-            console.log(error);
+          // console.log(error);
             if (error?.response?.status) {
                 return error?.response?.data;
             }
@@ -1205,7 +1205,7 @@ export const apiAdmin = {
             );
             return res?.data;
         } catch (error) {
-            console.log(error);
+          // console.log(error);
             if (error?.response?.status) {
                 return error?.response?.data;
             }
@@ -1223,7 +1223,7 @@ export const apiAdmin = {
             );
             return res?.data;
         } catch (error) {
-            console.log(error);
+          // console.log(error);
             if (error?.response?.status) {
                 return error?.response?.data;
             }
@@ -1285,7 +1285,7 @@ export const apiAdmin = {
             );
             return res?.data;
         } catch (error) {
-            console.log(error?.response?.data);
+          // console.log(error?.response?.data);
             if (error?.response?.status) {
                 return error?.response?.data;
             }
@@ -1312,7 +1312,7 @@ export const apiAdmin = {
             );
             return res?.data;
         } catch (error) {
-            console.log(error);
+          // console.log(error);
             if (error?.response?.status) {
                 return error?.response?.data;
             }
@@ -1339,7 +1339,7 @@ export const apiAdmin = {
             );
             return res?.data;
         } catch (error) {
-            console.log(error);
+          // console.log(error);
             if (error?.response?.status) {
                 return error?.response?.data;
             }
@@ -1357,7 +1357,7 @@ export const apiAdmin = {
             );
             return res?.data;
         } catch (error) {
-            console.log(error);
+          // console.log(error);
             if (error?.response?.status) {
                 return error?.response?.data;
             }
@@ -1419,7 +1419,7 @@ export const apiAdmin = {
             );
             return res?.data;
         } catch (error) {
-            console.log(error?.response?.data);
+          // console.log(error?.response?.data);
             if (error?.response?.status) {
                 return error?.response?.data;
             }
@@ -1451,7 +1451,7 @@ export const apiAdmin = {
             );
             return res?.data;
         } catch (error) {
-            console.log(error);
+          // console.log(error);
             if (error?.response?.status) {
                 return error?.response?.data;
             }
@@ -1483,7 +1483,7 @@ export const apiAdmin = {
             );
             return res?.data;
         } catch (error) {
-            console.log(error);
+          // console.log(error);
             if (error?.response?.status) {
                 return error?.response?.data;
             }
@@ -1501,7 +1501,7 @@ export const apiAdmin = {
             );
             return res?.data;
         } catch (error) {
-            console.log(error);
+          // console.log(error);
             if (error?.response?.status) {
                 return error?.response?.data;
             }
@@ -1563,7 +1563,7 @@ export const apiAdmin = {
             );
             return res?.data;
         } catch (error) {
-            console.log(error?.response?.data);
+          // console.log(error?.response?.data);
             if (error?.response?.status) {
                 return error?.response?.data;
             }
@@ -1610,7 +1610,7 @@ export const apiAdmin = {
             );
             return res?.data;
         } catch (error) {
-            console.log(error);
+          // console.log(error);
             if (error?.response?.status) {
                 return error?.response?.data;
             }
@@ -1657,7 +1657,7 @@ export const apiAdmin = {
             );
             return res?.data;
         } catch (error) {
-            console.log(error);
+          // console.log(error);
             if (error?.response?.status) {
                 return error?.response?.data;
             }
@@ -1678,7 +1678,7 @@ export const apiAdmin = {
             );
             return res?.data;
         } catch (error) {
-            console.log(error);
+          // console.log(error);
             if (error?.response?.status) {
                 return error?.response?.data;
             }
@@ -1699,7 +1699,7 @@ export const apiAdmin = {
             );
             return res?.data;
         } catch (error) {
-            console.log(error);
+          // console.log(error);
             if (error?.response?.status) {
                 return error?.response?.data;
             }
@@ -1714,7 +1714,7 @@ export const apiAdmin = {
             });
             return res?.data;
         } catch (error) {
-            console.log(error);
+          // console.log(error);
             if (error?.response?.status) {
                 return error?.response?.data;
             }
@@ -1800,7 +1800,7 @@ export const apiAdmin = {
             );
             return res?.data;
         } catch (error) {
-            console.log(error?.response?.data);
+          // console.log(error?.response?.data);
             if (error?.response?.status) {
                 return error?.response?.data;
             }
@@ -1808,7 +1808,7 @@ export const apiAdmin = {
     },
     apiAddThesis: async ({ user, data, axiosJWT }) => {
         try {
-            console.log(data);
+          // console.log(data);
             const res = await axiosJWT.post(
                 "/api/admin/create-thesis",
                 {
@@ -1867,7 +1867,7 @@ export const apiAdmin = {
             );
             return res?.data;
         } catch (error) {
-            console.log(error);
+          // console.log(error);
             if (error?.response?.status) {
                 return error?.response?.data;
             }
@@ -1933,7 +1933,7 @@ export const apiAdmin = {
             );
             return res?.data;
         } catch (error) {
-            console.log(error);
+          // console.log(error);
             if (error?.response?.status) {
                 return error?.response?.data;
             }
@@ -1951,7 +1951,7 @@ export const apiAdmin = {
             );
             return res?.data;
         } catch (error) {
-            console.log(error);
+          // console.log(error);
             if (error?.response?.status) {
                 return error?.response?.data;
             }
@@ -2014,7 +2014,7 @@ export const apiAdmin = {
             );
             return res?.data;
         } catch (error) {
-            console.log(error?.response?.data);
+          // console.log(error?.response?.data);
             if (error?.response?.status) {
                 return error?.response?.data;
             }
@@ -2046,7 +2046,7 @@ export const apiAdmin = {
             );
             return res?.data;
         } catch (error) {
-            console.log(error);
+          // console.log(error);
             if (error?.response?.status) {
                 return error?.response?.data;
             }
@@ -2078,7 +2078,7 @@ export const apiAdmin = {
             );
             return res?.data;
         } catch (error) {
-            console.log(error);
+          // console.log(error);
             if (error?.response?.status) {
                 return error?.response?.data;
             }
@@ -2096,7 +2096,7 @@ export const apiAdmin = {
             );
             return res?.data;
         } catch (error) {
-            console.log(error);
+          // console.log(error);
             if (error?.response?.status) {
                 return error?.response?.data;
             }
@@ -2161,7 +2161,7 @@ export const apiAdmin = {
             );
             return res?.data;
         } catch (error) {
-            console.log(error?.response?.data);
+          // console.log(error?.response?.data);
             if (error?.response?.status) {
                 return error?.response?.data;
             }
@@ -2191,7 +2191,7 @@ export const apiAdmin = {
             );
             return res?.data;
         } catch (error) {
-            console.log(error);
+          // console.log(error);
             if (error?.response?.status) {
                 return error?.response?.data;
             }
@@ -2221,7 +2221,7 @@ export const apiAdmin = {
             );
             return res?.data;
         } catch (error) {
-            console.log(error);
+          // console.log(error);
             if (error?.response?.status) {
                 return error?.response?.data;
             }
@@ -2239,7 +2239,7 @@ export const apiAdmin = {
             );
             return res?.data;
         } catch (error) {
-            console.log(error);
+          // console.log(error);
             if (error?.response?.status) {
                 return error?.response?.data;
             }
@@ -2270,7 +2270,7 @@ export const apiLecturer = {
             );
             return res?.data;
         } catch (error) {
-            console.log(error);
+          // console.log(error);
             if (error?.response?.status) {
                 return error?.response?.data;
             }
@@ -2301,7 +2301,7 @@ export const apiLecturer = {
             );
             return res?.data;
         } catch (error) {
-            console.log(error);
+          // console.log(error);
             if (error?.response?.status) {
                 return error?.response?.data;
             }
@@ -2324,7 +2324,7 @@ export const apiLecturer = {
             // console.log(res);
             dispatch(getInformationSuccess(res?.data));
         } catch (error) {
-            console.log(error);
+          // console.log(error);
             if (error?.response?.status) {
                 return error?.response?.data;
             }
@@ -2351,7 +2351,7 @@ export const apiLecturer = {
             // console.log(res);
             dispatch(getGenderSuccess({ code }));
         } catch (error) {
-            console.log(error);
+          // console.log(error);
             getGenderFailed();
             if (error?.response?.status) {
                 return error?.response?.data;
@@ -2379,7 +2379,7 @@ export const apiLecturer = {
             // console.log(res);
             dispatch(getHandleSuccess({ code }));
         } catch (error) {
-            console.log(error);
+          // console.log(error);
             getHandleFailed();
             if (error?.response?.status) {
                 return error?.response?.data;
@@ -2407,7 +2407,7 @@ export const apiLecturer = {
             // console.log(res);
             dispatch(getPositionSuccess({ code }));
         } catch (error) {
-            console.log(error);
+          // console.log(error);
             getPositionFailed();
             if (error?.response?.status) {
                 return error?.response?.data;
@@ -2435,7 +2435,7 @@ export const apiLecturer = {
             // console.log(res);
             dispatch(getResultSuccess({ code }));
         } catch (error) {
-            console.log(error);
+          // console.log(error);
             getResultFailed();
             if (error?.response?.status) {
                 return error?.response?.data;
@@ -2463,7 +2463,7 @@ export const apiLecturer = {
             // console.log(res);
             dispatch(getRoleSuccess({ code }));
         } catch (error) {
-            console.log(error);
+          // console.log(error);
             getRoleFailed();
             if (error?.response?.status) {
                 return error?.response?.data;
@@ -2491,7 +2491,7 @@ export const apiLecturer = {
             // console.log(res);
             dispatch(getStatusSuccess({ code }));
         } catch (error) {
-            console.log(error);
+          // console.log(error);
             getStatusFailed();
             if (error?.response?.status) {
                 return error?.response?.data;
@@ -2519,7 +2519,7 @@ export const apiLecturer = {
             // console.log(res);
             dispatch(getPermissionsSuccess({ code }));
         } catch (error) {
-            console.log(error);
+          // console.log(error);
             getPermissionsFailed();
             if (error?.response?.status) {
                 return error?.response?.data;
@@ -2582,7 +2582,7 @@ export const apiLecturer = {
             );
             return res?.data;
         } catch (error) {
-            console.log(error?.response?.data);
+          // console.log(error?.response?.data);
             if (error?.response?.status) {
                 return error?.response?.data;
             }
@@ -2615,7 +2615,7 @@ export const apiLecturer = {
             );
             return res?.data;
         } catch (error) {
-            console.log(error);
+          // console.log(error);
             if (error?.response?.status) {
                 return error?.response?.data;
             }
@@ -2648,7 +2648,7 @@ export const apiLecturer = {
             );
             return res?.data;
         } catch (error) {
-            console.log(error);
+          // console.log(error);
             if (error?.response?.status) {
                 return error?.response?.data;
             }
@@ -2666,7 +2666,7 @@ export const apiLecturer = {
             );
             return res?.data;
         } catch (error) {
-            console.log(error);
+          // console.log(error);
             if (error?.response?.status) {
                 return error?.response?.data;
             }
@@ -2738,7 +2738,7 @@ export const apiStudent = {
             );
             return res?.data;
         } catch (error) {
-            console.log(error);
+          // console.log(error);
             if (error?.response?.status) {
                 return error?.response?.data;
             }
@@ -2769,7 +2769,7 @@ export const apiStudent = {
             );
             return res?.data;
         } catch (error) {
-            console.log(error);
+          // console.log(error);
             if (error?.response?.status) {
                 return error?.response?.data;
             }
@@ -2792,7 +2792,7 @@ export const apiStudent = {
             // console.log(res);
             dispatch(getInformationStudentSuccess(res?.data));
         } catch (error) {
-            console.log(error);
+          // console.log(error);
             if (error?.response?.status) {
                 return error?.response?.data;
             }
@@ -2819,7 +2819,7 @@ export const apiStudent = {
             // console.log(res);
             dispatch(getGenderSuccess({ code }));
         } catch (error) {
-            console.log(error);
+          // console.log(error);
             getGenderFailed();
             if (error?.response?.status) {
                 return error?.response?.data;
@@ -2847,7 +2847,7 @@ export const apiStudent = {
             // console.log(res);
             dispatch(getHandleSuccess({ code }));
         } catch (error) {
-            console.log(error);
+          // console.log(error);
             getHandleFailed();
             if (error?.response?.status) {
                 return error?.response?.data;
@@ -2875,7 +2875,7 @@ export const apiStudent = {
             // console.log(res);
             dispatch(getPositionSuccess({ code }));
         } catch (error) {
-            console.log(error);
+          // console.log(error);
             getPositionFailed();
             if (error?.response?.status) {
                 return error?.response?.data;
@@ -2903,7 +2903,7 @@ export const apiStudent = {
             // console.log(res);
             dispatch(getResultSuccess({ code }));
         } catch (error) {
-            console.log(error);
+          // console.log(error);
             getResultFailed();
             if (error?.response?.status) {
                 return error?.response?.data;
@@ -2931,7 +2931,7 @@ export const apiStudent = {
             // console.log(res);
             dispatch(getRoleSuccess({ code }));
         } catch (error) {
-            console.log(error);
+          // console.log(error);
             getRoleFailed();
             if (error?.response?.status) {
                 return error?.response?.data;
@@ -2959,7 +2959,7 @@ export const apiStudent = {
             // console.log(res);
             dispatch(getStatusSuccess({ code }));
         } catch (error) {
-            console.log(error);
+          // console.log(error);
             getStatusFailed();
             if (error?.response?.status) {
                 return error?.response?.data;
@@ -2987,7 +2987,7 @@ export const apiStudent = {
             // console.log(res);
             dispatch(getPermissionsSuccess({ code }));
         } catch (error) {
-            console.log(error);
+          // console.log(error);
             getPermissionsFailed();
             if (error?.response?.status) {
                 return error?.response?.data;
@@ -3082,7 +3082,7 @@ export const apiStudent = {
     },
     apiRegisterAdvisor: async ({ user, id, axiosJWT }) => {
         try {
-            console.log(user, id, axiosJWT);
+          // console.log(user, id, axiosJWT);
             const res = await axiosJWT.get(
                 `/api/student/register-advisor/${id}`,
                 {
@@ -3195,7 +3195,7 @@ export const apiStudent = {
             );
             return res?.data;
         } catch (error) {
-            console.log(error);
+          // console.log(error);
             if (error?.response?.status) {
                 return error?.response?.data;
             }

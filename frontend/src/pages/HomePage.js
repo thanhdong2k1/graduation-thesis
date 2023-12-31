@@ -21,22 +21,22 @@ const HomePage = () => {
     const totalRecords = useSelector((state) => state?.user?.totalRecords);
     const dispatch = useDispatch();
     const handleAdd = () => {
-        console.log("handleAdd");
+      // console.log("handleAdd");
     };
     const handleImport = () => {
-        console.log("handleImport");
+      // console.log("handleImport");
     };
     const handleExport = () => {
-        console.log("handleExport");
+      // console.log("handleExport");
     };
     const handleEdit = (data) => {
-        console.log("handleEdit", data);
+      // console.log("handleEdit", data);
     };
     const handleDetail = (data) => {
-        console.log("handleDetail", data);
+      // console.log("handleDetail", data);
     };
     const handleDelete = (data) => {
-        console.log("handleDelete", data);
+      // console.log("handleDelete", data);
     };
     const tableData = [
         {

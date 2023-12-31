@@ -30,7 +30,7 @@ const LecturerAdvisor = () => {
     const information = useSelector((state) => state?.student.information);
     let axiosJWT = createAxios(currentUser, dispatch, logginSuccess);
 
-    console.log("lecturers", lecturers);
+  // console.log("lecturers", lecturers);
     const [defineTable, setDefineTable] = useState({
         inputSearch: "",
         filterSearch: "",
@@ -48,10 +48,10 @@ const LecturerAdvisor = () => {
         navigate(`../${pathRoutes?.R1?.addLecturer}`, { replace: true });
     };
     const handleImport = () => {
-        console.log("handleImport");
+      // console.log("handleImport");
     };
     const handleExport = () => {
-        console.log("handleExport");
+      // console.log("handleExport");
     };
     const handleEdit = (data) => {
         navigate(`../${pathRoutes?.R1?.updateLecturer}/${data?.id}`, {
@@ -65,7 +65,7 @@ const LecturerAdvisor = () => {
     };
 
     const handleDelete = (data) => {
-        console.log("handleDelete", data);
+      // console.log("handleDelete", data);
         setShowModal(true);
         setResult(data);
     };
@@ -120,7 +120,7 @@ const LecturerAdvisor = () => {
                 }
             })
             .catch((err) => {
-                console.log(err);
+              // console.log(err);
                 toast.update(id, {
                     render: "Đã xảy ra lỗi, vui lòng thử lại sau",
                     type: "error",
@@ -182,7 +182,7 @@ const LecturerAdvisor = () => {
                 }
             })
             .catch((err) => {
-                console.log(err);
+              // console.log(err);
                 toast.update(id, {
                     render: "Đã xảy ra lỗi, vui lòng thử lại sau",
                     type: "error",
@@ -199,7 +199,7 @@ const LecturerAdvisor = () => {
         // data?.map((obj) => {
         //     const convertedObj = {};
         //     for (const key in obj) {
-        //         console.log("key,obj", key, obj);
+        //       // console.log("key,obj", key, obj);
         //         if (key?.includes("Data")) {
         //             const newKey = key?.replace("Data", "Id");
         //             convertedObj[newKey] = obj[key];
@@ -258,7 +258,7 @@ const LecturerAdvisor = () => {
                 }
             })
             .catch((err) => {
-                console.log(err);
+              // console.log(err);
                 toast.update(id, {
                     render: "Đã xảy ra lỗi, vui lòng thử lại sau",
                     type: "error",
@@ -404,7 +404,7 @@ const LecturerAdvisor = () => {
             inputSearch: "",
             isSearched: false,
         }));
-        console.log(information);
+      // console.log(information);
         apiStudent.getAllLecturers({
             user: currentUser,
             majorId: information?.classData?.majorId,

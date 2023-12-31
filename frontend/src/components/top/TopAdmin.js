@@ -85,7 +85,7 @@ const TopAdmin = ({ isShowSidebar, setIsShowSidebar }) => {
                     </button> */}
                     <button
                         id="dropdownDefaultButton"
-                        class="button"
+                        className="button"
                         type="button"
                     >
                         <span>Cài đặt</span>
@@ -93,13 +93,13 @@ const TopAdmin = ({ isShowSidebar, setIsShowSidebar }) => {
                     </button>
                     <div
                         id="dropdown"
-                        class="z-10 hidden group-hover:inline-block absolute right-0 bg-white w-44 rounded-lg shadow whitespace-nowrap"
+                        className="z-10 hidden group-hover:inline-block absolute right-0 bg-white w-44 rounded-lg shadow whitespace-nowrap"
                     >
-                        <ul class="py-2 text-sm text-gray-700 dark:text-gray-200">
+                        <ul className="py-2 text-sm text-gray-700 dark:text-gray-200">
                             <li>
                                 <Link
                                     to={pathRoutes?.R1?.changeInformation}
-                                    class="block px-4 py-2 font-medium text-textColor hover:bg-gray-100"
+                                    className="block px-4 py-2 font-medium text-textColor hover:bg-gray-100"
                                 >
                                     Đổi thông tin
                                 </Link>
@@ -107,7 +107,7 @@ const TopAdmin = ({ isShowSidebar, setIsShowSidebar }) => {
                             <li>
                                 <Link
                                     to={pathRoutes?.R1?.changePassword}
-                                    class="block px-4 py-2 font-medium text-textColor hover:bg-gray-100"
+                                    className="block px-4 py-2 font-medium text-textColor hover:bg-gray-100"
                                 >
                                     Đổi mật khẩu
                                 </Link>
@@ -117,7 +117,7 @@ const TopAdmin = ({ isShowSidebar, setIsShowSidebar }) => {
                                     onClick={() => {
                                         logoutHandle();
                                     }}
-                                    class="block px-4 py-2 font-medium text-textColor hover:bg-gray-100"
+                                    className="block px-4 py-2 font-medium text-textColor hover:bg-gray-100"
                                 >
                                     Đăng xuất
                                 </Link>

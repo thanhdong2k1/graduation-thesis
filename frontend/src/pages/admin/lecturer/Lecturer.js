@@ -27,7 +27,7 @@ const Lecturer = () => {
     const currentUser = useSelector((state) => state?.auth?.currentUser);
     let axiosJWT = createAxios(currentUser, dispatch, logginSuccess);
 
-    console.log("lecturers", lecturers);
+  // console.log("lecturers", lecturers);
     const [defineTable, setDefineTable] = useState({
         inputSearch: "",
         filterSearch: "",
@@ -45,10 +45,10 @@ const Lecturer = () => {
         navigate(`../${pathRoutes?.R1?.addLecturer}`, { replace: true });
     };
     const handleImport = () => {
-        console.log("handleImport");
+      // console.log("handleImport");
     };
     const handleExport = () => {
-        console.log("handleExport");
+      // console.log("handleExport");
     };
     const handleEdit = (data) => {
         navigate(`../${pathRoutes?.R1?.updateLecturer}/${data?.id}`, {
@@ -62,7 +62,7 @@ const Lecturer = () => {
     };
 
     const handleDelete = (data) => {
-        console.log("handleDelete", data);
+      // console.log("handleDelete", data);
         setShowModal(true);
         setResult(data);
     };
@@ -116,7 +116,7 @@ const Lecturer = () => {
                 }
             })
             .catch((err) => {
-                console.log(err);
+              // console.log(err);
                 toast.update(id, {
                     render: "Đã xảy ra lỗi, vui lòng thử lại sau",
                     type: "error",
@@ -133,7 +133,7 @@ const Lecturer = () => {
         // data?.map((obj) => {
         //     const convertedObj = {};
         //     for (const key in obj) {
-        //         console.log("key,obj", key, obj);
+        //       // console.log("key,obj", key, obj);
         //         if (key?.includes("Data")) {
         //             const newKey = key?.replace("Data", "Id");
         //             convertedObj[newKey] = obj[key];
@@ -192,7 +192,7 @@ const Lecturer = () => {
                 }
             })
             .catch((err) => {
-                console.log(err);
+              // console.log(err);
                 toast.update(id, {
                     render: "Đã xảy ra lỗi, vui lòng thử lại sau",
                     type: "error",
@@ -375,7 +375,7 @@ const Lecturer = () => {
     }, [defineTable.limit]);
 
     // useEffect(() => {
-    //     console.log("currentpage effect");
+    //   // console.log("currentpage effect");
     //     apiAdmin.getAllLecturers(
     //         defineTable.inputSearch,
     //         (defineTable.currentPage - 1) * defineTable.limit,
@@ -405,7 +405,7 @@ const Lecturer = () => {
     //     // console.log(e);
     //     const permissions = [];
     //     e.map((obj) => {
-    //         console.log(obj.value);
+    //       // console.log(obj.value);
     //         permissions?.push(obj.value);
     //     });
 
@@ -414,12 +414,12 @@ const Lecturer = () => {
     //     const convert = [];
     //     const array = permissions.toString()?.split(",");
     //     gender.map((obj) => {
-    //         console.log(obj);
+    //       // console.log(obj);
     //         if (array?.includes(obj.value)) {
     //             convert?.push(obj);
     //         }
     //     });
-    //     console.log(convert, convert);
+    //   // console.log(convert, convert);
     // };
     return (
         <>

@@ -22,7 +22,7 @@ import { useParams } from "react-router-dom";
 
 const AddDepartment = ({ type }, params) => {
     let { id } = useParams();
-    console.log("type", type, id);
+  // console.log("type", type, id);
 
     const currentUser = useSelector((state) => state?.auth?.currentUser);
     const dispatch = useDispatch();
@@ -47,13 +47,13 @@ const AddDepartment = ({ type }, params) => {
 
         let founding = data?.founding && new Date(data?.founding).toLocaleDateString("vi-VN");
 
-        console.log(founding);
+      // console.log(founding);
 
         const datasend = {
             ...data,
             founding: founding,
         };
-        console.log(datasend);
+      // console.log(datasend);
 
         type == "add"
             ? await apiAdmin
@@ -166,15 +166,15 @@ const AddDepartment = ({ type }, params) => {
                             pauseOnFocusLoss: true,
                         });
                     } else {
-                        console.log(res);
+                      // console.log(res);
                         setValue("id", res?.result?.id);
                         setValue("name", res?.result?.name);
                         setValue("description", res?.result?.description);
                         setValue("founding", res?.result?.founding);
-                        console.log(
-                            "res?.result?.founding",
-                            res?.result?.founding
-                        );
+                      // console.log(
+                        //     "res?.result?.founding",
+                        //     res?.result?.founding
+                        // );
                         setValue(
                             "dean",
                             codeDean?.filter(

@@ -45,7 +45,7 @@ const CardAuth = () => {
 
     const onSubmit = async (data) => {
         const id = toast.loading("Vui lòng đợi...");
-        console.log(data);
+      // console.log(data);
         await apiAuth
             .logginUser({
                 data: data,
@@ -55,7 +55,7 @@ const CardAuth = () => {
             .then((res) => {
                 // console.log(res);
                 if (res?.errCode > 0 || res?.errCode < 0 ) {
-                    console.log(res);
+                  // console.log(res);
                     toast.update(id, {
                         render: res?.errMessage,
                         type: "error",
@@ -65,7 +65,7 @@ const CardAuth = () => {
                         pauseOnFocusLoss: true,
                     });
                 } else {
-                    console.log(res);
+                  // console.log(res);
                     toast.update(id, {
                         render: res?.errMessage,
                         type: "success",
@@ -88,7 +88,7 @@ const CardAuth = () => {
                 }
             })
             .catch((err) => {
-                console.log(err);
+              // console.log(err);
                 toast.update(id, {
                     render: "Đã xảy ra lỗi, vui lòng thử lại sau",
                     type: "error",
@@ -101,7 +101,7 @@ const CardAuth = () => {
     };
 
     useEffect(() => {
-        console.log("Đã useffect");
+      // console.log("Đã useffect");
         if (rolePath == "") {
             // console.log("Đã vào");
             navigate("/login");
@@ -217,7 +217,7 @@ const CardAuth = () => {
                                 <svg
                                     aria-hidden="true"
                                     role="status"
-                                    class="inline mr-3 w-4 h-4 text-white animate-spin"
+                                    className="inline mr-3 w-4 h-4 text-white animate-spin"
                                     viewBox="0 0 100 101"
                                     fill="none"
                                     xmlns="http://www.w3.org/2000/svg"

@@ -71,6 +71,7 @@ const Sidebar = ({ isShowSidebar, setIsShowSidebar }) => {
                     {routesAdmin &&
                         routesAdmin?.map((route, index) => (
                             <li
+                                key={index}
                                 className={`listItem w-full relative text-greyText text-h3FontSize before:absolute before:content-[''] before:w-[5px] before:h-[0%] before:bg-PrimaryColor before:l-0 b-0 before:rounded-r-3xl group ${
                                     path?.pathname?.split("/")?.at(-1) ==
                                     route?.path

@@ -48,7 +48,7 @@ db.sequelize = sequelize;
 db.Sequelize = Sequelize;
 
 // db.sequelize.sync({ force: true }).then(() => {
-//   console.log("All models were synchronized successfully.");
+//// console.log("All models were synchronized successfully.");
 // });
 
 module.exports = db;

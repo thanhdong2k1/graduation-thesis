@@ -23,7 +23,7 @@ import { MdLockReset } from "react-icons/md";
 
 const AddStudent = ({ type }) => {
     let { id } = useParams();
-    console.log("type", type, id);
+  // console.log("type", type, id);
 
     const currentUser = useSelector((state) => state?.auth?.currentUser);
     const dispatch = useDispatch();
@@ -41,14 +41,14 @@ const AddStudent = ({ type }) => {
     const [result, setResult] = useState(null);
 
     const onResetPassword = () => {
-        console.log(getValues("id"));
-        console.log("handleDelete", getValues("id"));
+      // console.log(getValues("id"));
+      // console.log("handleDelete", getValues("id"));
         setShowModal(true);
         setResult(getValues("id"));
     };
 
     const handleResetPassword = async (data) => {
-        console.log("hello", data, getValues());
+      // console.log("hello", data, getValues());
         const id = toast.loading("Vui lòng đợi...");
         await apiAdmin
             .apiResetPasswordStudent({
@@ -90,7 +90,7 @@ const AddStudent = ({ type }) => {
                 }
             })
             .catch((err) => {
-                console.log(err);
+              // console.log(err);
                 toast.update(id, {
                     render: "Đã xảy ra lỗi, vui lòng thử lại sau",
                     type: "error",
@@ -117,7 +117,7 @@ const AddStudent = ({ type }) => {
         data?.permissions
             ?.filter((value) => !value.isFixed)
             ?.map((obj) => {
-                console.log(obj.value);
+              // console.log(obj.value);
                 permissions?.push(obj.value);
             });
         const datasend = {
@@ -127,11 +127,11 @@ const AddStudent = ({ type }) => {
             ).toLocaleDateString("vi-VN"),
             permissions: permissions?.toString(),
             //     e.map((obj) => {
-            //         console.log(obj.value);
+            //       // console.log(obj.value);
             //         permissions?.push(obj.value);
             //     });,
         };
-        console.log(datasend);
+      // console.log(datasend);
         type == "add"
             ? await apiAdmin
                   .apiAddStudent({
@@ -251,7 +251,7 @@ const AddStudent = ({ type }) => {
                             pauseOnFocusLoss: true,
                         });
                     } else {
-                        console.log(res);
+                      // console.log(res);
                         let convert = [];
                         if (res?.result?.roleId === "R1") {
                             permissions.forEach((obj) => {

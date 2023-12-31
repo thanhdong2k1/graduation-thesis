@@ -94,7 +94,7 @@ const StudentChangeInformation = () => {
             ).toLocaleDateString("vi-VN"),
         };
         const { role, permissions, clases, code, ...dataFilter } = datasend;
-        console.log(datasend, dataFilter);
+      // console.log(datasend, dataFilter);
         await apiStudent
             .apiStudentChangeInformation(currentUser, dataFilter, axiosJWT)
             .then((res) => {

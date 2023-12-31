@@ -4,39 +4,44 @@ const { Op } = require("sequelize");
 const userController = {
   whereClause: (body) => {
     if (Object.keys(body).length > 0) {
-      console.log("đã vào whereClause", body);
+   // console.log("đã vào whereClause", body);
       const searchTerms = `%${
         body?.inputSearch ? body?.inputSearch?.trim() : ""
       }%`
         ?.replace(/\s/g, "%")
         .toLowerCase();
       const whereClause = {};
-      console.log(body?.inputSearch?.toLowerCase());
-      console.log("body?.length", Object.keys(body).length);
-      const [modelName, fieldName] = body?.filterSearch?.split(".");
+   // console.log(body?.inputSearch?.toLowerCase());
+   // console.log("body?.length", Object.keys(body).length);
+      const [modelName, fieldName, deepSearch] = body?.filterSearch?.split(".");
+      console.log("modelName, fieldName",modelName, fieldName)
       if (Object.keys(body).length > 0 && body?.filterSearch!="") {
         if (!body?.filterSearch?.includes("Data")) {
           if (searchTerms != "%null%") {
+            console.log('if (searchTerms != "%null%") {if (!body?.filterSearch?.includes("Data")) {')
             whereClause[modelName] = {
               [Op.like]: searchTerms,
             };
           } else {
+            console.log('elsse if (searchTerms != "%null%") {')
             whereClause[modelName] = {
               [Op.is]: null,
             };
           }
         } else {
           if (searchTerms != "%null%") {
-            whereClause[`$${modelName}.${fieldName}$`] = {
+            console.log('if (searchTerms != "%null%") {')
+            whereClause[`$${modelName}.${fieldName}${deepSearch?"."+deepSearch:""}$`] = {
               [Op.like]: searchTerms,
             };
 
             // theo id
-            whereClause[modelName.replace("Data", "Id")] = {
+            whereClause[`${!deepSearch?modelName.replace("Data", "Id"):"$"+modelName+"."+fieldName.replace("Data", "Id")+"$"}`] = {
               [Op.like]: searchTerms,
             };
           } else {
-            whereClause[modelName?.replace("Data", "Id")] = {
+            console.log('elsse if ')
+            whereClause[`${!deepSearch?modelName.replace("Data", "Id"):"$"+modelName+"."+fieldName.replace("Data", "Id")+"$"}`] = {
               [Op.is]: null,
             };
           }
@@ -48,7 +53,7 @@ const userController = {
   },
   getTopics: async (req, res) => {
     try {
-      console.log(req.body);
+   // console.log(req.body);
       const searchTerms = `%${
         req?.body?.inputSearch ? req?.body?.inputSearch : "".trim()
       }%`.replace(/\s/g, "%");
@@ -61,7 +66,7 @@ const userController = {
           [Op.like]: searchTerms,
         };
       }
-      console.log(whereClause);
+   // console.log(whereClause);
       const result = await db.Topic.findAndCountAll({
         where: whereClause,
         include: [
@@ -74,8 +79,8 @@ const userController = {
         raw: true,
         nest: true,
       });
-      console.log(result);
-      console.log(topics);
+   // console.log(result);
+   // console.log(topics);
       const { rows: topics, count: totalRecords } = result;
       return res.status(200).json({ errCode: 0, topics, totalRecords });
     } catch (error) {
@@ -87,7 +92,7 @@ const userController = {
       const searchTerms = `%${
         req?.body?.inputSearch ? req?.body?.inputSearch.trim() : ""
       }%`.replace(/\s/g, "%");
-      console.log(searchTerms);
+   // console.log(searchTerms);
       const whereClause = {
         statusId: "S1",
       };

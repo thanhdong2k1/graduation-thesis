@@ -4,13 +4,13 @@ dotenv.config();
 
 const middlewareController = {
   verifyToken: (req, res, next) => {
-    console.log("token middle", req.headers);
+ // console.log("token middle", req.headers);
 
     const token = req.headers?.token;
-    console.log("token middle", token);
+ // console.log("token middle", token);
     if (token) {
       const accessToken = token.split(" ")[1];
-      console.log("accessToken middle", accessToken);
+   // console.log("accessToken middle", accessToken);
       jwt.verify(accessToken, process.env.JWT_ACCESS_KEY, function (err, user) {
         if (err) {
           return res
@@ -20,7 +20,7 @@ const middlewareController = {
               errMessage: "Mã xác thực không hợp lệ, vui lòng đăng nhập lại!",
             });
         }
-        console.log("req", req.user);
+     // console.log("req", req.user);
         req.user = user;
         next();
       });
@@ -35,7 +35,7 @@ const middlewareController = {
   },
   verifyTokenImport: (req, res, next) => {
     middlewareController.verifyToken(req, res, () => {
-      console.log("req", req.user);
+   // console.log("req", req.user);
 
       if (
         req.user.roleId == "R1" ||
@@ -55,7 +55,7 @@ const middlewareController = {
   },
   verifyTokenAdd: (req, res, next) => {
     middlewareController.verifyToken(req, res, () => {
-      console.log("req", req.user);
+   // console.log("req", req.user);
 
       if (
         req.user.roleId == "R1" ||
@@ -75,7 +75,7 @@ const middlewareController = {
   },
   verifyTokenView: (req, res, next) => {
     middlewareController.verifyToken(req, res, () => {
-      console.log("req", req.user);
+   // console.log("req", req.user);
 
       if (
         req.user.roleId == "R1" ||
@@ -92,7 +92,7 @@ const middlewareController = {
   },
   verifyTokenUpdate: (req, res, next) => {
     middlewareController.verifyToken(req, res, () => {
-      console.log("req", req.user);
+   // console.log("req", req.user);
       if (
         req.user.roleId == "R1" ||
         req.user.roleId == "R2" ||
@@ -111,7 +111,7 @@ const middlewareController = {
   },
   verifyTokenDelete: (req, res, next) => {
     middlewareController.verifyToken(req, res, () => {
-      console.log("req", req.user);
+   // console.log("req", req.user);
       if (
         req.user.roleId == "R1" ||
         req.user.roleId == "R2" ||

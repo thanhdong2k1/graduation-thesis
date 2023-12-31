@@ -25,7 +25,7 @@ import { HiArrowDown, HiArrowUp } from "react-icons/hi";
 
 const AddEvaluationMethod = ({ type }, params) => {
     let { id } = useParams();
-    console.log("type", type, id);
+  // console.log("type", type, id);
 
     const currentUser = useSelector((state) => state?.auth?.currentUser);
     const dispatch = useDispatch();
@@ -48,7 +48,7 @@ const AddEvaluationMethod = ({ type }, params) => {
     } = useForm();
     const onSubmit = async (data) => {
         const id = toast.loading("Vui lòng đợi...");
-        console.log(data);
+      // console.log(data);
         type == "add"
             ? await apiAdmin
                   .apiAddEvaluationMethod({
@@ -58,7 +58,7 @@ const AddEvaluationMethod = ({ type }, params) => {
                       axiosJWT: axiosJWT,
                   })
                   .then((res) => {
-                      if (res?.errCode > 0 || res?.errCode < 0 ) {
+                      if (res?.errCode > 0 || res?.errCode < 0) {
                           // console.log(res);
                           toast.update(id, {
                               render: res?.errMessage,
@@ -100,7 +100,7 @@ const AddEvaluationMethod = ({ type }, params) => {
                       axiosJWT: axiosJWT,
                   })
                   .then((res) => {
-                      if (res?.errCode > 0 || res?.errCode < 0 ) {
+                      if (res?.errCode > 0 || res?.errCode < 0) {
                           // console.log(res);
                           toast.update(id, {
                               render: res?.errMessage,
@@ -146,7 +146,7 @@ const AddEvaluationMethod = ({ type }, params) => {
                     axiosJWT: axiosJWT,
                 })
                 .then((res) => {
-                    if (res?.errCode > 0 || res?.errCode < 0 ) {
+                    if (res?.errCode > 0 || res?.errCode < 0) {
                         toast.update(id, {
                             render: res?.errMessage,
                             type: "error",
@@ -156,7 +156,7 @@ const AddEvaluationMethod = ({ type }, params) => {
                             pauseOnFocusLoss: true,
                         });
                     } else {
-                        console.log(res);
+                      // console.log(res);
                         setValue("id", res?.result?.id);
                         setValue("name", res?.result?.name);
                         toast.update(id, {
@@ -188,10 +188,10 @@ const AddEvaluationMethod = ({ type }, params) => {
                         id: id,
                         axiosJWT: axiosJWT,
                     });
-                    console.log(response);
+                  // console.log(response);
                     setCriterias(response?.result);
                 } catch (e) {
-                    console.error(e);
+                    console.log(e);
                 }
             }
             fetchData();
@@ -207,12 +207,12 @@ const AddEvaluationMethod = ({ type }, params) => {
             ...criterias,
             {
                 level,
-                title: "",
+                name: "",
                 weight: level == 1 ? "0" : "",
                 order: criterias.length + 1,
             },
         ]);
-        console.log(criterias);
+      // console.log(criterias);
     };
 
     const removeItem = (index) => {
@@ -268,7 +268,7 @@ const AddEvaluationMethod = ({ type }, params) => {
         //     (item) => item.weight == "0" || item.score
         // ).length;
         // if (isFilled == isLengthColumn) {
-        //     console.log("Đã bằng");
+        //   // console.log("Đã bằng");
         //     for (var i = 0; i < criterias.length; i++) {}
         // }
         // console.log(isLengthColumn, isFilled);
@@ -277,14 +277,14 @@ const AddEvaluationMethod = ({ type }, params) => {
             total = total + +item.weight;
         });
         // setTotalScore(total);
-        setValue("total",total);
-        console.log(criterias, total);
+        setValue("total", total);
+      // console.log(criterias, total);
     }, [criterias]);
 
     return (
         <div className="changeInformationDiv flex flex-col justify-center items-center gap-2">
             <div className=" font-semibold text-h1FontSize">
-                {type=="add"?"Thêm":"Sửa"} phương pháp đánh giá
+                {type == "add" ? "Thêm" : "Sửa"} phương pháp đánh giá
             </div>
             <form
                 onSubmit={handleSubmit(onSubmit)}
@@ -347,11 +347,20 @@ const AddEvaluationMethod = ({ type }, params) => {
                                                     ? "disabled"
                                                     : ""
                                             }`}
-                                            disabled
+                                            disabled={
+                                                type == "detail" ? true : false
+                                            }
                                             // {...register("nameCriteria", {
                                             //     required: "Name is required",
                                             // })}
                                             value={item.name}
+                                            onChange={(e) =>
+                                                updateItem(
+                                                    index,
+                                                    "name",
+                                                    e.target.value
+                                                )
+                                            }
                                         />
                                     </div>
                                     {errors?.idCriteria?.type && (
@@ -434,8 +443,11 @@ const AddEvaluationMethod = ({ type }, params) => {
                             disabled={true}
                             {...register("total", {
                                 validate: (value) => {
-                                    return value == "10" || "The total weight must be 1 or 10!";
-                                  }
+                                    return (
+                                        value == "10" ||
+                                        "The total weight must be 1 or 10!"
+                                    );
+                                },
                             })}
                             // value={totalScore}
                         />

@@ -22,7 +22,7 @@ import { useParams } from "react-router-dom";
 
 const AddTopic = ({ type }, params) => {
     let { id } = useParams();
-    console.log("type", type, id);
+  // console.log("type", type, id);
 
     const currentUser = useSelector((state) => state?.auth?.currentUser);
     const dispatch = useDispatch();
@@ -45,7 +45,7 @@ const AddTopic = ({ type }, params) => {
     } = useForm();
     const onSubmit = async (data) => {
         const id = toast.loading("Vui lòng đợi...");
-        console.log(data);
+      // console.log(data);
         type == "add"
             ? await apiAdmin
                   .apiAddTopic({
@@ -159,7 +159,7 @@ const AddTopic = ({ type }, params) => {
                             pauseOnFocusLoss: true,
                         });
                     } else {
-                        console.log(res);
+                      // console.log(res);
                         setValue("id", res?.result?.id);
                         setValue("name", res?.result?.name);
                         setValue("description", res?.result?.description);

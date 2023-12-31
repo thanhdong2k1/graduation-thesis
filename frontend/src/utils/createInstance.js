@@ -9,7 +9,7 @@ const refreshToken = async (user) => {
         });
         return res?.data;
     } catch (err) {
-        console.log(err);
+      // console.log(err);
     }
 };
 export const createAxios = (user, dispatch, stateSuccess) => {
@@ -17,12 +17,12 @@ export const createAxios = (user, dispatch, stateSuccess) => {
     axiosJWT.interceptors.request.use(
         async (config) => {
             const decodedToken = jwt_decode(user.accessToken);
-            console.log("decodedToken", decodedToken);
+          // console.log("decodedToken", decodedToken);
             if (decodedToken.exp < new Date().getTime() / 1000) {
-                console.log("Đã kiểm tra token");
+              // console.log("Đã kiểm tra token");
                 const data = await refreshToken(user);
                 if (data) {
-                    console.log("Token đã được reset");
+                  // console.log("Token đã được reset");
                     const refreshUser = {
                         ...user,
                         accessToken: data?.accessToken,
@@ -30,7 +30,7 @@ export const createAxios = (user, dispatch, stateSuccess) => {
                     dispatch(stateSuccess(refreshUser));
                     config.headers["token"] = "Bearer " + data?.accessToken;
                 } else {
-                    console.log("Server đã reset và mất refreshToken");
+                  // console.log("Server đã reset và mất refreshToken");
                     dispatch(
                         logginFailed(
                             "Token đã hết hiệu lực, vui lòng đăng nhập lại!"
@@ -38,12 +38,12 @@ export const createAxios = (user, dispatch, stateSuccess) => {
                     );
                 }
             } else {
-                console.log("Token chưa hết hạn");
+              // console.log("Token chưa hết hạn");
             }
             return config;
         },
         (err) => {
-            console.log(err)
+          // console.log(err)
             return Promise.reject(err);
         }
     );

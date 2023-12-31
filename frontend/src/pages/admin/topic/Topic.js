@@ -44,10 +44,10 @@ const Topic = () => {
         navigate(`../${pathRoutes?.R1?.addTopic}`, { replace: true });
     };
     const handleImport = () => {
-        console.log("handleImport");
+      // console.log("handleImport");
     };
     const handleExport = () => {
-        console.log("handleExport");
+      // console.log("handleExport");
     };
     const handleEdit = (data) => {
         navigate(`../${pathRoutes?.R1?.updateTopic}/${data?.id}`, {
@@ -55,14 +55,14 @@ const Topic = () => {
         });
     };
     const handleDetail = (data) => {
-        console.log(pathRoutes?.R1?.topicDetail);
+      // console.log(pathRoutes?.R1?.topicDetail);
         navigate(`../${pathRoutes?.R1?.topicDetail}/${data?.id}`, {
             replace: true,
         });
     };
 
     const handleDelete = (data) => {
-        console.log("handleDelete", data);
+      // console.log("handleDelete", data);
         setShowModal(true);
         setResult(data);
     };
@@ -116,7 +116,7 @@ const Topic = () => {
                 }
             })
             .catch((err) => {
-                console.log(err);
+              // console.log(err);
                 toast.update(id, {
                     render: "Đã xảy ra lỗi, vui lòng thử lại sau",
                     type: "error",
@@ -133,7 +133,7 @@ const Topic = () => {
         // data?.map((obj) => {
         //     const convertedObj = {};
         //     for (const key in obj) {
-        //         console.log("key,obj", key, obj);
+        //       // console.log("key,obj", key, obj);
         //         if (key?.includes("Data")) {
         //             const newKey = key?.replace("Data", "Id");
         //             convertedObj[newKey] = obj[key];
@@ -192,7 +192,7 @@ const Topic = () => {
                 }
             })
             .catch((err) => {
-                console.log(err);
+              // console.log(err);
                 toast.update(id, {
                     render: "Đã xảy ra lỗi, vui lòng thử lại sau",
                     type: "error",
@@ -310,7 +310,7 @@ const Topic = () => {
     }, [defineTable.limit]);
 
     // useEffect(() => {
-    //     console.log("currentpage effect");
+    //   // console.log("currentpage effect");
     //     apiAdmin.getAllTopics(
     //         defineTable.inputSearch,
     //         (defineTable.currentPage - 1) * defineTable.limit,
@@ -340,7 +340,7 @@ const Topic = () => {
     //     // console.log(e);
     //     const permissions = [];
     //     e.map((obj) => {
-    //         console.log(obj.value);
+    //       // console.log(obj.value);
     //         permissions?.push(obj.value);
     //     });
 
@@ -349,12 +349,12 @@ const Topic = () => {
     //     const convert = [];
     //     const array = permissions.toString()?.split(",");
     //     gender.map((obj) => {
-    //         console.log(obj);
+    //       // console.log(obj);
     //         if (array?.includes(obj.value)) {
     //             convert?.push(obj);
     //         }
     //     });
-    //     console.log(convert, convert);
+    //   // console.log(convert, convert);
     // };
     return (
         <>

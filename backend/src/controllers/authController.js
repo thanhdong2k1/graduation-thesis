@@ -31,7 +31,7 @@ const authController = {
       });
       return res.status(200).json(user);
     } catch (error) {
-      console.log(error);
+   // console.log(error);
       return res.status(500).json({ errCode: -1, errMessage: "Dữ liệu không mong muốn, thử lại sau hoặc dữ liệu khác!" });
     }
   },
@@ -55,7 +55,7 @@ const authController = {
           .json({ errCode: -1, message: "Thiếu tham số đầu vào!" });
       }
 
-      console.log(req.body)
+   // console.log(req.body)
       //   findOne
       let userDB = await db.Lecturer.findOne({
         attributes: [
@@ -113,7 +113,7 @@ const authController = {
 
           delete userDB.password;
           delete userDB.refreshToken;
-          console.log(userDB);
+       // console.log(userDB);
           const accessToken = authController.generateAccessToken(userDB);
           const refreshToken = authController.generateRefreshToken(userDB);
 
@@ -121,14 +121,14 @@ const authController = {
 
           // console.log("jwt.verify", refreshTokenDB);
           if (refreshTokenDB) {
-            console.log("Đã vào được đây");
+         // console.log("Đã vào được đây");
             jwt.verify(
               refreshTokenDB,
               process.env.JWT_REFRESH_KEY,
               async (err, user) => {
                 // console.log("err,user", user);
                 if (err) {
-                  console.log("err,user", user);
+               // console.log("err,user", user);
 
                   const updateRefresh = await db[isRole].update(
                     {
@@ -140,7 +140,7 @@ const authController = {
                       },
                     }
                   );
-                  console.log("updateRefresh", updateRefresh, refreshToken);
+               // console.log("updateRefresh", updateRefresh, refreshToken);
                   res;
                   res.cookie("refreshToken", refreshToken, {
                     httpOnly: true,
@@ -148,7 +148,7 @@ const authController = {
                     path: "/",
                     sameSite: "strict",
                   });
-                  console.log("usêuser", userDB);
+               // console.log("usêuser", userDB);
 
                   if (updateRefresh) {
                     return res.status(200).json({
@@ -181,7 +181,7 @@ const authController = {
               }
             );
           } else {
-            console.log("err userDB", userDB);
+         // console.log("err userDB", userDB);
 
             const updateRefresh = await db[isRole].update(
               {
@@ -193,7 +193,7 @@ const authController = {
                 },
               }
             );
-            console.log("updateRefresh", updateRefresh);
+         // console.log("updateRefresh", updateRefresh);
             res;
             res.cookie("refreshToken", refreshToken, {
               httpOnly: true,
@@ -235,7 +235,7 @@ const authController = {
     // console.log("req",req);
     const refreshToken = req?.cookies?.refreshToken;
     // console.log("check refresh refreshTokens:", refreshToken, refreshTokens);
-    console.log("check refresh refreshTokens:", refreshToken);
+ // console.log("check refresh refreshTokens:", refreshToken);
 
     if (!refreshToken) return res.status(401).json("Bạn chưa được xác thực!");
 
@@ -252,8 +252,8 @@ const authController = {
       });
       isRole = "Student";
     }
-    console.log("userDB", userDB);
-    console.log("đã tới", userDB.refreshToken, refreshToken);
+ // console.log("userDB", userDB);
+ // console.log("đã tới", userDB.refreshToken, refreshToken);
     if (userDB && userDB.refreshToken != refreshToken) {
       return res.status(403).json("Mã thông báo làm mới không hợp lệ!");
     }
@@ -264,7 +264,7 @@ const authController = {
       }
       delete user.exp;
       delete user.iat;
-      console.log("user check refresh", user);
+   // console.log("user check refresh", user);
       const newAccessToken = authController.generateAccessToken(user);
       res.cookie("refreshToken", userDB.refreshToken, {
         httpOnly: true,

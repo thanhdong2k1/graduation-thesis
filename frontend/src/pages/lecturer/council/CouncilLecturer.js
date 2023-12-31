@@ -44,10 +44,10 @@ const CouncilLecturer = () => {
         navigate(`../${pathRoutes?.R1?.addCouncil}`, { replace: true });
     };
     const handleImport = () => {
-        console.log("handleImport");
+      // console.log("handleImport");
     };
     const handleExport = () => {
-        console.log("handleExport");
+      // console.log("handleExport");
     };
     const handleEdit = (data) => {
         navigate(`../${pathRoutes?.R1?.updateCouncil}/${data?.id}`, {
@@ -55,14 +55,14 @@ const CouncilLecturer = () => {
         });
     };
     const handleDetail = (data) => {
-        console.log(pathRoutes?.R1?.councilDetail,data);
+      // console.log(pathRoutes?.R1?.councilDetail,data);
         navigate(`../council/detail-council/${data?.councilData.thesisSessionId}/${data?.councilId}`, {
             replace: true,
         });
     };
 
     const handleDelete = (data) => {
-        console.log("handleDelete", data);
+      // console.log("handleDelete", data);
         setShowModal(true);
         setResult(data);
     };
@@ -116,7 +116,7 @@ const CouncilLecturer = () => {
                 }
             })
             .catch((err) => {
-                console.log(err);
+              // console.log(err);
                 toast.update(id, {
                     render: "Đã xảy ra lỗi, vui lòng thử lại sau",
                     type: "error",
@@ -133,7 +133,7 @@ const CouncilLecturer = () => {
         // data?.map((obj) => {
         //     const convertedObj = {};
         //     for (const key in obj) {
-        //         console.log("key,obj", key, obj);
+        //       // console.log("key,obj", key, obj);
         //         if (key?.includes("Data")) {
         //             const newKey = key?.replace("Data", "Id");
         //             convertedObj[newKey] = obj[key];
@@ -192,7 +192,7 @@ const CouncilLecturer = () => {
                 }
             })
             .catch((err) => {
-                console.log(err);
+              // console.log(err);
                 toast.update(id, {
                     render: "Đã xảy ra lỗi, vui lòng thử lại sau",
                     type: "error",
@@ -246,7 +246,7 @@ const CouncilLecturer = () => {
             header: "Trạng thái hội đồng",
 
             column: "statusId",
-            columnData: "councilData.statusId",
+            columnData: "councilData.statusData.valueVi",
             isStatus: true,
             // actions: actionsDetail(handleDetail),
         },
@@ -322,7 +322,7 @@ const CouncilLecturer = () => {
     }, [defineTable.limit]);
 
     // useEffect(() => {
-    //     console.log("currentpage effect");
+    //   // console.log("currentpage effect");
     //     apiLecturer.getAllCouncils(
     //         defineTable.inputSearch,
     //         (defineTable.currentPage - 1) * defineTable.limit,
@@ -352,7 +352,7 @@ const CouncilLecturer = () => {
     //     // console.log(e);
     //     const permissions = [];
     //     e.map((obj) => {
-    //         console.log(obj.value);
+    //       // console.log(obj.value);
     //         permissions?.push(obj.value);
     //     });
 
@@ -361,12 +361,12 @@ const CouncilLecturer = () => {
     //     const convert = [];
     //     const array = permissions.toString()?.split(",");
     //     gender.map((obj) => {
-    //         console.log(obj);
+    //       // console.log(obj);
     //         if (array?.includes(obj.value)) {
     //             convert?.push(obj);
     //         }
     //     });
-    //     console.log(convert, convert);
+    //   // console.log(convert, convert);
     // };
     return (
         <>

@@ -11,7 +11,7 @@ const ModalPopup = ({
     const handleSave = async () => {
         setResult && setResult(result);
         setShowModal(false);
-        console.log(result);
+      // console.log(result);
     };
     const handleClose = async () => {
         setShowModal(false);

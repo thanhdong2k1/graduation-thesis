@@ -44,10 +44,10 @@ const Block = () => {
         navigate(`../${pathRoutes?.R1?.addBlock}`, { replace: true });
     };
     const handleImport = () => {
-        console.log("handleImport");
+      // console.log("handleImport");
     };
     const handleExport = () => {
-        console.log("handleExport");
+      // console.log("handleExport");
     };
     const handleEdit = (data) => {
         navigate(`../${pathRoutes?.R1?.updateBlock}/${data?.id}`, {
@@ -61,7 +61,7 @@ const Block = () => {
     };
 
     const handleDelete = (data) => {
-        console.log("handleDelete", data);
+      // console.log("handleDelete", data);
         setShowModal(true);
         setResult(data);
     };
@@ -115,7 +115,7 @@ const Block = () => {
                 }
             })
             .catch((err) => {
-                console.log(err);
+              // console.log(err);
                 toast.update(id, {
                     render: "Đã xảy ra lỗi, vui lòng thử lại sau",
                     type: "error",
@@ -132,7 +132,7 @@ const Block = () => {
         // data?.map((obj) => {
         //     const convertedObj = {};
         //     for (const key in obj) {
-        //         console.log("key,obj", key, obj);
+        //       // console.log("key,obj", key, obj);
         //         if (key?.includes("Data")) {
         //             const newKey = key?.replace("Data", "Id");
         //             convertedObj[newKey] = obj[key];
@@ -191,7 +191,7 @@ const Block = () => {
                 }
             })
             .catch((err) => {
-                console.log(err);
+              // console.log(err);
                 toast.update(id, {
                     render: "Đã xảy ra lỗi, vui lòng thử lại sau",
                     type: "error",
@@ -308,7 +308,7 @@ const Block = () => {
     }, [defineTable.limit]);
 
     // useEffect(() => {
-    //     console.log("currentpage effect");
+    //   // console.log("currentpage effect");
     //     apiAdmin.getAllBlocks(
     //         defineTable.inputSearch,
     //         (defineTable.currentPage - 1) * defineTable.limit,
@@ -338,7 +338,7 @@ const Block = () => {
     //     // console.log(e);
     //     const permissions = [];
     //     e?.map((obj) => {
-    //         console.log(obj.value);
+    //       // console.log(obj.value);
     //         permissions?.push(obj.value);
     //     });
 
@@ -347,12 +347,12 @@ const Block = () => {
     //     const convert = [];
     //     const array = permissions.toString()?.split(",");
     //     gender?.map((obj) => {
-    //         console.log(obj);
+    //       // console.log(obj);
     //         if (array?.includes(obj.value)) {
     //             convert?.push(obj);
     //         }
     //     });
-    //     console.log(convert, convert);
+    //   // console.log(convert, convert);
     // };
     return (
         <>

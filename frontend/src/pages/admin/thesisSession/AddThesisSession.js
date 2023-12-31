@@ -22,7 +22,7 @@ import { useParams } from "react-router-dom";
 
 const AddThesisSession = ({ type }, params) => {
     let { id } = useParams();
-    console.log("type", type, id);
+  // console.log("type", type, id);
 
     const currentUser = useSelector((state) => state?.auth?.currentUser);
     const dispatch = useDispatch();
@@ -55,13 +55,13 @@ const AddThesisSession = ({ type }, params) => {
         let endDate =
             data?.endDate && new Date(data?.endDate).toLocaleString("vi-VN");
 
-        console.log("startDate,endDate", startDate, endDate);
+      // console.log("startDate,endDate", startDate, endDate);
         const datasend = {
             ...data,
             startDate: startDate,
             endDate: endDate,
         };
-        console.log(data);
+      // console.log(data);
         type == "add"
             ? await apiAdmin
                   .apiAddThesisSession({
@@ -175,7 +175,7 @@ const AddThesisSession = ({ type }, params) => {
                             pauseOnFocusLoss: true,
                         });
                     } else {
-                        console.log(res);
+                      // console.log(res);
                         setValue("id", res?.result?.id);
                         setValue("name", res?.result?.name);
                         setValue("description", res?.result?.description);
@@ -190,7 +190,7 @@ const AddThesisSession = ({ type }, params) => {
                                     res?.result?.evaluationMethodId
                             )
                         );
-                        console.log(getValues());
+                      // console.log(getValues());
                         toast.update(id, {
                             render: res?.errMessage,
                             type: "success",

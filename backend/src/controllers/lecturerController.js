@@ -34,7 +34,7 @@ const lecturerController = {
             }
           );
           if (changePassword) {
-            console.log("changePassword", changePassword);
+         // console.log("changePassword", changePassword);
             return res.status(200).json({
               errCode: 0,
               errMessage: "Mật khẩu đã được thay đổi.",
@@ -57,7 +57,7 @@ const lecturerController = {
           .json({ errCode: 1, errMessage: "Người dùng không hợp lệ!" });
       }
     } catch (error) {
-      console.log(error);
+   // console.log(error);
       return res.status(500).json({ errCode: -1, errMessage: "Dữ liệu không mong muốn, thử lại sau hoặc dữ liệu khác!" });
     }
   },
@@ -85,7 +85,7 @@ const lecturerController = {
           }
         );
         if (changeInformation) {
-          console.log("changeInformation", changeInformation);
+       // console.log("changeInformation", changeInformation);
           return res.status(200).json({
             errCode: 0,
             errMessage: "Thông tin đã được thay đổi.",
@@ -102,7 +102,7 @@ const lecturerController = {
           .json({ errCode: 1, errMessage: "Người dùng không hợp lệ!" });
       }
     } catch (error) {
-      console.log(error);
+   // console.log(error);
       return res.status(500).json({ errCode: -1, errMessage: "Dữ liệu không mong muốn, thử lại sau hoặc dữ liệu khác!" });
     }
   },
@@ -152,7 +152,7 @@ const lecturerController = {
         });
       }
     } catch (error) {
-      console.log("error", error);
+   // console.log("error", error);
       return res.status(500).json({ errCode: -1, errMessage: "Dữ liệu không mong muốn, thử lại sau hoặc dữ liệu khác!" });
     }
   },
@@ -190,7 +190,7 @@ const lecturerController = {
       };
       whereClause["lecturerId"] = req?.user?.id;
 
-      console.log("whereClause", whereClause);
+   // console.log("whereClause", whereClause);
 
       const queryOptions = {
         include: [
@@ -233,7 +233,7 @@ const lecturerController = {
       }
 
       const result = await db.CouncilDetail.findAndCountAll(queryOptions);
-      console.log("queryOptions", queryOptions);
+   // console.log("queryOptions", queryOptions);
       const { rows: councils, count: totalRecords } = result;
       return res.status(200).json({ errCode: 0, councils, totalRecords });
     } catch (error) {
@@ -293,7 +293,7 @@ const lecturerController = {
               ...criteria,
             });
           });
-          console.log("councilDetails", councilDetails);
+       // console.log("councilDetails", councilDetails);
           result = null;
           result = await db.CouncilDetail.bulkCreate(councilDetails);
           if (result) {
@@ -326,7 +326,7 @@ const lecturerController = {
   updateCouncil: async (req, res) => {
     try {
       if (req?.params?.id) {
-        console.log(req.body);
+     // console.log(req.body);
         let result = await db.Council.update(
           {
             name: req?.body?.name,
@@ -359,13 +359,13 @@ const lecturerController = {
             where: { id: ids },
           });
 
-          console.log("resultDelete", result, ids);
+       // console.log("resultDelete", result, ids);
 
           result = await db.CouncilDetail.bulkCreate(councilDetails, {
             upsertKeys: ["id"],
             updateOnDuplicate: ["positionId", "councilId", "lecturerId"],
           });
-          console.log("result", result);
+       // console.log("result", result);
 
           if (result) {
             return res
@@ -397,7 +397,7 @@ const lecturerController = {
   deleteCouncil: async (req, res) => {
     try {
       if (req?.params?.id) {
-        console.log(req.body);
+     // console.log(req.body);
         const result = await db.Council.destroy({
           where: { id: req?.params?.id },
         });
@@ -426,7 +426,7 @@ const lecturerController = {
     try {
       const whereClause = userController.whereClause(req?.body);
 
-      console.log("whereClause", whereClause);
+   // console.log("whereClause", whereClause);
 
       const queryOptions = {
         include: [
@@ -604,7 +604,7 @@ const lecturerController = {
   updateThesisCouncils: async (req, res) => {
     try {
       if (req?.params?.id) {
-        console.log(req.body);
+     // console.log(req.body);
         const result = await db.Thesis.update(
           {
             startDate: req?.body?.startDate,
@@ -651,7 +651,7 @@ const lecturerController = {
   deleteThesisCouncils: async (req, res) => {
     try {
       if (req?.params?.id) {
-        console.log(req.body);
+     // console.log(req.body);
         const result = await db.Thesis.destroy({
           where: { id: req?.params?.id },
         });
@@ -678,7 +678,7 @@ const lecturerController = {
   importTheses: async (req, res) => {
     try {
       if (req?.body?.data) {
-        console.log(req?.body?.data);
+     // console.log(req?.body?.data);
         const result = await db.Thesis.bulkCreate(req?.body?.data);
         if (result) {
           return res
@@ -703,7 +703,7 @@ const lecturerController = {
   importThesisCouncils: async (req, res) => {
     try {
       if (req?.body?.data) {
-        console.log(req?.body?.data);
+     // console.log(req?.body?.data);
         const result = await db.Council.bulkCreate(req?.body?.data);
         if (result) {
           return res
@@ -763,16 +763,16 @@ const lecturerController = {
   // Api Department
   getDepartments: async (req, res) => {
     try {
-      console.log(req.body);
+   // console.log(req.body);
       const searchTerms = `%${
         req?.body?.inputSearch ? req?.body?.inputSearch?.trim() : ""
       }%`?.replace(/\s/g, "%");
-      console.log(searchTerms);
+   // console.log(searchTerms);
       const whereClause = {};
-      console.log(req?.body?.inputSearch?.toLowerCase());
-      console.log("req?.body?.length", Object.keys(req?.body).length);
+   // console.log(req?.body?.inputSearch?.toLowerCase());
+   // console.log("req?.body?.length", Object.keys(req?.body).length);
       if (Object.keys(req?.body).length > 0) {
-        console.log("Đã vào");
+     // console.log("Đã vào");
         if (!req?.body?.filterSearch?.includes("Data")) {
           if (searchTerms?.toLowerCase() != "%null%") {
             whereClause[req?.body?.filterSearch] = {
@@ -785,7 +785,7 @@ const lecturerController = {
           }
         } else {
           if (searchTerms?.toLowerCase() != "%null%") {
-            console.log(req?.body?.filterSearch);
+         // console.log(req?.body?.filterSearch);
             if (req?.body?.filterSearch == "deanData") {
               whereClause["$deanData.fullName$"] = {
                 [Op.like]: searchTerms,
@@ -802,7 +802,7 @@ const lecturerController = {
           }
         }
       }
-      console.log("whereClause", whereClause);
+   // console.log("whereClause", whereClause);
 
       const queryOptions = {
         include: [
@@ -919,7 +919,7 @@ const lecturerController = {
   updateDepartment: async (req, res) => {
     try {
       if (req?.params?.id) {
-        console.log(req.body);
+     // console.log(req.body);
         const result = await db.Department.update(
           {
             name: req?.body?.name,
@@ -980,7 +980,7 @@ const lecturerController = {
   deleteDepartment: async (req, res) => {
     try {
       if (req?.params?.id) {
-        console.log(req.body);
+     // console.log(req.body);
         const result = await db.Department.destroy({
           where: { id: req?.params?.id },
         });
@@ -1007,7 +1007,7 @@ const lecturerController = {
   importDepartments: async (req, res) => {
     try {
       if (req?.body?.data) {
-        console.log(req?.body?.data);
+     // console.log(req?.body?.data);
         const result = await db.Department.bulkCreate(req?.body?.data);
         if (result) {
           return res
@@ -1033,16 +1033,16 @@ const lecturerController = {
   // Api Block
   getBlocks: async (req, res) => {
     try {
-      console.log(req.body);
+   // console.log(req.body);
       const searchTerms = `%${
         req?.body?.inputSearch ? req?.body?.inputSearch?.trim() : ""
       }%`?.replace(/\s/g, "%");
-      console.log(searchTerms);
+   // console.log(searchTerms);
       const whereClause = {};
-      console.log(req?.body?.inputSearch?.toLowerCase());
-      console.log("req?.body?.length", Object.keys(req?.body).length);
+   // console.log(req?.body?.inputSearch?.toLowerCase());
+   // console.log("req?.body?.length", Object.keys(req?.body).length);
       if (Object.keys(req?.body).length > 0) {
-        console.log("Đã vào");
+     // console.log("Đã vào");
         if (!req?.body?.filterSearch?.includes("Data")) {
           if (searchTerms?.toLowerCase() != "%null%") {
             whereClause[req?.body?.filterSearch] = {
@@ -1055,7 +1055,7 @@ const lecturerController = {
           }
         } else {
           if (searchTerms?.toLowerCase() != "%null%") {
-            console.log(req?.body?.filterSearch);
+         // console.log(req?.body?.filterSearch);
             // if (req?.body?.filterSearch == "deanData") {
             //   whereClause["$deanData.fullName$"] = {
             //     [Op.like]: searchTerms,
@@ -1072,7 +1072,7 @@ const lecturerController = {
           }
         }
       }
-      console.log("whereClause", whereClause);
+   // console.log("whereClause", whereClause);
 
       const queryOptions = {
         // include: [
@@ -1163,7 +1163,7 @@ const lecturerController = {
   updateBlock: async (req, res) => {
     try {
       if (req?.params?.id) {
-        console.log(req.body);
+     // console.log(req.body);
         const result = await db.Block.update(
           {
             name: req?.body?.name,
@@ -1194,7 +1194,7 @@ const lecturerController = {
   deleteBlock: async (req, res) => {
     try {
       if (req?.params?.id) {
-        console.log(req.body);
+     // console.log(req.body);
         const result = await db.Block.destroy({
           where: { id: req?.params?.id },
         });
@@ -1221,7 +1221,7 @@ const lecturerController = {
   importBlocks: async (req, res) => {
     try {
       if (req?.body?.data) {
-        console.log(req?.body?.data);
+     // console.log(req?.body?.data);
         const result = await db.Block.bulkCreate(req?.body?.data);
         if (result) {
           return res
@@ -1247,16 +1247,16 @@ const lecturerController = {
   // Api Major
   getMajors: async (req, res) => {
     try {
-      console.log(req.body);
+   // console.log(req.body);
       const searchTerms = `%${
         req?.body?.inputSearch ? req?.body?.inputSearch?.trim() : ""
       }%`?.replace(/\s/g, "%");
-      console.log(searchTerms);
+   // console.log(searchTerms);
       const whereClause = {};
-      console.log(req?.body?.inputSearch?.toLowerCase());
-      console.log("req?.body?.length", Object.keys(req?.body).length);
+   // console.log(req?.body?.inputSearch?.toLowerCase());
+   // console.log("req?.body?.length", Object.keys(req?.body).length);
       if (Object.keys(req?.body).length > 0) {
-        console.log("Đã vào");
+     // console.log("Đã vào");
         if (!req?.body?.filterSearch?.includes("Data")) {
           if (searchTerms?.toLowerCase() != "%null%") {
             whereClause[req?.body?.filterSearch] = {
@@ -1269,7 +1269,7 @@ const lecturerController = {
           }
         } else {
           if (searchTerms?.toLowerCase() != "%null%") {
-            console.log(req?.body?.filterSearch);
+         // console.log(req?.body?.filterSearch);
             if (req?.body?.filterSearch == "departmentData") {
               whereClause["$departmentData.name$"] = {
                 [Op.like]: searchTerms,
@@ -1291,7 +1291,7 @@ const lecturerController = {
           }
         }
       }
-      console.log("whereClause", whereClause);
+   // console.log("whereClause", whereClause);
 
       const queryOptions = {
         include: [
@@ -1381,7 +1381,7 @@ const lecturerController = {
   updateMajor: async (req, res) => {
     try {
       if (req?.params?.id) {
-        console.log(req.body);
+     // console.log(req.body);
         const result = await db.Major.update(
           {
             name: req?.body?.name,
@@ -1413,7 +1413,7 @@ const lecturerController = {
   deleteMajor: async (req, res) => {
     try {
       if (req?.params?.id) {
-        console.log(req.body);
+     // console.log(req.body);
         const result = await db.Major.destroy({
           where: { id: req?.params?.id },
         });
@@ -1440,7 +1440,7 @@ const lecturerController = {
   importMajors: async (req, res) => {
     try {
       if (req?.body?.data) {
-        console.log(req?.body?.data);
+     // console.log(req?.body?.data);
         const result = await db.Major.bulkCreate(req?.body?.data);
         if (result) {
           return res
@@ -1466,16 +1466,16 @@ const lecturerController = {
   // Api Class
   getClasses: async (req, res) => {
     try {
-      console.log(req.body);
+   // console.log(req.body);
       const searchTerms = `%${
         req?.body?.inputSearch ? req?.body?.inputSearch?.trim() : ""
       }%`?.replace(/\s/g, "%");
-      console.log(searchTerms);
+   // console.log(searchTerms);
       const whereClause = {};
-      console.log(req?.body?.inputSearch?.toLowerCase());
-      console.log("req?.body?.length", Object.keys(req?.body).length);
+   // console.log(req?.body?.inputSearch?.toLowerCase());
+   // console.log("req?.body?.length", Object.keys(req?.body).length);
       if (Object.keys(req?.body).length > 0) {
-        console.log("Đã vào");
+     // console.log("Đã vào");
         if (!req?.body?.filterSearch?.includes("Data")) {
           if (searchTerms?.toLowerCase() != "%null%") {
             whereClause[req?.body?.filterSearch] = {
@@ -1488,7 +1488,7 @@ const lecturerController = {
           }
         } else {
           if (searchTerms?.toLowerCase() != "%null%") {
-            console.log(req?.body?.filterSearch);
+         // console.log(req?.body?.filterSearch);
             if (req?.body?.filterSearch == "blockData") {
               whereClause["$blockData.name$"] = {
                 [Op.like]: searchTerms,
@@ -1510,7 +1510,7 @@ const lecturerController = {
           }
         }
       }
-      console.log("whereClause", whereClause);
+   // console.log("whereClause", whereClause);
 
       const queryOptions = {
         include: [
@@ -1609,7 +1609,7 @@ const lecturerController = {
   updateClass: async (req, res) => {
     try {
       if (req?.params?.id) {
-        console.log(req.body);
+     // console.log(req.body);
         const result = await db.Class.update(
           {
             name: req?.body?.name,
@@ -1642,7 +1642,7 @@ const lecturerController = {
   deleteClass: async (req, res) => {
     try {
       if (req?.params?.id) {
-        console.log(req.body);
+     // console.log(req.body);
         const result = await db.Class.destroy({
           where: { id: req?.params?.id },
         });
@@ -1669,7 +1669,7 @@ const lecturerController = {
   importClasses: async (req, res) => {
     try {
       if (req?.body?.data) {
-        console.log(req?.body?.data);
+     // console.log(req?.body?.data);
         const result = await db.Class.bulkCreate(req?.body?.data);
         if (result) {
           return res
@@ -1695,16 +1695,16 @@ const lecturerController = {
   // Api EvaluationMethod
   getEvaluationMethods: async (req, res) => {
     try {
-      console.log(req.body);
+   // console.log(req.body);
       const searchTerms = `%${
         req?.body?.inputSearch ? req?.body?.inputSearch?.trim() : ""
       }%`?.replace(/\s/g, "%");
-      console.log(searchTerms);
+   // console.log(searchTerms);
       const whereClause = {};
-      console.log(req?.body?.inputSearch?.toLowerCase());
-      console.log("req?.body?.length", Object.keys(req?.body).length);
+   // console.log(req?.body?.inputSearch?.toLowerCase());
+   // console.log("req?.body?.length", Object.keys(req?.body).length);
       if (Object.keys(req?.body).length > 0) {
-        console.log("Đã vào");
+     // console.log("Đã vào");
         if (!req?.body?.filterSearch?.includes("Data")) {
           if (searchTerms?.toLowerCase() != "%null%") {
             whereClause[req?.body?.filterSearch] = {
@@ -1717,7 +1717,7 @@ const lecturerController = {
           }
         } else {
           if (searchTerms?.toLowerCase() != "%null%") {
-            console.log(req?.body?.filterSearch);
+         // console.log(req?.body?.filterSearch);
             // if (req?.body?.filterSearch == "deanData") {
             //   whereClause["$deanData.fullName$"] = {
             //     [Op.like]: searchTerms,
@@ -1734,7 +1734,7 @@ const lecturerController = {
           }
         }
       }
-      console.log("whereClause", whereClause);
+   // console.log("whereClause", whereClause);
 
       const queryOptions = {
         // include: [
@@ -1812,7 +1812,7 @@ const lecturerController = {
               ...criteria,
             });
           });
-          console.log("criterias", criterias);
+       // console.log("criterias", criterias);
           result = null;
           result = await db.EvaluationCriteria.bulkCreate(criterias);
           if (result) {
@@ -1845,7 +1845,7 @@ const lecturerController = {
   updateEvaluationMethod: async (req, res) => {
     try {
       if (req?.params?.id) {
-        console.log(req.body);
+     // console.log(req.body);
         let result = await db.EvaluationMethod.update(
           {
             name: req?.body?.name,
@@ -1876,7 +1876,7 @@ const lecturerController = {
             where: { id: ids },
           });
 
-          console.log("resultDelete", result, ids);
+       // console.log("resultDelete", result, ids);
 
           result = await db.EvaluationCriteria.bulkCreate(criterias, {
             upsertKeys: ["id"],
@@ -1888,7 +1888,7 @@ const lecturerController = {
               "order",
             ],
           });
-          console.log("result", result);
+       // console.log("result", result);
 
           if (result) {
             return res
@@ -1920,7 +1920,7 @@ const lecturerController = {
   deleteEvaluationMethod: async (req, res) => {
     try {
       if (req?.params?.id) {
-        console.log(req.body);
+     // console.log(req.body);
         const result = await db.EvaluationMethod.destroy({
           where: { id: req?.params?.id },
         });
@@ -1947,7 +1947,7 @@ const lecturerController = {
   importEvaluationMethods: async (req, res) => {
     try {
       if (req?.body?.data) {
-        console.log(req?.body?.data);
+     // console.log(req?.body?.data);
         const result = await db.EvaluationMethod.bulkCreate(req?.body?.data);
         if (result) {
           return res
@@ -1973,7 +1973,7 @@ const lecturerController = {
   // Api EvaluationCriteria
   getEvaluationCriterias: async (req, res) => {
     try {
-      console.log(req.body);
+   // console.log(req.body);
       const searchTerms = `%${
         req?.body?.inputSearch ? req?.body?.inputSearch?.trim() : ""
       }%`?.replace(/\s/g, "%");
@@ -1982,7 +1982,7 @@ const lecturerController = {
       // console.log(req?.body?.inputSearch?.toLowerCase());
       // console.log("req?.body?.length", Object.keys(req?.body).length);
       if (Object.keys(req?.body).length > 0) {
-        console.log("Đã vào");
+     // console.log("Đã vào");
         if (!req?.body?.filterSearch?.includes("Data")) {
           if (searchTerms?.toLowerCase() != "%null%") {
             whereClause[req?.body?.filterSearch] = {
@@ -1995,7 +1995,7 @@ const lecturerController = {
           }
         } else {
           if (searchTerms?.toLowerCase() != "%null%") {
-            console.log(req?.body?.filterSearch);
+         // console.log(req?.body?.filterSearch);
             // if (req?.body?.filterSearch == "deanData") {
             //   whereClause["$deanData.fullName$"] = {
             //     [Op.like]: searchTerms,
@@ -2034,7 +2034,7 @@ const lecturerController = {
       }
 
       const result = await db.EvaluationCriteria.findAndCountAll(queryOptions);
-      console.log(result);
+   // console.log(result);
       const { rows: evaluationCriterias, count: totalRecords } = result;
       return res
         .status(200)
@@ -2045,7 +2045,7 @@ const lecturerController = {
   },
   getEvaluationCriteriaByThesisSessionId: async (req, res) => {
     try {
-      console.log(req?.params?.id);
+   // console.log(req?.params?.id);
       let result = await db.ThesisSession.findAll({
         where: {
           id: req?.params?.id,
@@ -2110,7 +2110,7 @@ const lecturerController = {
           description: req?.body?.description,
         });
         if (result) {
-          console.log("result", result);
+       // console.log("result", result);
           return res
             .status(200)
             .json({ errCode: 0, errMessage: "Thêm dữ liệu thành công." });
@@ -2133,7 +2133,7 @@ const lecturerController = {
   updateEvaluationCriteria: async (req, res) => {
     try {
       if (req?.params?.id) {
-        console.log(req.body);
+     // console.log(req.body);
         const result = await db.EvaluationCriteria.update(
           {
             name: req?.body?.name,
@@ -2164,7 +2164,7 @@ const lecturerController = {
   deleteEvaluationCriteria: async (req, res) => {
     try {
       if (req?.params?.id) {
-        console.log(req.body);
+     // console.log(req.body);
         const result = await db.EvaluationCriteria.destroy({
           where: { id: req?.params?.id },
         });
@@ -2191,7 +2191,7 @@ const lecturerController = {
   importEvaluationCriterias: async (req, res) => {
     try {
       if (req?.body?.data) {
-        console.log(req?.body?.data);
+     // console.log(req?.body?.data);
         const result = await db.EvaluationMethod.bulkCreate(req?.body?.data);
         if (result) {
           return res
@@ -2217,16 +2217,16 @@ const lecturerController = {
   // Api Lecturer
   getLecturers: async (req, res) => {
     try {
-      console.log(req.body);
+   // console.log(req.body);
       const searchTerms = `%${
         req?.body?.inputSearch ? req?.body?.inputSearch?.trim() : ""
       }%`?.replace(/\s/g, "%");
-      console.log(searchTerms);
+   // console.log(searchTerms);
       const whereClause = {};
-      console.log(req?.body?.inputSearch?.toLowerCase());
-      console.log("req?.body?.length", Object.keys(req?.body).length);
+   // console.log(req?.body?.inputSearch?.toLowerCase());
+   // console.log("req?.body?.length", Object.keys(req?.body).length);
       if (Object.keys(req?.body).length > 0) {
-        console.log("Đã vào");
+     // console.log("Đã vào");
         if (!req?.body?.filterSearch?.includes("Data")) {
           if (searchTerms?.toLowerCase() != "%null%") {
             whereClause[req?.body?.filterSearch] = {
@@ -2239,7 +2239,7 @@ const lecturerController = {
           }
         } else {
           if (searchTerms?.toLowerCase() != "%null%") {
-            console.log(req?.body?.filterSearch);
+         // console.log(req?.body?.filterSearch);
             if (req?.body?.filterSearch == "deanData") {
               whereClause["$deanData.fullName$"] = {
                 [Op.like]: searchTerms,
@@ -2276,7 +2276,7 @@ const lecturerController = {
           }
         }
       }
-      console.log("whereClause", whereClause);
+   // console.log("whereClause", whereClause);
 
       const queryOptions = {
         attributes: { exclude: ["password", "refreshToken", "image"] },
@@ -2376,7 +2376,7 @@ const lecturerController = {
         salt
       );
       if (req?.body) {
-        console.log("req.body", req.body);
+     // console.log("req.body", req.body);
         if (req?.body?.departmentId && req?.body?.roleId == "R2") {
           await db.Lecturer.update(
             {
@@ -2405,7 +2405,7 @@ const lecturerController = {
         });
 
         if (result) {
-          console.log("result", result);
+       // console.log("result", result);
           if (req?.body?.departmentId && req?.body?.roleId == "R2") {
             const resultDean = await db.Department.update(
               {
@@ -2414,7 +2414,7 @@ const lecturerController = {
               { where: { id: result?.dataValues?.departmentId } }
             );
             if (resultDean) {
-              console.log("resultDean", resultDean);
+           // console.log("resultDean", resultDean);
               return res.status(200).json({
                 errCode: 0,
                 errMessage:
@@ -2450,7 +2450,7 @@ const lecturerController = {
   updateLecturer: async (req, res) => {
     try {
       if (req?.params?.id) {
-        console.log("req.body", req.body);
+     // console.log("req.body", req.body);
         if (req?.body?.departmentId && req?.body?.roleId == "R2") {
           await db.Lecturer.update(
             {
@@ -2486,7 +2486,7 @@ const lecturerController = {
         );
 
         if (result) {
-          console.log("result", result);
+       // console.log("result", result);
           if (req?.body?.departmentId && req?.body?.roleId == "R2") {
             const resultDean = await db.Department.update(
               {
@@ -2495,7 +2495,7 @@ const lecturerController = {
               { where: { id: req?.body?.departmentId } }
             );
             if (resultDean) {
-              console.log("resultDean", resultDean);
+           // console.log("resultDean", resultDean);
               return res.status(200).json({
                 errCode: 0,
                 errMessage:
@@ -2531,7 +2531,7 @@ const lecturerController = {
   deleteLecturer: async (req, res) => {
     try {
       if (req?.params?.id) {
-        console.log(req.body);
+     // console.log(req.body);
         const result = await db.Lecturer.destroy({
           where: { id: req?.params?.id },
         });
@@ -2558,7 +2558,7 @@ const lecturerController = {
   importLecturers: async (req, res) => {
     try {
       if (req?.body?.data) {
-        console.log(req?.body?.data);
+     // console.log(req?.body?.data);
         const result = await db.Lecturer.bulkCreate(req?.body?.data);
         if (result) {
           return res
@@ -2584,16 +2584,16 @@ const lecturerController = {
   // Api Student
   getStudents: async (req, res) => {
     try {
-      console.log(req.body);
+   // console.log(req.body);
       const searchTerms = `%${
         req?.body?.inputSearch ? req?.body?.inputSearch?.trim() : ""
       }%`?.replace(/\s/g, "%");
-      console.log(searchTerms);
+   // console.log(searchTerms);
       const whereClause = {};
-      console.log(req?.body?.inputSearch?.toLowerCase());
-      console.log("req?.body?.length", Object.keys(req?.body).length);
+   // console.log(req?.body?.inputSearch?.toLowerCase());
+   // console.log("req?.body?.length", Object.keys(req?.body).length);
       if (Object.keys(req?.body).length > 0) {
-        console.log("Đã vào");
+     // console.log("Đã vào");
         if (!req?.body?.filterSearch?.includes("Data")) {
           if (searchTerms?.toLowerCase() != "%null%") {
             whereClause[req?.body?.filterSearch] = {
@@ -2606,7 +2606,7 @@ const lecturerController = {
           }
         } else {
           if (searchTerms?.toLowerCase() != "%null%") {
-            console.log(req?.body?.filterSearch);
+         // console.log(req?.body?.filterSearch);
             if (req?.body?.filterSearch == "deanData") {
               whereClause["$deanData.fullName$"] = {
                 [Op.like]: searchTerms,
@@ -2643,7 +2643,7 @@ const lecturerController = {
           }
         }
       }
-      console.log("whereClause", whereClause);
+   // console.log("whereClause", whereClause);
 
       const queryOptions = {
         attributes: { exclude: ["password", "refreshToken", "image"] },
@@ -2743,7 +2743,7 @@ const lecturerController = {
           req?.body?.code,
           salt
         );
-        console.log("req.body", req.body);
+     // console.log("req.body", req.body);
         const result = await db.Student.create({
           email: req?.body?.email,
           fullName: req?.body?.fullName,
@@ -2759,7 +2759,7 @@ const lecturerController = {
           permissions: req?.body?.permissions ? req?.body?.permissions : null,
         });
         if (result) {
-          console.log("result", result);
+       // console.log("result", result);
           return res
             .status(200)
             .json({ errCode: 0, errMessage: "Thêm dữ liệu thành công." });
@@ -2782,7 +2782,7 @@ const lecturerController = {
   updateStudent: async (req, res) => {
     try {
       if (req?.params?.id) {
-        console.log("req.body", req.body);
+     // console.log("req.body", req.body);
         const result = await db.Student.update(
           {
             email: req?.body?.email,
@@ -2831,7 +2831,7 @@ const lecturerController = {
           req?.body?.code,
           salt
         );
-        console.log("req.body", req.body);
+     // console.log("req.body", req.body);
         const result = await db.Student.update(
           {
             password: hashPasswordFromBcrypt,
@@ -2870,7 +2870,7 @@ const lecturerController = {
           req?.body?.code,
           salt
         );
-        console.log("req.body", req.body);
+     // console.log("req.body", req.body);
         const result = await db.Lecturer.update(
           {
             password: hashPasswordFromBcrypt,
@@ -2905,7 +2905,7 @@ const lecturerController = {
   deleteStudent: async (req, res) => {
     try {
       if (req?.params?.id) {
-        console.log(req.body);
+     // console.log(req.body);
         const result = await db.Student.destroy({
           where: { id: req?.params?.id },
         });
@@ -2932,7 +2932,7 @@ const lecturerController = {
   importStudents: async (req, res) => {
     try {
       if (req?.body?.data) {
-        console.log(req?.body?.data);
+     // console.log(req?.body?.data);
         const result = await db.Student.bulkCreate(req?.body?.data);
         if (result) {
           return res
@@ -2958,16 +2958,16 @@ const lecturerController = {
   // Api Topic
   getTopics: async (req, res) => {
     try {
-      console.log(req.body);
+   // console.log(req.body);
       const searchTerms = `%${
         req?.body?.inputSearch ? req?.body?.inputSearch?.trim() : ""
       }%`?.replace(/\s/g, "%");
-      console.log(searchTerms);
+   // console.log(searchTerms);
       const whereClause = {};
-      console.log(req?.body?.inputSearch?.toLowerCase());
-      console.log("req?.body?.length", Object.keys(req?.body).length);
+   // console.log(req?.body?.inputSearch?.toLowerCase());
+   // console.log("req?.body?.length", Object.keys(req?.body).length);
       if (Object.keys(req?.body).length > 0) {
-        console.log("Đã vào");
+     // console.log("Đã vào");
         if (!req?.body?.filterSearch?.includes("Data")) {
           if (searchTerms?.toLowerCase() != "%null%") {
             whereClause[req?.body?.filterSearch] = {
@@ -2980,7 +2980,7 @@ const lecturerController = {
           }
         } else {
           if (searchTerms?.toLowerCase() != "%null%") {
-            console.log(req?.body?.filterSearch);
+         // console.log(req?.body?.filterSearch);
             if (req?.body?.filterSearch == "departmentData") {
               whereClause["$departmentData.name$"] = {
                 [Op.like]: searchTerms,
@@ -3002,7 +3002,7 @@ const lecturerController = {
           }
         }
       }
-      console.log("whereClause", whereClause);
+   // console.log("whereClause", whereClause);
 
       const queryOptions = {
         include: [
@@ -3103,7 +3103,7 @@ const lecturerController = {
   updateTopic: async (req, res) => {
     try {
       if (req?.params?.id) {
-        console.log(req.body);
+     // console.log(req.body);
         const result = await db.Topic.update(
           {
             name: req?.body?.name,
@@ -3136,7 +3136,7 @@ const lecturerController = {
   deleteTopic: async (req, res) => {
     try {
       if (req?.params?.id) {
-        console.log(req.body);
+     // console.log(req.body);
         const result = await db.Topic.destroy({
           where: { id: req?.params?.id },
         });
@@ -3163,7 +3163,7 @@ const lecturerController = {
   importTopics: async (req, res) => {
     try {
       if (req?.body?.data) {
-        console.log(req?.body?.data);
+     // console.log(req?.body?.data);
         const result = await db.Topic.bulkCreate(req?.body?.data);
         if (result) {
           return res
@@ -3189,13 +3189,13 @@ const lecturerController = {
   // Api ThesisSession
   getThesisSessions: async (req, res) => {
     try {
-      console.log(req.body);
+   // console.log(req.body);
       const searchTerms = `%${
         req?.body?.inputSearch ? req?.body?.inputSearch?.trim() : ""
       }%`?.replace(/\s/g, "%");
-      console.log(searchTerms);
+   // console.log(searchTerms);
       const whereClause = {};
-      console.log(req?.body?.inputSearch?.toLowerCase());
+   // console.log(req?.body?.inputSearch?.toLowerCase());
       if (Object.keys(req?.body).length > 0) {
         if (!req?.body?.filterSearch?.includes("Data")) {
           if (searchTerms?.toLowerCase() != "%null%") {
@@ -3209,7 +3209,7 @@ const lecturerController = {
           }
         } else {
           if (searchTerms?.toLowerCase() != "%null%") {
-            console.log(req?.body?.filterSearch);
+         // console.log(req?.body?.filterSearch);
             if (req?.body?.filterSearch == "deanData") {
               whereClause["$deanData.name$"] = {
                 [Op.like]: searchTerms,
@@ -3227,7 +3227,7 @@ const lecturerController = {
           }
         }
       }
-      console.log("whereClause", whereClause);
+   // console.log("whereClause", whereClause);
 
       const queryOptions = {
         include: [
@@ -3249,7 +3249,7 @@ const lecturerController = {
       }
 
       const result = await db.ThesisSession.findAndCountAll(queryOptions);
-      console.log(result);
+   // console.log(result);
       const { rows: thesisSessions, count: totalRecords } = result;
       return res.status(200).json({ errCode: 0, thesisSessions, totalRecords });
     } catch (error) {
@@ -3322,7 +3322,7 @@ const lecturerController = {
   updateThesisSession: async (req, res) => {
     try {
       if (req?.params?.id) {
-        console.log(req.body);
+     // console.log(req.body);
         const result = await db.ThesisSession.update(
           {
             name: req?.body?.name,
@@ -3357,7 +3357,7 @@ const lecturerController = {
   deleteThesisSession: async (req, res) => {
     try {
       if (req?.params?.id) {
-        console.log(req.body);
+     // console.log(req.body);
         const result = await db.ThesisSession.destroy({
           where: { id: req?.params?.id },
         });
@@ -3384,7 +3384,7 @@ const lecturerController = {
   importThesisSessions: async (req, res) => {
     try {
       if (req?.body?.data) {
-        console.log(req?.body?.data);
+     // console.log(req?.body?.data);
         const result = await db.ThesisSession.bulkCreate(req?.body?.data);
         if (result) {
           return res

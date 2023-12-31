@@ -378,8 +378,20 @@ export const routes = [
             {
                 //   icon: <HomeIcon {...icon} />,
                 name: "Hội đồng",
-                path: pathRoutes?.R1?.council,
-                element: <Council />,
+                path: pathRoutes?.R3?.council,
+                element: <CouncilLecturer />,
+            },
+            {
+                //   icon: <HomeIcon {...icon} />,
+                name: "CouncilDetail",
+                path: pathRoutes?.R3?.councilDetailId,
+                element: <ThesisCouncilLecturer />,
+            },
+            {
+                //   icon: <HomeIcon {...icon} />,
+                name: "CouncilDetailThesis",
+                path: pathRoutes?.R3?.councilDetailThesisId,
+                element: <MarkEvaluationMethod />,
             },
         ],
     },

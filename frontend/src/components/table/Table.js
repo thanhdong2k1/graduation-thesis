@@ -80,7 +80,7 @@ const Table = ({
         return newItem;
       }); //Nơi import data lỗi
 
-    console.log("tableDataImport", tableDataImport, tableData);
+  // console.log("tableDataImport", tableDataImport, tableData);
 
     const importFile = async (e) => {
         /* get data as an ArrayBuffer */
@@ -97,26 +97,26 @@ const Table = ({
             dataImport?.map((item) => {
                 const obj = {};
                 const headerImport = Object.keys(item)?.splice(1);
-                console.log(
-                    "headerImport, item, dataImport",
-                    headerImport,
-                    item,
-                    dataImport
-                );
+              // console.log(
+                //     "headerImport, item, dataImport",
+                //     headerImport,
+                //     item,
+                //     dataImport
+                // );
                 tableDataImport?.forEach((headerItem) => {
                     // console.log("headerItem", headerItem);
                     if (headerImport?.includes(headerItem?.header)) {
-                        console.log("Xuống tới 82");
+                      // console.log("Xuống tới 82");
                         // console.log("header trùng", headerItem);
                         if (!headerItem?.actions) {
-                            console.log("Xuống tới 85");
+                          // console.log("Xuống tới 85");
                             const { header, column } = headerItem;
                             // console.log("check:", column, header, item[header]);
                             if (column === "id") {
-                                console.log("Xuống tới 90");
+                              // console.log("Xuống tới 90");
                                 obj[column] = null;
                             } else {
-                                console.log("Xuống tới 93");
+                              // console.log("Xuống tới 93");
                                 // console.log("check:", column, header, item);
                                 // console.log("headerItem", headerItem);
                                 obj[column] = item[header];
@@ -140,20 +140,20 @@ const Table = ({
                     }
                 });
                 if (Object.keys(obj)?.length != 0) {
-                    console.log("Xuống tới 110");
-                    console.log(obj);
+                  // console.log("Xuống tới 110");
+                  // console.log(obj);
                     convertedItem?.push(obj);
                 }
             });
 
-            console.log("Xuống tới 110");
-            console.log(
-                "check var:",
-                convertedItem,
-                Object.keys(convertedItem)
-            );
+          // console.log("Xuống tới 110");
+          // console.log(
+            //     "check var:",
+            //     convertedItem,
+            //     Object.keys(convertedItem)
+            // );
             if (Object.keys(convertedItem).length != 0) {
-                console.log("Có sự trùng", convertedItem);
+              // console.log("Có sự trùng", convertedItem);
                 setDataImport(convertedItem);
                 setDefineTableImport((prevState) => ({
                     ...prevState,
@@ -172,8 +172,8 @@ const Table = ({
         }
     };
     useEffect(() => {
-        console.log("tableData", tableData);
-        console.log("tableDataImport", tableDataImport);
+      // console.log("tableData", tableData);
+      // console.log("tableDataImport", tableDataImport);
         
     }, [isImport]);
     const exportSample = useCallback(() => {
@@ -199,14 +199,14 @@ const Table = ({
         );
     }, [tableDataImport]);
     const exportFile = useCallback(() => {
-        console.log("export datasa", datas);
+      // console.log("export datasa", datas);
         const convertedItem = [];
         datas?.map((item) => {
             const obj = {};
             tableDataImport?.forEach((headerData) => {
                 if (!headerData?.actions) {
                     const { header, column } = headerData;
-                    console.log("header, item[column]", header, item[column]);
+                  // console.log("header, item[column]", header, item[column]);
                     if (typeof item[column] === "object") {
                         item[column]?.id
                             ? (obj[header] = item[column]?.id)
@@ -217,7 +217,7 @@ const Table = ({
                 }
             });
             convertedItem?.push(obj);
-            console.log(convertedItem);
+          // console.log(convertedItem);
         });
         const ws = utils?.json_to_sheet(convertedItem);
         // console.log("wordsheet", ws);
@@ -231,7 +231,7 @@ const Table = ({
         );
     }, [dataImport]);
     // const saveDataImport = (data) => {
-    //     console.log("saveDataImport", data);
+    //   // console.log("saveDataImport", data);
     // };
 
     const handleChangePage = (page) => {
@@ -264,14 +264,14 @@ const Table = ({
         }
     };
     const handleSearch = () => {
-        console.log("Nhấn enter");
+      // console.log("Nhấn enter");
         setDefineTable((prevState) => ({
             ...prevState,
             isSearched: true,
         }));
     };
     const handleChangeInput = (e) => {
-        console.log(e.target.value);
+      // console.log(e.target.value);
         setDefineTable((prevState) => ({
             ...prevState,
             inputSearch: e.target.value,
@@ -698,7 +698,7 @@ const Table = ({
                     </div>
                 </div>
                 <div className="paginationTableDiv">
-                    <div class="flex justify-end text-sm gap-2">
+                    <div className="flex justify-end text-sm gap-2">
                         <div className="divLimitRows">
                             <Select
                                 placeholder="Chọn..."
@@ -718,7 +718,7 @@ const Table = ({
                             <div>
                                 <button
                                     onClick={() => handleChangePage(1)}
-                                    class="flex items-center justify-center w-6 h-[35px] ml-0 leading-tight text-gray-500 bg-white border border-gray-300 rounded-l-lg hover:bg-gray-100 hover:text-gray-700"
+                                    className="flex items-center justify-center w-6 h-[35px] ml-0 leading-tight text-gray-500 bg-white border border-gray-300 rounded-l-lg hover:bg-gray-100 hover:text-gray-700"
                                 >
                                     <FaAngleDoubleLeft />
                                     {/* <FaAngleLeft /> */}
@@ -752,7 +752,7 @@ const Table = ({
                                     onClick={() =>
                                         handleChangePage(defineTable.pages)
                                     }
-                                    class="flex items-center justify-center w-6 h-[35px] leading-tight text-gray-500 bg-white border border-gray-300 rounded-r-lg hover:bg-gray-100 hover:text-gray-700"
+                                    className="flex items-center justify-center w-6 h-[35px] leading-tight text-gray-500 bg-white border border-gray-300 rounded-r-lg hover:bg-gray-100 hover:text-gray-700"
                                 >
                                     {/* <FaAngleRight /> */}
                                     <FaAngleDoubleRight />

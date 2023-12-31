@@ -27,7 +27,7 @@ const Thesis = () => {
     const currentUser = useSelector((state) => state.auth.currentUser);
     let axiosJWT = createAxios(currentUser, dispatch, logginSuccess);
 
-    console.log("theses", theses);
+  // console.log("theses", theses);
     const [defineTable, setDefineTable] = useState({
         inputSearch: "",
         filterSearch: "",
@@ -45,10 +45,10 @@ const Thesis = () => {
         navigate(`../${pathRoutes.R1.addThesis}`, { replace: true });
     };
     const handleImport = () => {
-        console.log("handleImport");
+      // console.log("handleImport");
     };
     const handleExport = () => {
-        console.log("handleExport");
+      // console.log("handleExport");
     };
     const handleEdit = (data) => {
         navigate(`../${pathRoutes.R1.updateThesis}/${data.id}`, {
@@ -62,7 +62,7 @@ const Thesis = () => {
     };
 
     const onDelete = (data) => {
-        console.log("onDelete", data);
+      // console.log("onDelete", data);
         setShowModal(true);
         setResult(data);
     };
@@ -116,7 +116,7 @@ const Thesis = () => {
                 }
             })
             .catch((err) => {
-                console.log(err);
+              // console.log(err);
                 toast.update(id, {
                     render: "Đã xảy ra lỗi, vui lòng thử lại sau",
                     type: "error",
@@ -133,7 +133,7 @@ const Thesis = () => {
         // data?.map((obj) => {
         //     const convertedObj = {};
         //     for (const key in obj) {
-        //         console.log("key,obj", key, obj);
+        //       // console.log("key,obj", key, obj);
         //         if (key.includes("Data")) {
         //             const newKey = key.replace("Data", "Id");
         //             convertedObj[newKey] = obj[key];
@@ -192,7 +192,7 @@ const Thesis = () => {
                 }
             })
             .catch((err) => {
-                console.log(err);
+              // console.log(err);
                 toast.update(id, {
                     render: "Đã xảy ra lỗi, vui lòng thử lại sau",
                     type: "error",
@@ -398,7 +398,7 @@ const Thesis = () => {
     }, [defineTable.limit]);
 
     // useEffect(() => {
-    //     console.log("currentpage effect");
+    //   // console.log("currentpage effect");
     //     apiAdmin.getAllTheses(
     //         defineTable.inputSearch,
     //         (defineTable.currentPage - 1) * defineTable.limit,
@@ -428,7 +428,7 @@ const Thesis = () => {
     //     // console.log(e);
     //     const permissions = [];
     //     e.map((obj) => {
-    //         console.log(obj.value);
+    //       // console.log(obj.value);
     //         permissions.push(obj.value);
     //     });
 
@@ -437,12 +437,12 @@ const Thesis = () => {
     //     const convert = [];
     //     const array = permissions.toString().split(",");
     //     gender.map((obj) => {
-    //         console.log(obj);
+    //       // console.log(obj);
     //         if (array.includes(obj.value)) {
     //             convert.push(obj);
     //         }
     //     });
-    //     console.log(convert, convert);
+    //   // console.log(convert, convert);
     // };
     return (
         <>
