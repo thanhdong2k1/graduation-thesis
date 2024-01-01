@@ -11,6 +11,11 @@ router.post("/get-information", middlewareController.verifyToken, lecturerContro
 router.post("/get-allcode", middlewareController.verifyToken, lecturerController.getAllcode);
 // Api Council
 router.post("/councils", middlewareController.verifyToken, lecturerController.getCouncils);
+router.post("/thesis-councils", middlewareController.verifyToken, lecturerController.getThesisCouncils);
+router.get("/evaluation-criteria-by-thesis-session-id/:id", middlewareController.verifyToken, lecturerController.getEvaluationCriteriaByThesisSessionId);
+
+
+
 router.get("/council/:id", middlewareController.verifyToken, lecturerController.getCouncilById);
 // router.post("/import-councils", middlewareController.verifyTokenImport, lecturerController.importCouncils);
 router.post("/create-council", middlewareController.verifyTokenAdd, lecturerController.addCouncil);
@@ -21,14 +26,12 @@ router.delete("/delete-council/:id", middlewareController.verifyTokenDelete, lec
 router.post("/council-detail/:id", middlewareController.verifyToken, lecturerController.getCouncilDetailByIdCouncil);
 
 // Api Thesis
-router.post("/thesis-councils", middlewareController.verifyToken, lecturerController.getThesisCouncils);
 // router.get("/thesis-councils/:id", middlewareController.verifyToken, lecturerController.getThesisCouncilsById);
 router.post("/import-theses", middlewareController.verifyTokenImport, lecturerController.importTheses);
 router.post("/create-thesis", middlewareController.verifyTokenAdd, lecturerController.addThesisCouncils);
 // router.put("/update-thesis-councils/:id", middlewareController.verifyTokenUpdate, lecturerController.updateThesisCouncils);
 router.delete("/delete-thesis/:id", middlewareController.verifyTokenDelete, lecturerController.deleteThesisCouncils);
 
-router.get("/evaluation-criteria-by-thesis-session-id/:id", middlewareController.verifyToken, lecturerController.getEvaluationCriteriaByThesisSessionId);
 
 
 // // Api Department

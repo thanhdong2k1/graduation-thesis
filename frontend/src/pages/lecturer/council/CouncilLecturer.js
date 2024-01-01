@@ -56,7 +56,7 @@ const CouncilLecturer = () => {
     };
     const handleDetail = (data) => {
       // console.log(pathRoutes?.R1?.councilDetail,data);
-        navigate(`../council/detail-council/${data?.councilData.thesisSessionId}/${data?.councilId}`, {
+        navigate(`../council/${data?.councilData.thesisSessionId}/detail-council/${data?.id}/${data?.councilId}`, {
             replace: true,
         });
     };

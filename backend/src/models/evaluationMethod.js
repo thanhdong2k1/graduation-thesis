@@ -9,14 +9,6 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
-      // EvaluationMethod.belongsTo(models.Thesis, {
-      //   foreignKey: "thesisId",
-      //   targetKey: "id",
-      // });
-      // EvaluationMethod.belongsTo(models.Lecturer, {
-      //   foreignKey: "lecturerId",
-      //   targetKey: "id",
-      // });
       EvaluationMethod.hasMany(models.ThesisSession, {
         foreignKey: "evaluationMethodId",
       });

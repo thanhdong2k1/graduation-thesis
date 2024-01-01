@@ -9,18 +9,6 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
-      // CouncilDetail.belongsTo(models.Allcode, {
-      //   foreignKey: "positionId",
-      //   targetKey: "code",
-      // });
-      // CouncilDetail.belongsTo(models.Council, {
-      //   foreignKey: "councilId",
-      //   targetKey: "id",
-      // });
-      // CouncilDetail.belongsTo(models.Lecturer, {
-      //   foreignKey: "lecturerId",
-      //   targetKey: "id",
-      // });
 
       // Sauu
       CouncilDetail.belongsTo(models.Allcode, {
@@ -28,11 +16,8 @@ module.exports = (sequelize, DataTypes) => {
         targetKey: "code",
         as: "positionData",
       });
-      CouncilDetail.belongsToMany(models.Thesis, {
-        through: models.Point,
-        foreignKey: "councilDetailId",
-        as: "councilDetailData",
-      });
+
+
       CouncilDetail.belongsTo(models.Council, {
         foreignKey: "councilId",
         targetKey: "id",
@@ -42,6 +27,16 @@ module.exports = (sequelize, DataTypes) => {
         foreignKey: "lecturerId",
         targetKey: "id",
         as: "lecturerData",
+      });
+
+      // Quan hệ nhiều nhiều
+      CouncilDetail.belongsToMany(models.Thesis, {
+        through: models.Mark,
+        foreignKey: "councilDetailId",
+        as: "councilDetailData",
+      });
+      CouncilDetail.hasMany(models.Mark, {
+        foreignKey: "councilDetailId",
       });
     }
   }

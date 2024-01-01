@@ -9,18 +9,6 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
-      // Student.belongsTo(models.Allcode, {
-      //   foreignKey: "genderId",
-      //   targetKey: "code",
-      // });
-      // Student.belongsTo(models.Allcode, {
-      //   foreignKey: "roleId",
-      //   targetKey: "code",
-      // });
-      // Student.belongsTo(models.Allcode, {
-      //   foreignKey: "statusId",
-      //   targetKey: "code",
-      // });
 
       // Sauu
       Student.belongsTo(models.Class, {

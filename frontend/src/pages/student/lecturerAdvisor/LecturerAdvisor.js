@@ -297,6 +297,7 @@ const LecturerAdvisor = () => {
             width: "w-[250px]",
             maxWidth: "max-w-[250px]",
             column: "code",
+            hide: true
         },
         {
             header: "Tên giảng viên",
@@ -354,7 +355,7 @@ const LecturerAdvisor = () => {
             // hide: true,
         },
         {
-            header: "Khoa",
+            header: "Bộ môn",
             width: "w-[300px]",
             maxWidth: "max-w-[300px]",
             columnData: "departmentData.name",

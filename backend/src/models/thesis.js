@@ -9,12 +9,8 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
-      // Thesis.hasMany(models.Transcript,{
-      //   foreignKey:"thesisId"
-      // })
-      // Thesis.hasMany(models.Comment,{
-      //   foreignKey:"thesisId"
-      // })
+
+      // Sau
       Thesis.belongsTo(models.Student, {
         foreignKey: "studentId",
         targetKey: "id",
@@ -25,11 +21,7 @@ module.exports = (sequelize, DataTypes) => {
         targetKey: "id",
         as: "thesisAdvisorData",
       });
-      Thesis.belongsToMany(models.CouncilDetail, {
-        through: models.Point,
-        foreignKey: "thesisId",
-        as: "thesisData",
-      });
+
       Thesis.belongsTo(models.Topic, {
         foreignKey: "topicId",
         targetKey: "id",
@@ -60,6 +52,16 @@ module.exports = (sequelize, DataTypes) => {
         foreignKey: "thesisAdvisorStatusId",
         targetKey: "code",
         as: "thesisAdvisorStatusData",
+      });
+
+      // Quan hệ nhiều nhiều
+      Thesis.belongsToMany(models.CouncilDetail, {
+        through: models.Mark,
+        foreignKey: "thesisId",
+        as: "thesisData",
+      });
+      Thesis.hasMany(models.Mark, {
+        foreignKey: "thesisId",
       });
     }
   }

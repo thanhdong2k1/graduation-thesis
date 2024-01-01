@@ -213,13 +213,13 @@ const Department = () => {
             column: "id",
         },
         {
-            header: "Tên khoa",
+            header: "Tên bộ môn",
             width: "w-[250px]",
             maxWidth: "max-w-[250px]",
             column: "name",
         },
         {
-            header: "Mô tả khoa",
+            header: "Mô tả bộ môn",
             width: "w-[300px]",
             maxWidth: "max-w-[300px]",
             column: "description",
@@ -232,7 +232,7 @@ const Department = () => {
             // hide: true,
         },
         {
-            header: "Trưởng khoa",
+            header: "Trưởng bộ môn",
             column: "deanId",
             columnData: "deanData.fullName",
         },

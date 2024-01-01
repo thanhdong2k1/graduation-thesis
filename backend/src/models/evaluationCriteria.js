@@ -17,11 +17,16 @@ module.exports = (sequelize, DataTypes) => {
         onDelete: "CASCADE",
       });
 
-      EvaluationCriteria.belongsToMany(models.Point, {
-        through: models.PointCriteria,
+
+      // Quan hệ nhiều nhiều
+      EvaluationCriteria.belongsToMany(models.Mark, {
+        through: models.MarkCriteria,
         foreignKey: "evaluationCriteriaId",
         as: "evaluationCriteriaData",
       });
+      // EvaluationCriteria.hasMany(models.MarkCriteria, {
+      //   foreignKey: "evaluationCriteriaId",
+      // });
     }
   }
   EvaluationCriteria.init(

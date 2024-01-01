@@ -4,109 +4,109 @@ module.exports = {
   up: async (queryInterface, Sequelize) => {
     return queryInterface.bulkInsert("topics", [
       {
-        name: "CNTT-Phát triển ứng dụng di động cho quản lý việc làm tự động.",
+        name: "CNTT-Xây dựng website quản lý đồ án tốt nghiệp tại Phân Hiệu Trường Đại học Thủy Lợi.",
         description:
-          "Mô tả đề tài CNTT-Phát triển ứng dụng di động cho quản lý việc làm tự động.",
+          "Mô tả đề tài CNTT-Xây dựng website quản lý đồ án tốt nghiệp tại Phân Hiệu Trường Đại học Thủy Lợi.",
         statusId: "H1",
         createdAt: new Date(),
         updatedAt: new Date(),
       },
-      {
-        name: "CNTT-Thiết kế hệ thống giám sát an ninh thông minh sử dụng trí tuệ nhân tạo.",
-        description:
-          "Mô tả đề tài CNTT-Thiết kế hệ thống giám sát an ninh thông minh sử dụng trí tuệ nhân tạo.",
-        statusId: "H1",
-        createdAt: new Date(),
-        updatedAt: new Date(),
-      },
-      {
-        name: "CNTT-Nghiên cứu và triển khai hệ thống blockchain trong quản lý tài chính.",
-        description:
-          "Mô tả đề tài CNTT-Nghiên cứu và triển khai hệ thống blockchain trong quản lý tài chính.",
-        statusId: "H1",
-        createdAt: new Date(),
-        updatedAt: new Date(),
-      },
-      {
-        name: "CNTT-Phân tích và thiết kế hệ thống quản lý cơ sở dữ liệu phân tán.",
-        description:
-          "Mô tả đề tài CNTT-Phân tích và thiết kế hệ thống quản lý cơ sở dữ liệu phân tán.",
-        statusId: "H1",
-        createdAt: new Date(),
-        updatedAt: new Date(),
-      },
-      {
-        name: "CNTT-Phát triển ứng dụng di động dựa trên nền tảng đám mây.",
-        description:
-          "Mô tả đề tài CNTT-Phát triển ứng dụng di động dựa trên nền tảng đám mây.",
-        statusId: "H1",
-        createdAt: new Date(),
-        updatedAt: new Date(),
-      },
-      {
-        name: "CNTT-Xác định và giảm thiểu rủi ro bảo mật trong môi trường ảo hóa.",
-        description:
-          "Mô tả đề tài CNTT-Xác định và giảm thiểu rủi ro bảo mật trong môi trường ảo hóa.",
-        statusId: "H1",
-        createdAt: new Date(),
-        updatedAt: new Date(),
-      },
-      {
-        name: "CNTT-Triển khai và tối ưu hóa hệ thống mạng viễn thông.",
-        description:
-          "Mô tả đề tài CNTT-Triển khai và tối ưu hóa hệ thống mạng viễn thông.",
-        statusId: "H1",
-        createdAt: new Date(),
-        updatedAt: new Date(),
-      },
-      {
-        name: "CNTT-Nghiên cứu và ứng dụng trí tuệ nhân tạo trong xử lý ngôn ngữ tự nhiên.",
-        description:
-          "Mô tả đề tài CNTT-Nghiên cứu và ứng dụng trí tuệ nhân tạo trong xử lý ngôn ngữ tự nhiên.",
-        statusId: "H1",
-        createdAt: new Date(),
-        updatedAt: new Date(),
-      },
-      {
-        name: "CNTT-Phân tích và thiết kế thuật toán tối ưu hóa đa nhiệm.",
-        description:
-          "Mô tả đề tài CNTT-Phân tích và thiết kế thuật toán tối ưu hóa đa nhiệm.",
-        statusId: "H1",
-        createdAt: new Date(),
-        updatedAt: new Date(),
-      },
-      {
-        name: "CNTT-Nghiên cứu và phát triển hệ thống nhận diện hình ảnh sử dụng deep learning.",
-        description:
-          "Mô tả đề tài CNTT-Nghiên cứu và phát triển hệ thống nhận diện hình ảnh sử dụng deep learning.",
-        statusId: "H1",
-        createdAt: new Date(),
-        updatedAt: new Date(),
-      },
-      {
-        name: "CNTT-Tìm hiểu và áp dụng kỹ thuật trí tuệ nhân tạo trong tự động hóa quy trình kiểm thử phần mềm.",
-        description:
-          "Mô tả đề tài CNTT-Tìm hiểu và áp dụng kỹ thuật trí tuệ nhân tạo trong tự động hóa quy trình kiểm thử phần mềm.",
-        statusId: "H1",
-        createdAt: new Date(),
-        updatedAt: new Date(),
-      },
-      {
-        name: "CNTT-Xây dựng hệ thống phân tích dữ liệu lớn (big data) sử dụng công nghệ dựa trên đám mây.",
-        description:
-          "Mô tả đề tài CNTT-Xây dựng hệ thống phân tích dữ liệu lớn (big data) sử dụng công nghệ dựa trên đám mây.",
-        statusId: "H1",
-        createdAt: new Date(),
-        updatedAt: new Date(),
-      },
-      {
-        name: "CNTT-Nghiên cứu và phát triển công nghệ blockchain trong quản lý dữ liệu và bảo mật.",
-        description:
-          "Mô tả đề tài CNTT-Nghiên cứu và phát triển công nghệ blockchain trong quản lý dữ liệu và bảo mật.",
-        statusId: "H1",
-        createdAt: new Date(),
-        updatedAt: new Date(),
-      },
+      // {
+      //   name: "CNTT-Thiết kế hệ thống giám sát an ninh thông minh sử dụng trí tuệ nhân tạo.",
+      //   description:
+      //     "Mô tả đề tài CNTT-Thiết kế hệ thống giám sát an ninh thông minh sử dụng trí tuệ nhân tạo.",
+      //   statusId: "H1",
+      //   createdAt: new Date(),
+      //   updatedAt: new Date(),
+      // },
+      // {
+      //   name: "CNTT-Nghiên cứu và triển khai hệ thống blockchain trong quản lý tài chính.",
+      //   description:
+      //     "Mô tả đề tài CNTT-Nghiên cứu và triển khai hệ thống blockchain trong quản lý tài chính.",
+      //   statusId: "H1",
+      //   createdAt: new Date(),
+      //   updatedAt: new Date(),
+      // },
+      // {
+      //   name: "CNTT-Phân tích và thiết kế hệ thống quản lý cơ sở dữ liệu phân tán.",
+      //   description:
+      //     "Mô tả đề tài CNTT-Phân tích và thiết kế hệ thống quản lý cơ sở dữ liệu phân tán.",
+      //   statusId: "H1",
+      //   createdAt: new Date(),
+      //   updatedAt: new Date(),
+      // },
+      // {
+      //   name: "CNTT-Phát triển ứng dụng di động dựa trên nền tảng đám mây.",
+      //   description:
+      //     "Mô tả đề tài CNTT-Phát triển ứng dụng di động dựa trên nền tảng đám mây.",
+      //   statusId: "H1",
+      //   createdAt: new Date(),
+      //   updatedAt: new Date(),
+      // },
+      // {
+      //   name: "CNTT-Xác định và giảm thiểu rủi ro bảo mật trong môi trường ảo hóa.",
+      //   description:
+      //     "Mô tả đề tài CNTT-Xác định và giảm thiểu rủi ro bảo mật trong môi trường ảo hóa.",
+      //   statusId: "H1",
+      //   createdAt: new Date(),
+      //   updatedAt: new Date(),
+      // },
+      // {
+      //   name: "CNTT-Triển khai và tối ưu hóa hệ thống mạng viễn thông.",
+      //   description:
+      //     "Mô tả đề tài CNTT-Triển khai và tối ưu hóa hệ thống mạng viễn thông.",
+      //   statusId: "H1",
+      //   createdAt: new Date(),
+      //   updatedAt: new Date(),
+      // },
+      // {
+      //   name: "CNTT-Nghiên cứu và ứng dụng trí tuệ nhân tạo trong xử lý ngôn ngữ tự nhiên.",
+      //   description:
+      //     "Mô tả đề tài CNTT-Nghiên cứu và ứng dụng trí tuệ nhân tạo trong xử lý ngôn ngữ tự nhiên.",
+      //   statusId: "H1",
+      //   createdAt: new Date(),
+      //   updatedAt: new Date(),
+      // },
+      // {
+      //   name: "CNTT-Phân tích và thiết kế thuật toán tối ưu hóa đa nhiệm.",
+      //   description:
+      //     "Mô tả đề tài CNTT-Phân tích và thiết kế thuật toán tối ưu hóa đa nhiệm.",
+      //   statusId: "H1",
+      //   createdAt: new Date(),
+      //   updatedAt: new Date(),
+      // },
+      // {
+      //   name: "CNTT-Nghiên cứu và phát triển hệ thống nhận diện hình ảnh sử dụng deep learning.",
+      //   description:
+      //     "Mô tả đề tài CNTT-Nghiên cứu và phát triển hệ thống nhận diện hình ảnh sử dụng deep learning.",
+      //   statusId: "H1",
+      //   createdAt: new Date(),
+      //   updatedAt: new Date(),
+      // },
+      // {
+      //   name: "CNTT-Tìm hiểu và áp dụng kỹ thuật trí tuệ nhân tạo trong tự động hóa quy trình kiểm thử phần mềm.",
+      //   description:
+      //     "Mô tả đề tài CNTT-Tìm hiểu và áp dụng kỹ thuật trí tuệ nhân tạo trong tự động hóa quy trình kiểm thử phần mềm.",
+      //   statusId: "H1",
+      //   createdAt: new Date(),
+      //   updatedAt: new Date(),
+      // },
+      // {
+      //   name: "CNTT-Xây dựng hệ thống phân tích dữ liệu lớn (big data) sử dụng công nghệ dựa trên đám mây.",
+      //   description:
+      //     "Mô tả đề tài CNTT-Xây dựng hệ thống phân tích dữ liệu lớn (big data) sử dụng công nghệ dựa trên đám mây.",
+      //   statusId: "H1",
+      //   createdAt: new Date(),
+      //   updatedAt: new Date(),
+      // },
+      // {
+      //   name: "CNTT-Nghiên cứu và phát triển công nghệ blockchain trong quản lý dữ liệu và bảo mật.",
+      //   description:
+      //     "Mô tả đề tài CNTT-Nghiên cứu và phát triển công nghệ blockchain trong quản lý dữ liệu và bảo mật.",
+      //   statusId: "H1",
+      //   createdAt: new Date(),
+      //   updatedAt: new Date(),
+      // },
       {
         name: "NN-Nghiên cứu và phát triển ứng dụng học ngôn ngữ trực tuyến sử dụng trí tuệ nhân tạo.",
         description:

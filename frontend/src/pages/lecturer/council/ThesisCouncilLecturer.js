@@ -21,8 +21,9 @@ import { logginSuccess } from "../../../redux/authSlice";
 import ModalPopup from "../../../components/ModelPopup/ModalPopup";
 
 const ThesisCouncilLecturer = () => {
-    let { thesisSessionId, id } = useParams();
-  // console.log("type", id);
+    let { thesisSessionId, councilDetailId, id } = useParams();
+    let a = useParams();
+  console.log("type",a, thesisSessionId, councilDetailId, id);
     const dispatch = useDispatch();
     const navigate = useNavigate();
     const theses = useSelector((state) => state?.admin?.theses);
@@ -56,7 +57,7 @@ const ThesisCouncilLecturer = () => {
     const handleEdit = (data) => {
       // console.log(
             navigate(
-                `../council/detail-council/${thesisSessionId}/${id}/mark/${data?.id}`,
+                `../council/${thesisSessionId}/detail-council/${councilDetailId}/${id}/mark/${data?.id}`,
                 {
                     replace: true,
                 }

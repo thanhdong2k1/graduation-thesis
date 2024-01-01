@@ -230,7 +230,7 @@ const TopicStudent = () => {
             column: "description",
         },
         {
-            header: "Khoa",
+            header: "Bộ môn",
             width: "w-[300px]",
             maxWidth: "max-w-[300px]",
             column: "departmentId",

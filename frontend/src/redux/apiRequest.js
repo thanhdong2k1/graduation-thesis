@@ -1551,7 +1551,7 @@ export const apiAdmin = {
     importStudents: async ({ user, data, axiosJWT }) => {
         try {
             const res = await axiosJWT.post(
-                "/api/admin/imports",
+                "/api/admin/import-students",
                 {
                     data: data,
                 },
@@ -2181,7 +2181,7 @@ export const apiAdmin = {
                         : null,
                     // startDate: data?.startDate,
                     // endDate: data?.endDate,
-                    validPoint: data?.validPoint,
+                    validMark: data?.validMark,
                 },
                 {
                     headers: {
@@ -2211,7 +2211,7 @@ export const apiAdmin = {
                         : null,
                     // startDate: data?.startDate,
                     // endDate: data?.endDate,
-                    validPoint: data?.validPoint,
+                    validMark: data?.validMark,
                 },
                 {
                     headers: {

@@ -445,7 +445,7 @@ const AddEvaluationMethod = ({ type }, params) => {
                                 validate: (value) => {
                                     return (
                                         value == "10" ||
-                                        "The total weight must be 1 or 10!"
+                                        "Tổng trọng số phải bằng 1 hoặc 10!"
                                     );
                                 },
                             })}

@@ -288,7 +288,7 @@ const Lecturer = () => {
             // hide: true,
         },
         {
-            header: "Khoa",
+            header: "Bộ môn",
             width: "w-[300px]",
             maxWidth: "max-w-[300px]",
             columnData: "departmentData.name",

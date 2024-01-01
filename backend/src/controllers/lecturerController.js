@@ -424,9 +424,14 @@ const lecturerController = {
   // Api Thesis
   getThesisCouncils: async (req, res) => {
     try {
-      const whereClause = userController.whereClause(req?.body);
+      let whereClause = userController.whereClause(req?.body);
 
-   // console.log("whereClause", whereClause);
+      whereClause = {
+        [Op.or]: whereClause,
+      };
+      
+      console.log("whereClause", whereClause);
+      whereClause["councilId"] = req?.body?.id;
 
       const queryOptions = {
         include: [
@@ -470,7 +475,7 @@ const lecturerController = {
 
       if (Object.keys(whereClause).length > 0) {
         queryOptions.where = {
-          [Op.or]: whereClause,
+          [Op.and]: whereClause,
         };
       }
 
@@ -2069,6 +2074,7 @@ const lecturerController = {
         raw: true,
         nest: true,
       });
+      console.log(result);
       if (result) {
         result = await db.EvaluationCriteria.findAll({
           where: {
@@ -3297,7 +3303,7 @@ const lecturerController = {
           evaluationMethodId: req?.body?.evaluationMethodId,
           startDate: req?.body?.startDate,
           endDate: req?.body?.endDate,
-          validPoint: req?.body?.validPoint,
+          validMark: req?.body?.validMark,
         });
         if (result) {
           return res
@@ -3330,7 +3336,7 @@ const lecturerController = {
             evaluationMethodId: req?.body?.evaluationMethodId,
             startDate: req?.body?.startDate,
             endDate: req?.body?.endDate,
-            validPoint: req?.body?.validPoint,
+            validMark: req?.body?.validMark,
           },
           { where: { id: req?.params?.id } }
         );

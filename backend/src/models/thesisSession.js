@@ -9,9 +9,7 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
-      // ThesisSession.hasMany(models.Council,{
-      //   foreignKey:"thesisSessionId"
-      // })
+
 
       // Sauu
       ThesisSession.belongsTo(models.EvaluationMethod, {
@@ -31,7 +29,7 @@ module.exports = (sequelize, DataTypes) => {
     {
       name: DataTypes.STRING,
       description: DataTypes.STRING,
-      validPoint: DataTypes.FLOAT,
+      validMark: DataTypes.FLOAT,
       startDate: DataTypes.STRING,
       endDate: DataTypes.STRING,
       evaluationMethodId: DataTypes.INTEGER,

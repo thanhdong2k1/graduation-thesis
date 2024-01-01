@@ -23,10 +23,10 @@ import { TbTablePlus } from "react-icons/tb";
 import { MdAdd } from "react-icons/md";
 import { HiArrowDown, HiArrowUp } from "react-icons/hi";
 
-const MarkEvaluationMethod = ({ type }) => {
+const MarkEvaluationCriteria = ({ type }) => {
     // let { id } = useParams();
     let { thesisSessionId, coundilId, thesisId } = useParams();
-  // console.log("type", type, coundilId, thesisId);
+    // console.log("type", type, coundilId, thesisId);
 
     const currentUser = useSelector((state) => state?.auth?.currentUser);
     const dispatch = useDispatch();
@@ -49,12 +49,20 @@ const MarkEvaluationMethod = ({ type }) => {
     } = useForm();
     const onSubmit = async (data) => {
         const id = toast.loading("Vui lòng đợi...");
-      // console.log(data);
-        type == "add"
-            ? await apiAdmin
+        // console.log(data);
+        let markCriteria = [];
+        criterias.map((item) => {
+            markCriteria.push({
+                evaluationCriteriaId: item.id,
+                mark: item.mark || "0",
+            });
+        });
+
+        let mark = {markCriteria,totalMark:data.totalMark};
+        await apiAdmin
                   .apiAddEvaluationMethod({
                       user: currentUser,
-                      data: data,
+                      mark: mark,
                       criterias: criterias,
                       axiosJWT: axiosJWT,
                   })
@@ -93,53 +101,10 @@ const MarkEvaluationMethod = ({ type }) => {
                           pauseOnFocusLoss: true,
                       });
                   })
-            : await apiAdmin
-                  .apiUpdateEvaluationMethod({
-                      user: currentUser,
-                      data: data,
-                      criterias: criterias,
-                      axiosJWT: axiosJWT,
-                  })
-                  .then((res) => {
-                      if (res?.errCode > 0 || res?.errCode < 0) {
-                          // console.log(res);
-                          toast.update(id, {
-                              render: res?.errMessage,
-                              type: "error",
-                              isLoading: false,
-                              closeButton: true,
-                              autoClose: 1500,
-                              pauseOnFocusLoss: true,
-                          });
-                      } else {
-                          // console.log(res);
-                          toast.update(id, {
-                              render: res?.errMessage,
-                              type: "success",
-                              isLoading: false,
-                              closeButton: true,
-                              autoClose: 1500,
-                              pauseOnFocusLoss: true,
-                          });
-                          //   setValue("thesisSession", "");
-                          //   setValue("status", "");
-                          //   reset();
-                      }
-                  })
-                  .catch((error) => {
-                      // console.log(error);
-                      toast.update(id, {
-                          render: "Đã xảy ra lỗi, vui lòng thử lại sau",
-                          type: "error",
-                          isLoading: false,
-                          closeButton: true,
-                          autoClose: 1500,
-                          pauseOnFocusLoss: true,
-                      });
-                  });
+
     };
     useEffect(() => {
-      // console.log("thesisSessionId", thesisSessionId);
+        // console.log("thesisSessionId", thesisSessionId);
         if (thesisSessionId) {
             async function fetchData() {
                 try {
@@ -151,7 +116,7 @@ const MarkEvaluationMethod = ({ type }) => {
                                 axiosJWT: axiosJWT,
                             }
                         );
-                  // console.log(response);
+                    // console.log(response);
                     setCriterias(response?.result);
                 } catch (e) {
                     console.log(e);
@@ -167,56 +132,49 @@ const MarkEvaluationMethod = ({ type }) => {
                     axiosJWT: axiosJWT,
                 })
                 .then((res) => {
-                    if (res?.errCode > 0 || res?.errCode < 0 ) {
-                        
+                    if (res?.errCode > 0 || res?.errCode < 0) {
                     } else {
-                      // console.log(res);
+                        // console.log(res);
                         let convert = [];
                         setValue("id", res?.result?.id);
                         setValue("student", res?.result?.studentData?.fullName);
-                        setValue("thesisAdvisor", res?.result?.thesisAdvisorData?.fullName);
+                        setValue(
+                            "thesisAdvisor",
+                            res?.result?.thesisAdvisorData?.fullName
+                        );
                         setValue("topic", res?.result?.topicData?.name);
                         // reset();
                     }
                 })
                 .catch((error) => {
-                  // console.log(error);
-                    
+                    // console.log(error);
                 });
         }
     }, [currentUser]);
 
     const [criterias, setCriterias] = useState([]);
 
-    const [totalScore, setTotalScore] = useState(0);
+    const [totalMarkScore, setTotalScore] = useState(0);
 
     const updateItem = (index, field, value) => {
         const updatedItems = [...criterias];
         updatedItems[index][field] = value;
         updatedItems[index][field] = value;
-      // console.log(criterias);
+        // console.log(criterias);
         setCriterias(updatedItems);
     };
 
     useEffect(() => {
-        // const isLengthColumn = criterias.length;
-        // const isFilled = criterias?.filter(
-        //     (item) => item.weight == "0" || item.score
-        // ).length;
-        // if (isFilled == isLengthColumn) {
-        //   // console.log("Đã bằng");
-        //     for (var i = 0; i < criterias.length; i++) {}
-        // }
-        // console.log(isLengthColumn, isFilled);
-        let total = 0;
+        let totalMark = 0;
         criterias?.map((item) => {
             item.weight >= 1
-                ? (total += +item.mark ? +item.mark * (item.weight / 10) : 0)
-                : (total += +item.mark ? +item.mark * item.weight : 0);
+                ? (totalMark += +item.mark
+                      ? +item.mark * (item.weight / 10)
+                      : 0)
+                : (totalMark += +item.mark ? +item.mark * item.weight : 0);
         });
-        // setTotalScore(total);
-        setValue("total", total);
-      // console.log(criterias, total);
+        setValue("totalMark", totalMark);
+        console.log(criterias, totalMark);
     }, [criterias]);
 
     return (
@@ -286,14 +244,14 @@ const MarkEvaluationMethod = ({ type }) => {
                     <div className="col w-full">
                         <label className="labelInput">Sinh viên</label>
                         <input
-                                className={`input ${
-                                    type == "detail" ? "disabled" : ""
-                                } !bg-transparent`}
-                                disabled
-                                {...register("student", {
-                                    required: "Number phone is required",
-                                })}
-                            />
+                            className={`input ${
+                                type == "detail" ? "disabled" : ""
+                            } !bg-transparent`}
+                            disabled
+                            {...register("student", {
+                                required: "Number phone is required",
+                            })}
+                        />
                         {errors?.student?.type && (
                             <p className=" text-normal text-red-500">
                                 {errors?.student?.message}
@@ -303,14 +261,14 @@ const MarkEvaluationMethod = ({ type }) => {
                     <div className="col w-full">
                         <label className="labelInput">Người hướng dẫn</label>
                         <input
-                                className={`input ${
-                                    type == "detail" ? "disabled" : ""
-                                } !bg-transparent`}
-                                disabled
-                                {...register("thesisAdvisor", {
-                                    required: "Number phone is required",
-                                })}
-                            />
+                            className={`input ${
+                                type == "detail" ? "disabled" : ""
+                            } !bg-transparent`}
+                            disabled
+                            {...register("thesisAdvisor", {
+                                required: "Number phone is required",
+                            })}
+                        />
                         {errors?.thesisAdvisor?.type && (
                             <p className=" text-normal text-red-500">
                                 {errors?.thesisAdvisor?.message}
@@ -319,17 +277,17 @@ const MarkEvaluationMethod = ({ type }) => {
                     </div>
                 </div>
                 <div className="row flex justify-center items-center gap-2">
-                <div className="col w-full">
+                    <div className="col w-full">
                         <label className="labelInput">Đề tài</label>
                         <input
-                                 className={`input ${
-                                    type == "detail" ? "disabled" : ""
-                                } !bg-transparent`}
-                                disabled
-                                {...register("topic", {
-                                    required: "Number phone is required",
-                                })}
-                            />
+                            className={`input ${
+                                type == "detail" ? "disabled" : ""
+                            } !bg-transparent`}
+                            disabled
+                            {...register("topic", {
+                                required: "Number phone is required",
+                            })}
+                        />
                         {errors?.topic?.type && (
                             <p className=" text-normal text-red-500">
                                 {errors?.topic?.message}
@@ -419,13 +377,13 @@ const MarkEvaluationMethod = ({ type }) => {
                                     <>
                                         <label className="labelInput flex justify-between">
                                             <span>Trọng số</span>
-                                            {/* <span>Total: {totalScore}</span> */}
+                                            {/* <span>Total: {totalMarkScore}</span> */}
                                         </label>
                                     </>
                                 )}
 
                                 <div className="flex flex-row gap-2">
-                                    {(item.weight && item.weight != 0) ? (
+                                    {item.weight && item.weight != 0 ? (
                                         <input
                                             className={`input ${
                                                 type == "detail"
@@ -440,7 +398,7 @@ const MarkEvaluationMethod = ({ type }) => {
                                             // })}
                                             value={item.weight}
                                         />
-                                    ):null}
+                                    ) : null}
                                 </div>
                                 {/* {errors?.weightCriteria?.type && (
                                 <p className=" text-normal text-red-500">
@@ -453,13 +411,13 @@ const MarkEvaluationMethod = ({ type }) => {
                                     <>
                                         <label className="labelInput flex justify-between">
                                             <span>Điểm</span>
-                                            {/* <span>Total: {totalScore}</span> */}
+                                            {/* <span>Total: {totalMarkScore}</span> */}
                                         </label>
                                     </>
                                 )}
 
                                 <div className="flex flex-row gap-2">
-                                    {(item.weight && item.weight != 0) ? (
+                                    {item.weight && item.weight != 0 ? (
                                         <input
                                             className={`input ${
                                                 type == "detail"
@@ -487,7 +445,7 @@ const MarkEvaluationMethod = ({ type }) => {
                                                 )
                                             }
                                         />
-                                    ):null}
+                                    ) : null}
                                 </div>
                                 {/* {errors?.weightCriteria?.type && (
                                 <p className=" text-normal text-red-500">
@@ -510,7 +468,7 @@ const MarkEvaluationMethod = ({ type }) => {
                             type="number"
                             // max={10}
                             // min={0}
-                            {...register("total", {
+                            {...register("totalMark", {
                                 validate: (value) => {
                                     return (
                                         (value <= "10" && value >= "0") ||
@@ -518,11 +476,11 @@ const MarkEvaluationMethod = ({ type }) => {
                                     );
                                 },
                             })}
-                            // value={totalScore}
+                            // value={totalMarkScore}
                         />
-                        {errors?.total?.type && (
+                        {errors?.totalMark?.type && (
                             <p className=" text-normal text-red-500">
-                                {errors?.total?.message}
+                                {errors?.totalMark?.message}
                             </p>
                         )}
                     </div>
@@ -584,4 +542,4 @@ const MarkEvaluationMethod = ({ type }) => {
     );
 };
 
-export default MarkEvaluationMethod;
+export default MarkEvaluationCriteria;

@@ -25,7 +25,7 @@ import AddTopic from "../pages/admin/topic/AddTopic";
 import Topic from "../pages/admin/topic/Topic";
 import LecturerHomePage from "../pages/lecturer/LecturerHomePage";
 import CouncilLecturer from "../pages/lecturer/council/CouncilLecturer";
-import MarkEvaluationMethod from "../pages/lecturer/council/MarkEvaluationMethod";
+import MarkEvaluationCriteria from "../pages/lecturer/council/MarkEvaluationCriteria";
 import ThesisCouncilLecturer from "../pages/lecturer/council/ThesisCouncilLecturer";
 import StudentChangeInformation from "../pages/student/StudentChangeInformation";
 import StudentChangePassword from "../pages/student/StudentChangePassword";
@@ -94,7 +94,7 @@ export const routes = [
             // Department
             {
                 //   icon: <HomeIcon {...icon} />,
-                name: "Khoa",
+                name: "Bộ môn",
                 path: pathRoutes?.R1?.department,
                 element: <Department />,
             },
@@ -391,7 +391,7 @@ export const routes = [
                 //   icon: <HomeIcon {...icon} />,
                 name: "CouncilDetailThesis",
                 path: pathRoutes?.R3?.councilDetailThesisId,
-                element: <MarkEvaluationMethod />,
+                element: <MarkEvaluationCriteria />,
             },
         ],
     },
@@ -439,7 +439,7 @@ export const routes = [
                 //   icon: <HomeIcon {...icon} />,
                 name: "CouncilDetailThesis",
                 path: pathRoutes?.R3?.councilDetailThesisId,
-                element: <MarkEvaluationMethod />,
+                element: <MarkEvaluationCriteria />,
             },
         ],
     },

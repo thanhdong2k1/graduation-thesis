@@ -9,32 +9,6 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
-      // Lecturer.belongsTo(models.Allcode, {
-      //   foreignKey: "genderId",
-      //   targetKey: "code",
-      // });
-      // Lecturer.belongsTo(models.Allcode, {
-      //   foreignKey: "statusId",
-      //   targetKey: "code",
-      // });
-      // Lecturer.belongsTo(models.Allcode, {
-      //   foreignKey: "roleId",
-      //   targetKey: "code",
-      // });
-      // Lecturer.belongsTo(models.Class, {
-      //   foreignKey: "departmentId",
-      //   targetKey: "id",
-      // });
-      // Lecturer.hasMany(models.Transcript, {
-      //   foreignKey: "lecturerId",
-      // });
-      // Lecturer.hasMany(models.Comment, {
-      //   foreignKey: "lecturerId",
-      // });
-      // Lecturer.belongsToMany(models.Council, {
-      //   through: models.CouncilDetail,
-      //   foreignKey: "lecturerId",
-      // });
 
       // Sau
       Lecturer.belongsTo(models.Department, {
@@ -45,12 +19,6 @@ module.exports = (sequelize, DataTypes) => {
       Lecturer.hasMany(models.Department, {
         foreignKey: "deanId",
         onDelete: "SET NULL",
-      });
-
-      Lecturer.belongsToMany(models.Council, {
-        through: models.CouncilDetail,
-        foreignKey: "lecturerId",
-        // as: "lecturerData",
       });
       
       Lecturer.hasMany(models.Thesis, {
@@ -78,6 +46,13 @@ module.exports = (sequelize, DataTypes) => {
         targetKey: "code",
         as: "roleData",
       });
+
+      // Quan hệ nhiều nhiều
+      Lecturer.belongsToMany(models.Council, {
+        through: models.CouncilDetail,
+        foreignKey: "lecturerId",
+        as: "lecturerData",
+      });
       Lecturer.hasMany(models.CouncilDetail, {
         foreignKey: "lecturerId",
       });
@@ -104,7 +79,6 @@ module.exports = (sequelize, DataTypes) => {
       sequelize,
       modelName: "Lecturer",
       tableName: "lecturers",
-
     }
   );
   return Lecturer;

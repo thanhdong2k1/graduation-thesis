@@ -31,11 +31,13 @@ const userController = {
         } else {
           if (searchTerms != "%null%") {
             console.log('if (searchTerms != "%null%") {')
+            console.log(`$${modelName}.${fieldName}${deepSearch?"."+deepSearch:""}$`);
             whereClause[`$${modelName}.${fieldName}${deepSearch?"."+deepSearch:""}$`] = {
               [Op.like]: searchTerms,
             };
 
             // theo id
+            console.log(`${!deepSearch?modelName.replace("Data", "Id"):"$"+modelName+"."+fieldName.replace("Data", "Id")+"$"}`);
             whereClause[`${!deepSearch?modelName.replace("Data", "Id"):"$"+modelName+"."+fieldName.replace("Data", "Id")+"$"}`] = {
               [Op.like]: searchTerms,
             };
@@ -47,6 +49,7 @@ const userController = {
           }
         }
       }
+      console.log(whereClause);
       return whereClause;
     }
     return body;

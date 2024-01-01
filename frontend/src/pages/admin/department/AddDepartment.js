@@ -209,7 +209,7 @@ const AddDepartment = ({ type }, params) => {
     return (
         <div className="changeInformationDiv flex flex-col justify-center items-center gap-2">
             <div className=" font-semibold text-h1FontSize">
-                {type=="add"?"Thêm":"Sửa"} khoa
+                {type=="add"?"Thêm":"Sửa"} bộ môn
             </div>
             <form
                 onSubmit={handleSubmit(onSubmit)}
@@ -315,7 +315,7 @@ const AddDepartment = ({ type }, params) => {
                         )}
                     </div>
                     <div className="col w-full">
-                        <label className="labelInput">Trưởng khoa</label>
+                        <label className="labelInput">Trưởng bộ môn</label>
                         <Controller
                             name="dean"
                             control={control}

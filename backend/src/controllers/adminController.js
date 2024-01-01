@@ -451,12 +451,42 @@ const adminController = {
               {
                 councilId: result?.dataValues?.id,
               },
+              { where: { id: thesis.thesisId } }
+            );
+          });
+       console.log("councilDetails", councilDetails);
+          result = null;
+          req?.body?.thesesDetails.map(async (thesis) => {
+            await db.Thesis.update(
+              {
+                councilId: result?.dataValues?.id,
+              },
               { where: { id: thesis.id } }
             );
           });
-       // console.log("councilDetails", councilDetails);
-          result = null;
-          result = await db.CouncilDetail.bulkCreate(councilDetails);
+          result = councilDetails.map( async (position)=>{
+            console.log("position",position)
+            console.log("req?.body?.thesesDetails",req?.body?.thesesDetails)
+            let res = await db.CouncilDetail.create(position)
+            req?.body?.thesesDetails.map(async (thesis) => {
+                await db.Mark.create(
+                  {
+                    councilDetailId: res?.dataValues?.id,
+                    thesisId: thesis?.thesisId
+                  },
+                );
+              });
+            })
+          console.log(result);
+          // result = await db.CouncilDetail.bulkCreate(councilDetails);
+          // req?.body?.thesesDetails.map(async (thesis) => {
+          //   await db.Mark.update(
+          //     {
+          //       councilId: result?.dataValues?.id,
+          //     },
+          //     { where: { id: thesis.id } }
+          //   );
+          // });
           if (result) {
             return res
               .status(200)
@@ -2962,7 +2992,7 @@ const adminController = {
           evaluationMethodId: req?.body?.evaluationMethodId,
           startDate: req?.body?.startDate,
           endDate: req?.body?.endDate,
-          validPoint: req?.body?.validPoint,
+          validMark: req?.body?.validMark,
         });
         if (result) {
           return res
@@ -2998,7 +3028,7 @@ const adminController = {
             evaluationMethodId: req?.body?.evaluationMethodId,
             startDate: req?.body?.startDate,
             endDate: req?.body?.endDate,
-            validPoint: req?.body?.validPoint,
+            validMark: req?.body?.validMark,
           },
           { where: { id: req?.params?.id } }
         );

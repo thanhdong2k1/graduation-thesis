@@ -8,22 +8,6 @@ module.exports = (sequelize, DataTypes) => {
      * The `models/index` file will call this method automatically.
      */
     static associate(models) {
-      // define association here
-      // Council.belongsTo(models.Allcode, {
-      //   foreignKey: "statusId",
-      //   targetKey: "code",
-      // });
-      // Council.belongsTo(models.ThesisSession, {
-      //   foreignKey: "thesisSessionId",
-      //   targetKey: "id",
-      // });
-      // Council.hasMany(models.Transcript, {
-      //   foreignKey: "councilId",
-      // });
-      // Council.belongsToMany(models.Lecturer, {
-      //   through: models.CouncilDetail,
-      //   foreignKey: "councilId",
-      // });
 
       // Sau
       Council.belongsTo(models.ThesisSession, {
@@ -34,11 +18,7 @@ module.exports = (sequelize, DataTypes) => {
       Council.hasMany(models.Thesis, {
         foreignKey: "councilId",
       });
-      Council.belongsToMany(models.Lecturer, {
-        through: models.CouncilDetail,
-        foreignKey: "councilId",
-        as: "councilData",
-      });
+      
 
       Council.belongsTo(models.Allcode, {
         foreignKey: "statusId",
@@ -46,6 +26,12 @@ module.exports = (sequelize, DataTypes) => {
         as: "statusData",
       });
 
+      // Quan hệ nhiều nhiều
+      Council.belongsToMany(models.Lecturer, {
+        through: models.CouncilDetail,
+        foreignKey: "councilId",
+        as: "councilData",
+      });
       Council.hasMany(models.CouncilDetail, {
         foreignKey: "councilId",
       });

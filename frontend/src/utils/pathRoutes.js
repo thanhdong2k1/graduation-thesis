@@ -137,10 +137,10 @@ const pathRoutes = {
         updateCouncilId: "council/update-council/:id",
         updateCouncil: "council/update-council",
         councilDetail: "council/detail-council",
-        councilDetailId: "council/detail-council/:thesisSessionId/:id/",
-        councilDetailThesis: "council/detail-council/:thesisSessionId/:coundilId/mark",
+        councilDetailId: "council/:thesisSessionId/detail-council/:councilDetailId/:id/",
+        councilDetailThesis: "council/:thesisSessionId/detail-council/:councilDetailId/:coundilId/mark",
         councilDetailThesisId:
-            "council/detail-council/:thesisSessionId/:coundilId/mark/:thesisId",
+            "council/:thesisSessionId/detail-council/:coundilDetailId/:councilId/mark/:thesisId",
 
         department: "department",
         addDepartment: "department/add-department",

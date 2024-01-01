@@ -51,36 +51,36 @@ const DetailTable = ({ tableData, datas }) => {
     //     });
     // });
 
-    datas?.map((data) => {
-        console.log("data map");
-        tableData?.map((table, indexTable) => {
-            // if (!table?.actions) {
-                // const columnData = table?.columnData?.split(".");
-                // const column = table?.column;
-                console.log(
-                    table?.columnData?.split(".") &&
-                        table?.columnData?.split(".").length > 0
-                        ? (() => {
-                              let result = data;
-                              for (const key of table?.columnData?.split(".")) {
-                                  result = result?.[key];
-                                  if (result === undefined) {
-                                      break;
-                                  }
-                              }
-                              return result;
-                          })()
-                        : data?.[table?.column]
-                        ? data?.[table?.column]
-                        : data?.[table?.content]
-                        ? data?.[table?.content]
-                        : null
-                );
-            // } else {
-                // console.log("data map", table);
-            // }
-        });
-    });
+    // datas?.map((data) => {
+    //     console.log("data map");
+    //     tableData?.map((table, indexTable) => {
+    //         // if (!table?.actions) {
+    //             // const columnData = table?.columnData?.split(".");
+    //             // const column = table?.column;
+    //             console.log(
+    //                 table?.columnData?.split(".") &&
+    //                     table?.columnData?.split(".").length > 0
+    //                     ? (() => {
+    //                           let result = data;
+    //                           for (const key of table?.columnData?.split(".")) {
+    //                               result = result?.[key];
+    //                               if (result === undefined) {
+    //                                   break;
+    //                               }
+    //                           }
+    //                           return result;
+    //                       })()
+    //                     : data?.[table?.column]
+    //                     ? data?.[table?.column]
+    //                     : data?.[table?.content]
+    //                     ? data?.[table?.content]
+    //                     : null
+    //             );
+    //         // } else {
+    //             // console.log("data map", table);
+    //         // }
+    //     });
+    // });
 
     // datas?.map((data) => {
     //     tableData?.map((table, indexTable) => {

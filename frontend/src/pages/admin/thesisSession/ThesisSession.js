@@ -248,7 +248,7 @@ const ThesisSession = () => {
             header: "Sai số hợp lệ",
             // width: "w-[300px]",
             // maxWidth: "max-w-[300px]",
-            column: "validPoint",
+            column: "validMark",
             // hide: true,
         },
         {

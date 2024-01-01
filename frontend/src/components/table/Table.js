@@ -70,17 +70,17 @@ const Table = ({
         actions: [actionsRemove(handleDeleteImport)],
     });
 
-    tableDataImport = tableData.map(item => {
+    tableDataImport = tableData.map((item) => {
         // Tạo một bản sao của đối tượng hiện tại
         const newItem = { ...item };
-        
+
         // Xóa thuộc tính 'columnData' trong đối tượng mới
         delete newItem.columnData;
-        
-        return newItem;
-      }); //Nơi import data lỗi
 
-  // console.log("tableDataImport", tableDataImport, tableData);
+        return newItem;
+    }); //Nơi import data lỗi
+
+    // console.log("tableDataImport", tableDataImport, tableData);
 
     const importFile = async (e) => {
         /* get data as an ArrayBuffer */
@@ -97,7 +97,7 @@ const Table = ({
             dataImport?.map((item) => {
                 const obj = {};
                 const headerImport = Object.keys(item)?.splice(1);
-              // console.log(
+                // console.log(
                 //     "headerImport, item, dataImport",
                 //     headerImport,
                 //     item,
@@ -106,17 +106,17 @@ const Table = ({
                 tableDataImport?.forEach((headerItem) => {
                     // console.log("headerItem", headerItem);
                     if (headerImport?.includes(headerItem?.header)) {
-                      // console.log("Xuống tới 82");
+                        // console.log("Xuống tới 82");
                         // console.log("header trùng", headerItem);
                         if (!headerItem?.actions) {
-                          // console.log("Xuống tới 85");
+                            // console.log("Xuống tới 85");
                             const { header, column } = headerItem;
                             // console.log("check:", column, header, item[header]);
                             if (column === "id") {
-                              // console.log("Xuống tới 90");
+                                // console.log("Xuống tới 90");
                                 obj[column] = null;
                             } else {
-                              // console.log("Xuống tới 93");
+                                // console.log("Xuống tới 93");
                                 // console.log("check:", column, header, item);
                                 // console.log("headerItem", headerItem);
                                 obj[column] = item[header];
@@ -140,20 +140,20 @@ const Table = ({
                     }
                 });
                 if (Object.keys(obj)?.length != 0) {
-                  // console.log("Xuống tới 110");
-                  // console.log(obj);
+                    // console.log("Xuống tới 110");
+                    // console.log(obj);
                     convertedItem?.push(obj);
                 }
             });
 
-          // console.log("Xuống tới 110");
-          // console.log(
+            // console.log("Xuống tới 110");
+            // console.log(
             //     "check var:",
             //     convertedItem,
             //     Object.keys(convertedItem)
             // );
             if (Object.keys(convertedItem).length != 0) {
-              // console.log("Có sự trùng", convertedItem);
+                // console.log("Có sự trùng", convertedItem);
                 setDataImport(convertedItem);
                 setDefineTableImport((prevState) => ({
                     ...prevState,
@@ -172,9 +172,8 @@ const Table = ({
         }
     };
     useEffect(() => {
-      // console.log("tableData", tableData);
-      // console.log("tableDataImport", tableDataImport);
-        
+        // console.log("tableData", tableData);
+        // console.log("tableDataImport", tableDataImport);
     }, [isImport]);
     const exportSample = useCallback(() => {
         const convertedItem = [];
@@ -199,14 +198,14 @@ const Table = ({
         );
     }, [tableDataImport]);
     const exportFile = useCallback(() => {
-      // console.log("export datasa", datas);
+        // console.log("export datasa", datas);
         const convertedItem = [];
         datas?.map((item) => {
             const obj = {};
             tableDataImport?.forEach((headerData) => {
                 if (!headerData?.actions) {
                     const { header, column } = headerData;
-                  // console.log("header, item[column]", header, item[column]);
+                    // console.log("header, item[column]", header, item[column]);
                     if (typeof item[column] === "object") {
                         item[column]?.id
                             ? (obj[header] = item[column]?.id)
@@ -217,7 +216,7 @@ const Table = ({
                 }
             });
             convertedItem?.push(obj);
-          // console.log(convertedItem);
+            // console.log(convertedItem);
         });
         const ws = utils?.json_to_sheet(convertedItem);
         // console.log("wordsheet", ws);
@@ -264,14 +263,14 @@ const Table = ({
         }
     };
     const handleSearch = () => {
-      // console.log("Nhấn enter");
+        // console.log("Nhấn enter");
         setDefineTable((prevState) => ({
             ...prevState,
             isSearched: true,
         }));
     };
     const handleChangeInput = (e) => {
-      // console.log(e.target.value);
+        // console.log(e.target.value);
         setDefineTable((prevState) => ({
             ...prevState,
             inputSearch: e.target.value,
@@ -300,16 +299,19 @@ const Table = ({
     tableData?.map((data) => {
         const obj = {};
         if (!data?.actions) {
-            const { header, column, columnData } = data;
-            if (columnData) {
-                obj["label"] = header;
-                obj["value"] = columnData;
-                filterSearch?.push(obj);
-            } else {
-                obj["label"] = header;
-                obj["value"] = column;
-                filterSearch?.push(obj);
+            if(!data?.hide){
+                const { header, column, columnData } = data;
+                if (columnData) {
+                    obj["label"] = header;
+                    obj["value"] = columnData;
+                    filterSearch?.push(obj);
+                } else {
+                    obj["label"] = header;
+                    obj["value"] = column;
+                    filterSearch?.push(obj);
+                }
             }
+            
         }
     });
 
@@ -519,7 +521,7 @@ const Table = ({
                                         className="basic-single media-max-md:text-smallFontSize h-[35px]"
                                         classNamePrefix="select"
                                         defaultValue={
-                                            filterSearch && filterSearch[1]
+                                            filterSearch && filterSearch[0]
                                         }
                                         isRtl={isRtl}
                                         name="color"

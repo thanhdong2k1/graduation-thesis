@@ -274,7 +274,7 @@ const AddTopic = ({ type }, params) => {
 
                 <div className="row flex justify-center items-center gap-2">
                     <div className="col w-full">
-                        <label className="labelInput">Khoa</label>
+                        <label className="labelInput">Bộ môn</label>
                         <Controller
                             name="department"
                             control={control}

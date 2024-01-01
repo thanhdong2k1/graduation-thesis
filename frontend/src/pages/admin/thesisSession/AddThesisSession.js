@@ -181,7 +181,7 @@ const AddThesisSession = ({ type }, params) => {
                         setValue("description", res?.result?.description);
                         setValue("startDate", res?.result?.startDate);
                         setValue("endDate", res?.result?.endDate);
-                        setValue("validPoint", res?.result?.validPoint);
+                        setValue("validMark", res?.result?.validMark);
                         setValue(
                             "evaluationMethod",
                             codeEvaluationMethod?.filter(
@@ -321,13 +321,13 @@ const AddThesisSession = ({ type }, params) => {
                             type="number"
                             step="0.1"
                             disabled={type == "detail" ? true : false}
-                            {...register("validPoint", {
-                                required: "Valid point is required",
+                            {...register("validMark", {
+                                required: "Valid mark is required",
                             })}
                         />
-                        {errors?.validPoint?.type && (
+                        {errors?.validMark?.type && (
                             <p className=" text-normal text-red-500">
-                                {errors?.validPoint?.message}
+                                {errors?.validMark?.message}
                             </p>
                         )}
                     </div>

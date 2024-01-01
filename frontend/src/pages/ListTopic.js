@@ -169,7 +169,7 @@ const ListTopic = () => {
                 </div>
                 <div className="listitemsDiv relative top-4 flex flex-col gap-2 w-full font-medium text-justify">
                     {/* <div className="flex rounded-lg justify-end w-auto m-0 p-0">
-                        <label htmlFor="example">Khoa</label>
+                        <label htmlFor="example">Bộ môn</label>
                         <select
                             id="example"
                             onChange={(e) => {
@@ -178,7 +178,7 @@ const ListTopic = () => {
                         >
                             <option
                                 value=""
-                                placeholder="Vui lòng chọn khoa"
+                                placeholder="Vui lòng chọn bộ môn"
                                 hidden
                                 selected
                             ></option>
@@ -190,7 +190,7 @@ const ListTopic = () => {
                         </select>
                     </div> */}
                     <div className="rounded-lg w-auto">
-                        <label htmlFor="example">Khoa</label>
+                        <label htmlFor="example">Bộ môn</label>
                         <Select placeholder="Chọn..."
                             styles={customSelectStyles}
                             className="basic-single media-max-md:text-smallFontSize"
