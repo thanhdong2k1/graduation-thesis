@@ -106,13 +106,13 @@ const authController = {
       if (userDB) {
         const checkPassword = await bcrypt.compareSync(
           req?.body?.password,
-          userDB.password
+          userDB?.password
         );
         if (checkPassword) {
-          const refreshTokenDB = userDB.refreshToken;
+          const refreshTokenDB = userDB?.refreshToken;
 
-          delete userDB.password;
-          delete userDB.refreshToken;
+          delete userDB?.password;
+          delete userDB?.refreshToken;
        // console.log(userDB);
           const accessToken = authController.generateAccessToken(userDB);
           const refreshToken = authController.generateRefreshToken(userDB);

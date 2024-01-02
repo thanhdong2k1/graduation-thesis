@@ -140,7 +140,7 @@ const pathRoutes = {
         councilDetailId: "council/:thesisSessionId/detail-council/:councilDetailId/:id/",
         councilDetailThesis: "council/:thesisSessionId/detail-council/:councilDetailId/:coundilId/mark",
         councilDetailThesisId:
-            "council/:thesisSessionId/detail-council/:coundilDetailId/:councilId/mark/:thesisId",
+            "council/:thesisSessionId/detail-council/:councilDetailId/:councilId/mark/:thesisId",
 
         department: "department",
         addDepartment: "department/add-department",

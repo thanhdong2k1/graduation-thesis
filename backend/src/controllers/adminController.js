@@ -34,7 +34,7 @@ const adminController = {
             }
           );
           if (changePassword) {
-         // console.log("changePassword", changePassword);
+            // console.log("changePassword", changePassword);
             return res.status(200).json({
               errCode: 0,
               errMessage: "Mật khẩu đã được thay đổi.",
@@ -57,7 +57,7 @@ const adminController = {
           .json({ errCode: 1, errMessage: "Người dùng không hợp lệ." });
       }
     } catch (error) {
-   // console.log(error);
+      // console.log(error);
       return res.status(500).json({
         errCode: -1,
         errMessage: "Dữ liệu không mong muốn, thử lại sau hoặc dữ liệu khác!",
@@ -88,7 +88,7 @@ const adminController = {
           }
         );
         if (changeInformation) {
-       // console.log("changeInformation", changeInformation);
+          // console.log("changeInformation", changeInformation);
           return res.status(200).json({
             errCode: 0,
             errMessage: "Thông tin đã được thay đổi.",
@@ -105,7 +105,7 @@ const adminController = {
           .json({ errCode: 1, errMessage: "Người dùng không hợp lệ." });
       }
     } catch (error) {
-   // console.log(error);
+      // console.log(error);
       return res.status(500).json({
         errCode: -1,
         errMessage: "Dữ liệu không mong muốn, thử lại sau hoặc dữ liệu khác!",
@@ -158,7 +158,7 @@ const adminController = {
         });
       }
     } catch (error) {
-   // console.log("error", error);
+      // console.log("error", error);
       return res.status(500).json({
         errCode: -1,
         errMessage: "Dữ liệu không mong muốn, thử lại sau hoặc dữ liệu khác!",
@@ -192,7 +192,7 @@ const adminController = {
             }
           );
           if (changePassword) {
-         // console.log("changePassword", changePassword);
+            // console.log("changePassword", changePassword);
             return res.status(200).json({
               errCode: 0,
               errMessage: "Mật khẩu đã được thay đổi!",
@@ -215,7 +215,7 @@ const adminController = {
           .json({ errCode: 1, errMessage: "Người dùng không hợp lệ." });
       }
     } catch (error) {
-   // console.log(error);
+      // console.log(error);
       return res.status(500).json({
         errCode: -1,
         errMessage: "Dữ liệu không mong muốn, thử lại sau hoặc dữ liệu khác!",
@@ -246,7 +246,7 @@ const adminController = {
           }
         );
         if (changeInformation) {
-       // console.log("changeInformation", changeInformation);
+          // console.log("changeInformation", changeInformation);
           return res.status(200).json({
             errCode: 0,
             errMessage: "Thông tin đã được thay đổi.",
@@ -263,7 +263,7 @@ const adminController = {
           .json({ errCode: 1, errMessage: "Người dùng không hợp lệ." });
       }
     } catch (error) {
-   // console.log(error);
+      // console.log(error);
       return res.status(500).json({
         errCode: -1,
         errMessage: "Dữ liệu không mong muốn, thử lại sau hoặc dữ liệu khác!",
@@ -301,7 +301,7 @@ const adminController = {
         raw: true,
         nest: true,
       });
-   // console.log("information", information);
+      // console.log("information", information);
       if (information) {
         delete information.password;
         delete information.refreshToken;
@@ -317,7 +317,7 @@ const adminController = {
         });
       }
     } catch (error) {
-   // console.log("error", error);
+      // console.log("error", error);
       return res.status(500).json({
         errCode: -1,
         errMessage: "Dữ liệu không mong muốn, thử lại sau hoặc dữ liệu khác!",
@@ -355,7 +355,7 @@ const adminController = {
     try {
       const whereClause = userController.whereClause(req?.body);
 
-   // console.log("whereClause này", whereClause);
+      // console.log("whereClause này", whereClause);
 
       const queryOptions = {
         include: [
@@ -454,7 +454,7 @@ const adminController = {
               { where: { id: thesis.thesisId } }
             );
           });
-       console.log("councilDetails", councilDetails);
+          console.log("councilDetails", councilDetails);
           result = null;
           req?.body?.thesesDetails.map(async (thesis) => {
             await db.Thesis.update(
@@ -464,19 +464,17 @@ const adminController = {
               { where: { id: thesis.id } }
             );
           });
-          result = councilDetails.map( async (position)=>{
-            console.log("position",position)
-            console.log("req?.body?.thesesDetails",req?.body?.thesesDetails)
-            let res = await db.CouncilDetail.create(position)
+          result = councilDetails.map(async (position) => {
+            console.log("position", position);
+            console.log("req?.body?.thesesDetails", req?.body?.thesesDetails);
+            let res = await db.CouncilDetail.create(position);
             req?.body?.thesesDetails.map(async (thesis) => {
-                await db.Mark.create(
-                  {
-                    councilDetailId: res?.dataValues?.id,
-                    thesisId: thesis?.thesisId
-                  },
-                );
+              await db.Mark.create({
+                councilDetailId: res?.dataValues?.id,
+                thesisId: thesis?.thesisId,
               });
-            })
+            });
+          });
           console.log(result);
           // result = await db.CouncilDetail.bulkCreate(councilDetails);
           // req?.body?.thesesDetails.map(async (thesis) => {
@@ -520,7 +518,7 @@ const adminController = {
   updateCouncil: async (req, res) => {
     try {
       if (req?.params?.id) {
-     // console.log(req.body);
+        // console.log(req.body);
         let result = await db.Council.update(
           {
             name: req?.body?.name,
@@ -540,7 +538,7 @@ const adminController = {
           });
           let countThesisDuplicate = 0;
           req?.body?.thesesDetails.map(async (thesis) => {
-         // console.log(thesis);
+            // console.log(thesis);
             let update = await db.Thesis.update(
               {
                 councilId: req?.params?.id,
@@ -571,13 +569,30 @@ const adminController = {
             where: { id: ids },
           });
 
-       // console.log("resultDelete", result, ids);
+          // console.log("resultDelete", result, ids);
 
-          result = await db.CouncilDetail.bulkCreate(councilDetails, {
-            upsertKeys: ["id"],
-            updateOnDuplicate: ["positionId", "councilId", "lecturerId"],
-          });
-       // console.log("result", result);
+          // result = await db.CouncilDetail.bulkCreate(councilDetails, {
+          //   upsertKeys: ["id"],
+          //   updateOnDuplicate: ["positionId", "councilId", "lecturerId"],
+          // });
+
+          let result = await Promise.all(
+            councilDetails.map(async (position) => {
+              console.log("position", position);
+              console.log("req?.body?.thesesDetails", req?.body?.thesesDetails);
+              let res = await db.CouncilDetail.create(position);
+              await Promise.all(
+                req?.body?.thesesDetails.map(async (thesis) => {
+                  await db.Mark.create({
+                    councilDetailId: res?.dataValues?.id,
+                    thesisId: thesis?.thesisId,
+                  });
+                })
+              );
+              return res;
+            })
+          );
+          // console.log("result", result);
 
           if (result) {
             if (countThesisDuplicate) {
@@ -619,7 +634,7 @@ const adminController = {
   deleteCouncil: async (req, res) => {
     try {
       if (req?.params?.id) {
-     // console.log(req.body);
+        // console.log(req.body);
         const result = await db.Council.destroy({
           where: { id: req?.params?.id },
         });
@@ -649,7 +664,7 @@ const adminController = {
   importCouncils: async (req, res) => {
     try {
       if (req?.body?.data) {
-     // console.log(req?.body?.data);
+        // console.log(req?.body?.data);
         const result = await db.Council.bulkCreate(req?.body?.data);
         if (result) {
           return res
@@ -677,7 +692,7 @@ const adminController = {
   deleteCouncilDetail: async (req, res) => {
     try {
       if (req?.params?.id) {
-     // console.log(req.body);
+        // console.log(req.body);
         const result = await db.CouncilDetail.destroy({
           where: { id: req?.params?.id },
         });
@@ -746,7 +761,7 @@ const adminController = {
     try {
       const whereClause = userController.whereClause(req?.body);
 
-   // console.log("whereClause", whereClause);
+      // console.log("whereClause", whereClause);
 
       const queryOptions = {
         include: [
@@ -831,8 +846,7 @@ const adminController = {
               },
               {
                 where: {
-                  ["id"]:
-                    req?.body?.deanId,
+                  ["id"]: req?.body?.deanId,
                   [Op.ne]: {
                     ["roleId"]: "R1",
                   },
@@ -874,7 +888,7 @@ const adminController = {
   updateDepartment: async (req, res) => {
     try {
       if (req?.params?.id) {
-     // console.log(req.body);
+        // console.log(req.body);
         const result = await db.Department.update(
           {
             name: req?.body?.name,
@@ -888,7 +902,7 @@ const adminController = {
           const resultDean = await db.Lecturer.update(
             {
               roleId: req?.body?.deanId ? "R2" : "R3",
-              departmentId: req?.params?.id
+              departmentId: req?.params?.id,
             },
             {
               where: {
@@ -937,7 +951,7 @@ const adminController = {
   deleteDepartment: async (req, res) => {
     try {
       if (req?.params?.id) {
-     // console.log(req.body);
+        // console.log(req.body);
         const result = await db.Department.destroy({
           where: { id: req?.params?.id },
         });
@@ -967,7 +981,7 @@ const adminController = {
   importDepartments: async (req, res) => {
     try {
       if (req?.body?.data) {
-     // console.log(req?.body?.data);
+        // console.log(req?.body?.data);
         const result = await db.Department.bulkCreate(req?.body?.data);
         if (result) {
           return res
@@ -998,7 +1012,7 @@ const adminController = {
     try {
       const whereClause = userController.whereClause(req?.body);
 
-   // console.log("whereClause", whereClause);
+      // console.log("whereClause", whereClause);
 
       const queryOptions = {
         // include: [
@@ -1097,7 +1111,7 @@ const adminController = {
   updateBlock: async (req, res) => {
     try {
       if (req?.params?.id) {
-     // console.log(req.body);
+        // console.log(req.body);
         const result = await db.Block.update(
           {
             name: req?.body?.name,
@@ -1131,7 +1145,7 @@ const adminController = {
   deleteBlock: async (req, res) => {
     try {
       if (req?.params?.id) {
-     // console.log(req.body);
+        // console.log(req.body);
         const result = await db.Block.destroy({
           where: { id: req?.params?.id },
         });
@@ -1161,7 +1175,7 @@ const adminController = {
   importBlocks: async (req, res) => {
     try {
       if (req?.body?.data) {
-     // console.log(req?.body?.data);
+        // console.log(req?.body?.data);
         const result = await db.Block.bulkCreate(req?.body?.data);
         if (result) {
           return res
@@ -1192,7 +1206,7 @@ const adminController = {
     try {
       const whereClause = userController.whereClause(req?.body);
 
-   // console.log("whereClause", whereClause);
+      // console.log("whereClause", whereClause);
 
       const queryOptions = {
         include: [
@@ -1290,7 +1304,7 @@ const adminController = {
   updateMajor: async (req, res) => {
     try {
       if (req?.params?.id) {
-     // console.log(req.body);
+        // console.log(req.body);
         const result = await db.Major.update(
           {
             name: req?.body?.name,
@@ -1325,7 +1339,7 @@ const adminController = {
   deleteMajor: async (req, res) => {
     try {
       if (req?.params?.id) {
-     // console.log(req.body);
+        // console.log(req.body);
         const result = await db.Major.destroy({
           where: { id: req?.params?.id },
         });
@@ -1355,7 +1369,7 @@ const adminController = {
   importMajors: async (req, res) => {
     try {
       if (req?.body?.data) {
-     // console.log(req?.body?.data);
+        // console.log(req?.body?.data);
         const result = await db.Major.bulkCreate(req?.body?.data);
         if (result) {
           return res
@@ -1386,7 +1400,7 @@ const adminController = {
     try {
       const whereClause = userController.whereClause(req?.body);
 
-   // console.log("whereClause", whereClause);
+      // console.log("whereClause", whereClause);
 
       const queryOptions = {
         include: [
@@ -1493,7 +1507,7 @@ const adminController = {
   updateClass: async (req, res) => {
     try {
       if (req?.params?.id) {
-     // console.log(req.body);
+        // console.log(req.body);
         const result = await db.Class.update(
           {
             name: req?.body?.name,
@@ -1529,7 +1543,7 @@ const adminController = {
   deleteClass: async (req, res) => {
     try {
       if (req?.params?.id) {
-     // console.log(req.body);
+        // console.log(req.body);
         const result = await db.Class.destroy({
           where: { id: req?.params?.id },
         });
@@ -1559,7 +1573,7 @@ const adminController = {
   importClasses: async (req, res) => {
     try {
       if (req?.body?.data) {
-     // console.log(req?.body?.data);
+        // console.log(req?.body?.data);
         const result = await db.Class.bulkCreate(req?.body?.data);
         if (result) {
           return res
@@ -1590,7 +1604,7 @@ const adminController = {
     try {
       const whereClause = userController.whereClause(req?.body);
 
-   // console.log("whereClause", whereClause);
+      // console.log("whereClause", whereClause);
 
       const queryOptions = {
         // include: [
@@ -1673,7 +1687,7 @@ const adminController = {
               ...criteria,
             });
           });
-       // console.log("criterias", criterias);
+          // console.log("criterias", criterias);
           result = null;
           result = await db.EvaluationCriteria.bulkCreate(criterias);
           if (result) {
@@ -1709,7 +1723,7 @@ const adminController = {
   updateEvaluationMethod: async (req, res) => {
     try {
       if (req?.params?.id) {
-     // console.log(req.body);
+        // console.log(req.body);
         let result = await db.EvaluationMethod.update(
           {
             name: req?.body?.name,
@@ -1740,7 +1754,7 @@ const adminController = {
             where: { id: ids },
           });
 
-       // console.log("resultDelete", result, ids);
+          // console.log("resultDelete", result, ids);
 
           result = await db.EvaluationCriteria.bulkCreate(criterias, {
             upsertKeys: ["id"],
@@ -1752,7 +1766,7 @@ const adminController = {
               "order",
             ],
           });
-       // console.log("result", result);
+          // console.log("result", result);
 
           if (result) {
             return res
@@ -1787,7 +1801,7 @@ const adminController = {
   deleteEvaluationMethod: async (req, res) => {
     try {
       if (req?.params?.id) {
-     // console.log(req.body);
+        // console.log(req.body);
         const result = await db.EvaluationMethod.destroy({
           where: { id: req?.params?.id },
         });
@@ -1817,7 +1831,7 @@ const adminController = {
   importEvaluationMethods: async (req, res) => {
     try {
       if (req?.body?.data) {
-     // console.log(req?.body?.data);
+        // console.log(req?.body?.data);
         const result = await db.EvaluationMethod.bulkCreate(req?.body?.data);
         if (result) {
           return res
@@ -1848,7 +1862,7 @@ const adminController = {
     try {
       const whereClause = userController.whereClause(req?.body);
 
-   // console.log("whereClause", whereClause);
+      // console.log("whereClause", whereClause);
 
       const queryOptions = {
         // include: [
@@ -1870,7 +1884,7 @@ const adminController = {
       }
 
       const result = await db.EvaluationCriteria.findAndCountAll(queryOptions);
-   // console.log(result);
+      // console.log(result);
       const { rows: evaluationCriterias, count: totalRecords } = result;
       return res
         .status(200)
@@ -1924,7 +1938,7 @@ const adminController = {
           description: req?.body?.description,
         });
         if (result) {
-       // console.log("result", result);
+          // console.log("result", result);
           return res
             .status(200)
             .json({ errCode: 0, errMessage: "Thêm dữ liệu thành công." });
@@ -1950,7 +1964,7 @@ const adminController = {
   updateEvaluationCriteria: async (req, res) => {
     try {
       if (req?.params?.id) {
-     // console.log(req.body);
+        // console.log(req.body);
         const result = await db.EvaluationCriteria.update(
           {
             name: req?.body?.name,
@@ -1984,7 +1998,7 @@ const adminController = {
   deleteEvaluationCriteria: async (req, res) => {
     try {
       if (req?.params?.id) {
-     // console.log(req.body);
+        // console.log(req.body);
         const result = await db.EvaluationCriteria.destroy({
           where: { id: req?.params?.id },
         });
@@ -2014,7 +2028,7 @@ const adminController = {
   importEvaluationCriterias: async (req, res) => {
     try {
       if (req?.body?.data) {
-     // console.log(req?.body?.data);
+        // console.log(req?.body?.data);
         const result = await db.EvaluationMethod.bulkCreate(req?.body?.data);
         if (result) {
           return res
@@ -2045,7 +2059,7 @@ const adminController = {
     try {
       const whereClause = userController.whereClause(req?.body);
 
-   // console.log("whereClause", whereClause);
+      // console.log("whereClause", whereClause);
 
       const queryOptions = {
         attributes: { exclude: ["password", "refreshToken", "image"] },
@@ -2150,7 +2164,7 @@ const adminController = {
         salt
       );
       if (req?.body) {
-     // console.log("req.body", req.body);
+        // console.log("req.body", req.body);
         if (req?.body?.departmentId && req?.body?.roleId == "R2") {
           await db.Lecturer.update(
             {
@@ -2179,7 +2193,7 @@ const adminController = {
         });
 
         if (result) {
-       // console.log("result", result);
+          // console.log("result", result);
           if (req?.body?.departmentId && req?.body?.roleId == "R2") {
             const resultDean = await db.Department.update(
               {
@@ -2188,7 +2202,7 @@ const adminController = {
               { where: { id: result?.dataValues?.departmentId } }
             );
             if (resultDean) {
-           // console.log("resultDean", resultDean);
+              // console.log("resultDean", resultDean);
               return res.status(200).json({
                 errCode: 0,
                 errMessage:
@@ -2227,7 +2241,7 @@ const adminController = {
   updateLecturer: async (req, res) => {
     try {
       if (req?.params?.id) {
-     // console.log("req.body", req.body);
+        // console.log("req.body", req.body);
         if (req?.body?.departmentId && req?.body?.roleId == "R2") {
           await db.Lecturer.update(
             {
@@ -2263,7 +2277,7 @@ const adminController = {
         );
 
         if (result) {
-       // console.log("result", result);
+          // console.log("result", result);
           if (req?.body?.departmentId && req?.body?.roleId == "R2") {
             const resultDean = await db.Department.update(
               {
@@ -2272,7 +2286,7 @@ const adminController = {
               { where: { id: req?.body?.departmentId } }
             );
             if (resultDean) {
-           // console.log("resultDean", resultDean);
+              // console.log("resultDean", resultDean);
               return res.status(200).json({
                 errCode: 0,
                 errMessage:
@@ -2311,7 +2325,7 @@ const adminController = {
   deleteLecturer: async (req, res) => {
     try {
       if (req?.params?.id) {
-     // console.log(req.body);
+        // console.log(req.body);
         const result = await db.Lecturer.destroy({
           where: { id: req?.params?.id },
         });
@@ -2341,8 +2355,16 @@ const adminController = {
   importLecturers: async (req, res) => {
     try {
       if (req?.body?.data) {
-     // console.log(req?.body?.data);
-        const result = await db.Lecturer.bulkCreate(req?.body?.data);
+        // console.log(req?.body?.data);
+        let passwordDefaut = await bcrypt.hashSync(
+          "123456",
+          salt
+        );
+        let dataPasswordDefaut = [];
+        req?.body?.data.map((data) => {
+          dataPasswordDefaut.push({ ...data, password: passwordDefaut });
+        });
+        const result = await db.Lecturer.bulkCreate(dataPasswordDefaut);
         if (result) {
           return res
             .status(200)
@@ -2372,7 +2394,7 @@ const adminController = {
     try {
       const whereClause = userController.whereClause(req?.body);
 
-   // console.log("whereClause", whereClause);
+      // console.log("whereClause", whereClause);
 
       const queryOptions = {
         attributes: { exclude: ["password", "refreshToken", "image"] },
@@ -2477,7 +2499,7 @@ const adminController = {
           req?.body?.code,
           salt
         );
-     // console.log("req.body", req.body);
+        // console.log("req.body", req.body);
         const result = await db.Student.create({
           email: req?.body?.email,
           fullName: req?.body?.fullName,
@@ -2493,7 +2515,7 @@ const adminController = {
           permissions: req?.body?.permissions ? req?.body?.permissions : null,
         });
         if (result) {
-       // console.log("result", result);
+          // console.log("result", result);
           return res
             .status(200)
             .json({ errCode: 0, errMessage: "Thêm dữ liệu thành công." });
@@ -2519,7 +2541,7 @@ const adminController = {
   updateStudent: async (req, res) => {
     try {
       if (req?.params?.id) {
-     // console.log("req.body", req.body);
+        // console.log("req.body", req.body);
         const result = await db.Student.update(
           {
             email: req?.body?.email,
@@ -2571,7 +2593,7 @@ const adminController = {
           req?.body?.code,
           salt
         );
-     // console.log("req.body", req.body);
+        // console.log("req.body", req.body);
         const result = await db.Student.update(
           {
             password: hashPasswordFromBcrypt,
@@ -2613,7 +2635,7 @@ const adminController = {
           req?.body?.code,
           salt
         );
-     // console.log("req.body", req.body);
+        // console.log("req.body", req.body);
         const result = await db.Lecturer.update(
           {
             password: hashPasswordFromBcrypt,
@@ -2651,7 +2673,7 @@ const adminController = {
   deleteStudent: async (req, res) => {
     try {
       if (req?.params?.id) {
-     // console.log(req.body);
+        // console.log(req.body);
         const result = await db.Student.destroy({
           where: { id: req?.params?.id },
         });
@@ -2681,8 +2703,16 @@ const adminController = {
   importStudents: async (req, res) => {
     try {
       if (req?.body?.data) {
-     // console.log(req?.body?.data);
-        const result = await db.Student.bulkCreate(req?.body?.data);
+        // console.log(req?.body?.data);
+        let passwordDefaut = await bcrypt.hashSync(
+          "123456",
+          salt
+        );
+        let dataPasswordDefaut = [];
+        req?.body?.data.map((data) => {
+          dataPasswordDefaut.push({ ...data, password: passwordDefaut });
+        });
+        const result = await db.Student.bulkCreate(dataPasswordDefaut);
         if (result) {
           return res
             .status(200)
@@ -2712,7 +2742,7 @@ const adminController = {
     try {
       const whereClause = userController.whereClause(req?.body);
 
-   // console.log("whereClause", whereClause);
+      // console.log("whereClause", whereClause);
 
       const queryOptions = {
         include: [
@@ -2821,7 +2851,7 @@ const adminController = {
   updateTopic: async (req, res) => {
     try {
       if (req?.params?.id) {
-     // console.log(req.body);
+        // console.log(req.body);
         const result = await db.Topic.update(
           {
             name: req?.body?.name,
@@ -2857,7 +2887,7 @@ const adminController = {
   deleteTopic: async (req, res) => {
     try {
       if (req?.params?.id) {
-     // console.log(req.body);
+        // console.log(req.body);
         const result = await db.Topic.destroy({
           where: { id: req?.params?.id },
         });
@@ -2887,7 +2917,7 @@ const adminController = {
   importTopics: async (req, res) => {
     try {
       if (req?.body?.data) {
-     // console.log(req?.body?.data);
+        // console.log(req?.body?.data);
         const result = await db.Topic.bulkCreate(req?.body?.data);
         if (result) {
           return res
@@ -2931,7 +2961,7 @@ const adminController = {
         nest: true,
       };
 
-   // console.log("where", whereClause, Object.keys(whereClause).length > 0);
+      // console.log("where", whereClause, Object.keys(whereClause).length > 0);
       if (Object.keys(whereClause).length > 0) {
         queryOptions.where = {
           [Op.or]: whereClause,
@@ -2939,7 +2969,7 @@ const adminController = {
       }
 
       const result = await db.ThesisSession.findAndCountAll(queryOptions);
-   // console.log(result);
+      // console.log(result);
       const { rows: thesisSessions, count: totalRecords } = result;
       return res.status(200).json({ errCode: 0, thesisSessions, totalRecords });
     } catch (error) {
@@ -3020,7 +3050,7 @@ const adminController = {
   updateThesisSession: async (req, res) => {
     try {
       if (req?.params?.id) {
-     // console.log(req.body);
+        // console.log(req.body);
         const result = await db.ThesisSession.update(
           {
             name: req?.body?.name,
@@ -3058,7 +3088,7 @@ const adminController = {
   deleteThesisSession: async (req, res) => {
     try {
       if (req?.params?.id) {
-     // console.log(req.body);
+        // console.log(req.body);
         const result = await db.ThesisSession.destroy({
           where: { id: req?.params?.id },
         });
@@ -3088,7 +3118,7 @@ const adminController = {
   importThesisSessions: async (req, res) => {
     try {
       if (req?.body?.data) {
-     // console.log(req?.body?.data);
+        // console.log(req?.body?.data);
         const result = await db.ThesisSession.bulkCreate(req?.body?.data);
         if (result) {
           return res
@@ -3119,7 +3149,7 @@ const adminController = {
     try {
       const whereClause = userController.whereClause(req?.body);
 
-   // console.log("whereClause", whereClause);
+      // console.log("whereClause", whereClause);
 
       const queryOptions = {
         include: [
@@ -3305,7 +3335,7 @@ const adminController = {
   updateThesis: async (req, res) => {
     try {
       if (req?.params?.id) {
-     // console.log(req.body);
+        // console.log(req.body);
         const result = await db.Thesis.update(
           {
             startDate: req?.body?.startDate,
@@ -3355,7 +3385,7 @@ const adminController = {
   deleteThesis: async (req, res) => {
     try {
       if (req?.params?.id) {
-     // console.log(req.body);
+        // console.log(req.body);
         const result = await db.Thesis.destroy({
           where: { id: req?.params?.id },
         });
@@ -3385,7 +3415,7 @@ const adminController = {
   importTheses: async (req, res) => {
     try {
       if (req?.body?.data) {
-     // console.log(req?.body?.data);
+        // console.log(req?.body?.data);
         const result = await db.Thesis.bulkCreate(req?.body?.data);
         if (result) {
           return res

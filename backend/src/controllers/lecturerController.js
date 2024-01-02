@@ -34,7 +34,7 @@ const lecturerController = {
             }
           );
           if (changePassword) {
-         // console.log("changePassword", changePassword);
+            // console.log("changePassword", changePassword);
             return res.status(200).json({
               errCode: 0,
               errMessage: "Mật khẩu đã được thay đổi.",
@@ -57,8 +57,11 @@ const lecturerController = {
           .json({ errCode: 1, errMessage: "Người dùng không hợp lệ!" });
       }
     } catch (error) {
-   // console.log(error);
-      return res.status(500).json({ errCode: -1, errMessage: "Dữ liệu không mong muốn, thử lại sau hoặc dữ liệu khác!" });
+      // console.log(error);
+      return res.status(500).json({
+        errCode: -1,
+        errMessage: "Dữ liệu không mong muốn, thử lại sau hoặc dữ liệu khác!",
+      });
     }
   },
   changeInformationAdmin: async (req, res) => {
@@ -85,7 +88,7 @@ const lecturerController = {
           }
         );
         if (changeInformation) {
-       // console.log("changeInformation", changeInformation);
+          // console.log("changeInformation", changeInformation);
           return res.status(200).json({
             errCode: 0,
             errMessage: "Thông tin đã được thay đổi.",
@@ -102,8 +105,11 @@ const lecturerController = {
           .json({ errCode: 1, errMessage: "Người dùng không hợp lệ!" });
       }
     } catch (error) {
-   // console.log(error);
-      return res.status(500).json({ errCode: -1, errMessage: "Dữ liệu không mong muốn, thử lại sau hoặc dữ liệu khác!" });
+      // console.log(error);
+      return res.status(500).json({
+        errCode: -1,
+        errMessage: "Dữ liệu không mong muốn, thử lại sau hoặc dữ liệu khác!",
+      });
     }
   },
   getInformationAdmin: async (req, res) => {
@@ -152,8 +158,11 @@ const lecturerController = {
         });
       }
     } catch (error) {
-   // console.log("error", error);
-      return res.status(500).json({ errCode: -1, errMessage: "Dữ liệu không mong muốn, thử lại sau hoặc dữ liệu khác!" });
+      // console.log("error", error);
+      return res.status(500).json({
+        errCode: -1,
+        errMessage: "Dữ liệu không mong muốn, thử lại sau hoặc dữ liệu khác!",
+      });
     }
   },
 
@@ -176,7 +185,10 @@ const lecturerController = {
         });
       }
     } catch (error) {
-      return res.status(500).json({ errCode: -1, errMessage: "Dữ liệu không mong muốn, thử lại sau hoặc dữ liệu khác!" });
+      return res.status(500).json({
+        errCode: -1,
+        errMessage: "Dữ liệu không mong muốn, thử lại sau hoặc dữ liệu khác!",
+      });
     }
   },
 
@@ -190,7 +202,7 @@ const lecturerController = {
       };
       whereClause["lecturerId"] = req?.user?.id;
 
-   // console.log("whereClause", whereClause);
+      // console.log("whereClause", whereClause);
 
       const queryOptions = {
         include: [
@@ -233,11 +245,14 @@ const lecturerController = {
       }
 
       const result = await db.CouncilDetail.findAndCountAll(queryOptions);
-   // console.log("queryOptions", queryOptions);
+      // console.log("queryOptions", queryOptions);
       const { rows: councils, count: totalRecords } = result;
       return res.status(200).json({ errCode: 0, councils, totalRecords });
     } catch (error) {
-      return res.status(500).json({ errCode: -1, errMessage: "Dữ liệu không mong muốn, thử lại sau hoặc dữ liệu khác!" });
+      return res.status(500).json({
+        errCode: -1,
+        errMessage: "Dữ liệu không mong muốn, thử lại sau hoặc dữ liệu khác!",
+      });
     }
   },
   getCouncilById: async (req, res) => {
@@ -273,7 +288,10 @@ const lecturerController = {
         });
       }
     } catch (error) {
-      return res.status(500).json({ errCode: -1, errMessage: "Dữ liệu không mong muốn, thử lại sau hoặc dữ liệu khác!" });
+      return res.status(500).json({
+        errCode: -1,
+        errMessage: "Dữ liệu không mong muốn, thử lại sau hoặc dữ liệu khác!",
+      });
     }
   },
   addCouncil: async (req, res) => {
@@ -293,7 +311,7 @@ const lecturerController = {
               ...criteria,
             });
           });
-       // console.log("councilDetails", councilDetails);
+          // console.log("councilDetails", councilDetails);
           result = null;
           result = await db.CouncilDetail.bulkCreate(councilDetails);
           if (result) {
@@ -320,13 +338,16 @@ const lecturerController = {
           .json({ errCode: 1, errMessage: "Dữ liệu không được tìm thấy!" });
       }
     } catch (error) {
-      return res.status(500).json({ errCode: -1, errMessage: "Dữ liệu không mong muốn, thử lại sau hoặc dữ liệu khác!" });
+      return res.status(500).json({
+        errCode: -1,
+        errMessage: "Dữ liệu không mong muốn, thử lại sau hoặc dữ liệu khác!",
+      });
     }
   },
   updateCouncil: async (req, res) => {
     try {
       if (req?.params?.id) {
-     // console.log(req.body);
+        // console.log(req.body);
         let result = await db.Council.update(
           {
             name: req?.body?.name,
@@ -359,13 +380,13 @@ const lecturerController = {
             where: { id: ids },
           });
 
-       // console.log("resultDelete", result, ids);
+          // console.log("resultDelete", result, ids);
 
           result = await db.CouncilDetail.bulkCreate(councilDetails, {
             upsertKeys: ["id"],
             updateOnDuplicate: ["positionId", "councilId", "lecturerId"],
           });
-       // console.log("result", result);
+          // console.log("result", result);
 
           if (result) {
             return res
@@ -391,13 +412,16 @@ const lecturerController = {
           .json({ errCode: 1, errMessage: "Dữ liệu không được tìm thấy!" });
       }
     } catch (error) {
-      return res.status(500).json({ errCode: -1, errMessage: "Dữ liệu không mong muốn, thử lại sau hoặc dữ liệu khác!" });
+      return res.status(500).json({
+        errCode: -1,
+        errMessage: "Dữ liệu không mong muốn, thử lại sau hoặc dữ liệu khác!",
+      });
     }
   },
   deleteCouncil: async (req, res) => {
     try {
       if (req?.params?.id) {
-     // console.log(req.body);
+        // console.log(req.body);
         const result = await db.Council.destroy({
           where: { id: req?.params?.id },
         });
@@ -418,7 +442,10 @@ const lecturerController = {
           .json({ errCode: 1, errMessage: "Dữ liệu không được tìm thấy!" });
       }
     } catch (error) {
-      return res.status(500).json({ errCode: -1, errMessage: "Dữ liệu không mong muốn, thử lại sau hoặc dữ liệu khác!" });
+      return res.status(500).json({
+        errCode: -1,
+        errMessage: "Dữ liệu không mong muốn, thử lại sau hoặc dữ liệu khác!",
+      });
     }
   },
   // Api Thesis
@@ -429,7 +456,7 @@ const lecturerController = {
       whereClause = {
         [Op.or]: whereClause,
       };
-      
+
       console.log("whereClause", whereClause);
       whereClause["councilId"] = req?.body?.id;
 
@@ -484,7 +511,10 @@ const lecturerController = {
       const { rows: theses, count: totalRecords } = result;
       return res.status(200).json({ errCode: 0, theses, totalRecords });
     } catch (error) {
-      return res.status(500).json({ errCode: -1, errMessage: "Dữ liệu không mong muốn, thử lại sau hoặc dữ liệu khác!" });
+      return res.status(500).json({
+        errCode: -1,
+        errMessage: "Dữ liệu không mong muốn, thử lại sau hoặc dữ liệu khác!",
+      });
     }
   },
   getThesisCouncilsById: async (req, res) => {
@@ -543,7 +573,10 @@ const lecturerController = {
         });
       }
     } catch (error) {
-      return res.status(500).json({ errCode: -1, errMessage: "Dữ liệu không mong muốn, thử lại sau hoặc dữ liệu khác!" });
+      return res.status(500).json({
+        errCode: -1,
+        errMessage: "Dữ liệu không mong muốn, thử lại sau hoặc dữ liệu khác!",
+      });
     }
   },
   // id,
@@ -603,13 +636,16 @@ const lecturerController = {
           .json({ errCode: 1, errMessage: "Dữ liệu không được tìm thấy!" });
       }
     } catch (error) {
-      return res.status(500).json({ errCode: -1, errMessage: "Dữ liệu không mong muốn, thử lại sau hoặc dữ liệu khác!" });
+      return res.status(500).json({
+        errCode: -1,
+        errMessage: "Dữ liệu không mong muốn, thử lại sau hoặc dữ liệu khác!",
+      });
     }
   },
   updateThesisCouncils: async (req, res) => {
     try {
       if (req?.params?.id) {
-     // console.log(req.body);
+        // console.log(req.body);
         const result = await db.Thesis.update(
           {
             startDate: req?.body?.startDate,
@@ -650,13 +686,16 @@ const lecturerController = {
           .json({ errCode: 1, errMessage: "Dữ liệu không được tìm thấy!" });
       }
     } catch (error) {
-      return res.status(500).json({ errCode: -1, errMessage: "Dữ liệu không mong muốn, thử lại sau hoặc dữ liệu khác!" });
+      return res.status(500).json({
+        errCode: -1,
+        errMessage: "Dữ liệu không mong muốn, thử lại sau hoặc dữ liệu khác!",
+      });
     }
   },
   deleteThesisCouncils: async (req, res) => {
     try {
       if (req?.params?.id) {
-     // console.log(req.body);
+        // console.log(req.body);
         const result = await db.Thesis.destroy({
           where: { id: req?.params?.id },
         });
@@ -677,13 +716,175 @@ const lecturerController = {
           .json({ errCode: 1, errMessage: "Dữ liệu không được tìm thấy!" });
       }
     } catch (error) {
-      return res.status(500).json({ errCode: -1, errMessage: "Dữ liệu không mong muốn, thử lại sau hoặc dữ liệu khác!" });
+      return res.status(500).json({
+        errCode: -1,
+        errMessage: "Dữ liệu không mong muốn, thử lại sau hoặc dữ liệu khác!",
+      });
+    }
+  },
+
+  MarkEvaluationCriteria: async (req, res) => {
+    try {
+      if (req?.body) {
+        let mark = await db.Mark.findOne({
+          where: {
+            councilDetailId: req?.body?.mark?.councilDetailId,
+            thesisId: req?.body?.mark?.thesisId,
+          },
+        });
+        await db.Mark.update(
+          { totalMark: req?.body?.mark?.totalMark },
+          {
+            where: {
+              councilDetailId: req?.body?.mark?.councilDetailId,
+              thesisId: req?.body?.mark?.thesisId,
+            },
+          }
+        );
+        console.log("mark", mark);
+        if (mark) {
+          req?.body?.mark?.markCriterias.map(async (markCriteria) => {
+            console.log("markCriteria", markCriteria);
+            markCriteria["markId"] = mark?.id;
+            console.log(
+              " markCriteria[]=mark?.id",
+              (markCriteria["markId"] = mark?.id)
+            );
+            await db.MarkCriteria.upsert(markCriteria, {
+              where: {
+                markId: mark?.id,
+                evaluationCriteriaId: markCriteria?.evaluationCriteriaId,
+              },
+            });
+          });
+          console.log("mark", mark);
+          return res
+            .status(200)
+            .json({ errCode: 0, errMessage: "Thêm dữ liệu thành công." });
+        } else {
+          return res.status(200).json({
+            errCode: 2,
+            errMessage:
+              "Đã xảy ra lỗi trong quá trình thêm, vui lòng thử lại sau!",
+          });
+        }
+      } else {
+        return res
+          .status(404)
+          .json({ errCode: 1, errMessage: "Dữ liệu không được tìm thấy!" });
+      }
+    } catch (error) {
+      return res.status(500).json({
+        errCode: -1,
+        errMessage: "Dữ liệu không mong muốn, thử lại sau hoặc dữ liệu khác!",
+      });
+    }
+  },
+
+  getMarkCriteria: async (req, res) => {
+    try {
+      let mark = await db.Mark.findOne({
+        where: {
+          councilDetailId: req?.body?.data?.councilDetailId,
+          thesisId: req?.body?.data?.thesisId,
+        },
+      });
+      console.log(mark);
+      const result = await db.MarkCriteria.findAll({
+        where: {
+          markId: mark?.id,
+        },
+        // order: [["evaluationCriteriaId", "DESC"]],
+        raw: true,
+        nest: true,
+      });
+      if (result) {
+        return res
+          .status(200)
+          .json({
+            errCode: 0,
+            errMessage: "Tìm dữ liệu thành công.",
+            result: { result, totalMark: mark?.totalMark },
+          });
+      } else {
+        return res.status(200).json({
+          errCode: 1,
+          errMessage:
+            "Đã xảy ra lỗi trong quá trình tìm, vui lòng thử lại sau!",
+        });
+      }
+    } catch (error) {
+      return res.status(500).json({
+        errCode: -1,
+        errMessage: "Dữ liệu không mong muốn, thử lại sau hoặc dữ liệu khác!",
+      });
+    }
+  },
+  getThesisById: async (req, res) => {
+    try {
+      const result = await db.Thesis.findOne({
+        where: {
+          id: req?.params?.id,
+        },
+        include: [
+          {
+            model: db.Allcode,
+            as: "councilStatusData",
+          },
+          {
+            model: db.Allcode,
+            as: "resultData",
+          },
+          {
+            model: db.Allcode,
+            as: "thesisAdvisorStatusData",
+          },
+          {
+            model: db.Topic,
+            as: "topicData",
+          },
+          {
+            model: db.Student,
+            as: "studentData",
+          },
+          {
+            model: db.Council,
+            as: "councilData",
+          },
+          {
+            model: db.Lecturer,
+            as: "thesisAdvisorData",
+          },
+          {
+            model: db.ThesisSession,
+            as: "thesisSessionData",
+          },
+        ],
+        order: [["updatedAt", "DESC"]],
+        raw: true,
+        nest: true,
+      });
+      if (result) {
+        return res
+          .status(200)
+          .json({ errCode: 0, errMessage: "Tìm dữ liệu thành công.", result });
+      } else {
+        return res.status(200).json({
+          errCode: 1,
+          errMessage: "Đã xảy ra lỗi trong quá trình tìm, vui lòng thử lại sau",
+        });
+      }
+    } catch (error) {
+      return res.status(500).json({
+        errCode: -1,
+        errMessage: "Dữ liệu không mong muốn, thử lại sau hoặc dữ liệu khác!",
+      });
     }
   },
   importTheses: async (req, res) => {
     try {
       if (req?.body?.data) {
-     // console.log(req?.body?.data);
+        // console.log(req?.body?.data);
         const result = await db.Thesis.bulkCreate(req?.body?.data);
         if (result) {
           return res
@@ -702,13 +903,16 @@ const lecturerController = {
           .json({ errCode: 1, errMessage: "Dữ liệu không được tìm thấy!" });
       }
     } catch (error) {
-      return res.status(500).json({ errCode: -1, errMessage: "Dữ liệu không mong muốn, thử lại sau hoặc dữ liệu khác!" });
+      return res.status(500).json({
+        errCode: -1,
+        errMessage: "Dữ liệu không mong muốn, thử lại sau hoặc dữ liệu khác!",
+      });
     }
   },
   importThesisCouncils: async (req, res) => {
     try {
       if (req?.body?.data) {
-     // console.log(req?.body?.data);
+        // console.log(req?.body?.data);
         const result = await db.Council.bulkCreate(req?.body?.data);
         if (result) {
           return res
@@ -727,7 +931,10 @@ const lecturerController = {
           .json({ errCode: 1, errMessage: "Dữ liệu không được tìm thấy!" });
       }
     } catch (error) {
-      return res.status(500).json({ errCode: -1, errMessage: "Dữ liệu không mong muốn, thử lại sau hoặc dữ liệu khác!" });
+      return res.status(500).json({
+        errCode: -1,
+        errMessage: "Dữ liệu không mong muốn, thử lại sau hoặc dữ liệu khác!",
+      });
     }
   },
 
@@ -761,23 +968,26 @@ const lecturerController = {
         });
       }
     } catch (error) {
-      return res.status(500).json({ errCode: -1, errMessage: "Dữ liệu không mong muốn, thử lại sau hoặc dữ liệu khác!" });
+      return res.status(500).json({
+        errCode: -1,
+        errMessage: "Dữ liệu không mong muốn, thử lại sau hoặc dữ liệu khác!",
+      });
     }
   },
 
   // Api Department
   getDepartments: async (req, res) => {
     try {
-   // console.log(req.body);
+      // console.log(req.body);
       const searchTerms = `%${
         req?.body?.inputSearch ? req?.body?.inputSearch?.trim() : ""
       }%`?.replace(/\s/g, "%");
-   // console.log(searchTerms);
+      // console.log(searchTerms);
       const whereClause = {};
-   // console.log(req?.body?.inputSearch?.toLowerCase());
-   // console.log("req?.body?.length", Object.keys(req?.body).length);
+      // console.log(req?.body?.inputSearch?.toLowerCase());
+      // console.log("req?.body?.length", Object.keys(req?.body).length);
       if (Object.keys(req?.body).length > 0) {
-     // console.log("Đã vào");
+        // console.log("Đã vào");
         if (!req?.body?.filterSearch?.includes("Data")) {
           if (searchTerms?.toLowerCase() != "%null%") {
             whereClause[req?.body?.filterSearch] = {
@@ -790,7 +1000,7 @@ const lecturerController = {
           }
         } else {
           if (searchTerms?.toLowerCase() != "%null%") {
-         // console.log(req?.body?.filterSearch);
+            // console.log(req?.body?.filterSearch);
             if (req?.body?.filterSearch == "deanData") {
               whereClause["$deanData.fullName$"] = {
                 [Op.like]: searchTerms,
@@ -807,7 +1017,7 @@ const lecturerController = {
           }
         }
       }
-   // console.log("whereClause", whereClause);
+      // console.log("whereClause", whereClause);
 
       const queryOptions = {
         include: [
@@ -833,7 +1043,10 @@ const lecturerController = {
       const { rows: departments, count: totalRecords } = result;
       return res.status(200).json({ errCode: 0, departments, totalRecords });
     } catch (error) {
-      return res.status(500).json({ errCode: -1, errMessage: "Dữ liệu không mong muốn, thử lại sau hoặc dữ liệu khác!" });
+      return res.status(500).json({
+        errCode: -1,
+        errMessage: "Dữ liệu không mong muốn, thử lại sau hoặc dữ liệu khác!",
+      });
     }
   },
   getDepartmentById: async (req, res) => {
@@ -865,7 +1078,10 @@ const lecturerController = {
         });
       }
     } catch (error) {
-      return res.status(500).json({ errCode: -1, errMessage: "Dữ liệu không mong muốn, thử lại sau hoặc dữ liệu khác!" });
+      return res.status(500).json({
+        errCode: -1,
+        errMessage: "Dữ liệu không mong muốn, thử lại sau hoặc dữ liệu khác!",
+      });
     }
   },
   addDepartment: async (req, res) => {
@@ -918,13 +1134,16 @@ const lecturerController = {
           .json({ errCode: 1, errMessage: "Dữ liệu không được tìm thấy!" });
       }
     } catch (error) {
-      return res.status(500).json({ errCode: -1, errMessage: "Dữ liệu không mong muốn, thử lại sau hoặc dữ liệu khác!" });
+      return res.status(500).json({
+        errCode: -1,
+        errMessage: "Dữ liệu không mong muốn, thử lại sau hoặc dữ liệu khác!",
+      });
     }
   },
   updateDepartment: async (req, res) => {
     try {
       if (req?.params?.id) {
-     // console.log(req.body);
+        // console.log(req.body);
         const result = await db.Department.update(
           {
             name: req?.body?.name,
@@ -979,13 +1198,16 @@ const lecturerController = {
           .json({ errCode: 1, errMessage: "Dữ liệu không được tìm thấy!" });
       }
     } catch (error) {
-      return res.status(500).json({ errCode: -1, errMessage: "Dữ liệu không mong muốn, thử lại sau hoặc dữ liệu khác!" });
+      return res.status(500).json({
+        errCode: -1,
+        errMessage: "Dữ liệu không mong muốn, thử lại sau hoặc dữ liệu khác!",
+      });
     }
   },
   deleteDepartment: async (req, res) => {
     try {
       if (req?.params?.id) {
-     // console.log(req.body);
+        // console.log(req.body);
         const result = await db.Department.destroy({
           where: { id: req?.params?.id },
         });
@@ -1006,13 +1228,16 @@ const lecturerController = {
           .json({ errCode: 1, errMessage: "Dữ liệu không được tìm thấy!" });
       }
     } catch (error) {
-      return res.status(500).json({ errCode: -1, errMessage: "Dữ liệu không mong muốn, thử lại sau hoặc dữ liệu khác!" });
+      return res.status(500).json({
+        errCode: -1,
+        errMessage: "Dữ liệu không mong muốn, thử lại sau hoặc dữ liệu khác!",
+      });
     }
   },
   importDepartments: async (req, res) => {
     try {
       if (req?.body?.data) {
-     // console.log(req?.body?.data);
+        // console.log(req?.body?.data);
         const result = await db.Department.bulkCreate(req?.body?.data);
         if (result) {
           return res
@@ -1031,23 +1256,26 @@ const lecturerController = {
           .json({ errCode: 1, errMessage: "Dữ liệu không được tìm thấy!" });
       }
     } catch (error) {
-      return res.status(500).json({ errCode: -1, errMessage: "Dữ liệu không mong muốn, thử lại sau hoặc dữ liệu khác!" });
+      return res.status(500).json({
+        errCode: -1,
+        errMessage: "Dữ liệu không mong muốn, thử lại sau hoặc dữ liệu khác!",
+      });
     }
   },
 
   // Api Block
   getBlocks: async (req, res) => {
     try {
-   // console.log(req.body);
+      // console.log(req.body);
       const searchTerms = `%${
         req?.body?.inputSearch ? req?.body?.inputSearch?.trim() : ""
       }%`?.replace(/\s/g, "%");
-   // console.log(searchTerms);
+      // console.log(searchTerms);
       const whereClause = {};
-   // console.log(req?.body?.inputSearch?.toLowerCase());
-   // console.log("req?.body?.length", Object.keys(req?.body).length);
+      // console.log(req?.body?.inputSearch?.toLowerCase());
+      // console.log("req?.body?.length", Object.keys(req?.body).length);
       if (Object.keys(req?.body).length > 0) {
-     // console.log("Đã vào");
+        // console.log("Đã vào");
         if (!req?.body?.filterSearch?.includes("Data")) {
           if (searchTerms?.toLowerCase() != "%null%") {
             whereClause[req?.body?.filterSearch] = {
@@ -1060,7 +1288,7 @@ const lecturerController = {
           }
         } else {
           if (searchTerms?.toLowerCase() != "%null%") {
-         // console.log(req?.body?.filterSearch);
+            // console.log(req?.body?.filterSearch);
             // if (req?.body?.filterSearch == "deanData") {
             //   whereClause["$deanData.fullName$"] = {
             //     [Op.like]: searchTerms,
@@ -1077,7 +1305,7 @@ const lecturerController = {
           }
         }
       }
-   // console.log("whereClause", whereClause);
+      // console.log("whereClause", whereClause);
 
       const queryOptions = {
         // include: [
@@ -1103,7 +1331,10 @@ const lecturerController = {
       const { rows: blocks, count: totalRecords } = result;
       return res.status(200).json({ errCode: 0, blocks, totalRecords });
     } catch (error) {
-      return res.status(500).json({ errCode: -1, errMessage: "Dữ liệu không mong muốn, thử lại sau hoặc dữ liệu khác!" });
+      return res.status(500).json({
+        errCode: -1,
+        errMessage: "Dữ liệu không mong muốn, thử lại sau hoặc dữ liệu khác!",
+      });
     }
   },
   getBlockById: async (req, res) => {
@@ -1135,7 +1366,10 @@ const lecturerController = {
         });
       }
     } catch (error) {
-      return res.status(500).json({ errCode: -1, errMessage: "Dữ liệu không mong muốn, thử lại sau hoặc dữ liệu khác!" });
+      return res.status(500).json({
+        errCode: -1,
+        errMessage: "Dữ liệu không mong muốn, thử lại sau hoặc dữ liệu khác!",
+      });
     }
   },
   addBlock: async (req, res) => {
@@ -1162,13 +1396,16 @@ const lecturerController = {
           .json({ errCode: 1, errMessage: "Dữ liệu không được tìm thấy!" });
       }
     } catch (error) {
-      return res.status(500).json({ errCode: -1, errMessage: "Dữ liệu không mong muốn, thử lại sau hoặc dữ liệu khác!" });
+      return res.status(500).json({
+        errCode: -1,
+        errMessage: "Dữ liệu không mong muốn, thử lại sau hoặc dữ liệu khác!",
+      });
     }
   },
   updateBlock: async (req, res) => {
     try {
       if (req?.params?.id) {
-     // console.log(req.body);
+        // console.log(req.body);
         const result = await db.Block.update(
           {
             name: req?.body?.name,
@@ -1193,13 +1430,16 @@ const lecturerController = {
           .json({ errCode: 1, errMessage: "Dữ liệu không được tìm thấy!" });
       }
     } catch (error) {
-      return res.status(500).json({ errCode: -1, errMessage: "Dữ liệu không mong muốn, thử lại sau hoặc dữ liệu khác!" });
+      return res.status(500).json({
+        errCode: -1,
+        errMessage: "Dữ liệu không mong muốn, thử lại sau hoặc dữ liệu khác!",
+      });
     }
   },
   deleteBlock: async (req, res) => {
     try {
       if (req?.params?.id) {
-     // console.log(req.body);
+        // console.log(req.body);
         const result = await db.Block.destroy({
           where: { id: req?.params?.id },
         });
@@ -1220,13 +1460,16 @@ const lecturerController = {
           .json({ errCode: 1, errMessage: "Dữ liệu không được tìm thấy!" });
       }
     } catch (error) {
-      return res.status(500).json({ errCode: -1, errMessage: "Dữ liệu không mong muốn, thử lại sau hoặc dữ liệu khác!" });
+      return res.status(500).json({
+        errCode: -1,
+        errMessage: "Dữ liệu không mong muốn, thử lại sau hoặc dữ liệu khác!",
+      });
     }
   },
   importBlocks: async (req, res) => {
     try {
       if (req?.body?.data) {
-     // console.log(req?.body?.data);
+        // console.log(req?.body?.data);
         const result = await db.Block.bulkCreate(req?.body?.data);
         if (result) {
           return res
@@ -1245,23 +1488,26 @@ const lecturerController = {
           .json({ errCode: 1, errMessage: "Dữ liệu không được tìm thấy!" });
       }
     } catch (error) {
-      return res.status(500).json({ errCode: -1, errMessage: "Dữ liệu không mong muốn, thử lại sau hoặc dữ liệu khác!" });
+      return res.status(500).json({
+        errCode: -1,
+        errMessage: "Dữ liệu không mong muốn, thử lại sau hoặc dữ liệu khác!",
+      });
     }
   },
 
   // Api Major
   getMajors: async (req, res) => {
     try {
-   // console.log(req.body);
+      // console.log(req.body);
       const searchTerms = `%${
         req?.body?.inputSearch ? req?.body?.inputSearch?.trim() : ""
       }%`?.replace(/\s/g, "%");
-   // console.log(searchTerms);
+      // console.log(searchTerms);
       const whereClause = {};
-   // console.log(req?.body?.inputSearch?.toLowerCase());
-   // console.log("req?.body?.length", Object.keys(req?.body).length);
+      // console.log(req?.body?.inputSearch?.toLowerCase());
+      // console.log("req?.body?.length", Object.keys(req?.body).length);
       if (Object.keys(req?.body).length > 0) {
-     // console.log("Đã vào");
+        // console.log("Đã vào");
         if (!req?.body?.filterSearch?.includes("Data")) {
           if (searchTerms?.toLowerCase() != "%null%") {
             whereClause[req?.body?.filterSearch] = {
@@ -1274,7 +1520,7 @@ const lecturerController = {
           }
         } else {
           if (searchTerms?.toLowerCase() != "%null%") {
-         // console.log(req?.body?.filterSearch);
+            // console.log(req?.body?.filterSearch);
             if (req?.body?.filterSearch == "departmentData") {
               whereClause["$departmentData.name$"] = {
                 [Op.like]: searchTerms,
@@ -1296,7 +1542,7 @@ const lecturerController = {
           }
         }
       }
-   // console.log("whereClause", whereClause);
+      // console.log("whereClause", whereClause);
 
       const queryOptions = {
         include: [
@@ -1321,7 +1567,10 @@ const lecturerController = {
       const { rows: majors, count: totalRecords } = result;
       return res.status(200).json({ errCode: 0, majors, totalRecords });
     } catch (error) {
-      return res.status(500).json({ errCode: -1, errMessage: "Dữ liệu không mong muốn, thử lại sau hoặc dữ liệu khác!" });
+      return res.status(500).json({
+        errCode: -1,
+        errMessage: "Dữ liệu không mong muốn, thử lại sau hoặc dữ liệu khác!",
+      });
     }
   },
   getMajorById: async (req, res) => {
@@ -1352,7 +1601,10 @@ const lecturerController = {
         });
       }
     } catch (error) {
-      return res.status(500).json({ errCode: -1, errMessage: "Dữ liệu không mong muốn, thử lại sau hoặc dữ liệu khác!" });
+      return res.status(500).json({
+        errCode: -1,
+        errMessage: "Dữ liệu không mong muốn, thử lại sau hoặc dữ liệu khác!",
+      });
     }
   },
   addMajor: async (req, res) => {
@@ -1380,13 +1632,16 @@ const lecturerController = {
           .json({ errCode: 1, errMessage: "Dữ liệu không được tìm thấy!" });
       }
     } catch (error) {
-      return res.status(500).json({ errCode: -1, errMessage: "Dữ liệu không mong muốn, thử lại sau hoặc dữ liệu khác!" });
+      return res.status(500).json({
+        errCode: -1,
+        errMessage: "Dữ liệu không mong muốn, thử lại sau hoặc dữ liệu khác!",
+      });
     }
   },
   updateMajor: async (req, res) => {
     try {
       if (req?.params?.id) {
-     // console.log(req.body);
+        // console.log(req.body);
         const result = await db.Major.update(
           {
             name: req?.body?.name,
@@ -1412,13 +1667,16 @@ const lecturerController = {
           .json({ errCode: 1, errMessage: "Dữ liệu không được tìm thấy!" });
       }
     } catch (error) {
-      return res.status(500).json({ errCode: -1, errMessage: "Dữ liệu không mong muốn, thử lại sau hoặc dữ liệu khác!" });
+      return res.status(500).json({
+        errCode: -1,
+        errMessage: "Dữ liệu không mong muốn, thử lại sau hoặc dữ liệu khác!",
+      });
     }
   },
   deleteMajor: async (req, res) => {
     try {
       if (req?.params?.id) {
-     // console.log(req.body);
+        // console.log(req.body);
         const result = await db.Major.destroy({
           where: { id: req?.params?.id },
         });
@@ -1439,13 +1697,16 @@ const lecturerController = {
           .json({ errCode: 1, errMessage: "Dữ liệu không được tìm thấy!" });
       }
     } catch (error) {
-      return res.status(500).json({ errCode: -1, errMessage: "Dữ liệu không mong muốn, thử lại sau hoặc dữ liệu khác!" });
+      return res.status(500).json({
+        errCode: -1,
+        errMessage: "Dữ liệu không mong muốn, thử lại sau hoặc dữ liệu khác!",
+      });
     }
   },
   importMajors: async (req, res) => {
     try {
       if (req?.body?.data) {
-     // console.log(req?.body?.data);
+        // console.log(req?.body?.data);
         const result = await db.Major.bulkCreate(req?.body?.data);
         if (result) {
           return res
@@ -1464,23 +1725,26 @@ const lecturerController = {
           .json({ errCode: 1, errMessage: "Dữ liệu không được tìm thấy!" });
       }
     } catch (error) {
-      return res.status(500).json({ errCode: -1, errMessage: "Dữ liệu không mong muốn, thử lại sau hoặc dữ liệu khác!" });
+      return res.status(500).json({
+        errCode: -1,
+        errMessage: "Dữ liệu không mong muốn, thử lại sau hoặc dữ liệu khác!",
+      });
     }
   },
 
   // Api Class
   getClasses: async (req, res) => {
     try {
-   // console.log(req.body);
+      // console.log(req.body);
       const searchTerms = `%${
         req?.body?.inputSearch ? req?.body?.inputSearch?.trim() : ""
       }%`?.replace(/\s/g, "%");
-   // console.log(searchTerms);
+      // console.log(searchTerms);
       const whereClause = {};
-   // console.log(req?.body?.inputSearch?.toLowerCase());
-   // console.log("req?.body?.length", Object.keys(req?.body).length);
+      // console.log(req?.body?.inputSearch?.toLowerCase());
+      // console.log("req?.body?.length", Object.keys(req?.body).length);
       if (Object.keys(req?.body).length > 0) {
-     // console.log("Đã vào");
+        // console.log("Đã vào");
         if (!req?.body?.filterSearch?.includes("Data")) {
           if (searchTerms?.toLowerCase() != "%null%") {
             whereClause[req?.body?.filterSearch] = {
@@ -1493,7 +1757,7 @@ const lecturerController = {
           }
         } else {
           if (searchTerms?.toLowerCase() != "%null%") {
-         // console.log(req?.body?.filterSearch);
+            // console.log(req?.body?.filterSearch);
             if (req?.body?.filterSearch == "blockData") {
               whereClause["$blockData.name$"] = {
                 [Op.like]: searchTerms,
@@ -1515,7 +1779,7 @@ const lecturerController = {
           }
         }
       }
-   // console.log("whereClause", whereClause);
+      // console.log("whereClause", whereClause);
 
       const queryOptions = {
         include: [
@@ -1544,7 +1808,10 @@ const lecturerController = {
       const { rows: classes, count: totalRecords } = result;
       return res.status(200).json({ errCode: 0, classes, totalRecords });
     } catch (error) {
-      return res.status(500).json({ errCode: -1, errMessage: "Dữ liệu không mong muốn, thử lại sau hoặc dữ liệu khác!" });
+      return res.status(500).json({
+        errCode: -1,
+        errMessage: "Dữ liệu không mong muốn, thử lại sau hoặc dữ liệu khác!",
+      });
     }
   },
   getClassById: async (req, res) => {
@@ -1579,7 +1846,10 @@ const lecturerController = {
         });
       }
     } catch (error) {
-      return res.status(500).json({ errCode: -1, errMessage: "Dữ liệu không mong muốn, thử lại sau hoặc dữ liệu khác!" });
+      return res.status(500).json({
+        errCode: -1,
+        errMessage: "Dữ liệu không mong muốn, thử lại sau hoặc dữ liệu khác!",
+      });
     }
   },
   addClass: async (req, res) => {
@@ -1608,13 +1878,16 @@ const lecturerController = {
           .json({ errCode: 1, errMessage: "Dữ liệu không được tìm thấy!" });
       }
     } catch (error) {
-      return res.status(500).json({ errCode: -1, errMessage: "Dữ liệu không mong muốn, thử lại sau hoặc dữ liệu khác!" });
+      return res.status(500).json({
+        errCode: -1,
+        errMessage: "Dữ liệu không mong muốn, thử lại sau hoặc dữ liệu khác!",
+      });
     }
   },
   updateClass: async (req, res) => {
     try {
       if (req?.params?.id) {
-     // console.log(req.body);
+        // console.log(req.body);
         const result = await db.Class.update(
           {
             name: req?.body?.name,
@@ -1641,13 +1914,16 @@ const lecturerController = {
           .json({ errCode: 1, errMessage: "Dữ liệu không được tìm thấy!" });
       }
     } catch (error) {
-      return res.status(500).json({ errCode: -1, errMessage: "Dữ liệu không mong muốn, thử lại sau hoặc dữ liệu khác!" });
+      return res.status(500).json({
+        errCode: -1,
+        errMessage: "Dữ liệu không mong muốn, thử lại sau hoặc dữ liệu khác!",
+      });
     }
   },
   deleteClass: async (req, res) => {
     try {
       if (req?.params?.id) {
-     // console.log(req.body);
+        // console.log(req.body);
         const result = await db.Class.destroy({
           where: { id: req?.params?.id },
         });
@@ -1668,13 +1944,16 @@ const lecturerController = {
           .json({ errCode: 1, errMessage: "Dữ liệu không được tìm thấy!" });
       }
     } catch (error) {
-      return res.status(500).json({ errCode: -1, errMessage: "Dữ liệu không mong muốn, thử lại sau hoặc dữ liệu khác!" });
+      return res.status(500).json({
+        errCode: -1,
+        errMessage: "Dữ liệu không mong muốn, thử lại sau hoặc dữ liệu khác!",
+      });
     }
   },
   importClasses: async (req, res) => {
     try {
       if (req?.body?.data) {
-     // console.log(req?.body?.data);
+        // console.log(req?.body?.data);
         const result = await db.Class.bulkCreate(req?.body?.data);
         if (result) {
           return res
@@ -1693,23 +1972,26 @@ const lecturerController = {
           .json({ errCode: 1, errMessage: "Dữ liệu không được tìm thấy!" });
       }
     } catch (error) {
-      return res.status(500).json({ errCode: -1, errMessage: "Dữ liệu không mong muốn, thử lại sau hoặc dữ liệu khác!" });
+      return res.status(500).json({
+        errCode: -1,
+        errMessage: "Dữ liệu không mong muốn, thử lại sau hoặc dữ liệu khác!",
+      });
     }
   },
 
   // Api EvaluationMethod
   getEvaluationMethods: async (req, res) => {
     try {
-   // console.log(req.body);
+      // console.log(req.body);
       const searchTerms = `%${
         req?.body?.inputSearch ? req?.body?.inputSearch?.trim() : ""
       }%`?.replace(/\s/g, "%");
-   // console.log(searchTerms);
+      // console.log(searchTerms);
       const whereClause = {};
-   // console.log(req?.body?.inputSearch?.toLowerCase());
-   // console.log("req?.body?.length", Object.keys(req?.body).length);
+      // console.log(req?.body?.inputSearch?.toLowerCase());
+      // console.log("req?.body?.length", Object.keys(req?.body).length);
       if (Object.keys(req?.body).length > 0) {
-     // console.log("Đã vào");
+        // console.log("Đã vào");
         if (!req?.body?.filterSearch?.includes("Data")) {
           if (searchTerms?.toLowerCase() != "%null%") {
             whereClause[req?.body?.filterSearch] = {
@@ -1722,7 +2004,7 @@ const lecturerController = {
           }
         } else {
           if (searchTerms?.toLowerCase() != "%null%") {
-         // console.log(req?.body?.filterSearch);
+            // console.log(req?.body?.filterSearch);
             // if (req?.body?.filterSearch == "deanData") {
             //   whereClause["$deanData.fullName$"] = {
             //     [Op.like]: searchTerms,
@@ -1739,7 +2021,7 @@ const lecturerController = {
           }
         }
       }
-   // console.log("whereClause", whereClause);
+      // console.log("whereClause", whereClause);
 
       const queryOptions = {
         // include: [
@@ -1767,7 +2049,10 @@ const lecturerController = {
         .status(200)
         .json({ errCode: 0, evaluationMethods, totalRecords });
     } catch (error) {
-      return res.status(500).json({ errCode: -1, errMessage: "Dữ liệu không mong muốn, thử lại sau hoặc dữ liệu khác!" });
+      return res.status(500).json({
+        errCode: -1,
+        errMessage: "Dữ liệu không mong muốn, thử lại sau hoặc dữ liệu khác!",
+      });
     }
   },
   getEvaluationMethodById: async (req, res) => {
@@ -1799,7 +2084,10 @@ const lecturerController = {
         });
       }
     } catch (error) {
-      return res.status(500).json({ errCode: -1, errMessage: "Dữ liệu không mong muốn, thử lại sau hoặc dữ liệu khác!" });
+      return res.status(500).json({
+        errCode: -1,
+        errMessage: "Dữ liệu không mong muốn, thử lại sau hoặc dữ liệu khác!",
+      });
     }
   },
   addEvaluationMethod: async (req, res) => {
@@ -1817,7 +2105,7 @@ const lecturerController = {
               ...criteria,
             });
           });
-       // console.log("criterias", criterias);
+          // console.log("criterias", criterias);
           result = null;
           result = await db.EvaluationCriteria.bulkCreate(criterias);
           if (result) {
@@ -1844,13 +2132,16 @@ const lecturerController = {
           .json({ errCode: 1, errMessage: "Dữ liệu không được tìm thấy!" });
       }
     } catch (error) {
-      return res.status(500).json({ errCode: -1, errMessage: "Dữ liệu không mong muốn, thử lại sau hoặc dữ liệu khác!" });
+      return res.status(500).json({
+        errCode: -1,
+        errMessage: "Dữ liệu không mong muốn, thử lại sau hoặc dữ liệu khác!",
+      });
     }
   },
   updateEvaluationMethod: async (req, res) => {
     try {
       if (req?.params?.id) {
-     // console.log(req.body);
+        // console.log(req.body);
         let result = await db.EvaluationMethod.update(
           {
             name: req?.body?.name,
@@ -1881,7 +2172,7 @@ const lecturerController = {
             where: { id: ids },
           });
 
-       // console.log("resultDelete", result, ids);
+          // console.log("resultDelete", result, ids);
 
           result = await db.EvaluationCriteria.bulkCreate(criterias, {
             upsertKeys: ["id"],
@@ -1893,7 +2184,7 @@ const lecturerController = {
               "order",
             ],
           });
-       // console.log("result", result);
+          // console.log("result", result);
 
           if (result) {
             return res
@@ -1919,13 +2210,16 @@ const lecturerController = {
           .json({ errCode: 1, errMessage: "Dữ liệu không được tìm thấy!" });
       }
     } catch (error) {
-      return res.status(500).json({ errCode: -1, errMessage: "Dữ liệu không mong muốn, thử lại sau hoặc dữ liệu khác!" });
+      return res.status(500).json({
+        errCode: -1,
+        errMessage: "Dữ liệu không mong muốn, thử lại sau hoặc dữ liệu khác!",
+      });
     }
   },
   deleteEvaluationMethod: async (req, res) => {
     try {
       if (req?.params?.id) {
-     // console.log(req.body);
+        // console.log(req.body);
         const result = await db.EvaluationMethod.destroy({
           where: { id: req?.params?.id },
         });
@@ -1946,13 +2240,16 @@ const lecturerController = {
           .json({ errCode: 1, errMessage: "Dữ liệu không được tìm thấy!" });
       }
     } catch (error) {
-      return res.status(500).json({ errCode: -1, errMessage: "Dữ liệu không mong muốn, thử lại sau hoặc dữ liệu khác!" });
+      return res.status(500).json({
+        errCode: -1,
+        errMessage: "Dữ liệu không mong muốn, thử lại sau hoặc dữ liệu khác!",
+      });
     }
   },
   importEvaluationMethods: async (req, res) => {
     try {
       if (req?.body?.data) {
-     // console.log(req?.body?.data);
+        // console.log(req?.body?.data);
         const result = await db.EvaluationMethod.bulkCreate(req?.body?.data);
         if (result) {
           return res
@@ -1971,86 +2268,18 @@ const lecturerController = {
           .json({ errCode: 1, errMessage: "Dữ liệu không được tìm thấy!" });
       }
     } catch (error) {
-      return res.status(500).json({ errCode: -1, errMessage: "Dữ liệu không mong muốn, thử lại sau hoặc dữ liệu khác!" });
+      return res.status(500).json({
+        errCode: -1,
+        errMessage: "Dữ liệu không mong muốn, thử lại sau hoặc dữ liệu khác!",
+      });
     }
   },
 
   // Api EvaluationCriteria
-  getEvaluationCriterias: async (req, res) => {
-    try {
-   // console.log(req.body);
-      const searchTerms = `%${
-        req?.body?.inputSearch ? req?.body?.inputSearch?.trim() : ""
-      }%`?.replace(/\s/g, "%");
-      // console.log(searchTerms);
-      const whereClause = {};
-      // console.log(req?.body?.inputSearch?.toLowerCase());
-      // console.log("req?.body?.length", Object.keys(req?.body).length);
-      if (Object.keys(req?.body).length > 0) {
-     // console.log("Đã vào");
-        if (!req?.body?.filterSearch?.includes("Data")) {
-          if (searchTerms?.toLowerCase() != "%null%") {
-            whereClause[req?.body?.filterSearch] = {
-              [Op.like]: searchTerms,
-            };
-          } else {
-            whereClause[req?.body?.filterSearch] = {
-              [Op.is]: null,
-            };
-          }
-        } else {
-          if (searchTerms?.toLowerCase() != "%null%") {
-         // console.log(req?.body?.filterSearch);
-            // if (req?.body?.filterSearch == "deanData") {
-            //   whereClause["$deanData.fullName$"] = {
-            //     [Op.like]: searchTerms,
-            //   };
-            // }
-            // theo id
-            whereClause[req?.body?.filterSearch.replace("Data", "Id")] = {
-              [Op.like]: searchTerms,
-            };
-          } else {
-            whereClause[req?.body?.filterSearch?.replace("Data", "Id")] = {
-              [Op.is]: null,
-            };
-          }
-        }
-      }
-      // console.log("whereClause", whereClause);
 
-      const queryOptions = {
-        // include: [
-        //   {
-        //     model: db.Lecturer,
-        //     as: "deanData",
-        //     // attributes: ["name"],
-        //   },
-        // ],
-        order: [["order", "ASC"]],
-        raw: true,
-        nest: true,
-      };
-
-      if (Object.keys(whereClause).length > 0) {
-        queryOptions.where = {
-          [Op.or]: whereClause,
-        };
-      }
-
-      const result = await db.EvaluationCriteria.findAndCountAll(queryOptions);
-   // console.log(result);
-      const { rows: evaluationCriterias, count: totalRecords } = result;
-      return res
-        .status(200)
-        .json({ errCode: 0, evaluationCriterias, totalRecords });
-    } catch (error) {
-      return res.status(500).json({ errCode: -1, errMessage: "Dữ liệu không mong muốn, thử lại sau hoặc dữ liệu khác!" });
-    }
-  },
   getEvaluationCriteriaByThesisSessionId: async (req, res) => {
     try {
-   // console.log(req?.params?.id);
+      // console.log(req?.params?.id);
       let result = await db.ThesisSession.findAll({
         where: {
           id: req?.params?.id,
@@ -2105,7 +2334,10 @@ const lecturerController = {
         });
       }
     } catch (error) {
-      return res.status(500).json({ errCode: -1, errMessage: "Dữ liệu không mong muốn, thử lại sau hoặc dữ liệu khác!" });
+      return res.status(500).json({
+        errCode: -1,
+        errMessage: "Dữ liệu không mong muốn, thử lại sau hoặc dữ liệu khác!",
+      });
     }
   },
   addEvaluationCriteria: async (req, res) => {
@@ -2116,7 +2348,7 @@ const lecturerController = {
           description: req?.body?.description,
         });
         if (result) {
-       // console.log("result", result);
+          // console.log("result", result);
           return res
             .status(200)
             .json({ errCode: 0, errMessage: "Thêm dữ liệu thành công." });
@@ -2133,13 +2365,16 @@ const lecturerController = {
           .json({ errCode: 1, errMessage: "Dữ liệu không được tìm thấy!" });
       }
     } catch (error) {
-      return res.status(500).json({ errCode: -1, errMessage: "Dữ liệu không mong muốn, thử lại sau hoặc dữ liệu khác!" });
+      return res.status(500).json({
+        errCode: -1,
+        errMessage: "Dữ liệu không mong muốn, thử lại sau hoặc dữ liệu khác!",
+      });
     }
   },
   updateEvaluationCriteria: async (req, res) => {
     try {
       if (req?.params?.id) {
-     // console.log(req.body);
+        // console.log(req.body);
         const result = await db.EvaluationCriteria.update(
           {
             name: req?.body?.name,
@@ -2164,13 +2399,16 @@ const lecturerController = {
           .json({ errCode: 1, errMessage: "Dữ liệu không được tìm thấy!" });
       }
     } catch (error) {
-      return res.status(500).json({ errCode: -1, errMessage: "Dữ liệu không mong muốn, thử lại sau hoặc dữ liệu khác!" });
+      return res.status(500).json({
+        errCode: -1,
+        errMessage: "Dữ liệu không mong muốn, thử lại sau hoặc dữ liệu khác!",
+      });
     }
   },
   deleteEvaluationCriteria: async (req, res) => {
     try {
       if (req?.params?.id) {
-     // console.log(req.body);
+        // console.log(req.body);
         const result = await db.EvaluationCriteria.destroy({
           where: { id: req?.params?.id },
         });
@@ -2191,13 +2429,16 @@ const lecturerController = {
           .json({ errCode: 1, errMessage: "Dữ liệu không được tìm thấy!" });
       }
     } catch (error) {
-      return res.status(500).json({ errCode: -1, errMessage: "Dữ liệu không mong muốn, thử lại sau hoặc dữ liệu khác!" });
+      return res.status(500).json({
+        errCode: -1,
+        errMessage: "Dữ liệu không mong muốn, thử lại sau hoặc dữ liệu khác!",
+      });
     }
   },
   importEvaluationCriterias: async (req, res) => {
     try {
       if (req?.body?.data) {
-     // console.log(req?.body?.data);
+        // console.log(req?.body?.data);
         const result = await db.EvaluationMethod.bulkCreate(req?.body?.data);
         if (result) {
           return res
@@ -2216,23 +2457,26 @@ const lecturerController = {
           .json({ errCode: 1, errMessage: "Dữ liệu không được tìm thấy!" });
       }
     } catch (error) {
-      return res.status(500).json({ errCode: -1, errMessage: "Dữ liệu không mong muốn, thử lại sau hoặc dữ liệu khác!" });
+      return res.status(500).json({
+        errCode: -1,
+        errMessage: "Dữ liệu không mong muốn, thử lại sau hoặc dữ liệu khác!",
+      });
     }
   },
 
   // Api Lecturer
   getLecturers: async (req, res) => {
     try {
-   // console.log(req.body);
+      // console.log(req.body);
       const searchTerms = `%${
         req?.body?.inputSearch ? req?.body?.inputSearch?.trim() : ""
       }%`?.replace(/\s/g, "%");
-   // console.log(searchTerms);
+      // console.log(searchTerms);
       const whereClause = {};
-   // console.log(req?.body?.inputSearch?.toLowerCase());
-   // console.log("req?.body?.length", Object.keys(req?.body).length);
+      // console.log(req?.body?.inputSearch?.toLowerCase());
+      // console.log("req?.body?.length", Object.keys(req?.body).length);
       if (Object.keys(req?.body).length > 0) {
-     // console.log("Đã vào");
+        // console.log("Đã vào");
         if (!req?.body?.filterSearch?.includes("Data")) {
           if (searchTerms?.toLowerCase() != "%null%") {
             whereClause[req?.body?.filterSearch] = {
@@ -2245,7 +2489,7 @@ const lecturerController = {
           }
         } else {
           if (searchTerms?.toLowerCase() != "%null%") {
-         // console.log(req?.body?.filterSearch);
+            // console.log(req?.body?.filterSearch);
             if (req?.body?.filterSearch == "deanData") {
               whereClause["$deanData.fullName$"] = {
                 [Op.like]: searchTerms,
@@ -2282,7 +2526,7 @@ const lecturerController = {
           }
         }
       }
-   // console.log("whereClause", whereClause);
+      // console.log("whereClause", whereClause);
 
       const queryOptions = {
         attributes: { exclude: ["password", "refreshToken", "image"] },
@@ -2324,7 +2568,10 @@ const lecturerController = {
       const { rows: lecturers, count: totalRecords } = result;
       return res.status(200).json({ errCode: 0, lecturers, totalRecords });
     } catch (error) {
-      return res.status(500).json({ errCode: -1, errMessage: "Dữ liệu không mong muốn, thử lại sau hoặc dữ liệu khác!" });
+      return res.status(500).json({
+        errCode: -1,
+        errMessage: "Dữ liệu không mong muốn, thử lại sau hoặc dữ liệu khác!",
+      });
     }
   },
   getLecturerById: async (req, res) => {
@@ -2372,7 +2619,10 @@ const lecturerController = {
         });
       }
     } catch (error) {
-      return res.status(500).json({ errCode: -1, errMessage: "Dữ liệu không mong muốn, thử lại sau hoặc dữ liệu khác!" });
+      return res.status(500).json({
+        errCode: -1,
+        errMessage: "Dữ liệu không mong muốn, thử lại sau hoặc dữ liệu khác!",
+      });
     }
   },
   addLecturer: async (req, res) => {
@@ -2382,7 +2632,7 @@ const lecturerController = {
         salt
       );
       if (req?.body) {
-     // console.log("req.body", req.body);
+        // console.log("req.body", req.body);
         if (req?.body?.departmentId && req?.body?.roleId == "R2") {
           await db.Lecturer.update(
             {
@@ -2411,7 +2661,7 @@ const lecturerController = {
         });
 
         if (result) {
-       // console.log("result", result);
+          // console.log("result", result);
           if (req?.body?.departmentId && req?.body?.roleId == "R2") {
             const resultDean = await db.Department.update(
               {
@@ -2420,7 +2670,7 @@ const lecturerController = {
               { where: { id: result?.dataValues?.departmentId } }
             );
             if (resultDean) {
-           // console.log("resultDean", resultDean);
+              // console.log("resultDean", resultDean);
               return res.status(200).json({
                 errCode: 0,
                 errMessage:
@@ -2450,13 +2700,16 @@ const lecturerController = {
           .json({ errCode: 1, errMessage: "Dữ liệu không được tìm thấy!" });
       }
     } catch (error) {
-      return res.status(500).json({ errCode: -1, errMessage: "Dữ liệu không mong muốn, thử lại sau hoặc dữ liệu khác!" });
+      return res.status(500).json({
+        errCode: -1,
+        errMessage: "Dữ liệu không mong muốn, thử lại sau hoặc dữ liệu khác!",
+      });
     }
   },
   updateLecturer: async (req, res) => {
     try {
       if (req?.params?.id) {
-     // console.log("req.body", req.body);
+        // console.log("req.body", req.body);
         if (req?.body?.departmentId && req?.body?.roleId == "R2") {
           await db.Lecturer.update(
             {
@@ -2492,7 +2745,7 @@ const lecturerController = {
         );
 
         if (result) {
-       // console.log("result", result);
+          // console.log("result", result);
           if (req?.body?.departmentId && req?.body?.roleId == "R2") {
             const resultDean = await db.Department.update(
               {
@@ -2501,7 +2754,7 @@ const lecturerController = {
               { where: { id: req?.body?.departmentId } }
             );
             if (resultDean) {
-           // console.log("resultDean", resultDean);
+              // console.log("resultDean", resultDean);
               return res.status(200).json({
                 errCode: 0,
                 errMessage:
@@ -2531,13 +2784,16 @@ const lecturerController = {
           .json({ errCode: 1, errMessage: "Dữ liệu không được tìm thấy!" });
       }
     } catch (error) {
-      return res.status(500).json({ errCode: -1, errMessage: "Dữ liệu không mong muốn, thử lại sau hoặc dữ liệu khác!" });
+      return res.status(500).json({
+        errCode: -1,
+        errMessage: "Dữ liệu không mong muốn, thử lại sau hoặc dữ liệu khác!",
+      });
     }
   },
   deleteLecturer: async (req, res) => {
     try {
       if (req?.params?.id) {
-     // console.log(req.body);
+        // console.log(req.body);
         const result = await db.Lecturer.destroy({
           where: { id: req?.params?.id },
         });
@@ -2558,13 +2814,16 @@ const lecturerController = {
           .json({ errCode: 1, errMessage: "Dữ liệu không được tìm thấy!" });
       }
     } catch (error) {
-      return res.status(500).json({ errCode: -1, errMessage: "Dữ liệu không mong muốn, thử lại sau hoặc dữ liệu khác!" });
+      return res.status(500).json({
+        errCode: -1,
+        errMessage: "Dữ liệu không mong muốn, thử lại sau hoặc dữ liệu khác!",
+      });
     }
   },
   importLecturers: async (req, res) => {
     try {
       if (req?.body?.data) {
-     // console.log(req?.body?.data);
+        // console.log(req?.body?.data);
         const result = await db.Lecturer.bulkCreate(req?.body?.data);
         if (result) {
           return res
@@ -2583,23 +2842,26 @@ const lecturerController = {
           .json({ errCode: 1, errMessage: "Dữ liệu không được tìm thấy!" });
       }
     } catch (error) {
-      return res.status(500).json({ errCode: -1, errMessage: "Dữ liệu không mong muốn, thử lại sau hoặc dữ liệu khác!" });
+      return res.status(500).json({
+        errCode: -1,
+        errMessage: "Dữ liệu không mong muốn, thử lại sau hoặc dữ liệu khác!",
+      });
     }
   },
 
   // Api Student
   getStudents: async (req, res) => {
     try {
-   // console.log(req.body);
+      // console.log(req.body);
       const searchTerms = `%${
         req?.body?.inputSearch ? req?.body?.inputSearch?.trim() : ""
       }%`?.replace(/\s/g, "%");
-   // console.log(searchTerms);
+      // console.log(searchTerms);
       const whereClause = {};
-   // console.log(req?.body?.inputSearch?.toLowerCase());
-   // console.log("req?.body?.length", Object.keys(req?.body).length);
+      // console.log(req?.body?.inputSearch?.toLowerCase());
+      // console.log("req?.body?.length", Object.keys(req?.body).length);
       if (Object.keys(req?.body).length > 0) {
-     // console.log("Đã vào");
+        // console.log("Đã vào");
         if (!req?.body?.filterSearch?.includes("Data")) {
           if (searchTerms?.toLowerCase() != "%null%") {
             whereClause[req?.body?.filterSearch] = {
@@ -2612,7 +2874,7 @@ const lecturerController = {
           }
         } else {
           if (searchTerms?.toLowerCase() != "%null%") {
-         // console.log(req?.body?.filterSearch);
+            // console.log(req?.body?.filterSearch);
             if (req?.body?.filterSearch == "deanData") {
               whereClause["$deanData.fullName$"] = {
                 [Op.like]: searchTerms,
@@ -2649,7 +2911,7 @@ const lecturerController = {
           }
         }
       }
-   // console.log("whereClause", whereClause);
+      // console.log("whereClause", whereClause);
 
       const queryOptions = {
         attributes: { exclude: ["password", "refreshToken", "image"] },
@@ -2691,7 +2953,10 @@ const lecturerController = {
       const { rows: students, count: totalRecords } = result;
       return res.status(200).json({ errCode: 0, students, totalRecords });
     } catch (error) {
-      return res.status(500).json({ errCode: -1, errMessage: "Dữ liệu không mong muốn, thử lại sau hoặc dữ liệu khác!" });
+      return res.status(500).json({
+        errCode: -1,
+        errMessage: "Dữ liệu không mong muốn, thử lại sau hoặc dữ liệu khác!",
+      });
     }
   },
   getStudentById: async (req, res) => {
@@ -2739,7 +3004,10 @@ const lecturerController = {
         });
       }
     } catch (error) {
-      return res.status(500).json({ errCode: -1, errMessage: "Dữ liệu không mong muốn, thử lại sau hoặc dữ liệu khác!" });
+      return res.status(500).json({
+        errCode: -1,
+        errMessage: "Dữ liệu không mong muốn, thử lại sau hoặc dữ liệu khác!",
+      });
     }
   },
   addStudent: async (req, res) => {
@@ -2749,7 +3017,7 @@ const lecturerController = {
           req?.body?.code,
           salt
         );
-     // console.log("req.body", req.body);
+        // console.log("req.body", req.body);
         const result = await db.Student.create({
           email: req?.body?.email,
           fullName: req?.body?.fullName,
@@ -2765,7 +3033,7 @@ const lecturerController = {
           permissions: req?.body?.permissions ? req?.body?.permissions : null,
         });
         if (result) {
-       // console.log("result", result);
+          // console.log("result", result);
           return res
             .status(200)
             .json({ errCode: 0, errMessage: "Thêm dữ liệu thành công." });
@@ -2782,13 +3050,16 @@ const lecturerController = {
           .json({ errCode: 1, errMessage: "Dữ liệu không được tìm thấy!" });
       }
     } catch (error) {
-      return res.status(500).json({ errCode: -1, errMessage: "Dữ liệu không mong muốn, thử lại sau hoặc dữ liệu khác!" });
+      return res.status(500).json({
+        errCode: -1,
+        errMessage: "Dữ liệu không mong muốn, thử lại sau hoặc dữ liệu khác!",
+      });
     }
   },
   updateStudent: async (req, res) => {
     try {
       if (req?.params?.id) {
-     // console.log("req.body", req.body);
+        // console.log("req.body", req.body);
         const result = await db.Student.update(
           {
             email: req?.body?.email,
@@ -2827,7 +3098,10 @@ const lecturerController = {
           .json({ errCode: 1, errMessage: "Dữ liệu không được tìm thấy!" });
       }
     } catch (error) {
-      return res.status(500).json({ errCode: -1, errMessage: "Dữ liệu không mong muốn, thử lại sau hoặc dữ liệu khác!" });
+      return res.status(500).json({
+        errCode: -1,
+        errMessage: "Dữ liệu không mong muốn, thử lại sau hoặc dữ liệu khác!",
+      });
     }
   },
   resetPasswordStudent: async (req, res) => {
@@ -2837,7 +3111,7 @@ const lecturerController = {
           req?.body?.code,
           salt
         );
-     // console.log("req.body", req.body);
+        // console.log("req.body", req.body);
         const result = await db.Student.update(
           {
             password: hashPasswordFromBcrypt,
@@ -2866,7 +3140,10 @@ const lecturerController = {
           .json({ errCode: 1, errMessage: "Dữ liệu không được tìm thấy!" });
       }
     } catch (error) {
-      return res.status(500).json({ errCode: -1, errMessage: "Dữ liệu không mong muốn, thử lại sau hoặc dữ liệu khác!" });
+      return res.status(500).json({
+        errCode: -1,
+        errMessage: "Dữ liệu không mong muốn, thử lại sau hoặc dữ liệu khác!",
+      });
     }
   },
   resetPasswordLecturer: async (req, res) => {
@@ -2876,7 +3153,7 @@ const lecturerController = {
           req?.body?.code,
           salt
         );
-     // console.log("req.body", req.body);
+        // console.log("req.body", req.body);
         const result = await db.Lecturer.update(
           {
             password: hashPasswordFromBcrypt,
@@ -2905,13 +3182,16 @@ const lecturerController = {
           .json({ errCode: 1, errMessage: "Dữ liệu không được tìm thấy!" });
       }
     } catch (error) {
-      return res.status(500).json({ errCode: -1, errMessage: "Dữ liệu không mong muốn, thử lại sau hoặc dữ liệu khác!" });
+      return res.status(500).json({
+        errCode: -1,
+        errMessage: "Dữ liệu không mong muốn, thử lại sau hoặc dữ liệu khác!",
+      });
     }
   },
   deleteStudent: async (req, res) => {
     try {
       if (req?.params?.id) {
-     // console.log(req.body);
+        // console.log(req.body);
         const result = await db.Student.destroy({
           where: { id: req?.params?.id },
         });
@@ -2932,13 +3212,16 @@ const lecturerController = {
           .json({ errCode: 1, errMessage: "Dữ liệu không được tìm thấy!" });
       }
     } catch (error) {
-      return res.status(500).json({ errCode: -1, errMessage: "Dữ liệu không mong muốn, thử lại sau hoặc dữ liệu khác!" });
+      return res.status(500).json({
+        errCode: -1,
+        errMessage: "Dữ liệu không mong muốn, thử lại sau hoặc dữ liệu khác!",
+      });
     }
   },
   importStudents: async (req, res) => {
     try {
       if (req?.body?.data) {
-     // console.log(req?.body?.data);
+        // console.log(req?.body?.data);
         const result = await db.Student.bulkCreate(req?.body?.data);
         if (result) {
           return res
@@ -2957,23 +3240,26 @@ const lecturerController = {
           .json({ errCode: 1, errMessage: "Dữ liệu không được tìm thấy!" });
       }
     } catch (error) {
-      return res.status(500).json({ errCode: -1, errMessage: "Dữ liệu không mong muốn, thử lại sau hoặc dữ liệu khác!" });
+      return res.status(500).json({
+        errCode: -1,
+        errMessage: "Dữ liệu không mong muốn, thử lại sau hoặc dữ liệu khác!",
+      });
     }
   },
 
   // Api Topic
   getTopics: async (req, res) => {
     try {
-   // console.log(req.body);
+      // console.log(req.body);
       const searchTerms = `%${
         req?.body?.inputSearch ? req?.body?.inputSearch?.trim() : ""
       }%`?.replace(/\s/g, "%");
-   // console.log(searchTerms);
+      // console.log(searchTerms);
       const whereClause = {};
-   // console.log(req?.body?.inputSearch?.toLowerCase());
-   // console.log("req?.body?.length", Object.keys(req?.body).length);
+      // console.log(req?.body?.inputSearch?.toLowerCase());
+      // console.log("req?.body?.length", Object.keys(req?.body).length);
       if (Object.keys(req?.body).length > 0) {
-     // console.log("Đã vào");
+        // console.log("Đã vào");
         if (!req?.body?.filterSearch?.includes("Data")) {
           if (searchTerms?.toLowerCase() != "%null%") {
             whereClause[req?.body?.filterSearch] = {
@@ -2986,7 +3272,7 @@ const lecturerController = {
           }
         } else {
           if (searchTerms?.toLowerCase() != "%null%") {
-         // console.log(req?.body?.filterSearch);
+            // console.log(req?.body?.filterSearch);
             if (req?.body?.filterSearch == "departmentData") {
               whereClause["$departmentData.name$"] = {
                 [Op.like]: searchTerms,
@@ -3008,7 +3294,7 @@ const lecturerController = {
           }
         }
       }
-   // console.log("whereClause", whereClause);
+      // console.log("whereClause", whereClause);
 
       const queryOptions = {
         include: [
@@ -3038,7 +3324,10 @@ const lecturerController = {
       const { rows: topics, count: totalRecords } = result;
       return res.status(200).json({ errCode: 0, topics, totalRecords });
     } catch (error) {
-      return res.status(500).json({ errCode: -1, errMessage: "Dữ liệu không mong muốn, thử lại sau hoặc dữ liệu khác!" });
+      return res.status(500).json({
+        errCode: -1,
+        errMessage: "Dữ liệu không mong muốn, thử lại sau hoặc dữ liệu khác!",
+      });
     }
   },
   getTopicById: async (req, res) => {
@@ -3074,7 +3363,10 @@ const lecturerController = {
         });
       }
     } catch (error) {
-      return res.status(500).json({ errCode: -1, errMessage: "Dữ liệu không mong muốn, thử lại sau hoặc dữ liệu khác!" });
+      return res.status(500).json({
+        errCode: -1,
+        errMessage: "Dữ liệu không mong muốn, thử lại sau hoặc dữ liệu khác!",
+      });
     }
   },
   addTopic: async (req, res) => {
@@ -3103,13 +3395,16 @@ const lecturerController = {
           .json({ errCode: 1, errMessage: "Dữ liệu không được tìm thấy!" });
       }
     } catch (error) {
-      return res.status(500).json({ errCode: -1, errMessage: "Dữ liệu không mong muốn, thử lại sau hoặc dữ liệu khác!" });
+      return res.status(500).json({
+        errCode: -1,
+        errMessage: "Dữ liệu không mong muốn, thử lại sau hoặc dữ liệu khác!",
+      });
     }
   },
   updateTopic: async (req, res) => {
     try {
       if (req?.params?.id) {
-     // console.log(req.body);
+        // console.log(req.body);
         const result = await db.Topic.update(
           {
             name: req?.body?.name,
@@ -3136,13 +3431,16 @@ const lecturerController = {
           .json({ errCode: 1, errMessage: "Dữ liệu không được tìm thấy!" });
       }
     } catch (error) {
-      return res.status(500).json({ errCode: -1, errMessage: "Dữ liệu không mong muốn, thử lại sau hoặc dữ liệu khác!" });
+      return res.status(500).json({
+        errCode: -1,
+        errMessage: "Dữ liệu không mong muốn, thử lại sau hoặc dữ liệu khác!",
+      });
     }
   },
   deleteTopic: async (req, res) => {
     try {
       if (req?.params?.id) {
-     // console.log(req.body);
+        // console.log(req.body);
         const result = await db.Topic.destroy({
           where: { id: req?.params?.id },
         });
@@ -3163,13 +3461,16 @@ const lecturerController = {
           .json({ errCode: 1, errMessage: "Dữ liệu không được tìm thấy!" });
       }
     } catch (error) {
-      return res.status(500).json({ errCode: -1, errMessage: "Dữ liệu không mong muốn, thử lại sau hoặc dữ liệu khác!" });
+      return res.status(500).json({
+        errCode: -1,
+        errMessage: "Dữ liệu không mong muốn, thử lại sau hoặc dữ liệu khác!",
+      });
     }
   },
   importTopics: async (req, res) => {
     try {
       if (req?.body?.data) {
-     // console.log(req?.body?.data);
+        // console.log(req?.body?.data);
         const result = await db.Topic.bulkCreate(req?.body?.data);
         if (result) {
           return res
@@ -3188,20 +3489,23 @@ const lecturerController = {
           .json({ errCode: 1, errMessage: "Dữ liệu không được tìm thấy!" });
       }
     } catch (error) {
-      return res.status(500).json({ errCode: -1, errMessage: "Dữ liệu không mong muốn, thử lại sau hoặc dữ liệu khác!" });
+      return res.status(500).json({
+        errCode: -1,
+        errMessage: "Dữ liệu không mong muốn, thử lại sau hoặc dữ liệu khác!",
+      });
     }
   },
 
   // Api ThesisSession
   getThesisSessions: async (req, res) => {
     try {
-   // console.log(req.body);
+      // console.log(req.body);
       const searchTerms = `%${
         req?.body?.inputSearch ? req?.body?.inputSearch?.trim() : ""
       }%`?.replace(/\s/g, "%");
-   // console.log(searchTerms);
+      // console.log(searchTerms);
       const whereClause = {};
-   // console.log(req?.body?.inputSearch?.toLowerCase());
+      // console.log(req?.body?.inputSearch?.toLowerCase());
       if (Object.keys(req?.body).length > 0) {
         if (!req?.body?.filterSearch?.includes("Data")) {
           if (searchTerms?.toLowerCase() != "%null%") {
@@ -3215,7 +3519,7 @@ const lecturerController = {
           }
         } else {
           if (searchTerms?.toLowerCase() != "%null%") {
-         // console.log(req?.body?.filterSearch);
+            // console.log(req?.body?.filterSearch);
             if (req?.body?.filterSearch == "deanData") {
               whereClause["$deanData.name$"] = {
                 [Op.like]: searchTerms,
@@ -3233,7 +3537,7 @@ const lecturerController = {
           }
         }
       }
-   // console.log("whereClause", whereClause);
+      // console.log("whereClause", whereClause);
 
       const queryOptions = {
         include: [
@@ -3255,11 +3559,14 @@ const lecturerController = {
       }
 
       const result = await db.ThesisSession.findAndCountAll(queryOptions);
-   // console.log(result);
+      // console.log(result);
       const { rows: thesisSessions, count: totalRecords } = result;
       return res.status(200).json({ errCode: 0, thesisSessions, totalRecords });
     } catch (error) {
-      return res.status(500).json({ errCode: -1, errMessage: "Dữ liệu không mong muốn, thử lại sau hoặc dữ liệu khác!" });
+      return res.status(500).json({
+        errCode: -1,
+        errMessage: "Dữ liệu không mong muốn, thử lại sau hoặc dữ liệu khác!",
+      });
     }
   },
   getThesisSessionById: async (req, res) => {
@@ -3291,7 +3598,10 @@ const lecturerController = {
         });
       }
     } catch (error) {
-      return res.status(500).json({ errCode: -1, errMessage: "Dữ liệu không mong muốn, thử lại sau hoặc dữ liệu khác!" });
+      return res.status(500).json({
+        errCode: -1,
+        errMessage: "Dữ liệu không mong muốn, thử lại sau hoặc dữ liệu khác!",
+      });
     }
   },
   addThesisSession: async (req, res) => {
@@ -3322,13 +3632,16 @@ const lecturerController = {
           .json({ errCode: 1, errMessage: "Dữ liệu không được tìm thấy!" });
       }
     } catch (error) {
-      return res.status(500).json({ errCode: -1, errMessage: "Dữ liệu không mong muốn, thử lại sau hoặc dữ liệu khác!" });
+      return res.status(500).json({
+        errCode: -1,
+        errMessage: "Dữ liệu không mong muốn, thử lại sau hoặc dữ liệu khác!",
+      });
     }
   },
   updateThesisSession: async (req, res) => {
     try {
       if (req?.params?.id) {
-     // console.log(req.body);
+        // console.log(req.body);
         const result = await db.ThesisSession.update(
           {
             name: req?.body?.name,
@@ -3357,13 +3670,16 @@ const lecturerController = {
           .json({ errCode: 1, errMessage: "Dữ liệu không được tìm thấy!" });
       }
     } catch (error) {
-      return res.status(500).json({ errCode: -1, errMessage: "Dữ liệu không mong muốn, thử lại sau hoặc dữ liệu khác!" });
+      return res.status(500).json({
+        errCode: -1,
+        errMessage: "Dữ liệu không mong muốn, thử lại sau hoặc dữ liệu khác!",
+      });
     }
   },
   deleteThesisSession: async (req, res) => {
     try {
       if (req?.params?.id) {
-     // console.log(req.body);
+        // console.log(req.body);
         const result = await db.ThesisSession.destroy({
           where: { id: req?.params?.id },
         });
@@ -3384,13 +3700,16 @@ const lecturerController = {
           .json({ errCode: 1, errMessage: "Dữ liệu không được tìm thấy!" });
       }
     } catch (error) {
-      return res.status(500).json({ errCode: -1, errMessage: "Dữ liệu không mong muốn, thử lại sau hoặc dữ liệu khác!" });
+      return res.status(500).json({
+        errCode: -1,
+        errMessage: "Dữ liệu không mong muốn, thử lại sau hoặc dữ liệu khác!",
+      });
     }
   },
   importThesisSessions: async (req, res) => {
     try {
       if (req?.body?.data) {
-     // console.log(req?.body?.data);
+        // console.log(req?.body?.data);
         const result = await db.ThesisSession.bulkCreate(req?.body?.data);
         if (result) {
           return res
@@ -3409,7 +3728,10 @@ const lecturerController = {
           .json({ errCode: 1, errMessage: "Dữ liệu không được tìm thấy!" });
       }
     } catch (error) {
-      return res.status(500).json({ errCode: -1, errMessage: "Dữ liệu không mong muốn, thử lại sau hoặc dữ liệu khác!" });
+      return res.status(500).json({
+        errCode: -1,
+        errMessage: "Dữ liệu không mong muốn, thử lại sau hoặc dữ liệu khác!",
+      });
     }
   },
 };

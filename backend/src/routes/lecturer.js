@@ -33,6 +33,9 @@ router.post("/create-thesis", middlewareController.verifyTokenAdd, lecturerContr
 router.delete("/delete-thesis/:id", middlewareController.verifyTokenDelete, lecturerController.deleteThesisCouncils);
 
 
+router.post("/mark-evaluation-criteria", middlewareController.verifyToken, lecturerController.MarkEvaluationCriteria);
+router.post("/mark-criteria", middlewareController.verifyToken, lecturerController.getMarkCriteria);
+router.get("/thesis/:id", middlewareController.verifyToken, lecturerController.getThesisById);
 
 // // Api Department
 // router.post("/departments", middlewareController.verifyToken, lecturerController.getDepartments);
@@ -75,7 +78,6 @@ router.delete("/delete-thesis/:id", middlewareController.verifyTokenDelete, lect
 // router.delete("/delete-evaluation-method/:id", middlewareController.verifyTokenDelete, lecturerController.deleteEvaluationMethod);
 
 // // Api Evaluation Criteria
-// router.post("/evaluation-criterias", middlewareController.verifyToken, lecturerController.getEvaluationCriterias);
 // router.get("/evaluation-criteria/:id", middlewareController.verifyToken, lecturerController.getEvaluationCriteriaByIdMethod);
 // router.post("/import-evaluation-criterias", middlewareController.verifyTokenImport, lecturerController.importEvaluationCriterias);
 // router.post("/create-evaluation-criteria", middlewareController.verifyTokenAdd, lecturerController.addEvaluationCriteria);

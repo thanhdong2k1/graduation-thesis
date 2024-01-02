@@ -25,7 +25,7 @@ import { HiArrowDown, HiArrowUp } from "react-icons/hi";
 
 const MarkEvaluationCriteria = ({ type }) => {
     // let { id } = useParams();
-    let { thesisSessionId, coundilId, thesisId } = useParams();
+    let { thesisSessionId, councilDetailId, coundilId, thesisId } = useParams();
     // console.log("type", type, coundilId, thesisId);
 
     const currentUser = useSelector((state) => state?.auth?.currentUser);
@@ -50,82 +50,84 @@ const MarkEvaluationCriteria = ({ type }) => {
     const onSubmit = async (data) => {
         const id = toast.loading("Vui lòng đợi...");
         // console.log(data);
-        let markCriteria = [];
+        let markCriterias = [];
         criterias.map((item) => {
-            markCriteria.push({
+            markCriterias.push({
                 evaluationCriteriaId: item.id,
                 mark: item.mark || "0",
             });
         });
 
-        let mark = {markCriteria,totalMark:data.totalMark};
-        await apiAdmin
-                  .apiAddEvaluationMethod({
-                      user: currentUser,
-                      mark: mark,
-                      criterias: criterias,
-                      axiosJWT: axiosJWT,
-                  })
-                  .then((res) => {
-                      if (res?.errCode > 0 || res?.errCode < 0) {
-                          // console.log(res);
-                          toast.update(id, {
-                              render: res?.errMessage,
-                              type: "error",
-                              isLoading: false,
-                              closeButton: true,
-                              autoClose: 1500,
-                              pauseOnFocusLoss: true,
-                          });
-                      } else {
-                          // console.log(res);
-                          toast.update(id, {
-                              render: res?.errMessage,
-                              type: "success",
-                              isLoading: false,
-                              closeButton: true,
-                              autoClose: 1500,
-                              pauseOnFocusLoss: true,
-                          });
-                          reset();
-                      }
-                  })
-                  .catch((error) => {
-                      // console.log(error);
-                      toast.update(id, {
-                          render: "Đã xảy ra lỗi, vui lòng thử lại sau",
-                          type: "error",
-                          isLoading: false,
-                          closeButton: true,
-                          autoClose: 1500,
-                          pauseOnFocusLoss: true,
-                      });
-                  })
-
+        let mark = {
+            markCriterias,
+            totalMark: data.totalMark,
+            councilDetailId: councilDetailId,
+            thesisId: thesisId,
+        };
+        await apiLecturer
+            .apiMarkEvaluationCriteria({
+                user: currentUser,
+                mark: mark,
+                axiosJWT: axiosJWT,
+            })
+            .then((res) => {
+                if (res?.errCode > 0 || res?.errCode < 0) {
+                    // console.log(res);
+                    toast.update(id, {
+                        render: res?.errMessage,
+                        type: "error",
+                        isLoading: false,
+                        closeButton: true,
+                        autoClose: 1500,
+                        pauseOnFocusLoss: true,
+                    });
+                } else {
+                    // console.log(res);
+                    toast.update(id, {
+                        render: res?.errMessage,
+                        type: "success",
+                        isLoading: false,
+                        closeButton: true,
+                        autoClose: 1500,
+                        pauseOnFocusLoss: true,
+                    });
+                    // reset();
+                }
+            })
+            .catch((error) => {
+                // console.log(error);
+                toast.update(id, {
+                    render: "Đã xảy ra lỗi, vui lòng thử lại sau",
+                    type: "error",
+                    isLoading: false,
+                    closeButton: true,
+                    autoClose: 1500,
+                    pauseOnFocusLoss: true,
+                });
+            });
     };
     useEffect(() => {
         // console.log("thesisSessionId", thesisSessionId);
-        if (thesisSessionId) {
-            async function fetchData() {
-                try {
-                    const response =
-                        await apiLecturer.getEvaluationCriteriaByThesisSessionId(
-                            {
-                                user: currentUser,
-                                id: thesisSessionId,
-                                axiosJWT: axiosJWT,
-                            }
-                        );
-                    // console.log(response);
-                    setCriterias(response?.result);
-                } catch (e) {
-                    console.log(e);
-                }
-            }
-            fetchData();
-        }
+        // if (thesisSessionId) {
+        //     async function fetchData() {
+        //         try {
+        //             const response =
+        //                 await apiLecturer.getEvaluationCriteriaByThesisSessionId(
+        //                     {
+        //                         user: currentUser,
+        //                         id: thesisSessionId,
+        //                         axiosJWT: axiosJWT,
+        //                     }
+        //                 );
+        //             // console.log(response);
+        //         } catch (e) {
+        //             console.log(e);
+        //         }
+        //     }
+        //     fetchData();
+        // }
         if (thesisId) {
-            apiAdmin
+            apiLecturer
                 .getThesisById({
                     user: currentUser,
                     id: thesisId,
@@ -150,9 +152,63 @@ const MarkEvaluationCriteria = ({ type }) => {
                     // console.log(error);
                 });
         }
+        console.log("councilDetailId && thesisId", councilDetailId, thesisId);
+        if (councilDetailId && thesisId && thesisSessionId) {
+            async function fetchData() {
+                try {
+                    const responseCriteria =
+                        await apiLecturer.getEvaluationCriteriaByThesisSessionId(
+                            {
+                                user: currentUser,
+                                id: thesisSessionId,
+                                axiosJWT: axiosJWT,
+                            }
+                        );
+
+                    const responseMarkCriteria =
+                        await apiLecturer.getMarkCriteria({
+                            user: currentUser,
+                            data: { thesisId, councilDetailId },
+                            axiosJWT: axiosJWT,
+                        });
+                    console.log(
+                        "responseMarkCriteria",
+                        responseMarkCriteria?.result
+                    );
+
+                    let criteriasMark = [];
+
+                    if (responseMarkCriteria?.result?.result?.length > 0) {
+                        console.log("a", responseCriteria?.result);
+                        responseCriteria?.result?.map((criteria) => {
+                            responseMarkCriteria?.result?.result.map((res) => {
+                                if (criteria.id == res.evaluationCriteriaId) {
+                                    criteriasMark.push({
+                                        ...criteria,
+                                        mark: res?.mark,
+                                    });
+                                }
+                            });
+                        });
+                        console.log("criteriasMark", criteriasMark);
+                        setCriterias(criteriasMark);
+                        setValue(
+                            "totalMark",
+                            responseMarkCriteria?.result?.totalMark
+                        );
+                    } else {
+                        setCriterias(responseCriteria?.result);
+                    }
+                } catch (e) {
+                    console.log(e);
+                }
+            }
+            fetchData();
+        }
     }, [currentUser]);
 
     const [criterias, setCriterias] = useState([]);
+    const [changedMark, setChangedMark] = useState(false);
 
     const [totalMarkScore, setTotalScore] = useState(0);
 
@@ -162,20 +218,22 @@ const MarkEvaluationCriteria = ({ type }) => {
         updatedItems[index][field] = value;
         // console.log(criterias);
         setCriterias(updatedItems);
+        setChangedMark(true);
     };
 
     useEffect(() => {
         let totalMark = 0;
-        criterias?.map((item) => {
-            item.weight >= 1
-                ? (totalMark += +item.mark
-                      ? +item.mark * (item.weight / 10)
-                      : 0)
-                : (totalMark += +item.mark ? +item.mark * item.weight : 0);
-        });
-        setValue("totalMark", totalMark);
-        console.log(criterias, totalMark);
-    }, [criterias]);
+        if (changedMark) {
+            criterias?.map((item) => {
+                item.weight >= 1
+                    ? (totalMark += +item.mark
+                          ? +item.mark * (item.weight / 10)
+                          : 0)
+                    : (totalMark += +item.mark ? +item.mark * item.weight : 0);
+            });
+            setValue("totalMark", totalMark);
+        }
+    }, [criterias,changedMark]);
 
     return (
         <div className="changeInformationDiv flex flex-col justify-center items-center gap-2">
@@ -466,12 +524,13 @@ const MarkEvaluationCriteria = ({ type }) => {
                         <input
                             className={`input disabled`}
                             type="number"
-                            // max={10}
-                            // min={0}
+                            step={0.1}
+                            max={10}
+                            min={0}
                             {...register("totalMark", {
                                 validate: (value) => {
                                     return (
-                                        (value <= "10" && value >= "0") ||
+                                        (value <= 10 && value >= 0) ||
                                         "Tổng điểm phải lớn hơn 0 bé hơn 10!"
                                     );
                                 },
