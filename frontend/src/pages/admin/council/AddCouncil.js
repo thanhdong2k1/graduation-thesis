@@ -487,7 +487,7 @@ const AddCouncil = ({ type }, params) => {
                             }`}
                             disabled={type == "detail" ? true : false}
                             {...register("name", {
-                                required: "Name is required",
+                                required: "Không được để trống",
                             })}
                         />
                         {errors?.name?.type && (
@@ -532,7 +532,7 @@ const AddCouncil = ({ type }, params) => {
                             name="thesisSession"
                             control={control}
                             {...register("thesisSession", {
-                                // required: "Full name is required",
+                                required: "Không được để trống",
                             })}
                             render={({ field }) => (
                                 <Select
@@ -558,6 +558,7 @@ const AddCouncil = ({ type }, params) => {
                             control={control}
                             {...register("status", {
                                 // required: "Full name is required",
+                                required: "Không được để trống",
                             })}
                             render={({ field }) => (
                                 <Select

@@ -11,7 +11,7 @@ import "react-datepicker/dist/react-datepicker.css";
 import moment from "moment/moment";
 import { createAxios } from "../../../utils/createInstance";
 import { logginSuccess } from "../../../redux/authSlice";
-import { apiAdmin } from "../../../redux/apiRequest";
+import { apiAdmin, apiStudent } from "../../../redux/apiRequest";
 import ModalPopup from "../../../components/ModelPopup/ModalPopup";
 import {
     customSelectStyles,
@@ -47,7 +47,7 @@ const AddTopicStudent = ({ type }, params) => {
         const id = toast.loading("Vui lòng đợi...");
       // console.log(data);
         type == "add"
-            ? await apiAdmin
+            ? await apiStudent
                   .apiAddTopic({
                       user: currentUser,
                       data: data,
@@ -193,7 +193,7 @@ const AddTopicStudent = ({ type }, params) => {
     return (
         <div className="changeInformationDiv flex flex-col justify-center items-center gap-2">
             <div className=" font-semibold text-h1FontSize">
-                {type=="add"?"Thêm":"Sửa"} đề tài
+                {type=="add"?"Đăng ký":type=="update"?"Sửa":"Chi tiết"} đề tài
             </div>
             <form
                 onSubmit={handleSubmit(onSubmit)}
@@ -223,7 +223,7 @@ const AddTopicStudent = ({ type }, params) => {
                             }`}
                             disabled={type == "detail" ? true : false}
                             {...register("name", {
-                                required: "Name is required",
+                                required: "Không được để trống",
                             })}
                         />
                         {errors?.name?.type && (
@@ -261,25 +261,10 @@ const AddTopicStudent = ({ type }, params) => {
                     </div>
                 </div>
 
-                <div className="row flex justify-center items-center gap-2">
+                {/* <div className="row flex justify-center items-center gap-2">
                     <div className="col w-full">
                         <label className="labelInput">Bộ môn</label>
-                        {/* <Controller
-                            name="department"
-                            control={control}
-                            {...register("department", {
-                                // required: "Full name is required",
-                            })}
-                            render={({ field }) => (
-                                <Select placeholder="Chọn..."
-                                    styles={customSelectStyles}
-                                    {...field}
-                                    options={codeDepartments}
-                                    isClearable={true}
-                                    isDisabled={type == "detail" ? true : false}
-                                />
-                            )}
-                        /> */}
+                       
                         <input
                             className={`input ${
                                 type == "detail" ? "disabled" : ""
@@ -297,22 +282,7 @@ const AddTopicStudent = ({ type }, params) => {
                     </div>
                     <div className="col w-full">
                         <label className="labelInput">Trạng thái</label>
-                        {/* <Controller
-                            name="status"
-                            control={control}
-                            {...register("status", {
-                                // required: "Full name is required",
-                            })}
-                            render={({ field }) => (
-                                <Select placeholder="Chọn..."
-                                    styles={customSelectStyles}
-                                    {...field}
-                                    options={status}
-                                    isClearable={true}
-                                    isDisabled={type == "detail" ? true : false}
-                                />
-                            )}
-                        /> */}
+                       
                         <input
                             className={`input ${
                                 type == "detail" ? "disabled" : ""
@@ -328,7 +298,7 @@ const AddTopicStudent = ({ type }, params) => {
                             </p>
                         )}
                     </div>
-                </div>
+                </div> */}
                 {/* code, roleId, departmentId, permissions */}
 
                 <ButtonConfirm type={type} />

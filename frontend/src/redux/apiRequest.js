@@ -2257,6 +2257,18 @@ export const apiAdmin = {
             }
         }
     },
+    getStatistic: async ({ user, id, axiosJWT }) => {
+        try {
+            const res = await axiosJWT.get(`/api/admin/statistic`, {
+                headers: {
+                    token: `Bearer ${user?.accessToken}`,
+                },
+            });
+            return res?.data;
+        } catch (error) {
+            return error?.response?.data;
+        }
+    },
 };
 
 export const apiLecturer = {
@@ -2728,6 +2740,111 @@ export const apiLecturer = {
             return error?.response?.data;
         }
     },
+    getAllTheses: async ({
+        user,
+        inputSearch,
+        filterSearch,
+        dispatch,
+        axiosJWT,
+    }) => {
+        try {
+            dispatch(getAdminThesesStart());
+            const res = await axiosJWT.post(
+                "/api/lecturer/theses",
+                {
+                    inputSearch: inputSearch,
+                    filterSearch: filterSearch,
+                },
+                {
+                    headers: {
+                        token: `Bearer ${user?.accessToken}`,
+                    },
+                }
+            );
+            dispatch(getAdminThesesSuccess(res?.data));
+        } catch (error) {
+            toast.error(error?.response?.data?.errMessage);
+            dispatch(getAdminThesesFailed());
+        }
+    },
+    apiUpdateThesisLecturer: async ({ user, data, axiosJWT }) => {
+        try {
+            const res = await axiosJWT.put(
+                `/api/lecturer/update-thesis/${data?.id}`,
+                {
+                    data: {
+                        advisorMark: data?.advisorMark,
+                        lecturerId: data?.thesisAdvisorId,
+                    },
+                },
+                {
+                    headers: {
+                        token: `Bearer ${user?.accessToken}`,
+                    },
+                }
+            );
+            return res?.data;
+        } catch (error) {
+            // console.log(error);
+            if (error?.response?.status) {
+                return error?.response?.data;
+            }
+        }
+    },
+    getAllThesesTopic: async ({
+        user,
+        inputSearch,
+        filterSearch,
+        dispatch,
+        axiosJWT,
+    }) => {
+        try {
+            dispatch(getAdminThesesStart());
+            const res = await axiosJWT.post(
+                "/api/lecturer/theses-topic",
+                {
+                    inputSearch: inputSearch,
+                    filterSearch: filterSearch,
+                },
+                {
+                    headers: {
+                        token: `Bearer ${user?.accessToken}`,
+                    },
+                }
+            );
+            dispatch(getAdminThesesSuccess(res?.data));
+        } catch (error) {
+            toast.error(error?.response?.data?.errMessage);
+            dispatch(getAdminThesesFailed());
+        }
+    },
+    getAllThesesStudent: async ({
+        user,
+        inputSearch,
+        filterSearch,
+        dispatch,
+        axiosJWT,
+    }) => {
+        try {
+            dispatch(getAdminThesesStart());
+            const res = await axiosJWT.post(
+                "/api/lecturer/theses-student",
+                {
+                    inputSearch: inputSearch,
+                    filterSearch: filterSearch,
+                },
+                {
+                    headers: {
+                        token: `Bearer ${user?.accessToken}`,
+                    },
+                }
+            );
+            dispatch(getAdminThesesSuccess(res?.data));
+        } catch (error) {
+            toast.error(error?.response?.data?.errMessage);
+            dispatch(getAdminThesesFailed());
+        }
+    },
     getThesisById: async ({ user, id, axiosJWT }) => {
         try {
             const res = await axiosJWT.get(`/api/lecturer/thesis/${id}`, {
@@ -2777,6 +2894,181 @@ export const apiLecturer = {
             return res?.data;
         } catch (error) {
             // console.log(error);
+            if (error?.response?.status) {
+                return error?.response?.data;
+            }
+        }
+    },
+    apiConfirmAdvisor: async ({ user, id, axiosJWT }) => {
+        try {
+            // console.log(user, id, axiosJWT);
+            const res = await axiosJWT.get(
+                `/api/lecturer/confirm-advisor/${id}`,
+                {
+                    headers: {
+                        token: `Bearer ${user?.accessToken}`,
+                    },
+                }
+            );
+            return res?.data;
+        } catch (error) {
+            return error?.response?.data;
+        }
+    },
+    apiCancelAdvisor: async ({ user, id, axiosJWT }) => {
+        try {
+            // console.log(user, id, axiosJWT);
+            const res = await axiosJWT.get(
+                `/api/lecturer/cancel-advisor/${id}`,
+                {
+                    headers: {
+                        token: `Bearer ${user?.accessToken}`,
+                    },
+                }
+            );
+            return res?.data;
+        } catch (error) {
+            return error?.response?.data;
+        }
+    },
+    apiConfirmTopic: async ({ user, id, axiosJWT }) => {
+        try {
+            // console.log(user, id, axiosJWT);
+            const res = await axiosJWT.get(
+                `/api/lecturer/confirm-topic/${id}`,
+                {
+                    headers: {
+                        token: `Bearer ${user?.accessToken}`,
+                    },
+                }
+            );
+            return res?.data;
+        } catch (error) {
+            return error?.response?.data;
+        }
+    },
+    apiCancelTopic: async ({ user, id, axiosJWT }) => {
+        try {
+            // console.log(user, id, axiosJWT);
+            const res = await axiosJWT.get(`/api/lecturer/cancel-topic/${id}`, {
+                headers: {
+                    token: `Bearer ${user?.accessToken}`,
+                },
+            });
+            return res?.data;
+        } catch (error) {
+            return error?.response?.data;
+        }
+    },
+    getAllDeanTopics: async ({
+        user,
+        departmentId,
+        inputSearch,
+        filterSearch,
+        dispatch,
+        axiosJWT,
+    }) => {
+        try {
+            dispatch(getTopicsStart());
+            const res = await axiosJWT.post(
+                "/api/lecturer/dean-topics",
+                {
+                    inputSearch: inputSearch,
+                    filterSearch: filterSearch,
+                    departmentId: departmentId ? departmentId : "",
+                },
+                {
+                    headers: {
+                        token: `Bearer ${user?.accessToken}`,
+                    },
+                }
+            );
+            dispatch(getTopicsSuccess(res?.data));
+        } catch (error) {
+            toast.error(error?.response?.data?.errMessage);
+            dispatch(getTopicsFailed());
+        }
+    },
+    getAllDeanTheses: async ({
+        user,
+        departmentId,
+        inputSearch,
+        filterSearch,
+        dispatch,
+        axiosJWT,
+    }) => {
+        try {
+            dispatch(getAdminThesesStart());
+            const res = await axiosJWT.post(
+                "/api/lecturer/dean-theses",
+                {
+                    inputSearch: inputSearch,
+                    filterSearch: filterSearch,
+                    departmentId: departmentId ? departmentId : "",
+                },
+                {
+                    headers: {
+                        token: `Bearer ${user?.accessToken}`,
+                    },
+                }
+            );
+            dispatch(getAdminThesesSuccess(res?.data));
+        } catch (error) {
+            toast.error(error?.response?.data?.errMessage);
+            dispatch(getAdminThesesFailed());
+        }
+    },
+    getTopicById: async ({ user, id, axiosJWT }) => {
+        try {
+            const res = await axiosJWT.get(`/api/lecturer/dean-topic/${id}`, {
+                headers: {
+                    token: `Bearer ${user?.accessToken}`,
+                },
+            });
+            return res?.data;
+        } catch (error) {
+            return error?.response?.data;
+        }
+    },
+    apiAddTopic: async ({ user, data, axiosJWT }) => {
+        try {
+            const res = await axiosJWT.post(
+                "/api/lecturer/dean-create-topic",
+                {
+                    name: data?.name,
+                    description: data?.description,
+                },
+                {
+                    headers: {
+                        token: `Bearer ${user?.accessToken}`,
+                    },
+                }
+            );
+            return res?.data;
+        } catch (error) {
+            // console.log(error);
+            if (error?.response?.status) {
+                return error?.response?.data;
+            }
+        }
+    },
+    importDeanTopics: async ({ user, data,departmentId, axiosJWT }) => {
+        try {
+            const res = await axiosJWT.post(
+                "/api/lecturer/import-dean-topics",
+                {
+                    data: data,
+                    departmentId:departmentId
+                },
+                {
+                    headers: {
+                        token: `Bearer ${user?.accessToken}`,
+                    },
+                }
+            );
+            return res?.data;
+        } catch (error) {
+            // console.log(error?.response?.data);
             if (error?.response?.status) {
                 return error?.response?.data;
             }
@@ -3096,7 +3388,7 @@ export const apiStudent = {
     },
     getTopicById: async ({ user, id, axiosJWT }) => {
         try {
-            const res = await axiosJWT.get(`/api/admin/topic/${id}`, {
+            const res = await axiosJWT.get(`/api/student/topic/${id}`, {
                 headers: {
                     token: `Bearer ${user?.accessToken}`,
                 },
@@ -3106,7 +3398,28 @@ export const apiStudent = {
             return error?.response?.data;
         }
     },
-
+    apiAddTopic: async ({ user, data, axiosJWT }) => {
+        try {
+            const res = await axiosJWT.post(
+                "/api/student/create-topic",
+                {
+                    name: data?.name,
+                    description: data?.description,
+                },
+                {
+                    headers: {
+                        token: `Bearer ${user?.accessToken}`,
+                    },
+                }
+            );
+            return res?.data;
+        } catch (error) {
+            // console.log(error);
+            if (error?.response?.status) {
+                return error?.response?.data;
+            }
+        }
+    },
     // Api Lecturer
     getAllLecturers: async ({
         user,
@@ -3165,6 +3478,22 @@ export const apiStudent = {
             return error?.response?.data;
         }
     },
+    apiRegisterTopic: async ({ user, id, axiosJWT }) => {
+        try {
+            // console.log(user, id, axiosJWT);
+            const res = await axiosJWT.get(
+                `/api/student/register-topic/${id}`,
+                {
+                    headers: {
+                        token: `Bearer ${user?.accessToken}`,
+                    },
+                }
+            );
+            return res?.data;
+        } catch (error) {
+            return error?.response?.data;
+        }
+    },
     getAllTheses: async ({
         user,
         inputSearch,
@@ -3204,61 +3533,15 @@ export const apiStudent = {
             return error?.response?.data;
         }
     },
-    apiUpdateThesis: async ({ user, data, axiosJWT }) => {
+    apiUpdateThesis: async ({ user, formData, axiosJWT }) => {
         try {
             const res = await axiosJWT.put(
-                `/api/student/update-thesis/${data?.id}`,
-                {
-                    // startDate: data?.startDate,
-                    // complateDate: data?.complateDate,
-                    // thesisStartDate: data?.thesisStartDate,
-                    // thesisEndDate: data?.thesisEndDate,
-                    reportFile: data?.reportFile,
-                    totalScore: data?.totalScore,
-                    resultId: data?.result
-                        ? data?.result[0]?.value
-                            ? data?.result[0]?.value
-                            : data?.result.value
-                        : null,
-                    topicId: data?.topic
-                        ? data?.topic[0]?.value
-                            ? data?.topic[0]?.value
-                            : data?.topic.value
-                        : null,
-                    studentId: data?.student
-                        ? data?.student[0]?.value
-                            ? data?.student[0]?.value
-                            : data?.student.value
-                        : null,
-                    thesisAdvisorId: data?.thesisAdvisor
-                        ? data?.thesisAdvisor[0]?.value
-                            ? data?.thesisAdvisor[0]?.value
-                            : data?.thesisAdvisor.value
-                        : null,
-                    thesisAdvisorStatusId: data?.thesisAdvisorStatus
-                        ? data?.thesisAdvisorStatus[0]?.value
-                            ? data?.thesisAdvisorStatus[0]?.value
-                            : data?.thesisAdvisorStatus.value
-                        : null,
-                    thesisSessionId: data?.thesisSession
-                        ? data?.thesisSession[0]?.value
-                            ? data?.thesisSession[0]?.value
-                            : data?.thesisSession.value
-                        : null,
-                    councilId: data?.council
-                        ? data?.council[0]?.value
-                            ? data?.council[0]?.value
-                            : data?.council.value
-                        : null,
-                    councilStatusId: data?.councilStatus
-                        ? data?.councilStatus[0]?.value
-                            ? data?.councilStatus[0]?.value
-                            : data?.councilStatus.value
-                        : null,
-                },
+                `/api/student/upload-thesis/${formData?.get("id")}`,
+                formData,
                 {
                     headers: {
                         token: `Bearer ${user?.accessToken}`,
+                        "Content-Type": "multipart/form-data",
                     },
                 }
             );

@@ -726,46 +726,218 @@ const lecturerController = {
   MarkEvaluationCriteria: async (req, res) => {
     try {
       if (req?.body) {
-        let mark = await db.Mark.findOne({
+        let council = await db.Council.findOne({
           where: {
-            councilDetailId: req?.body?.mark?.councilDetailId,
-            thesisId: req?.body?.mark?.thesisId,
+            id: req?.body?.mark?.councilId,
           },
         });
-        await db.Mark.update(
-          { totalMark: req?.body?.mark?.totalMark },
-          {
+        if (council.statusId == "S1") {
+          let mark = await db.Mark.findOne({
             where: {
               councilDetailId: req?.body?.mark?.councilDetailId,
               thesisId: req?.body?.mark?.thesisId,
             },
-          }
-        );
-        console.log("mark", mark);
-        if (mark) {
-          req?.body?.mark?.markCriterias.map(async (markCriteria) => {
-            console.log("markCriteria", markCriteria);
-            markCriteria["markId"] = mark?.id;
-            console.log(
-              " markCriteria[]=mark?.id",
-              (markCriteria["markId"] = mark?.id)
-            );
-            await db.MarkCriteria.upsert(markCriteria, {
-              where: {
-                markId: mark?.id,
-                evaluationCriteriaId: markCriteria?.evaluationCriteriaId,
-              },
-            });
           });
-          console.log("mark", mark);
-          return res
-            .status(200)
-            .json({ errCode: 0, errMessage: "Thêm dữ liệu thành công." });
+          await db.Mark.update(
+            { totalMark: req?.body?.mark?.totalMark },
+            {
+              where: {
+                councilDetailId: req?.body?.mark?.councilDetailId,
+                thesisId: req?.body?.mark?.thesisId,
+              },
+            }
+          );
+          // Kiểm tra giảng viên hội đồng đã chấm hết chưa
+          let marks = await db.Mark.findAndCountAll({
+            where: {
+              thesisId: req?.body?.mark?.thesisId,
+              totalMark: { [Op.not]: null },
+            },
+            include: [
+              {
+                model: db.CouncilDetail,
+                as: "councilDetailData",
+                // where: {
+                //   "$councilDetailData.id$": req?.body?.mark?.councilDetailId,
+                // },
+                // required: true, // (tùy chọn) chỉ bao gồm các CouncilDetail có id trùng khớp
+                // separate: true, // (tùy chọn) tạo các truy vấn riêng biệt cho CouncilDetail
+                // include: [], // (tùy chọn) nếu bạn muốn bao gồm thêm mối quan hệ khác
+              },
+            ],
+            raw: true,
+            // nest: true,
+          });
+          let councilDetails = await db.CouncilDetail.count({
+            where: {
+              councilId: req?.body?.mark?.councilId,
+            },
+          });
+          let thesisSession = await db.ThesisSession.findOne({
+            where: {
+              id: req?.body?.mark?.thesisSessionId,
+            },
+          });
+          let thesis = await db.Thesis.findAndCountAll({
+            where: {
+              id: req?.body?.mark?.thesisId,
+              advisorMark: { [Op.not]: null },
+            },
+          });
+          console.log(
+            "councilDetail",
+            // marks,
+            // councilDetails,
+            // thesisSession,
+            thesis
+          );
+          if (
+            marks.count == councilDetails &&
+            thesis.count &&
+            thesisSession.validMark
+          ) {
+            console.log("Đã chấm full điểm");
+            // Điểm trung bình chưa lọc
+            function averageScoreUnfiltered(scores) {
+              const totalScore = scores.reduce(
+                (sum, score) => +sum + +score,
+                0
+              );
+              const averageScore = (+totalScore / scores?.length).toFixed(1);
+              return averageScore;
+            }
+            // Điểm trung bình đã lọc
+            function averageScoreFiltered(
+              scores,
+              validMark,
+              councilAverageScoreUnfiltered
+            ) {
+              const validScores = scores.filter(
+                (score) =>
+                  Math.abs(+score - +councilAverageScoreUnfiltered) < +validMark
+              );
+              console.log("validScores", validScores, scores);
+              const totalScore = validScores?.reduce(
+                (sum, score) => +sum + +score,
+                0
+              );
+              const averageScore = (+totalScore / validScores?.length)?.toFixed(
+                1
+              );
+              return { averageScore, validScores };
+            }
+
+            // Điểm đồ án tốt nghiệp = trung bình điểm mỗi vị trí(Đã lọc)
+            // Điểm mỗi vị trí trong hội đồng(P1,P2,P4) = trung bình hội đồng(CL) +- điểm hợp lệ
+            // Điểm phản biện(P3) = trung bình hội đồng (Đã lọc) +- điểm hợp lệ
+            // Điểm TB Hội đồng + Bảo vệ = trung bình tất cả trừ điểm người hướng dẫn
+            // Điểm hướng dẫn = Điểm TB Hội đồng + Bảo vệ +- điểm hợp lệ
+
+            const validMark = 1.5; // Điểm hợp lệ
+
+            const councilScores = marks?.rows
+              ?.filter((mark) => mark["councilDetailData.positionId"] !== "P3")
+              .map((mark) => mark.totalMark);
+            const councilAverageScoreUnfiltered =
+              averageScoreUnfiltered(councilScores); //Điểm trung bình chưa lọc
+
+            const councilAverageScoreFiltered = averageScoreFiltered(
+              councilScores,
+              validMark,
+              councilAverageScoreUnfiltered
+            ); //Điểm hội đồng đã lọc
+
+            const defenseScores = marks?.rows
+              ?.filter((mark) => mark["councilDetailData.positionId"] === "P3")
+              .map((mark) => mark.totalMark);
+
+            const argumentAverageScoreFiltered = averageScoreFiltered(
+              defenseScores,
+              validMark,
+              councilAverageScoreFiltered.averageScore
+            ); //Điểm phản biện đã lọc
+
+            const councilAndArgumentScoreFiltered =
+              argumentAverageScoreFiltered.validScores.concat(
+                councilAverageScoreFiltered.validScores
+              );
+            const councilAndArgumentAverageScoreFiltered = (
+              councilAndArgumentScoreFiltered.reduce(
+                (sum, score) => +sum + +score,
+                0
+              ) / councilAndArgumentScoreFiltered.length
+            ).toFixed(1); //Điểm trung bình HĐ+PB đã lọc
+
+            const advisorAverageScoreFiltered = averageScoreFiltered(
+              [thesis?.rows[0]?.advisorMark],
+              validMark,
+              councilAndArgumentAverageScoreFiltered
+            ); //Điểm hướng dẫn đã lọc
+
+            const totalScoreFiltered = councilAndArgumentScoreFiltered.concat(
+              advisorAverageScoreFiltered.validScores
+            );
+            console.log(
+              "totalScoreFiltered",
+              totalScoreFiltered,
+              advisorAverageScoreFiltered,
+              [thesis?.rows[0]?.advisorMark]
+            );
+            const totalScore = averageScoreUnfiltered(totalScoreFiltered); //Điểm tổng
+
+            console.log("totalScore", totalScore);
+            if (totalScore <= 10 && totalScore >= 0) {
+              await db.Thesis.update(
+                {
+                  totalScore: totalScore,
+                  resultId: totalScore
+                    ? totalScore >= 4
+                      ? "RS1"
+                      : "RS0"
+                    : null,
+                  councilStatusId: totalScore ? "H3" : "H2",
+                },
+                { where: { id: req?.body?.mark?.thesisId } }
+              );
+            }
+            console.log("Đã đến đây");
+          } else if (!thesisSession.validMark) {
+            console.log("Chưa có điểm hợp lệ");
+          }
+
+          if (mark) {
+            console.log("mark", mark);
+            req?.body?.mark?.markCriterias.map(async (markCriteria) => {
+              // console.log("markCriteria", markCriteria);
+              markCriteria["markId"] = mark?.id;
+              console.log(
+                " markCriteria[]=mark?.id",
+                (markCriteria["markId"] = mark?.id)
+              );
+              await db.MarkCriteria.upsert(markCriteria, {
+                where: {
+                  markId: +mark?.id,
+                  evaluationCriteriaId: markCriteria?.evaluationCriteriaId,
+                },
+              });
+            });
+            // console.log("mark", mark);
+
+            return res.status(200).json({
+              errCode: 0,
+              errMessage: "Chấm điểm hội đồng thành công.",
+            });
+          } else {
+            return res.status(200).json({
+              errCode: 2,
+              errMessage:
+                "Đã xảy ra lỗi trong quá trình chấm, vui lòng thử lại sau!",
+            });
+          }
         } else {
-          return res.status(200).json({
-            errCode: 2,
-            errMessage:
-              "Đã xảy ra lỗi trong quá trình thêm, vui lòng thử lại sau!",
+          return res.status(404).json({
+            errCode: 1,
+            errMessage: "Hội đồng chưa mở, không được chấm điểm!",
           });
         }
       } else {
@@ -799,19 +971,729 @@ const lecturerController = {
         nest: true,
       });
       if (result) {
-        return res
-          .status(200)
-          .json({
-            errCode: 0,
-            errMessage: "Tìm dữ liệu thành công.",
-            result: { result, totalMark: mark?.totalMark },
-          });
+        return res.status(200).json({
+          errCode: 0,
+          errMessage: "Tìm dữ liệu thành công.",
+          result: { result, totalMark: mark?.totalMark },
+        });
       } else {
         return res.status(200).json({
           errCode: 1,
           errMessage:
             "Đã xảy ra lỗi trong quá trình tìm, vui lòng thử lại sau!",
         });
+      }
+    } catch (error) {
+      return res.status(500).json({
+        errCode: -1,
+        errMessage: "Dữ liệu không mong muốn, thử lại sau hoặc dữ liệu khác!",
+      });
+    }
+  },
+  getTheses: async (req, res) => {
+    try {
+      const whereClause = userController.whereClause(req?.body);
+
+      console.log("whereClause", whereClause);
+
+      const queryOptions = {
+        include: [
+          {
+            model: db.Allcode,
+            as: "councilStatusData",
+          },
+          {
+            model: db.Allcode,
+            as: "resultData",
+          },
+          {
+            model: db.Allcode,
+            as: "thesisAdvisorStatusData",
+          },
+          {
+            model: db.Topic,
+            as: "topicData",
+            include: [
+              {
+                model: db.Allcode,
+                as: "statusData",
+              },
+            ],
+          },
+          {
+            model: db.Student,
+            as: "studentData",
+          },
+          {
+            model: db.Council,
+            as: "councilData",
+          },
+          {
+            model: db.Lecturer,
+            as: "thesisAdvisorData",
+          },
+          {
+            model: db.ThesisSession,
+            as: "thesisSessionData",
+          },
+        ],
+        order: [["updatedAt", "DESC"]],
+        raw: true,
+        nest: true,
+      };
+
+      // console.log("req", req);
+      if (Object.keys(whereClause).length > 0) {
+        queryOptions.where = {
+          [Op.or]: whereClause,
+          thesisAdvisorId: req?.user?.id,
+        };
+      }
+
+      const result = await db.Thesis.findAndCountAll(queryOptions);
+      // console.log(result);
+      const { rows: theses, count: totalRecords } = result;
+      return res.status(200).json({ errCode: 0, theses, totalRecords });
+    } catch (error) {
+      return res.status(500).json({
+        errCode: -1,
+        errMessage: "Dữ liệu không mong muốn, thử lại sau hoặc dữ liệu khác!",
+      });
+    }
+  },
+  updateThesis: async (req, res) => {
+    try {
+      if (req?.params?.id) {
+        // console.log(req.body);
+        let thesis = await db.Thesis.findOne({
+          where: { id: req?.params?.id, reportFile: { [Op.ne]: null } },
+        });
+        if (thesis) {
+          console.log(!thesis.reportFile);
+          let result = await db.Thesis.update(
+            {
+              advisorMark: req?.body?.advisorMark,
+            },
+            { where: { id: req?.params?.id } }
+          );
+          if (result) {
+            return res.status(200).json({
+              errCode: 0,
+              errMessage: "Chấm điểm hướng dẫn thành công.",
+            });
+          } else {
+            return res.status(200).json({
+              errCode: 2,
+              errMessage:
+                "Đã xảy ra lỗi trong quá trình chấm điểm, vui lòng thử lại sau.",
+            });
+          }
+        } else {
+          return res.status(200).json({
+            errCode: 2,
+            errMessage:
+              "Sinh viên chưa nộp báo cáo, không thể chấm điểm, vui lòng thử lại sau.",
+          });
+        }
+      } else {
+        return res
+          .status(404)
+          .json({ errCode: 1, errMessage: "Dữ liệu không được tìm thấy!" });
+      }
+    } catch (error) {
+      return res.status(500).json({
+        errCode: -1,
+        errMessage: "Dữ liệu không mong muốn, thử lại sau hoặc dữ liệu khác!",
+      });
+    }
+  },
+  getThesesTopic: async (req, res) => {
+    try {
+      const whereClause = userController.whereClause(req?.body);
+
+      console.log("whereClause", whereClause);
+
+      const queryOptions = {
+        include: [
+          {
+            model: db.Allcode,
+            as: "councilStatusData",
+          },
+          {
+            model: db.Allcode,
+            as: "resultData",
+          },
+          {
+            model: db.Allcode,
+            as: "thesisAdvisorStatusData",
+          },
+          {
+            model: db.Topic,
+            as: "topicData",
+            include: [
+              {
+                model: db.Allcode,
+                as: "statusData",
+              },
+            ],
+            where: { statusId: "H2" },
+          },
+          {
+            model: db.Student,
+            as: "studentData",
+          },
+          {
+            model: db.Council,
+            as: "councilData",
+          },
+          {
+            model: db.Lecturer,
+            as: "thesisAdvisorData",
+          },
+          {
+            model: db.ThesisSession,
+            as: "thesisSessionData",
+          },
+        ],
+        order: [["updatedAt", "DESC"]],
+        raw: true,
+        nest: true,
+      };
+
+      // console.log("req", req);
+      if (Object.keys(whereClause).length > 0) {
+        queryOptions.where = {
+          [Op.or]: whereClause,
+          thesisAdvisorId: req?.user?.id,
+          thesisAdvisorStatusId: "H3",
+        };
+      }
+
+      const result = await db.Thesis.findAndCountAll(queryOptions);
+      // console.log(result);
+      const { rows: theses, count: totalRecords } = result;
+      return res.status(200).json({ errCode: 0, theses, totalRecords });
+    } catch (error) {
+      return res.status(500).json({
+        errCode: -1,
+        errMessage: "Dữ liệu không mong muốn, thử lại sau hoặc dữ liệu khác!",
+      });
+    }
+  },
+  getThesesStudent: async (req, res) => {
+    try {
+      const whereClause = userController.whereClause(req?.body);
+
+      console.log("whereClause", whereClause);
+
+      const queryOptions = {
+        include: [
+          {
+            model: db.Allcode,
+            as: "councilStatusData",
+          },
+          {
+            model: db.Allcode,
+            as: "resultData",
+          },
+          {
+            model: db.Allcode,
+            as: "thesisAdvisorStatusData",
+          },
+          {
+            model: db.Topic,
+            as: "topicData",
+          },
+          {
+            model: db.Student,
+            as: "studentData",
+            include: [
+              {
+                model: db.Allcode,
+                as: "genderData",
+              },
+              {
+                model: db.Class,
+                as: "classData",
+              },
+            ],
+          },
+          {
+            model: db.Council,
+            as: "councilData",
+          },
+          {
+            model: db.Lecturer,
+            as: "thesisAdvisorData",
+          },
+          {
+            model: db.ThesisSession,
+            as: "thesisSessionData",
+          },
+        ],
+        order: [["updatedAt", "DESC"]],
+        raw: true,
+        nest: true,
+      };
+
+      // console.log("req", req);
+      if (Object.keys(whereClause).length > 0) {
+        queryOptions.where = {
+          [Op.or]: whereClause,
+          thesisAdvisorId: req?.user?.id,
+          thesisAdvisorStatusId: "H2",
+        };
+      }
+
+      const result = await db.Thesis.findAndCountAll(queryOptions);
+      // console.log(result);
+      const { rows: theses, count: totalRecords } = result;
+      return res.status(200).json({ errCode: 0, theses, totalRecords });
+    } catch (error) {
+      return res.status(500).json({
+        errCode: -1,
+        errMessage: "Dữ liệu không mong muốn, thử lại sau hoặc dữ liệu khác!",
+      });
+    }
+  },
+  confirmAdvisorById: async (req, res) => {
+    try {
+      let result = await db.Thesis.findOne({
+        where: {
+          id: req?.params?.id,
+          thesisAdvisorId: req?.user?.id,
+        },
+        order: [["createdAt", "DESC"]],
+        raw: true,
+        nest: true,
+      });
+      // console.log("thesisSession", thesisSession);
+
+      // console.log("result", result);
+      if (result) {
+        if (result.thesisAdvisorStatusId == "H2") {
+          result = await db.Thesis.update(
+            {
+              thesisAdvisorStatusId: "H3",
+            },
+            { where: { id: req?.params?.id } }
+          );
+          if (result) {
+            return res.status(200).json({
+              errCode: 0,
+              errMessage: "Xác nhận hướng dẫn thành công.",
+            });
+          } else {
+            return res.status(200).json({
+              errCode: 2,
+              errMessage:
+                "Đã xảy ra lỗi trong quá trình xác nhận, vui lòng thử lại sau!",
+            });
+          }
+        } else {
+          return res.status(200).json({
+            errCode: 1,
+            errMessage:
+              "Trạng thái xác nhận đã bị thay đổi trước đó, vui lòng thử lại!",
+          });
+        }
+      } else {
+        return res.status(200).json({
+          errCode: 2,
+          errMessage:
+            "Sinh viên không đăng ký hướng dẫn, vui lòng thử lại sau!",
+        });
+      }
+    } catch (error) {
+      return res.status(500).json({
+        errCode: -1,
+        errMessage: "Dữ liệu không mong muốn, thử lại sau hoặc dữ liệu khác!",
+      });
+    }
+  },
+  cancelAdvisorById: async (req, res) => {
+    try {
+      let result = await db.Thesis.findOne({
+        where: {
+          id: req?.params?.id,
+          thesisAdvisorId: req?.user?.id,
+        },
+        order: [["createdAt", "DESC"]],
+        raw: true,
+        nest: true,
+      });
+      // console.log("thesisSession", thesisSession);
+
+      // console.log("result", result);
+      if (result) {
+        if (result.thesisAdvisorStatusId == "H2") {
+          result = await db.Thesis.update(
+            {
+              thesisAdvisorStatusId: "H4",
+            },
+            { where: { id: req?.params?.id } }
+          );
+          if (result) {
+            return res.status(200).json({
+              errCode: 0,
+              errMessage: "Hủy đăng ký hướng dẫn thành công.",
+            });
+          } else {
+            return res.status(200).json({
+              errCode: 2,
+              errMessage:
+                "Đã xảy ra lỗi trong quá trình xác nhận, vui lòng thử lại sau!",
+            });
+          }
+        } else {
+          return res.status(200).json({
+            errCode: 1,
+            errMessage:
+              "Trạng thái xác nhận đã bị thay đổi trước đó, vui lòng thử lại!",
+          });
+        }
+      } else {
+        return res.status(200).json({
+          errCode: 2,
+          errMessage:
+            "Sinh viên không đăng ký hướng dẫn, vui lòng thử lại sau!",
+        });
+      }
+    } catch (error) {
+      return res.status(500).json({
+        errCode: -1,
+        errMessage: "Dữ liệu không mong muốn, thử lại sau hoặc dữ liệu khác!",
+      });
+    }
+  },
+
+  confirmTopicById: async (req, res) => {
+    try {
+      let result = await db.Thesis.findOne({
+        where: {
+          topicId: req?.params?.id,
+          thesisAdvisorId: req?.user?.id,
+        },
+        include: [
+          {
+            model: db.Topic,
+            as: "topicData",
+          },
+        ],
+        order: [["createdAt", "DESC"]],
+        raw: true,
+        nest: true,
+      });
+      // console.log("thesisSession", thesisSession);
+
+      // console.log("result", result);
+      if (result) {
+        if (result.topicData.statusId == "H2") {
+          result = await db.Topic.update(
+            {
+              statusId: "H3",
+            },
+            { where: { id: req?.params?.id } }
+          );
+          if (result) {
+            return res.status(200).json({
+              errCode: 0,
+              errMessage: "Xác nhận đề tài thành công.",
+            });
+          } else {
+            return res.status(200).json({
+              errCode: 2,
+              errMessage:
+                "Đã xảy ra lỗi trong quá trình xác nhận, vui lòng thử lại sau!",
+            });
+          }
+        } else {
+          return res.status(200).json({
+            errCode: 1,
+            errMessage:
+              "Trạng thái xác nhận đã bị thay đổi trước đó, vui lòng thử lại!",
+          });
+        }
+      } else {
+        return res.status(200).json({
+          errCode: 2,
+          errMessage: "Sinh viên không đăng ký đề tài, vui lòng thử lại sau!",
+        });
+      }
+    } catch (error) {
+      return res.status(500).json({
+        errCode: -1,
+        errMessage: "Dữ liệu không mong muốn, thử lại sau hoặc dữ liệu khác!",
+      });
+    }
+  },
+  cancelTopicById: async (req, res) => {
+    try {
+      let result = await db.Thesis.findOne({
+        where: {
+          topicId: req?.params?.id,
+          thesisAdvisorId: req?.user?.id,
+        },
+        include: [
+          {
+            model: db.Topic,
+            as: "topicData",
+          },
+        ],
+        order: [["createdAt", "DESC"]],
+        raw: true,
+        nest: true,
+      });
+      // console.log("thesisSession", thesisSession);
+
+      // console.log("result", result);
+      if (result) {
+        if (result.topicData.statusId == "H2") {
+          result = await db.Topic.update(
+            {
+              statusId: "H4",
+            },
+            { where: { id: req?.params?.id } }
+          );
+          if (result) {
+            return res.status(200).json({
+              errCode: 0,
+              errMessage: "Hủy đăng ký đề tài thành công.",
+            });
+          } else {
+            return res.status(200).json({
+              errCode: 2,
+              errMessage:
+                "Đã xảy ra lỗi trong quá trình xác nhận, vui lòng thử lại sau!",
+            });
+          }
+        } else {
+          return res.status(200).json({
+            errCode: 1,
+            errMessage:
+              "Trạng thái xác nhận đã bị thay đổi trước đó, vui lòng thử lại!",
+          });
+        }
+      } else {
+        return res.status(200).json({
+          errCode: 2,
+          errMessage: "Sinh viên không đăng ký đề tài, vui lòng thử lại sau!",
+        });
+      }
+    } catch (error) {
+      return res.status(500).json({
+        errCode: -1,
+        errMessage: "Dữ liệu không mong muốn, thử lại sau hoặc dữ liệu khác!",
+      });
+    }
+  },
+
+  // Api Topic
+  getDeanTopics: async (req, res) => {
+    try {
+      const whereClause = userController.whereClause(req?.body);
+
+      // console.log("whereClause", whereClause);
+
+      const queryOptions = {
+        include: [
+          {
+            model: db.Allcode,
+            as: "statusData",
+            // attributes: ["name"],
+          },
+          {
+            model: db.Department,
+            as: "departmentData",
+          },
+        ],
+        order: [["updatedAt", "DESC"]],
+        raw: true,
+        nest: true,
+      };
+
+      if (Object.keys(whereClause).length > 0) {
+        queryOptions.where = {
+          [Op.or]: whereClause,
+          departmentId: req?.body?.departmentId,
+        };
+      }
+
+      const result = await db.Topic.findAndCountAll(queryOptions);
+      // console.log(result);
+      const { rows: topics, count: totalRecords } = result;
+      return res.status(200).json({ errCode: 0, topics, totalRecords });
+    } catch (error) {
+      return res.status(500).json({
+        errCode: -1,
+        errMessage: "Dữ liệu không mong muốn, thử lại sau hoặc dữ liệu khác!",
+      });
+    }
+  },
+  getDeanTopicById: async (req, res) => {
+    try {
+      const result = await db.Topic.findOne({
+        where: {
+          id: req?.params?.id,
+        },
+        include: [
+          {
+            model: db.Allcode,
+            as: "statusData",
+            // attributes: ["name"],
+          },
+          {
+            model: db.Department,
+            as: "departmentData",
+          },
+        ],
+        order: [["updatedAt", "DESC"]],
+        raw: true,
+        nest: true,
+      });
+      if (result) {
+        return res
+          .status(200)
+          .json({ errCode: 0, errMessage: "Tìm dữ liệu thành công.", result });
+      } else {
+        return res.status(200).json({
+          errCode: 1,
+          errMessage: "Đã xảy ra lỗi trong quá trình tìm, vui lòng thử lại sau",
+        });
+      }
+    } catch (error) {
+      return res.status(500).json({
+        errCode: -1,
+        errMessage: "Dữ liệu không mong muốn, thử lại sau hoặc dữ liệu khác!",
+      });
+    }
+  },
+  addDeanTopic: async (req, res) => {
+    try {
+      if (req?.body) {
+        const result = await db.Topic.create({
+          name: req?.body?.name,
+          description: req?.body?.description,
+          statusId: req?.body?.statusId,
+          departmentId: req?.body?.departmentId,
+        });
+        if (result) {
+          return res
+            .status(200)
+            .json({ errCode: 0, errMessage: "Thêm dữ liệu thành công." });
+        } else {
+          return res.status(200).json({
+            errCode: 2,
+            errMessage:
+              "Đã xảy ra lỗi trong quá trình thêm, vui lòng thử lại sau.",
+          });
+        }
+      } else {
+        return res
+          .status(404)
+          .json({ errCode: 1, errMessage: "Dữ liệu không được tìm thấy!" });
+      }
+    } catch (error) {
+      return res.status(500).json({
+        errCode: -1,
+        errMessage: "Dữ liệu không mong muốn, thử lại sau hoặc dữ liệu khác!",
+      });
+    }
+  },
+  updateDeanTopic: async (req, res) => {
+    try {
+      if (req?.params?.id) {
+        // console.log(req.body);
+        const result = await db.Topic.update(
+          {
+            name: req?.body?.name,
+            description: req?.body?.description,
+            statusId: req?.body?.statusId,
+            departmentId: req?.body?.departmentId,
+          },
+          { where: { id: req?.params?.id } }
+        );
+        if (result) {
+          return res
+            .status(200)
+            .json({ errCode: 0, errMessage: "Cập nhật dữ liệu thành công." });
+        } else {
+          return res.status(200).json({
+            errCode: 2,
+            errMessage:
+              "Đã xảy ra lỗi trong quá trình thêm, vui lòng thử lại sau.",
+          });
+        }
+      } else {
+        return res
+          .status(404)
+          .json({ errCode: 1, errMessage: "Dữ liệu không được tìm thấy!" });
+      }
+    } catch (error) {
+      return res.status(500).json({
+        errCode: -1,
+        errMessage: "Dữ liệu không mong muốn, thử lại sau hoặc dữ liệu khác!",
+      });
+    }
+  },
+  deleteDeanTopic: async (req, res) => {
+    try {
+      if (req?.params?.id) {
+        // console.log(req.body);
+        const result = await db.Topic.destroy({
+          where: { id: req?.params?.id },
+        });
+        if (result) {
+          return res
+            .status(200)
+            .json({ errCode: 0, errMessage: "Xóa dữ liệu thành công." });
+        } else {
+          return res.status(200).json({
+            errCode: 2,
+            errMessage:
+              "Đã xảy ra lỗi trong quá trình xóa, vui lòng thử lại sau.",
+          });
+        }
+      } else {
+        return res
+          .status(404)
+          .json({ errCode: 1, errMessage: "Dữ liệu không được tìm thấy!" });
+      }
+    } catch (error) {
+      return res.status(500).json({
+        errCode: -1,
+        errMessage: "Dữ liệu không mong muốn, thử lại sau hoặc dữ liệu khác!",
+      });
+    }
+  },
+  importDeanTopics: async (req, res) => {
+    try {
+      if (req?.body?.data) {
+        // console.log(req?.body?.data);
+        let dataFilter = req?.body?.data?.map((res) => {
+          return {
+            ...res,
+            departmentId: req?.body?.departmentId,
+            statusId: "H1",
+          };
+        });
+        console.log("dataFilter", dataFilter);
+        const result = await db.Topic.bulkCreate(dataFilter);
+        if (result) {
+          return res
+            .status(200)
+            .json({ errCode: 0, errMessage: "Import dữ liệu thành công." });
+        } else {
+          return res.status(200).json({
+            errCode: 2,
+            errMessage:
+              "Đã xảy ra lỗi trong quá trình import, vui lòng thử lại sau.",
+          });
+        }
+      } else {
+        return res
+          .status(404)
+          .json({ errCode: 1, errMessage: "Dữ liệu không được tìm thấy!" });
       }
     } catch (error) {
       return res.status(500).json({
@@ -873,6 +1755,366 @@ const lecturerController = {
           errCode: 1,
           errMessage: "Đã xảy ra lỗi trong quá trình tìm, vui lòng thử lại sau",
         });
+      }
+    } catch (error) {
+      return res.status(500).json({
+        errCode: -1,
+        errMessage: "Dữ liệu không mong muốn, thử lại sau hoặc dữ liệu khác!",
+      });
+    }
+  },
+
+  // Api Topic
+  getThesisById: async (req, res) => {
+    try {
+      const result = await db.Thesis.findOne({
+        where: {
+          id: req?.params?.id,
+        },
+        include: [
+          {
+            model: db.Allcode,
+            as: "councilStatusData",
+          },
+          {
+            model: db.Allcode,
+            as: "resultData",
+          },
+          {
+            model: db.Allcode,
+            as: "thesisAdvisorStatusData",
+          },
+          {
+            model: db.Thesis,
+            as: "topicData",
+          },
+          {
+            model: db.Student,
+            as: "studentData",
+          },
+          {
+            model: db.Council,
+            as: "councilData",
+          },
+          {
+            model: db.Lecturer,
+            as: "thesisAdvisorData",
+          },
+          {
+            model: db.ThesisSession,
+            as: "thesisSessionData",
+          },
+        ],
+        order: [["updatedAt", "DESC"]],
+        raw: true,
+        nest: true,
+      });
+      if (result) {
+        return res
+          .status(200)
+          .json({ errCode: 0, errMessage: "Tìm dữ liệu thành công.", result });
+      } else {
+        return res.status(200).json({
+          errCode: 1,
+          errMessage: "Đã xảy ra lỗi trong quá trình tìm, vui lòng thử lại sau",
+        });
+      }
+    } catch (error) {
+      return res.status(500).json({
+        errCode: -1,
+        errMessage: "Dữ liệu không mong muốn, thử lại sau hoặc dữ liệu khác!",
+      });
+    }
+  },
+
+  getDeanTheses: async (req, res) => {
+    try {
+      const whereClause = userController.whereClause(req?.body);
+
+      // console.log("whereClause", whereClause);
+
+      const queryOptions = {
+        include: [
+          {
+            model: db.Allcode,
+            as: "councilStatusData",
+          },
+          {
+            model: db.Allcode,
+            as: "resultData",
+          },
+          {
+            model: db.Allcode,
+            as: "thesisAdvisorStatusData",
+          },
+          {
+            model: db.Topic,
+            as: "topicData",
+          },
+          {
+            model: db.Student,
+            as: "studentData",
+          },
+          {
+            model: db.Council,
+            as: "councilData",
+          },
+          {
+            model: db.Lecturer,
+            as: "thesisAdvisorData",
+            where: { departmentId: req?.body?.departmentId },
+          },
+          {
+            model: db.ThesisSession,
+            as: "thesisSessionData",
+          },
+        ],
+        order: [["updatedAt", "DESC"]],
+        raw: true,
+        nest: true,
+      };
+
+      if (Object.keys(whereClause).length > 0) {
+        queryOptions.where = {
+          [Op.or]: whereClause,
+        };
+      }
+
+      const result = await db.Thesis.findAndCountAll(queryOptions);
+      // console.log(result);
+      const { rows: theses, count: totalRecords } = result;
+      return res.status(200).json({ errCode: 0, theses, totalRecords });
+    } catch (error) {
+      return res.status(500).json({
+        errCode: -1,
+        errMessage: "Dữ liệu không mong muốn, thử lại sau hoặc dữ liệu khác!",
+      });
+    }
+  },
+  getDeanThesisById: async (req, res) => {
+    try {
+      const result = await db.Thesis.findOne({
+        where: {
+          id: req?.params?.id,
+        },
+        include: [
+          {
+            model: db.Allcode,
+            as: "councilStatusData",
+          },
+          {
+            model: db.Allcode,
+            as: "resultData",
+          },
+          {
+            model: db.Allcode,
+            as: "thesisAdvisorStatusData",
+          },
+          {
+            model: db.Topic,
+            as: "topicData",
+          },
+          {
+            model: db.Student,
+            as: "studentData",
+          },
+          {
+            model: db.Council,
+            as: "councilData",
+          },
+          {
+            model: db.Lecturer,
+            as: "thesisAdvisorData",
+          },
+          {
+            model: db.ThesisSession,
+            as: "thesisSessionData",
+          },
+        ],
+        order: [["updatedAt", "DESC"]],
+        raw: true,
+        nest: true,
+      });
+      if (result) {
+        return res
+          .status(200)
+          .json({ errCode: 0, errMessage: "Tìm dữ liệu thành công.", result });
+      } else {
+        return res.status(200).json({
+          errCode: 1,
+          errMessage: "Đã xảy ra lỗi trong quá trình tìm, vui lòng thử lại sau",
+        });
+      }
+    } catch (error) {
+      return res.status(500).json({
+        errCode: -1,
+        errMessage: "Dữ liệu không mong muốn, thử lại sau hoặc dữ liệu khác!",
+      });
+    }
+  },
+  // id,
+  // startDate,
+  // complateDate,
+  // thesisStartDate,
+  // thesisEndDate,
+  // reportFile,
+  // totalScore,
+  // resultId,
+  // topicId,
+  // studentId,
+  // thesisAdvisorId,
+  // thesisAdvisorStatusId,
+  // thesisSessionId,
+  // councilId,
+  // councilStatusId,
+  // createdAt,
+  // updatedAt,
+  addDeanThesis: async (req, res) => {
+    try {
+      if (req?.body) {
+        const result = await db.Thesis.create({
+          startDate: req?.body?.startDate,
+          complateDate: req?.body?.complateDate,
+          thesisStartDate: req?.body?.thesisStartDate,
+          thesisEndDate: req?.body?.thesisEndDate,
+          reportFile: req?.body?.reportFile,
+          totalScore: req?.body?.totalScore,
+          resultId: req?.body?.totalScore
+            ? req?.body?.totalScore > 4
+              ? "RS1"
+              : "RS0"
+            : req?.body?.resultId,
+          topicId: req?.body?.topicId,
+          studentId: req?.body?.studentId,
+          thesisAdvisorId: req?.body?.thesisAdvisorId,
+          thesisAdvisorStatusId: req?.body?.thesisAdvisorStatusId,
+          thesisSessionId: req?.body?.thesisSessionId,
+          councilId: req?.body?.councilId,
+          councilStatusId: req?.body?.councilStatusId,
+        });
+        if (result) {
+          return res
+            .status(200)
+            .json({ errCode: 0, errMessage: "Thêm dữ liệu thành công." });
+        } else {
+          return res.status(200).json({
+            errCode: 2,
+            errMessage:
+              "Đã xảy ra lỗi trong quá trình thêm, vui lòng thử lại sau.",
+          });
+        }
+      } else {
+        return res
+          .status(404)
+          .json({ errCode: 1, errMessage: "Dữ liệu không được tìm thấy!" });
+      }
+    } catch (error) {
+      return res.status(500).json({
+        errCode: -1,
+        errMessage: "Dữ liệu không mong muốn, thử lại sau hoặc dữ liệu khác!",
+      });
+    }
+  },
+  updateDeanThesis: async (req, res) => {
+    try {
+      if (req?.params?.id) {
+        // console.log(req.body);
+        const result = await db.Thesis.update(
+          {
+            startDate: req?.body?.startDate,
+            complateDate: req?.body?.complateDate,
+            thesisStartDate: req?.body?.thesisStartDate,
+            thesisEndDate: req?.body?.thesisEndDate,
+            reportFile: req?.body?.reportFile,
+            totalScore: req?.body?.totalScore,
+            resultId: req?.body?.totalScore
+              ? req?.body?.totalScore >= 4
+                ? "RS1"
+                : "RS0"
+              : null,
+            topicId: req?.body?.topicId,
+            studentId: req?.body?.studentId,
+            thesisAdvisorId: req?.body?.thesisAdvisorId,
+            thesisAdvisorStatusId: req?.body?.thesisAdvisorStatusId,
+            thesisSessionId: req?.body?.thesisSessionId,
+            councilId: req?.body?.councilId,
+            councilStatusId: req?.body?.councilStatusId,
+          },
+          { where: { id: req?.params?.id } }
+        );
+        if (result) {
+          return res
+            .status(200)
+            .json({ errCode: 0, errMessage: "Cập nhật dữ liệu thành công." });
+        } else {
+          return res.status(200).json({
+            errCode: 2,
+            errMessage:
+              "Đã xảy ra lỗi trong quá trình thêm, vui lòng thử lại sau.",
+          });
+        }
+      } else {
+        return res
+          .status(404)
+          .json({ errCode: 1, errMessage: "Dữ liệu không được tìm thấy!" });
+      }
+    } catch (error) {
+      return res.status(500).json({
+        errCode: -1,
+        errMessage: "Dữ liệu không mong muốn, thử lại sau hoặc dữ liệu khác!",
+      });
+    }
+  },
+  deleteDeanThesis: async (req, res) => {
+    try {
+      if (req?.params?.id) {
+        // console.log(req.body);
+        const result = await db.Thesis.destroy({
+          where: { id: req?.params?.id },
+        });
+        if (result) {
+          return res
+            .status(200)
+            .json({ errCode: 0, errMessage: "Xóa dữ liệu thành công." });
+        } else {
+          return res.status(200).json({
+            errCode: 2,
+            errMessage:
+              "Đã xảy ra lỗi trong quá trình xóa, vui lòng thử lại sau.",
+          });
+        }
+      } else {
+        return res
+          .status(404)
+          .json({ errCode: 1, errMessage: "Dữ liệu không được tìm thấy!" });
+      }
+    } catch (error) {
+      return res.status(500).json({
+        errCode: -1,
+        errMessage: "Dữ liệu không mong muốn, thử lại sau hoặc dữ liệu khác!",
+      });
+    }
+  },
+  importDeanTheses: async (req, res) => {
+    try {
+      if (req?.body?.data) {
+        // console.log(req?.body?.data);
+        const result = await db.Thesis.bulkCreate(req?.body?.data);
+        if (result) {
+          return res
+            .status(200)
+            .json({ errCode: 0, errMessage: "Import dữ liệu thành công." });
+        } else {
+          return res.status(200).json({
+            errCode: 2,
+            errMessage:
+              "Đã xảy ra lỗi trong quá trình import, vui lòng thử lại sau.",
+          });
+        }
+      } else {
+        return res
+          .status(404)
+          .json({ errCode: 1, errMessage: "Dữ liệu không được tìm thấy!" });
       }
     } catch (error) {
       return res.status(500).json({
@@ -3247,7 +4489,7 @@ const lecturerController = {
     }
   },
 
-  // Api Topic
+  // Api Thesis
   getTopics: async (req, res) => {
     try {
       // console.log(req.body);

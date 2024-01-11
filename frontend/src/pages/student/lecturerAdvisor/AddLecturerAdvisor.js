@@ -285,7 +285,7 @@ const AddLecturerAdvisor = ({ type }, params) => {
         <>
             <div className="changeInformationDiv flex flex-col justify-center items-center gap-2">
                 <div className=" font-semibold text-h1FontSize">
-                    {type=="add"?"Thêm":"Sửa"} giảng viên
+                    {type=="add"?"Thêm":type=="update"?"Sửa":"Chi tiết"} giảng viên
                 </div>
                 <form
                     onSubmit={handleSubmit(onSubmit)}

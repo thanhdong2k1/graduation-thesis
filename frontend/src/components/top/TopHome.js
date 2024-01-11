@@ -31,7 +31,7 @@ const TopHome = () => {
                     <div className="text-biggestFontSize media-max-lg:text-h3FontSize media-max-sm:text-smallFontSize">
                         PHÂN HIỆU TRƯỜNG ĐẠI HỌC THỦY LỢI
                     </div>
-                    <div className="text-h2FontSize media-max-lg:text-smallestFontSize whitespace-nowrap overflow-hidden">
+                    <div className="text-h2FontSize media-max-lg:text-[9px] whitespace-nowrap overflow-hidden">
                         HỆ THỐNG QUẢN LÝ LUẬN VĂN TỐT NGHIỆP
                     </div>
                 </div>

@@ -124,7 +124,7 @@ const ListTopic = () => {
     };
 
     useEffect(() => {
-      // console.log(abc);
+        // console.log(abc);
     }, [abc]);
     const tableData = [
         {
@@ -143,13 +143,13 @@ const ListTopic = () => {
         },
         {
             header: "Mô tả đề tài",
-            width: "w-[300px]",
-            maxWidth: "max-w-[300px]",
+            // width: "w-[300px]",
+            // maxWidth: "max-w-[300px]",
             column: "description",
         },
         {
             header: "Trạng thái đề tài",
-
+            hide: true,
             column: "statusId",
         },
         // {
@@ -191,7 +191,8 @@ const ListTopic = () => {
                     </div> */}
                     <div className="rounded-lg w-auto">
                         <label htmlFor="example">Bộ môn</label>
-                        <Select placeholder="Chọn..."
+                        <Select
+                            placeholder="Chọn..."
                             styles={customSelectStyles}
                             className="basic-single media-max-md:text-smallFontSize"
                             classNamePrefix="select"

@@ -20,19 +20,16 @@ import {
 import ButtonConfirm from "../../../components/button/ButtonConfirm";
 import { useParams } from "react-router-dom";
 
-const AddClass = ({ type }, params) => {
+const AddTopicLecturer = ({ type }, params) => {
     let { id } = useParams();
   // console.log("type", type, id);
 
     const currentUser = useSelector((state) => state?.auth?.currentUser);
     const dispatch = useDispatch();
     let axiosJWT = createAxios(currentUser, dispatch, logginSuccess);
-    const majors = useSelector((state) => state?.admin?.majors);
-    const blocks = useSelector((state) => state?.admin?.blocks);
-    let codeMajor = majors?.map((v) => {
-        return { value: v.id, label: `${v.id} | ${v.name}` };
-    });
-    let codeBlock = blocks?.map((v) => {
+    const status = useSelector((state) => state?.admin?.handle);
+    const departments = useSelector((state) => state?.admin?.departments);
+    let codeDepartments = departments?.map((v) => {
         return { value: v.id, label: `${v.id} | ${v.name}` };
     });
     const [isRtl, setIsRtl] = useState(false);
@@ -51,7 +48,7 @@ const AddClass = ({ type }, params) => {
       // console.log(data);
         type == "add"
             ? await apiAdmin
-                  .apiAddClass({
+                  .apiAddTopic({
                       user: currentUser,
                       data: data,
                       axiosJWT: axiosJWT,
@@ -77,7 +74,7 @@ const AddClass = ({ type }, params) => {
                               autoClose: 1500,
                               pauseOnFocusLoss: true,
                           });
-                          setValue("major", "");
+                          setValue("department", "");
                           setValue("status", "");
                           reset();
                       }
@@ -94,7 +91,7 @@ const AddClass = ({ type }, params) => {
                       });
                   })
             : await apiAdmin
-                  .apiUpdateClass({
+                  .apiUpdateTopic({
                       user: currentUser,
                       data: data,
                       axiosJWT: axiosJWT,
@@ -120,7 +117,7 @@ const AddClass = ({ type }, params) => {
                               autoClose: 1500,
                               pauseOnFocusLoss: true,
                           });
-                          //   setValue("major", "");
+                          //   setValue("department", "");
                           //   setValue("status", "");
                           //   reset();
                       }
@@ -138,19 +135,15 @@ const AddClass = ({ type }, params) => {
                   });
     };
     useEffect(() => {
-        apiAdmin.getAllMajors({
-            user: currentUser,
-            dispatch: dispatch,
-            axiosJWT: axiosJWT,
-        });
-        apiAdmin.getAllBlocks({
+        apiAdmin.apiGetHandle(currentUser, dispatch, axiosJWT);
+        apiAdmin.getAllDepartments({
             user: currentUser,
             dispatch: dispatch,
             axiosJWT: axiosJWT,
         });
         if (id) {
             apiAdmin
-                .getClassById({
+                .getTopicById({
                     user: currentUser,
                     id: id,
                     axiosJWT: axiosJWT,
@@ -171,15 +164,16 @@ const AddClass = ({ type }, params) => {
                         setValue("name", res?.result?.name);
                         setValue("description", res?.result?.description);
                         setValue(
-                            "major",
-                            codeMajor?.filter(
-                                (value) => value?.value == res?.result?.majorId
+                            "department",
+                            codeDepartments?.filter(
+                                (value) =>
+                                    value?.value == res?.result?.departmentId
                             )
                         );
                         setValue(
-                            "block",
-                            codeBlock?.filter(
-                                (value) => value?.value == res?.result?.blockId
+                            "status",
+                            status?.filter(
+                                (value) => value?.value == res?.result?.statusId
                             )
                         );
                         toast.update(id, {
@@ -210,7 +204,7 @@ const AddClass = ({ type }, params) => {
     return (
         <div className="changeInformationDiv flex flex-col justify-center items-center gap-2">
             <div className=" font-semibold text-h1FontSize">
-                {type=="add"?"Thêm":type=="update"?"Sửa":"Chi tiết"} lớp
+                {type=="add"?"Thêm":type=="update"?"Sửa":"Chi tiết"} đề tài
             </div>
             <form
                 onSubmit={handleSubmit(onSubmit)}
@@ -280,55 +274,55 @@ const AddClass = ({ type }, params) => {
 
                 <div className="row flex justify-center items-center gap-2">
                     <div className="col w-full">
-                        <label className="labelInput">Khối</label>
+                        <label className="labelInput">Bộ môn</label>
                         <Controller
-                            name="block"
+                            name="department"
                             control={control}
-                            {...register("block", {
+                            {...register("department", {
                                 // required: "Full name is required",
                             })}
                             render={({ field }) => (
                                 <Select placeholder="Chọn..."
                                     styles={customSelectStyles}
                                     {...field}
-                                    options={codeBlock}
+                                    options={codeDepartments}
                                     isClearable={true}
                                     isDisabled={type == "detail" ? true : false}
                                 />
                             )}
                         />
-                        {errors?.block?.type && (
+                        {errors?.department?.type && (
                             <p className=" text-normal text-red-500">
-                                {errors?.block?.message}
+                                {errors?.department?.message}
                             </p>
                         )}
                     </div>
                     <div className="col w-full">
-                        <label className="labelInput">Ngành</label>
+                        <label className="labelInput">Trạng thái</label>
                         <Controller
-                            name="major"
+                            name="status"
                             control={control}
-                            {...register("major", {
+                            {...register("status", {
                                 // required: "Full name is required",
                             })}
                             render={({ field }) => (
                                 <Select placeholder="Chọn..."
                                     styles={customSelectStyles}
                                     {...field}
-                                    options={codeMajor}
+                                    options={status}
                                     isClearable={true}
                                     isDisabled={type == "detail" ? true : false}
                                 />
                             )}
                         />
-                        {errors?.major?.type && (
+                        {errors?.status?.type && (
                             <p className=" text-normal text-red-500">
-                                {errors?.major?.message}
+                                {errors?.status?.message}
                             </p>
                         )}
                     </div>
                 </div>
-                {/* code, roleId, majorId, permissions */}
+                {/* code, roleId, departmentId, permissions */}
 
                 <ButtonConfirm type={type} />
             </form>
@@ -336,4 +330,4 @@ const AddClass = ({ type }, params) => {
     );
 };
 
-export default AddClass;
+export default AddTopicLecturer;

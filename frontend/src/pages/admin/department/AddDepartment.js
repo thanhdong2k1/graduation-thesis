@@ -209,7 +209,7 @@ const AddDepartment = ({ type }, params) => {
     return (
         <div className="changeInformationDiv flex flex-col justify-center items-center gap-2">
             <div className=" font-semibold text-h1FontSize">
-                {type=="add"?"Thêm":"Sửa"} bộ môn
+                {type=="add"?"Thêm":type=="update"?"Sửa":"Chi tiết"} bộ môn
             </div>
             <form
                 onSubmit={handleSubmit(onSubmit)}
@@ -239,7 +239,7 @@ const AddDepartment = ({ type }, params) => {
                             }`}
                             disabled={type == "detail" ? true : false}
                             {...register("name", {
-                                required: "Name is required",
+                                required: "Không được để trống",
                             })}
                         />
                         {errors?.name?.type && (

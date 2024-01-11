@@ -92,12 +92,14 @@ const middlewareController = {
   },
   verifyTokenUpdate: (req, res, next) => {
     middlewareController.verifyToken(req, res, () => {
-   // console.log("req", req.user);
+   console.log("req", req.body);
       if (
         req.user.roleId == "R1" ||
         req.user.roleId == "R2" ||
-        req.user.permissions.split(",").includes("PERU")
-      ) {
+        req.user?.permissions?.split(",")?.includes("PERU")||
+        req.body?.data?.studentId == req.user.id||
+        req.body?.data?.lecturerId == req.user.id
+        ) {
         next();
       } else {
         return res
@@ -108,6 +110,26 @@ const middlewareController = {
           });
       }
     });
+  },
+  verifyTokenUpload: (req, res, next) => {
+    // middlewareController.verifyToken(req, res, () => {
+   console.log("req", req.file);
+      if (
+        req.user.roleId == "R1" ||
+        req.user.roleId == "R2" ||
+        req.user.permissions.split(",").includes("PERU")||
+        req.file?.studentId == req.user.id
+      ) {
+        next();
+      } else {
+        return res
+          .status(403)
+          .json({
+            errCode: 403,
+            errMessage: "Bạn không được phép cập nhật dữ liệu!",
+          });
+      }
+    // });
   },
   verifyTokenDelete: (req, res, next) => {
     middlewareController.verifyToken(req, res, () => {

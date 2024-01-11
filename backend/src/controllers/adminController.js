@@ -456,14 +456,6 @@ const adminController = {
           });
           console.log("councilDetails", councilDetails);
           result = null;
-          req?.body?.thesesDetails.map(async (thesis) => {
-            await db.Thesis.update(
-              {
-                councilId: result?.dataValues?.id,
-              },
-              { where: { id: thesis.id } }
-            );
-          });
           result = councilDetails.map(async (position) => {
             console.log("position", position);
             console.log("req?.body?.thesesDetails", req?.body?.thesesDetails);
@@ -518,7 +510,7 @@ const adminController = {
   updateCouncil: async (req, res) => {
     try {
       if (req?.params?.id) {
-        // console.log(req.body);
+        console.log(req.body);
         let result = await db.Council.update(
           {
             name: req?.body?.name,
@@ -529,6 +521,7 @@ const adminController = {
           { where: { id: req?.params?.id } }
         );
         if (result) {
+          // Thêm councilId vào chi tiết
           let councilDetails = [];
           req?.body?.councilDetails.map((position) => {
             councilDetails.push({
@@ -537,6 +530,17 @@ const adminController = {
             });
           });
           let countThesisDuplicate = 0;
+          await db.Thesis.update(
+            {
+              councilId: null,
+            },
+            {
+              where: {
+                councilId: req?.params?.id,
+              },
+            }
+          );
+          // Cập nhật hội đồng chấm
           req?.body?.thesesDetails.map(async (thesis) => {
             // console.log(thesis);
             let update = await db.Thesis.update(
@@ -564,6 +568,7 @@ const adminController = {
               councilId: req?.params?.id,
             },
           });
+          // xóa tất cả chi tiết không nằm trong danh sách gửi lên
           ids = resultDelete?.map((position) => position.id);
           result = await db.CouncilDetail.destroy({
             where: { id: ids },
@@ -571,22 +576,35 @@ const adminController = {
 
           // console.log("resultDelete", result, ids);
 
-          // result = await db.CouncilDetail.bulkCreate(councilDetails, {
-          //   upsertKeys: ["id"],
-          //   updateOnDuplicate: ["positionId", "councilId", "lecturerId"],
-          // });
+          result = await db.CouncilDetail.bulkCreate(councilDetails, {
+            upsertKeys: ["id"],
+            updateOnDuplicate: ["positionId", "councilId", "lecturerId"],
+          });
 
-          let result = await Promise.all(
-            councilDetails.map(async (position) => {
+          councilDetails = await db.CouncilDetail.findAll({
+            where: {
+              councilId: req?.params?.id,
+            },
+          });
+          console.log("councilDetails", councilDetails);
+          result = await Promise.all(
+            councilDetails?.map(async (position) => {
               console.log("position", position);
               console.log("req?.body?.thesesDetails", req?.body?.thesesDetails);
-              let res = await db.CouncilDetail.create(position);
               await Promise.all(
                 req?.body?.thesesDetails.map(async (thesis) => {
-                  await db.Mark.create({
-                    councilDetailId: res?.dataValues?.id,
-                    thesisId: thesis?.thesisId,
-                  });
+                  await db.Mark.bulkCreate(
+                    [
+                      {
+                        councilDetailId: position?.id,
+                        thesisId: thesis?.thesisId,
+                      },
+                    ],
+                    {
+                      upsertKeys: ["id"],
+                      updateOnDuplicate: ["councilDetailId", "thesisId"],
+                    }
+                  );
                 })
               );
               return res;
@@ -830,47 +848,57 @@ const adminController = {
   addDepartment: async (req, res) => {
     try {
       if (req?.body) {
-        const result = await db.Department.create({
-          name: req?.body?.name,
-          description: req?.body?.description,
-          founding: req?.body?.founding,
-          deanId: req?.body?.deanId,
+        let deaned = await db.Department.findOne({
+          where: { deanId: req?.body?.deanId },
         });
-        if (result) {
-          let resultDean = null;
-          if (req?.body?.deanId) {
-            resultDean = await db.Lecturer.update(
-              {
-                roleId: "R2",
-                departmentId: result?.dataValues.id,
-              },
-              {
-                where: {
-                  ["id"]: req?.body?.deanId,
-                  [Op.ne]: {
-                    ["roleId"]: "R1",
-                  },
+        if (!deaned) {
+          const result = await db.Department.create({
+            name: req?.body?.name,
+            description: req?.body?.description,
+            founding: req?.body?.founding,
+            deanId: req?.body?.deanId,
+          });
+          if (result) {
+            let resultDean = null;
+            if (req?.body?.deanId) {
+              resultDean = await db.Lecturer.update(
+                {
+                  roleId: "R2",
+                  departmentId: result?.dataValues.id,
                 },
-              }
-            );
-          }
-          if (resultDean) {
-            return res.status(200).json({
-              errCode: 0,
-              errMessage:
-                "Cập nhật dữ liệu thành công, vai trò người dùng đã thay đổi.",
-            });
+                {
+                  where: {
+                    ["id"]: req?.body?.deanId,
+                    [Op.ne]: {
+                      ["roleId"]: "R1",
+                    },
+                  },
+                }
+              );
+            }
+            if (resultDean) {
+              return res.status(200).json({
+                errCode: 0,
+                errMessage:
+                  "Cập nhật dữ liệu thành công, vai trò người dùng đã thay đổi.",
+              });
+            } else {
+              return res.status(200).json({
+                errCode: 0,
+                errMessage: "Cập nhật dữ liệu thành công.",
+              });
+            }
           } else {
             return res.status(200).json({
-              errCode: 0,
-              errMessage: "Cập nhật dữ liệu thành công.",
+              errCode: 2,
+              errMessage:
+                "Đã xảy ra lỗi trong quá trình thêm, vui lòng thử lại sau.",
             });
           }
         } else {
           return res.status(200).json({
-            errCode: 2,
-            errMessage:
-              "Đã xảy ra lỗi trong quá trình thêm, vui lòng thử lại sau.",
+            errCode: 1,
+            errMessage: "Giảng viên đã là trưởng bộ môn khác!",
           });
         }
       } else {
@@ -889,6 +917,21 @@ const adminController = {
     try {
       if (req?.params?.id) {
         // console.log(req.body);
+        const department = await db.Department.findOne({
+          where: { id: req?.params?.id },
+        });
+        console.log("req", req);
+        await db.Lecturer.update(
+          {
+            roleId: department?.deanId ? "R3" : "R2",
+          },
+          {
+            where: {
+              id: department?.deanId,
+              roleId: { [Op.ne]: "R1" },
+            },
+          }
+        );
         const result = await db.Department.update(
           {
             name: req?.body?.name,
@@ -906,10 +949,8 @@ const adminController = {
             },
             {
               where: {
-                ["id"]: req?.body?.deanId,
-                [Op.ne]: {
-                  ["roleId"]: "R1",
-                },
+                id: req?.body?.deanId,
+                roleId: { [Op.ne]: "R1" },
               },
             }
           );
@@ -2356,10 +2397,7 @@ const adminController = {
     try {
       if (req?.body?.data) {
         // console.log(req?.body?.data);
-        let passwordDefaut = await bcrypt.hashSync(
-          "123456",
-          salt
-        );
+        let passwordDefaut = await bcrypt.hashSync("123456", salt);
         let dataPasswordDefaut = [];
         req?.body?.data.map((data) => {
           dataPasswordDefaut.push({ ...data, password: passwordDefaut });
@@ -2704,10 +2742,7 @@ const adminController = {
     try {
       if (req?.body?.data) {
         // console.log(req?.body?.data);
-        let passwordDefaut = await bcrypt.hashSync(
-          "123456",
-          salt
-        );
+        let passwordDefaut = await bcrypt.hashSync("123456", salt);
         let dataPasswordDefaut = [];
         req?.body?.data.map((data) => {
           dataPasswordDefaut.push({ ...data, password: passwordDefaut });
@@ -3437,6 +3472,37 @@ const adminController = {
       return res.status(500).json({
         errCode: -1,
         errMessage: "Dữ liệu không mong muốn, thử lại sau hoặc dữ liệu khác!",
+      });
+    }
+  },
+  statistic: async (req, res) => {
+    try {
+      const statisticTotalThesis = await db.Thesis.count();
+      const statisticThesisAvailabeResult = await db.Thesis.count({
+        where: { resultId: { [Op.ne]: null } },
+      });
+      const statisticThesisSuccessResult = await db.Thesis.count({
+        where: { resultId: { [Op.eq]: "RS1" } },
+      });
+      const statisticTotalStudent = await db.Student.count();
+      const statisticTotalLecturer = await db.Lecturer.count();
+      // console.log(result);
+      return res
+        .status(200)
+        .json({
+          errCode: 0,
+          data: {
+            statisticTotalThesis,
+            statisticTotalStudent,
+            statisticThesisAvailabeResult,
+            statisticTotalLecturer,
+            statisticThesisSuccessResult
+          },
+        });
+    } catch (error) {
+      return res.status(500).json({
+        errCode: -1,
+        errMessage: "Đã xảy ra lỗi, vui lòng thử lại sau!",
       });
     }
   },

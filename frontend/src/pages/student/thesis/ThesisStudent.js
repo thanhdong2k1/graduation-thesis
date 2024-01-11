@@ -27,7 +27,7 @@ const ThesisStudent = () => {
     const currentUser = useSelector((state) => state?.auth?.currentUser);
     let axiosJWT = createAxios(currentUser, dispatch, logginSuccess);
 
-  // console.log("theses", theses);
+    // console.log("theses", theses);
     const [defineTable, setDefineTable] = useState({
         inputSearch: "",
         filterSearch: "",
@@ -45,10 +45,10 @@ const ThesisStudent = () => {
         navigate(`../${pathRoutes?.R1?.addStudent}`, { replace: true });
     };
     const handleImport = () => {
-      // console.log("handleImport");
+        // console.log("handleImport");
     };
     const handleExport = () => {
-      // console.log("handleExport");
+        // console.log("handleExport");
     };
     const handleEdit = (data) => {
         navigate(`../${pathRoutes?.R1?.updateThesis}/${data?.id}`, {
@@ -62,7 +62,7 @@ const ThesisStudent = () => {
     };
 
     const onDelete = (data) => {
-      // console.log("onDelete", data);
+        // console.log("onDelete", data);
         setShowModal(true);
         setResult(data);
     };
@@ -94,7 +94,7 @@ const ThesisStudent = () => {
                         dispatch: dispatch,
                         axiosJWT: axiosJWT,
                     });
-                } else if (res?.errCode > 0 || res?.errCode < 0 ) {
+                } else if (res?.errCode > 0 || res?.errCode < 0) {
                     // console.log(res);
                     toast.update(id, {
                         render: res?.errMessage,
@@ -116,7 +116,7 @@ const ThesisStudent = () => {
                 }
             })
             .catch((err) => {
-              // console.log(err);
+                // console.log(err);
                 toast.update(id, {
                     render: "Đã xảy ra lỗi, vui lòng thử lại sau",
                     type: "error",
@@ -170,7 +170,7 @@ const ThesisStudent = () => {
                         dispatch: dispatch,
                         axiosJWT: axiosJWT,
                     });
-                } else if (res?.errCode > 0 || res?.errCode < 0 ) {
+                } else if (res?.errCode > 0 || res?.errCode < 0) {
                     // console.log(res);
                     toast.update(id, {
                         render: res?.errMessage,
@@ -192,7 +192,7 @@ const ThesisStudent = () => {
                 }
             })
             .catch((err) => {
-              // console.log(err);
+                // console.log(err);
                 toast.update(id, {
                     render: "Đã xảy ra lỗi, vui lòng thử lại sau",
                     type: "error",
@@ -220,6 +220,29 @@ const ThesisStudent = () => {
     //   refreshToken: DataTypes.STRING,
     const tableData = [
         {
+            header: "Hành động",
+            isRowPer: "id",
+            isPerR: true,
+            actions:
+                currentUser?.roleId == "R1"
+                    ? [
+                          actionsDetail(handleDetail),
+                          actionsEdit(handleEdit),
+                          actionsRemove(onDelete),
+                      ]
+                    : [
+                          actionsDetail(handleDetail),
+                          actionsEdit(handleEdit),
+                          (currentUser?.permissions
+                              ?.split(",")
+                              ?.includes("PERF") ||
+                              currentUser?.permissions
+                                  ?.split(",")
+                                  ?.includes("PERD")) &&
+                              actionsRemove(onDelete),
+                      ],
+        },
+        {
             header: "#",
             hide: true,
             // width: "w-[10px]",
@@ -241,6 +264,15 @@ const ThesisStudent = () => {
             columnData: "thesisAdvisorData.fullName",
         },
         {
+            header: "XN hướng dẫn",
+            width: "w-[300px]",
+            maxWidth: "max-w-[300px]",
+            column: "thesisAdvisorStatusId",
+            columnData: "thesisAdvisorStatusData.valueVi",
+            isStatus: true,
+            // actions: actionsDetail(handleDetail),
+        },
+        {
             header: "Tên đề tài",
             width: "w-[300px]",
             maxWidth: "max-w-[300px]",
@@ -248,13 +280,12 @@ const ThesisStudent = () => {
             columnData: "topicData.name",
         },
         {
-            header: "Giảng viên xác nhận",
+            header: "XN đề tài",
             width: "w-[300px]",
             maxWidth: "max-w-[300px]",
-            column: "thesisAdvisorStatusId",
-            columnData: "thesisAdvisorStatusData.valueVi",
+            column: "topicId",
+            columnData: "topicData.statusData.valueVi",
             isStatus: true,
-            // actions: actionsDetail(handleDetail),
         },
         {
             header: "Khóa luận",
@@ -268,6 +299,7 @@ const ThesisStudent = () => {
             width: "w-[300px]",
             maxWidth: "max-w-[300px]",
             column: "councilId",
+            hide: true,
             columnData: "councilData.name",
         },
         {
@@ -276,6 +308,7 @@ const ThesisStudent = () => {
             maxWidth: "max-w-[300px]",
             column: "councilStatusId",
             columnData: "councilStatusData.valueVi",
+            hide: true,
             isStatus: true,
             // actions: actionsDetail(handleDetail),
         },
@@ -327,29 +360,7 @@ const ThesisStudent = () => {
         // thesisStartDate,
         // thesisEndDate,
         // reportFile,
-        {
-            header: "Hành động",
-            // isRowPer: "thesisSessionId",
-            isPerR: true,
-            actions:
-                currentUser?.roleId == "R1"
-                    ? [
-                          actionsDetail(handleDetail),
-                          actionsEdit(handleEdit),
-                          actionsRemove(onDelete),
-                      ]
-                    : [
-                          actionsDetail(handleDetail),
-                          actionsEdit(handleEdit),
-                          (currentUser?.permissions
-                              ?.split(",")
-                              ?.includes("PERF") ||
-                              currentUser?.permissions
-                                  ?.split(",")
-                                  ?.includes("PERD")) &&
-                              actionsRemove(onDelete),
-                      ],
-        },
+        
     ];
     // Effect
     useEffect(() => {

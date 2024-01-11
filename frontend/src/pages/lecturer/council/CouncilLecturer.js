@@ -258,19 +258,19 @@ const CouncilLecturer = () => {
                 currentUser?.roleId == "R1"
                     ? [
                           actionsDetail(handleDetail),
-                          actionsEdit(handleEdit),
-                          actionsRemove(handleDelete),
+                        //   actionsEdit(handleEdit),
+                        //   actionsRemove(handleDelete),
                       ]
                     : [
                           actionsDetail(handleDetail),
-                          actionsEdit(handleEdit),
-                          (currentUser?.permissions
-                              ?.split(",")
-                              ?.includes("PERF") ||
-                              currentUser?.permissions
-                                  ?.split(",")
-                                  ?.includes("PERD")) &&
-                              actionsRemove(handleDelete),
+                        //   actionsEdit(handleEdit),
+                        //   (currentUser?.permissions
+                        //       ?.split(",")
+                        //       ?.includes("PERF") ||
+                        //       currentUser?.permissions
+                        //           ?.split(",")
+                        //           ?.includes("PERD")) &&
+                        //       actionsRemove(handleDelete),
                       ],
         },
     ];

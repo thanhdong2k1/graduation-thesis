@@ -25,8 +25,15 @@ import { HiArrowDown, HiArrowUp } from "react-icons/hi";
 
 const MarkEvaluationCriteria = ({ type }) => {
     // let { id } = useParams();
-    let { thesisSessionId, councilDetailId, coundilId, thesisId } = useParams();
-    // console.log("type", type, coundilId, thesisId);
+    let { thesisSessionId, councilDetailId, councilId, thesisId } = useParams();
+    console.log(
+        "type",
+        type,
+        thesisSessionId,
+        councilDetailId,
+        councilId,
+        thesisId
+    );
 
     const currentUser = useSelector((state) => state?.auth?.currentUser);
     const dispatch = useDispatch();
@@ -63,6 +70,8 @@ const MarkEvaluationCriteria = ({ type }) => {
             totalMark: data.totalMark,
             councilDetailId: councilDetailId,
             thesisId: thesisId,
+            councilId: councilId,
+            thesisSessionId: thesisSessionId,
         };
         await apiLecturer
             .apiMarkEvaluationCriteria({
@@ -191,11 +200,15 @@ const MarkEvaluationCriteria = ({ type }) => {
                             });
                         });
                         console.log("criteriasMark", criteriasMark);
-                        setCriterias(criteriasMark);
-                        setValue(
-                            "totalMark",
-                            responseMarkCriteria?.result?.totalMark
-                        );
+                        if (criteriasMark.length > 0) {
+                            setCriterias(criteriasMark);
+                            setValue(
+                                "totalMark",
+                                responseMarkCriteria?.result?.totalMark
+                            );
+                        } else {
+                            setCriterias(responseCriteria?.result);
+                        }
                     } else {
                         setCriterias(responseCriteria?.result);
                     }
@@ -231,9 +244,9 @@ const MarkEvaluationCriteria = ({ type }) => {
                           : 0)
                     : (totalMark += +item.mark ? +item.mark * item.weight : 0);
             });
-            setValue("totalMark", totalMark);
+            setValue("totalMark", totalMark.toFixed(2));
         }
-    }, [criterias,changedMark]);
+    }, [criterias, changedMark]);
 
     return (
         <div className="changeInformationDiv flex flex-col justify-center items-center gap-2">
@@ -307,7 +320,7 @@ const MarkEvaluationCriteria = ({ type }) => {
                             } !bg-transparent`}
                             disabled
                             {...register("student", {
-                                required: "Number phone is required",
+                                // required: "Number phone is required",
                             })}
                         />
                         {errors?.student?.type && (
@@ -324,7 +337,7 @@ const MarkEvaluationCriteria = ({ type }) => {
                             } !bg-transparent`}
                             disabled
                             {...register("thesisAdvisor", {
-                                required: "Number phone is required",
+                                // required: "Number phone is required",
                             })}
                         />
                         {errors?.thesisAdvisor?.type && (
@@ -343,7 +356,7 @@ const MarkEvaluationCriteria = ({ type }) => {
                             } !bg-transparent`}
                             disabled
                             {...register("topic", {
-                                required: "Number phone is required",
+                                // required: "Number phone is required",
                             })}
                         />
                         {errors?.topic?.type && (
@@ -383,7 +396,7 @@ const MarkEvaluationCriteria = ({ type }) => {
                             }`}
                             disabled={type == "detail" ? true : false}
                             {...register("name", {
-                                required: "Name is required",
+                                required: "Không được để trống",
                             })}
                         />
                         {errors?.name?.type && (
@@ -418,7 +431,7 @@ const MarkEvaluationCriteria = ({ type }) => {
                                             }`}
                                             disabled
                                             // {...register("nameCriteria", {
-                                            //     required: "Name is required",
+                                            //     required: "Không được để trống",
                                             // })}
                                             value={item.name}
                                         />
@@ -452,7 +465,7 @@ const MarkEvaluationCriteria = ({ type }) => {
                                             step={0.1}
                                             disabled
                                             // {...register("weightCriteria", {
-                                            //     required: "Name is required",
+                                            //     required: "Không được để trống",
                                             // })}
                                             value={item.weight}
                                         />
@@ -492,7 +505,7 @@ const MarkEvaluationCriteria = ({ type }) => {
                                                     : false
                                             }
                                             // {...register("weightCriteria", {
-                                            //     required: "Name is required",
+                                            //     required: "Không được để trống",
                                             // })}
                                             value={item.mark}
                                             onChange={(e) =>

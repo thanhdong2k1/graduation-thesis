@@ -479,6 +479,7 @@ const DetailTable = ({ tableData, datas }) => {
                                                                     </span>
                                                                 </span>
                                                             ) : currentUser?.permissions ? (
+                                                                // Nếu có per
                                                                 currentUser?.permissions
                                                                     ?.split(",")
                                                                     ?.includes(

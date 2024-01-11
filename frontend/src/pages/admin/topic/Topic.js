@@ -233,7 +233,7 @@ const Topic = () => {
             // hide: true,
         },
         {
-            header: "Trạng thái hội đồng",
+            header: "Trạng thái đề tài",
             column: "statusId",
             columnData: "statusData.valueVi",
             isStatus: true,

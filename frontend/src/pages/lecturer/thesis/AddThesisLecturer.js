@@ -11,7 +11,7 @@ import "react-datepicker/dist/react-datepicker.css";
 import moment from "moment/moment";
 import { createAxios } from "../../../utils/createInstance";
 import { logginSuccess } from "../../../redux/authSlice";
-import { apiStudent } from "../../../redux/apiRequest";
+import { apiAdmin, apiLecturer } from "../../../redux/apiRequest";
 import ModalPopup from "../../../components/ModelPopup/ModalPopup";
 import {
     customSelectStyles,
@@ -21,16 +21,47 @@ import ButtonConfirm from "../../../components/button/ButtonConfirm";
 import { useParams } from "react-router-dom";
 import { MdLockReset } from "react-icons/md";
 import pdf from "../../../assets/540cb75550adf33f281f29132dddd14fded85bfc.pdf";
-import axios from "axios";
 
-const AddThesisStudent = ({ type }) => {
+const AddThesisLecturer = ({ type }) => {
     let { id } = useParams();
     // console.log("type", type, id);
 
     const currentUser = useSelector((state) => state?.auth?.currentUser);
     const dispatch = useDispatch();
     let axiosJWT = createAxios(currentUser, dispatch, logginSuccess);
+    const results = useSelector((state) => state?.admin?.result);
+    const topics = useSelector((state) => state?.admin?.topics);
+    const students = useSelector((state) => state?.admin?.students);
+    const thesisAdvisor = useSelector((state) => state?.admin?.lecturers);
+    const thesisAdvisorStatus = useSelector((state) => state?.admin?.handle);
+    const thesisSessions = useSelector((state) => state?.admin?.thesisSessions);
+    const councils = useSelector((state) => state?.admin?.councils);
+    const councilStatus = useSelector((state) => state?.admin?.handle);
+    let codeCouncil = councils?.map((v) => {
+        return { value: v.id, label: `${v.id} | ${v.name}` };
+    });
+    let codeThesisSession = thesisSessions?.map((v) => {
+        return { value: v.id, label: `${v.id} | ${v.name}` };
+    });
+    let codeThesisAdvisor = thesisAdvisor?.map((v) => {
+        return { value: v.id, label: `${v.id} | ${v.fullName}` };
+    });
+    let codeStudent = students?.map((v) => {
+        return { value: v.id, label: `${v.id} | ${v.fullName}` };
+    });
+    let codeTopic = topics?.map((v) => {
+        return { value: v.id, label: `${v.id} | ${v.name}` };
+    });
 
+    const [file, setFile] = useState();
+    const [fileName, setFileName] = useState();
+    const [reportFile, setReportFile] = useState(null);
+    const importFile = async (e) => {
+        /* get data as an ArrayBuffer */
+        console.log(e.target.files);
+        setFile(e.target.files[0]);
+        setFileName(e.target.files[0].name);
+    };
     const [isRtl, setIsRtl] = useState(false);
     const [showModal, setShowModal] = useState(false);
     const [result, setResult] = useState(null);
@@ -41,14 +72,60 @@ const AddThesisStudent = ({ type }) => {
         setShowModal(true);
         setResult(getValues("id"));
     };
-    const [file, setFile] = useState();
-    const [fileName, setFileName] = useState();
-    const [reportFile, setReportFile] = useState(null);
-    const importFile = async (e) => {
-        /* get data as an ArrayBuffer */
-        console.log(e.target.files);
-        setFile(e.target.files[0]);
-        setFileName(e.target.files[0].name);
+
+    const handleResetPassword = async (data) => {
+        // console.log("hello", data, getValues());
+        const id = toast.loading("Vui lòng đợi...");
+        await apiAdmin
+            .apiResetPasswordThesis({
+                user: currentUser,
+                data: getValues(),
+                axiosJWT: axiosJWT,
+            })
+            .then((res) => {
+                if (res?.errCode == 0) {
+                    // console.log(res);
+                    toast.update(id, {
+                        render: res?.errMessage,
+                        type: "success",
+                        isLoading: false,
+                        closeButton: true,
+                        autoClose: 1500,
+                        pauseOnFocusLoss: true,
+                    });
+                    // reset();
+                } else if (res?.errCode > 0 || res?.errCode < 0) {
+                    // console.log(res);
+                    toast.update(id, {
+                        render: res?.errMessage,
+                        type: "error",
+                        isLoading: false,
+                        closeButton: true,
+                        autoClose: 1500,
+                        pauseOnFocusLoss: true,
+                    });
+                } else if (res?.errCode < 0) {
+                    toast.update(id, {
+                        render: "Dữ liệu lỗi, vui lòng kiểm tra lại dữ liệu",
+                        type: "error",
+                        isLoading: false,
+                        closeButton: true,
+                        autoClose: 1500,
+                        pauseOnFocusLoss: true,
+                    });
+                }
+            })
+            .catch((err) => {
+                // console.log(err);
+                toast.update(id, {
+                    render: "Đã xảy ra lỗi, vui lòng thử lại sau",
+                    type: "error",
+                    isLoading: false,
+                    closeButton: true,
+                    autoClose: 1500,
+                    pauseOnFocusLoss: true,
+                });
+            });
     };
 
     const {
@@ -61,141 +138,84 @@ const AddThesisStudent = ({ type }) => {
         reset,
     } = useForm();
     const onSubmit = async (data) => {
-        const toastId = toast.loading("Vui lòng đợi...");
-        const formData = new FormData();
-        formData?.append("file", file);
-        formData?.append("fileName", fileName);
-        formData?.append("id", data.id);
-        // formData?.append("reportFile", data.reportFile);
-        formData?.append("studentId", data.studentId);
-        console.log(formData.get("id"));
-        file && fileName
-            ? await apiStudent
-                  .apiUpdateThesis({
-                      user: currentUser,
-                      formData: formData,
-                      axiosJWT: axiosJWT,
-                  })
-                  .then((res) => {
-                      if (res?.errCode > 0 || res?.errCode < 0) {
-                          // console.log(res);
-                          toast.update(toastId, {
-                              render: res?.errMessage,
-                              type: "error",
-                              isLoading: false,
-                              closeButton: true,
-                              autoClose: 1500,
-                              pauseOnFocusLoss: true,
-                          });
-                      } else {
-                          // console.log(res);
-                          toast.update(toastId, {
-                              render: res?.errMessage,
-                              type: "success",
-                              isLoading: false,
-                              closeButton: true,
-                              autoClose: 1500,
-                              pauseOnFocusLoss: true,
-                          });
-                          apiStudent
-                              .getThesisById({
-                                  user: currentUser,
-                                  id: id,
-                                  axiosJWT: axiosJWT,
-                              })
-                              .then((res) => {
-                                  if (res?.errCode > 0 || res?.errCode < 0) {
-                                      toast.update(toastId, {
-                                          render: res?.errMessage,
-                                          type: "error",
-                                          isLoading: false,
-                                          closeButton: true,
-                                          autoClose: 1500,
-                                          pauseOnFocusLoss: true,
-                                      });
-                                  } else {
-                                      let convert = [];
-                                      console.log("res?.result", res?.result);
-                                      setValue(
-                                          "reportFile",
-                                          res?.result?.reportFile
-                                      );
-                                      setReportFile(res?.result?.reportFile);
-                                      toast.update(toastId, {
-                                          render: res?.errMessage,
-                                          type: "success",
-                                          isLoading: false,
-                                          closeButton: true,
-                                          autoClose: 1500,
-                                          pauseOnFocusLoss: true,
-                                      });
-                                      // reset();
-                                  }
-                              })
-                              .catch((error) => {
-                                  // console.log(error);
-                                  toast.update(toastId, {
-                                      render: "Đã xảy ra lỗi, vui lòng thử lại sau",
-                                      type: "error",
-                                      isLoading: false,
-                                      closeButton: true,
-                                      autoClose: 1500,
-                                      pauseOnFocusLoss: true,
-                                  });
-                              });
-                      }
-                  })
-                  .catch((error) => {
-                      // console.log(error);
-                      toast.update(toastId, {
-                          render: "Đã xảy ra lỗi, vui lòng thử lại sau",
-                          type: "error",
-                          isLoading: false,
-                          closeButton: true,
-                          autoClose: 1500,
-                          pauseOnFocusLoss: true,
-                      });
-                  })
-            : toast.update(toastId, {
-                  render: "Không tìm thấy tập tin tải lên, vui lòng thử lại!",
-                  type: "error",
-                  isLoading: false,
-                  closeButton: true,
-                  autoClose: 1500,
-                  pauseOnFocusLoss: true,
-              });
+        const id = toast.loading("Vui lòng đợi...");
+        await apiLecturer
+            .apiUpdateThesisLecturer({
+                user: currentUser,
+                data: data,
+                axiosJWT: axiosJWT,
+            })
+            .then((res) => {
+                if (res?.errCode > 0 || res?.errCode < 0) {
+                    // console.log(res);
+                    toast.update(id, {
+                        render: res?.errMessage,
+                        type: "error",
+                        isLoading: false,
+                        closeButton: true,
+                        autoClose: 1500,
+                        pauseOnFocusLoss: true,
+                    });
+                } else {
+                    // console.log(res);
+                    toast.update(id, {
+                        render: res?.errMessage,
+                        type: "success",
+                        isLoading: false,
+                        closeButton: true,
+                        autoClose: 1500,
+                        pauseOnFocusLoss: true,
+                    });
+                    //   setValue("thesisSession", "");
+                    //   setValue("status", "");
+                    //   reset();
+                }
+            })
+            .catch((error) => {
+                // console.log(error);
+                toast.update(id, {
+                    render: "Đã xảy ra lỗi, vui lòng thử lại sau",
+                    type: "error",
+                    isLoading: false,
+                    closeButton: true,
+                    autoClose: 1500,
+                    pauseOnFocusLoss: true,
+                });
+            });
     };
     useEffect(() => {
         const toastId = toast.loading("Vui lòng đợi...");
-        apiStudent.apiGetResult(currentUser, dispatch, axiosJWT);
-        apiStudent.apiGetHandle(currentUser, dispatch, axiosJWT);
-        // apiStudent.getAllTopics({
-        //     user: currentUser,
-        //     dispatch: dispatch,
-        //     axiosJWT: axiosJWT,
-        // });
-        // apiStudent.getAllStudents({
-        //     user: currentUser,
-        //     dispatch: dispatch,
-        //     axiosJWT: axiosJWT,
-        // });
-        // apiStudent.getAllLecturers({
-        //     user: currentUser,
-        //     dispatch: dispatch,
-        //     axiosJWT: axiosJWT,
-        // });
-        // apiStudent.getAllThesisSessions({
-        //     user: currentUser,
-        //     dispatch: dispatch,
-        //     axiosJWT: axiosJWT,
-        // });
-        // apiStudent.getAllCouncils({
-        //     user: currentUser,
-        //     dispatch: dispatch,
-        //     axiosJWT: axiosJWT,
-        // });
+        apiAdmin.apiGetResult(currentUser, dispatch, axiosJWT);
+        apiAdmin.apiGetHandle(currentUser, dispatch, axiosJWT);
+        apiAdmin.getAllTopics({
+            user: currentUser,
+            dispatch: dispatch,
+            axiosJWT: axiosJWT,
+            filterSearch: "statusId",
+            inputSearch: "H1",
+        });
+        apiAdmin.getAllStudents({
+            user: currentUser,
+            dispatch: dispatch,
+            axiosJWT: axiosJWT,
+        });
+        apiAdmin.getAllLecturers({
+            user: currentUser,
+            dispatch: dispatch,
+            axiosJWT: axiosJWT,
+        });
+        apiAdmin.getAllThesisSessions({
+            user: currentUser,
+            dispatch: dispatch,
+            axiosJWT: axiosJWT,
+        });
+        apiAdmin.getAllCouncils({
+            user: currentUser,
+            dispatch: dispatch,
+            axiosJWT: axiosJWT,
+        });
         if (id) {
-            apiStudent
+            apiAdmin
                 .getThesisById({
                     user: currentUser,
                     id: id,
@@ -203,7 +223,7 @@ const AddThesisStudent = ({ type }) => {
                 })
                 .then((res) => {
                     if (res?.errCode > 0 || res?.errCode < 0) {
-                        toast.update(toastId, {
+                        toast.update(id, {
                             render: res?.errMessage,
                             type: "error",
                             isLoading: false,
@@ -212,7 +232,7 @@ const AddThesisStudent = ({ type }) => {
                             pauseOnFocusLoss: true,
                         });
                     } else {
-                        console.log(res);
+                        // console.log(res);
                         let convert = [];
 
                         setValue("id", res?.result?.id);
@@ -223,6 +243,10 @@ const AddThesisStudent = ({ type }) => {
                         setValue(
                             "thesisAdvisor",
                             res?.result?.thesisAdvisorData.fullName
+                        );
+                        setValue(
+                            "thesisAdvisorId",
+                            res?.result?.thesisAdvisorId
                         );
                         setValue(
                             "thesisAdvisorStatus",
@@ -246,6 +270,7 @@ const AddThesisStudent = ({ type }) => {
                         );
                         setValue("thesisEndDate", res?.result?.thesisEndDate);
                         setValue("totalScore", res?.result?.totalScore);
+                        setValue("advisorMark", res?.result?.advisorMark);
                         setValue("reportFile", res?.result?.reportFile);
 
                         setReportFile(res?.result?.reportFile);
@@ -264,7 +289,7 @@ const AddThesisStudent = ({ type }) => {
                 })
                 .catch((error) => {
                     // console.log(error);
-                    toast.update(toastId, {
+                    toast.update(id, {
                         render: "Đã xảy ra lỗi, vui lòng thử lại sau",
                         type: "error",
                         isLoading: false,
@@ -283,7 +308,7 @@ const AddThesisStudent = ({ type }) => {
                     {type == "add"
                         ? "Thêm"
                         : type == "update"
-                        ? "Sửa"
+                        ? "Chấm điểm hướng dẫn"
                         : "Chi tiết"}{" "}
                     đồ án
                 </div>
@@ -356,10 +381,15 @@ const AddThesisStudent = ({ type }) => {
                                 // onChange={importFile}
                             /> */}
                             <label className="labelInput" for="file_input">
-                                Báo cáo: {reportFile ? (
-                                    <span className="text-emerald-500">Đã nộp</span>
+                                Báo cáo:{" "}
+                                {reportFile ? (
+                                    <span className="text-emerald-500">
+                                        Đã nộp
+                                    </span>
                                 ) : (
-                                    <span className="text-red-500">Chưa nộp</span>
+                                    <span className="text-red-500">
+                                        Chưa nộp
+                                    </span>
                                 )}
                             </label>
                             {reportFile ? (
@@ -374,40 +404,32 @@ const AddThesisStudent = ({ type }) => {
                                     >
                                         Tải xuống báo cáo
                                     </a>
-                                    {type != "detail" && (
-                                        <input
-                                            className="w-full text-sm rounded-lg bg-white shadow-md border
-                                    file:cursor-pointer
-                                    file:items-center file:text-h3FontSize file:font-semibold file:bg-inputColor file:rounded-lg file:px-2 file:py-1 file:border-none file:shadow-sm
-                                    file:hover:text-PrimaryColor file:hover:bg-paleBlue
-                                "
-                                            id="file_input"
-                                            type="file"
-                                            accept=".pdf,.doc,.docx"
-                                            onChange={importFile}
-                                            // {...register("reportFile", {
-                                            //     // //required: "Number phone is required",
-                                            // })}
-                                        />
-                                    )}
                                 </div>
-                            ) : (
-                                type != "detail" && (
-                                    <input
-                                        className="block w-full text-sm rounded-lg bg-white shadow-md border
-                                        file:cursor-pointer
-                                        file:items-center file:text-h3FontSize file:font-semibold file:bg-inputColor file:rounded-lg file:px-2 file:py-1 file:border-none file:shadow-sm
-                                        file:hover:text-PrimaryColor file:hover:bg-paleBlue
-                                    "
-                                        id="file_input"
-                                        type="file"
-                                        accept=".pdf,.doc,.docx"
-                                        onChange={importFile}
-                                        // {...register("reportFile", {
-                                        //     // //required: "Number phone is required",
-                                        // })}
-                                    />
-                                )
+                            ) : null}
+                        </div>
+                        <div className="col w-3/5">
+                            <label className="labelInput">Điểm hướng dẫn</label>
+                            <input
+                                // className={`input ${
+                                //     type == "detail" ? "disabled" : ""
+                                // }`}
+                                className={`input ${
+                                    type == "detail" ? "disabled" : ""
+                                }`}
+                                disabled={type == "detail" ? true : false}
+                                type="number"
+                                step="0.1"
+                                max={10}
+                                min={0}
+                                // disabled
+                                {...register("advisorMark", {
+                                    // //required: "Full name is required",
+                                })}
+                            />
+                            {errors?.advisorMark?.type && (
+                                <p className=" text-normal text-red-500">
+                                    {errors?.advisorMark?.message}
+                                </p>
                             )}
                         </div>
                     </div>
@@ -848,8 +870,18 @@ const AddThesisStudent = ({ type }) => {
                     </div> */}
                 </form>
             </div>
+
+            <div>
+                <ModalPopup
+                    title={"Confim Reset Password User"}
+                    showModal={showModal}
+                    setShowModal={setShowModal}
+                    result={result}
+                    setResult={handleResetPassword}
+                />
+            </div>
         </>
     );
 };
 
-export default AddThesisStudent;
+export default AddThesisLecturer;

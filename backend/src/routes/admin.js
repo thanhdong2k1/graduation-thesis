@@ -112,6 +112,8 @@ router.post("/create-thesis", middlewareController.verifyTokenAdd, adminControll
 router.put("/update-thesis/:id", middlewareController.verifyTokenUpdate, adminController.updateThesis);
 router.delete("/delete-thesis/:id", middlewareController.verifyTokenDelete, adminController.deleteThesis);
 
+router.get("/statistic", middlewareController.verifyToken, adminController.statistic);
+
 router.post("/refresh", authController.requestRefreshToken);
 router.post(
   "/logout",

@@ -2,7 +2,9 @@ import { Controller, useForm } from "react-hook-form";
 import { useDispatch, useSelector } from "react-redux";
 import { toast } from "react-toastify";
 import { useEffect, useState } from "react";
-import { MdLockReset } from "react-icons/md";
+import Avatar from "react-avatar-edit";
+import { FaPenAlt } from "react-icons/fa";
+import { Buffer } from "buffer";
 import Select from "react-select";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
@@ -10,15 +12,16 @@ import moment from "moment/moment";
 import { createAxios } from "../../../utils/createInstance";
 import { logginSuccess } from "../../../redux/authSlice";
 import { apiAdmin } from "../../../redux/apiRequest";
+import ModalPopup from "../../../components/ModelPopup/ModalPopup";
 import {
     customSelectStyles,
     customSelectStylesMulti,
 } from "../../../utils/customStyleReactSelect";
 import ButtonConfirm from "../../../components/button/ButtonConfirm";
 import { useParams } from "react-router-dom";
-import ModalPopup from "../../../components/ModelPopup/ModalPopup";
+import { MdLockReset } from "react-icons/md";
 
-const AddLecturer = ({ type }, params) => {
+const AddStudentAdvisor = ({ type }) => {
     let { id } = useParams();
   // console.log("type", type, id);
 
@@ -29,8 +32,8 @@ const AddLecturer = ({ type }, params) => {
     const gender = useSelector((state) => state?.admin?.gender);
     const role = useSelector((state) => state?.admin?.role);
     const permissions = useSelector((state) => state?.admin?.permissions);
-    const departments = useSelector((state) => state?.admin?.departments);
-    let codeDepartment = departments?.map((v) => {
+    const classes = useSelector((state) => state?.admin?.classes);
+    let codeClass = classes?.map((v) => {
         return { value: v.id, label: `${v.id} | ${v.name}` };
     });
     const [isRtl, setIsRtl] = useState(false);
@@ -48,7 +51,7 @@ const AddLecturer = ({ type }, params) => {
       // console.log("hello", data, getValues());
         const id = toast.loading("Vui lòng đợi...");
         await apiAdmin
-            .apiResetPasswordLecturer({
+            .apiResetPasswordStudent({
                 user: currentUser,
                 data: getValues(),
                 axiosJWT: axiosJWT,
@@ -114,15 +117,15 @@ const AddLecturer = ({ type }, params) => {
         data?.permissions
             ?.filter((value) => !value.isFixed)
             ?.map((obj) => {
-              // console.log(obj?.value);
-                permissions?.push(obj?.value);
+              // console.log(obj.value);
+                permissions?.push(obj.value);
             });
         const datasend = {
             ...data,
             birthday: new Date(
                 moment(data?.birthday, "DD/MM/YYYY")
             ).toLocaleDateString("vi-VN"),
-            permissions: permissions.toString(),
+            permissions: permissions?.toString(),
             //     e.map((obj) => {
             //       // console.log(obj.value);
             //         permissions?.push(obj.value);
@@ -131,7 +134,7 @@ const AddLecturer = ({ type }, params) => {
       // console.log(datasend);
         type == "add"
             ? await apiAdmin
-                  .apiAddLecturer({
+                  .apiAddStudent({
                       user: currentUser,
                       data: datasend,
                       axiosJWT: axiosJWT,
@@ -173,7 +176,7 @@ const AddLecturer = ({ type }, params) => {
                       });
                   })
             : await apiAdmin
-                  .apiUpdateLecturer({
+                  .apiUpdateStudent({
                       user: currentUser,
                       data: datasend,
                       axiosJWT: axiosJWT,
@@ -217,143 +220,137 @@ const AddLecturer = ({ type }, params) => {
                   });
     };
     useEffect(() => {
-        async function fetchData() {
-            await apiAdmin.apiGetRole(currentUser, dispatch, axiosJWT);
-            await apiAdmin.apiGetStatus(currentUser, dispatch, axiosJWT);
-            await apiAdmin.apiGetPermissions(currentUser, dispatch, axiosJWT);
-            await apiAdmin.apiGetGender(currentUser, dispatch, axiosJWT);
-            await apiAdmin.getAllDepartments({
-                user: currentUser,
-                dispatch: dispatch,
-                axiosJWT: axiosJWT,
-            });
-            if (id) {
-                await apiAdmin
-                    .getLecturerById({
-                        user: currentUser,
-                        id: id,
-                        axiosJWT: axiosJWT,
-                    })
-                    .then((res) => {
-                        if (res?.errCode > 0 || res?.errCode < 0 ) {
-                            toast.update(id, {
-                                render: res?.errMessage,
-                                type: "error",
-                                isLoading: false,
-                                closeButton: true,
-                                autoClose: 1500,
-                                pauseOnFocusLoss: true,
-                            });
-                        } else {
-                          // console.log(res);
-                            let convert = [];
-                            if (res?.result?.roleId === "R1") {
-                                permissions.forEach((obj) => {
-                                    if (obj.value === "PERF") {
-                                        convert?.push({ ...obj, isFixed: true });
-                                    }
-                                });
-                            } else if (res?.result?.roleId === "R2") {
-                                permissions.forEach((obj) => {
-                                    if (
-                                        obj.value !== "PERD" &&
-                                        obj.value !== "PERF"
-                                    ) {
-                                        convert?.push({ ...obj, isFixed: true });
-                                    }
-                                });
-                            } else {
-                                permissions.forEach((obj) => {
-                                    if (
-                                        obj.value === "PERU" ||
-                                        obj.value === "PERR"
-                                    ) {
-                                        convert?.push({ ...obj, isFixed: true });
-                                    }
-                                });
-                            }
-                            const array = res?.result?.permissions
-                                ?.toString()?.split(",");
-                            permissions.forEach((obj) => {
-                                if (array?.includes(obj.value)) {
-                                    convert?.push(obj);
-                                }
-                            });
-                            setValue("id", res?.result?.id);
-                            setValue("fullName", res?.result?.fullName);
-                            setValue("email", res?.result?.email);
-                            setValue("numberPhone", res?.result?.numberPhone);
-                            setValue("address", res?.result?.address);
-                            setValue("birthday", res?.result?.birthday);
-
-                            {
-                                /* code, roleId, departmentId, permissions */
-                            }
-
-                            setValue("code", res?.result?.code);
-                            setValue(
-                                "role",
-                                role?.filter(
-                                    (role) =>
-                                        role?.value === res?.result?.roleId
-                                )
-                            );
-                            setValue(
-                                "department",
-                                codeDepartment?.filter(
-                                    (value) =>
-                                        value?.value ==
-                                        res?.result?.departmentId
-                                )
-                            );
-                            setValue("permissions", convert);
-                            // console.log(res?.result?.birthday,moment(res?.result?.birthday, "DD/MM/YYYY").toString());
-                            setValue(
-                                "gender",
-                                gender?.filter(
-                                    (gender) =>
-                                        gender?.value === res?.result?.genderId
-                                )
-                            );
-                            setValue(
-                                "status",
-                                status?.filter(
-                                    (status) =>
-                                        status?.value === res?.result?.statusId
-                                )
-                            );
-                            toast.update(id, {
-                                render: res?.errMessage,
-                                type: "success",
-                                isLoading: false,
-                                closeButton: true,
-                                autoClose: 1500,
-                                pauseOnFocusLoss: true,
-                            });
-                            // reset();
-                        }
-                    })
-                    .catch((error) => {
-                        // console.log(error);
+        apiAdmin.apiGetRole(currentUser, dispatch, axiosJWT);
+        apiAdmin.apiGetPermissions(currentUser, dispatch, axiosJWT);
+        apiAdmin.apiGetStatus(currentUser, dispatch, axiosJWT);
+        apiAdmin.getAllClasses({
+            user: currentUser,
+            dispatch: dispatch,
+            axiosJWT: axiosJWT,
+        });
+        apiAdmin.apiGetGender(currentUser, dispatch, axiosJWT);
+        setValue(
+            "role",
+            role?.filter((role) => role?.value == "R4")
+        );
+        if (id) {
+            apiAdmin
+                .getStudentById({
+                    user: currentUser,
+                    id: id,
+                    axiosJWT: axiosJWT,
+                })
+                .then((res) => {
+                    if (res?.errCode > 0 || res?.errCode < 0 ) {
                         toast.update(id, {
-                            render: "Đã xảy ra lỗi, vui lòng thử lại sau",
+                            render: res?.errMessage,
                             type: "error",
                             isLoading: false,
                             closeButton: true,
                             autoClose: 1500,
                             pauseOnFocusLoss: true,
                         });
+                    } else {
+                      // console.log(res);
+                        let convert = [];
+                        if (res?.result?.roleId === "R1") {
+                            permissions.forEach((obj) => {
+                                if (obj.value === "PERF") {
+                                    convert?.push({ ...obj, isFixed: true });
+                                }
+                            });
+                        } else if (res?.result?.roleId === "R2") {
+                            permissions.forEach((obj) => {
+                                if (
+                                    obj.value !== "PERD" &&
+                                    obj.value !== "PERF"
+                                ) {
+                                    convert?.push({ ...obj, isFixed: true });
+                                }
+                            });
+                        } else {
+                            permissions.forEach((obj) => {
+                                if (
+                                    obj.value === "PERU" ||
+                                    obj.value === "PERR"
+                                ) {
+                                    convert?.push({ ...obj, isFixed: true });
+                                }
+                            });
+                        }
+                        const array = res?.result?.permissions
+                            ?.toString()?.split(",");
+                        permissions.forEach((obj) => {
+                            if (array?.includes(obj.value)) {
+                                convert?.push(obj);
+                            }
+                        });
+                        setValue("id", res?.result?.id);
+                        setValue("fullName", res?.result?.fullName);
+                        setValue("email", res?.result?.email);
+                        setValue("numberPhone", res?.result?.numberPhone);
+                        setValue("address", res?.result?.address);
+                        setValue("birthday", res?.result?.birthday);
+                        {
+                            /* code, roleId, classeId, permissions */
+                        }
+                        setValue("code", res?.result?.code);
+                        setValue(
+                            "role",
+                            role?.filter((role) => role?.value == "R4")
+                        );
+                        setValue(
+                            "class",
+                            codeClass?.filter(
+                                (value) => value?.value == res?.result?.classId
+                            )
+                        );
+                        setValue("permissions", convert);
+                        // console.log(res?.result?.birthday,moment(res?.result?.birthday, "DD/MM/YYYY").toString());
+                        setValue(
+                            "gender",
+                            gender?.filter(
+                                (gender) =>
+                                    gender?.value === res?.result?.genderId
+                            )
+                        );
+                        setValue(
+                            "status",
+                            status?.filter(
+                                (status) =>
+                                    status?.value === res?.result?.statusId
+                            )
+                        );
+                        toast.update(id, {
+                            render: res?.errMessage,
+                            type: "success",
+                            isLoading: false,
+                            closeButton: true,
+                            autoClose: 1500,
+                            pauseOnFocusLoss: true,
+                        });
+                        // reset();
+                    }
+                })
+                .catch((error) => {
+                    // console.log(error);
+                    toast.update(id, {
+                        render: "Đã xảy ra lỗi, vui lòng thử lại sau",
+                        type: "error",
+                        isLoading: false,
+                        closeButton: true,
+                        autoClose: 1500,
+                        pauseOnFocusLoss: true,
                     });
-            }
+                });
         }
-        fetchData()
     }, [currentUser]);
 
     return (
         <>
             <div className="changeInformationDiv flex flex-col justify-center items-center gap-2">
                 <div className=" font-semibold text-h1FontSize">
-                    {type=="add"?"Thêm":type=="update"?"Sửa":"Chi tiết"} giảng viên
+                    {type=="add"?"Thêm":type=="update"?"Sửa":"Chi tiết"} sinh viên
                 </div>
                 <form
                     onSubmit={handleSubmit(onSubmit)}
@@ -515,7 +512,7 @@ const AddLecturer = ({ type }, params) => {
                             )}
                         </div>
                     </div>
-                    {/* code, roleId, departmentId, permissions */}
+                    {/* code, roleId, classeId, permissions */}
 
                     <div className="row flex justify-center items-center gap-2">
                         <div className="col w-full">
@@ -560,9 +557,7 @@ const AddLecturer = ({ type }, params) => {
                                         {...field}
                                         options={role}
                                         isClearable={true}
-                                        isDisabled={
-                                            type == "detail" ? true : false
-                                        }
+                                        isDisabled={true}
                                     />
                                 )}
                             />
@@ -576,18 +571,18 @@ const AddLecturer = ({ type }, params) => {
 
                     <div className="row flex justify-center items-center gap-2">
                         <div className="col w-full">
-                            <label className="labelInput">Bộ môn</label>
+                            <label className="labelInput">Lớp</label>
                             <Controller
-                                name="department"
+                                name="class"
                                 control={control}
-                                {...register("department", {
+                                {...register("class", {
                                     // required: "Full name is required",
                                 })}
                                 render={({ field }) => (
                                     <Select placeholder="Chọn..."
                                         styles={customSelectStyles}
                                         {...field}
-                                        options={codeDepartment}
+                                        options={codeClass}
                                         isClearable={true}
                                         isDisabled={
                                             type == "detail" ? true : false
@@ -595,9 +590,9 @@ const AddLecturer = ({ type }, params) => {
                                     />
                                 )}
                             />
-                            {errors?.department?.type && (
+                            {errors?.class?.type && (
                                 <p className=" text-normal text-red-500">
-                                    {errors?.department?.message}
+                                    {errors?.class?.message}
                                 </p>
                             )}
                         </div>
@@ -668,7 +663,7 @@ const AddLecturer = ({ type }, params) => {
                         /> */}
                         </div>
                     </div>
-                    {/* code, roleId, departmentId, permissions */}
+                    {/* code, roleId, classeId, permissions */}
 
                     <ButtonConfirm type={type} />
                 </form>
@@ -686,4 +681,4 @@ const AddLecturer = ({ type }, params) => {
     );
 };
 
-export default AddLecturer;
+export default AddStudentAdvisor;

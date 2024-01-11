@@ -28,7 +28,9 @@ const Table = ({
     handleImport,
     handleExport,
     saveDataImport,
+    btnAdd,
 }) => {
+    console.log("tableData", tableData);
     // redux
     const currentUser = useSelector((state) => state?.auth?.currentUser);
     const path = useLocation();
@@ -299,7 +301,7 @@ const Table = ({
     tableData?.map((data) => {
         const obj = {};
         if (!data?.actions) {
-            if(!data?.hide){
+            if (!data?.hide) {
                 const { header, column, columnData } = data;
                 if (columnData) {
                     obj["label"] = header;
@@ -311,7 +313,6 @@ const Table = ({
                     filterSearch?.push(obj);
                 }
             }
-            
         }
     });
 
@@ -418,7 +419,7 @@ const Table = ({
     useEffect(() => {
         setDefineTable((prevState) => ({
             ...prevState,
-            filterSearch: filterSearch[1]?.value,
+            filterSearch: filterSearch[0]?.value,
             offset: 0,
             currentPage: 1,
         }));
@@ -561,7 +562,8 @@ const Table = ({
                                             <TbTablePlus className="icon" />
                                         </button>
                                     </>
-                                ) : currentUser?.permissions ? (
+                                ) : currentUser?.permissions?.split(",")
+                                      ?.length > 0 ? (
                                     currentUser?.permissions
                                         ?.split(",")
                                         ?.includes("PERF") ? (
@@ -646,10 +648,19 @@ const Table = ({
                                                         );
                                                     }
                                                 }
+
                                                 return null;
                                             }
                                         )
                                     )
+                                ) : btnAdd ? (
+                                    <button
+                                        className="addDiv button"
+                                        onClick={handleAdd}
+                                    >
+                                        <span>Thêm</span>
+                                        <TbTablePlus className="icon" />
+                                    </button>
                                 ) : null}
                                 {/* {functionsModule && handleExport && (
                                     <button

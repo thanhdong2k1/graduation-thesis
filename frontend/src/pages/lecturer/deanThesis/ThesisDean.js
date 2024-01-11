@@ -1,5 +1,5 @@
 import { Link, useNavigate } from "react-router-dom";
-import { apiStudent } from "../../../redux/apiRequest";
+import { apiLecturer } from "../../../redux/apiRequest";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import {
@@ -20,15 +20,16 @@ import { createAxios } from "../../../utils/createInstance";
 import { logginSuccess } from "../../../redux/authSlice";
 import ModalPopup from "../../../components/ModelPopup/ModalPopup";
 
-const TopicStudent = () => {
+const ThesisDean = () => {
     const dispatch = useDispatch();
     const navigate = useNavigate();
-    const topics = useSelector((state) => state?.student.topics);
-    const totalRecords = useSelector((state) => state?.student.totalRecords);
-    const currentUser = useSelector((state) => state?.auth?.currentUser);
-    const information = useSelector((state) => state?.student.information);
+    const theses = useSelector((state) => state.admin.theses);
+    const totalRecords = useSelector((state) => state.admin.totalRecords);
+    const currentUser = useSelector((state) => state.auth.currentUser);
+    const information = useSelector((state) => state?.admin.information);
     let axiosJWT = createAxios(currentUser, dispatch, logginSuccess);
 
+    // console.log("theses", theses);
     const [defineTable, setDefineTable] = useState({
         inputSearch: "",
         filterSearch: "",
@@ -43,7 +44,7 @@ const TopicStudent = () => {
 
     // Handle
     const handleAdd = () => {
-        navigate(`../${pathRoutes?.R1?.addTopic}`, { replace: true });
+        navigate(`../${pathRoutes?.R3?.addThesis}`, { replace: true });
     };
     const handleImport = () => {
         // console.log("handleImport");
@@ -52,31 +53,26 @@ const TopicStudent = () => {
         // console.log("handleExport");
     };
     const handleEdit = (data) => {
-        navigate(`../${pathRoutes?.R1?.updateTopic}/${data?.id}`, {
+        navigate(`../${pathRoutes?.R1?.updateThesis}/${data.id}`, {
             replace: true,
         });
     };
-    const handleStatus = (data) => {
-        // console.log(data);
-    };
-
     const handleDetail = (data) => {
-        // console.log(pathRoutes?.R1?.topicDetail);
-        navigate(`../${pathRoutes?.R1?.topicDetail}/${data?.id}`, {
+        navigate(`../${pathRoutes?.R1?.thesisDetail}/${data.id}`, {
             replace: true,
         });
     };
 
-    const handleDelete = (data) => {
-        // console.log("handleDelete", data);
+    const onDelete = (data) => {
+        // console.log("onDelete", data);
         setShowModal(true);
         setResult(data);
     };
 
-    const onDelete = async () => {
+    const handleDelete = async () => {
         const id = toast.loading("Vui lòng đợi...");
-        await apiStudent
-            .apiDeleteTopic({
+        await apiLecturer
+            .apiDeleteThesis({
                 user: currentUser,
                 data: result,
                 axiosJWT: axiosJWT,
@@ -93,11 +89,11 @@ const TopicStudent = () => {
                         pauseOnFocusLoss: true,
                     });
                     // reset();
-                    apiStudent.getAllTopics({
+                    apiLecturer.getAllDeanTheses({
                         user: currentUser,
                         inputSearch: defineTable.inputSearch,
+                        departmentId: information?.departmentId,
                         filterSearch: defineTable.filterSearch,
-                        majorId: information?.classData?.majorId,
                         dispatch: dispatch,
                         axiosJWT: axiosJWT,
                     });
@@ -141,19 +137,19 @@ const TopicStudent = () => {
         //     const convertedObj = {};
         //     for (const key in obj) {
         //       // console.log("key,obj", key, obj);
-        //         if (key?.includes("Data")) {
-        //             const newKey = key?.replace("Data", "Id");
+        //         if (key.includes("Data")) {
+        //             const newKey = key.replace("Data", "Id");
         //             convertedObj[newKey] = obj[key];
         //         } else {
         //             convertedObj[key] = obj[key];
         //         }
         //     }
-        //     convertImport?.push(convertedObj);
+        //     convertImport.push(convertedObj);
         // });
         // console.log("convertImport", convertImport);
         // console.log("convertImport", data);
-        await apiStudent
-            .importTopics({
+        await apiLecturer
+            .importTheses({
                 user: currentUser,
                 data: data,
                 axiosJWT: axiosJWT,
@@ -170,71 +166,10 @@ const TopicStudent = () => {
                         pauseOnFocusLoss: true,
                     });
                     // reset();
-                    apiStudent.getAllTopics({
+                    apiLecturer.getAllDeanTheses({
                         user: currentUser,
                         inputSearch: defineTable.inputSearch,
-                        filterSearch: defineTable.filterSearch,
-                        majorId: information?.classData?.majorId,
-                        dispatch: dispatch,
-                        axiosJWT: axiosJWT,
-                    });
-                } else if (res?.errCode > 0 || res?.errCode < 0) {
-                    // console.log(res);
-                    toast.update(id, {
-                        render: res?.errMessage,
-                        type: "error",
-                        isLoading: false,
-                        closeButton: true,
-                        autoClose: 1500,
-                        pauseOnFocusLoss: true,
-                    });
-                } else if (res?.errCode < 0) {
-                    toast.update(id, {
-                        render: "Dữ liệu lỗi, vui lòng kiểm tra lại dữ liệu",
-                        type: "error",
-                        isLoading: false,
-                        closeButton: true,
-                        autoClose: 1500,
-                        pauseOnFocusLoss: true,
-                    });
-                }
-            })
-            .catch((err) => {
-                // console.log(err);
-                toast.update(id, {
-                    render: "Đã xảy ra lỗi, vui lòng thử lại sau",
-                    type: "error",
-                    isLoading: false,
-                    closeButton: true,
-                    autoClose: 1500,
-                    pauseOnFocusLoss: true,
-                });
-            });
-    };
-    const handleRegister = async (data) => {
-        const id = toast.loading("Vui lòng đợi...");
-        await apiStudent
-            .apiRegisterTopic({
-                user: currentUser,
-                id: data?.id,
-                axiosJWT: axiosJWT,
-            })
-            .then((res) => {
-                if (res?.errCode == 0) {
-                    // console.log(res);
-                    toast.update(id, {
-                        render: res?.errMessage,
-                        type: "success",
-                        isLoading: false,
-                        closeButton: true,
-                        autoClose: 1500,
-                        pauseOnFocusLoss: true,
-                    });
-                    // reset();
-                    apiStudent.getAllTopics({
-                        user: currentUser,
-                        majorId: information?.classData?.majorId,
-                        inputSearch: defineTable.inputSearch,
+                        departmentId: information?.departmentId,
                         filterSearch: defineTable.filterSearch,
                         dispatch: dispatch,
                         axiosJWT: axiosJWT,
@@ -272,6 +207,23 @@ const TopicStudent = () => {
                 });
             });
     };
+
+    // email: { type: DataTypes.STRING, unique: true },
+    //   password: DataTypes.STRING,
+    //   code: { type: DataTypes.STRING, unique: true },
+    //   fullName: DataTypes.STRING,
+    //   numberPhone: { type: DataTypes.STRING, unique: true },
+    //   birthday: DataTypes.STRING,
+    //   address: DataTypes.STRING,
+    //   genderId: DataTypes.STRING,
+    //   roleId: DataTypes.STRING,
+    //   statusId: DataTypes.STRING,
+    //   departmentId: DataTypes.INTEGER,
+    //   image: DataTypes.BLOB,
+    //   permissions: DataTypes.STRING,
+    //   refreshToken: DataTypes.STRING,
+
+    
     const tableData = [
         {
             header: "#",
@@ -281,57 +233,136 @@ const TopicStudent = () => {
             column: "id",
         },
         {
-            header: "Tên đề tài",
-            width: "w-[250px]",
-            maxWidth: "max-w-[250px]",
-            column: "name",
-        },
-        {
-            header: "Mô tả đề tài",
-            width: "w-[800px]",
-            maxWidth: "max-w-[800px]",
-            column: "description",
-        },
-        {
-            header: "Bộ môn",
+            header: "Tên sinh viên",
             width: "w-[300px]",
             maxWidth: "max-w-[300px]",
-            column: "departmentId",
-            columnData: "departmentData.name",
+            column: "studentId",
+            columnData: "studentData.fullName",
+        },
+        {
+            header: "Giảng viên hướng dẫn",
+            width: "w-[300px]",
+            maxWidth: "max-w-[300px]",
+            column: "thesisAdvisorId",
+            columnData: "thesisAdvisorData.fullName",
+        },
+        {
+            header: "XN hướng dẫn",
+            width: "w-[300px]",
+            maxWidth: "max-w-[300px]",
+            column: "thesisAdvisorStatusId",
+            columnData: "thesisAdvisorStatusData.valueVi",
+            isStatus: true,
+            // actions: actionsDetail(handleDetail),
+        },
+        {
+            header: "Tên đề tài",
+            width: "w-[300px]",
+            maxWidth: "max-w-[300px]",
+            column: "topicId",
+            columnData: "topicData.name",
+        },
+        {
+            header: "XN đề tài",
+            width: "w-[300px]",
+            maxWidth: "max-w-[300px]",
+            column: "topicData.statusId",
+            isStatus: true,
+            columnData: "topicData.statusData.valueVi",
+        },
+        {
+            header: "Khóa luận",
+            width: "w-[300px]",
+            maxWidth: "max-w-[300px]",
+            column: "thesisSessionId",
+            columnData: "thesisSessionData.name",
+        },
+        {
+            header: "Hội đồng",
+            width: "w-[300px]",
+            maxWidth: "max-w-[300px]",
+            column: "councilId",
+            columnData: "councilData.name",
+        },
+        {
+            header: "Trạng thái điểm",
+            width: "w-[300px]",
+            maxWidth: "max-w-[300px]",
+            column: "councilStatusId",
+            columnData: "councilStatusData.valueVi",
+            isStatus: true,
+            // actions: actionsDetail(handleDetail),
+        },
+        {
+            header: "Tổng điểm hội đồng",
+            width: "w-[300px]",
+            maxWidth: "max-w-[300px]",
+            column: "totalScore",
+        },
+        {
+            header: "Kết quả",
+            width: "w-[300px]",
+            maxWidth: "max-w-[300px]",
+            column: "resultId",
+            columnData: "resultData.valueVi",
+            isStatus: true,
+            // actions: actionsDetail(handleDetail),
+        },
+        {
+            header: "Ngày thực hiện",
+            width: "w-[300px]",
+            maxWidth: "max-w-[300px]",
+            column: "startDate",
             hide: true,
         },
         {
-            header: "Đăng ký",
+            header: "Hạn thực hiện",
             width: "w-[300px]",
             maxWidth: "max-w-[300px]",
-            // columnData: "statusData.valueVi",
-            // column: "statusId",
-            // hide: true,
-            customContent: true,
-            isStatus: true,
-            actions: [actionsCustom(handleRegister, "Đăng ký")],
+            column: "complateDate",
+            hide: true,
         },
         {
+            header: "Ngày chấm và bảo vệ",
+            width: "w-[300px]",
+            maxWidth: "max-w-[300px]",
+            column: "thesisStartDate",
+            hide: true,
+        },
+        {
+            header: "Hạn chấm và bảo vệ",
+            width: "w-[300px]",
+            maxWidth: "max-w-[300px]",
+            column: "thesisEndDate",
+            hide: true,
+        },
+        
+        // startDate,
+        // complateDate,
+        // thesisStartDate,
+        // thesisEndDate,
+        // reportFile,
+        {
             header: "Hành động",
-            // isRowPer: "thesisSessionId",
+            isRowPer: "thesisAdvisorId",
             isPerR: true,
             actions:
                 currentUser?.roleId == "R1"
                     ? [
                           actionsDetail(handleDetail),
-                          actionsEdit(handleEdit),
-                          actionsRemove(handleDelete),
+                        //   actionsEdit(handleEdit),
+                        //   actionsRemove(onDelete),
                       ]
                     : [
                           actionsDetail(handleDetail),
-                          actionsEdit(handleEdit),
-                          (currentUser?.permissions
-                              ?.split(",")
-                              ?.includes("PERF") ||
-                              currentUser?.permissions
-                                  ?.split(",")
-                                  ?.includes("PERD")) &&
-                              actionsRemove(handleDelete),
+                        //   actionsEdit(handleEdit),
+                        //   (currentUser?.permissions
+                        //       ?.split(",")
+                        //       ?.includes("PERF") ||
+                        //       currentUser?.permissions
+                        //           ?.split(",")
+                        //           ?.includes("PERD")) &&
+                        //       actionsRemove(onDelete),
                       ],
         },
     ];
@@ -343,10 +374,10 @@ const TopicStudent = () => {
             inputSearch: "",
             isSearched: false,
         }));
-        apiStudent.getAllTopics({
+        apiLecturer.getAllDeanTheses({
             user: currentUser,
-            majorId: information?.classData?.majorId,
             inputSearch: defineTable.inputSearch,
+            departmentId: information?.departmentId,
             filterSearch: defineTable.filterSearch,
             dispatch: dispatch,
             axiosJWT: axiosJWT,
@@ -355,10 +386,10 @@ const TopicStudent = () => {
 
     useEffect(() => {
         // console.log("inputSearch", defineTable.inputSearch);
-        apiStudent.getAllTopics({
+        apiLecturer.getAllDeanTheses({
             user: currentUser,
-            majorId: information?.classData?.majorId,
             inputSearch: defineTable.inputSearch,
+            departmentId: information?.departmentId,
             filterSearch: defineTable.filterSearch,
             dispatch: dispatch,
             axiosJWT: axiosJWT,
@@ -375,7 +406,7 @@ const TopicStudent = () => {
             ...prevState,
             currentPage: 1,
         }));
-        // apiStudent.getAllTopics(
+        // apiLecturer.getAllDeanTheses(
         //     defineTable.inputSearch,
         //     (defineTable.currentPage - 1) * defineTable.limit,
         //     defineTable.limit,
@@ -385,7 +416,7 @@ const TopicStudent = () => {
 
     // useEffect(() => {
     //   // console.log("currentpage effect");
-    //     apiStudent.getAllTopics(
+    //     apiLecturer.getAllDeanTheses(
     //         defineTable.inputSearch,
     //         (defineTable.currentPage - 1) * defineTable.limit,
     //         defineTable.limit,
@@ -409,23 +440,23 @@ const TopicStudent = () => {
     //     },
     // ];
 
-    // const gender = useSelector((state) => state?.admin?.gender);
+    // const gender = useSelector((state) => state.admin.gender);
     // const handleChangeLimit = (e) => {
     //     // console.log(e);
     //     const permissions = [];
     //     e.map((obj) => {
     //       // console.log(obj.value);
-    //         permissions?.push(obj.value);
+    //         permissions.push(obj.value);
     //     });
 
-    //     // console.log(permissions.toString(), permissions.toString()?.split(","));
+    //     // console.log(permissions.toString(), permissions.toString().split(","));
 
     //     const convert = [];
-    //     const array = permissions.toString()?.split(",");
+    //     const array = permissions.toString().split(",");
     //     gender.map((obj) => {
     //       // console.log(obj);
-    //         if (array?.includes(obj.value)) {
-    //             convert?.push(obj);
+    //         if (array.includes(obj.value)) {
+    //             convert.push(obj);
     //         }
     //     });
     //   // console.log(convert, convert);
@@ -433,7 +464,7 @@ const TopicStudent = () => {
     return (
         <>
             {/* <div>
-                <div>Hello Topic</div>
+                <div>Hello Thesis</div>
                 <Link to={"1"}>Detail 1</Link>
                 <Select placeholder="Chọn..."
                     styles={customSelectStylesMulti}
@@ -455,7 +486,7 @@ const TopicStudent = () => {
                     showModal={showModal}
                     setShowModal={setShowModal}
                     result={result}
-                    setResult={onDelete}
+                    setResult={handleDelete}
                 />
             </div>
             <div>
@@ -467,14 +498,13 @@ const TopicStudent = () => {
                     defineTable={defineTable}
                     setDefineTable={setDefineTable}
                     tableData={tableData}
-                    datas={topics}
+                    datas={theses}
                     totalRecords={totalRecords}
                     functionsModule={true}
-                    btnAdd={true}
                 />
             </div>
         </>
     );
 };
 
-export default TopicStudent;
+export default ThesisDean;

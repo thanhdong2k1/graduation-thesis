@@ -1,5 +1,5 @@
 import { Link, useNavigate } from "react-router-dom";
-import { apiStudent } from "../../../redux/apiRequest";
+import { apiLecturer } from "../../../redux/apiRequest";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import {
@@ -20,15 +20,15 @@ import { createAxios } from "../../../utils/createInstance";
 import { logginSuccess } from "../../../redux/authSlice";
 import ModalPopup from "../../../components/ModelPopup/ModalPopup";
 
-const TopicStudent = () => {
+const StudentAdvisor = () => {
     const dispatch = useDispatch();
     const navigate = useNavigate();
-    const topics = useSelector((state) => state?.student.topics);
-    const totalRecords = useSelector((state) => state?.student.totalRecords);
-    const currentUser = useSelector((state) => state?.auth?.currentUser);
-    const information = useSelector((state) => state?.student.information);
+    const theses = useSelector((state) => state.admin.theses);
+    const totalRecords = useSelector((state) => state.admin.totalRecords);
+    const currentUser = useSelector((state) => state.auth.currentUser);
     let axiosJWT = createAxios(currentUser, dispatch, logginSuccess);
 
+    // console.log("theses", theses);
     const [defineTable, setDefineTable] = useState({
         inputSearch: "",
         filterSearch: "",
@@ -43,7 +43,7 @@ const TopicStudent = () => {
 
     // Handle
     const handleAdd = () => {
-        navigate(`../${pathRoutes?.R1?.addTopic}`, { replace: true });
+        navigate(`../${pathRoutes.R1.addThesis}`, { replace: true });
     };
     const handleImport = () => {
         // console.log("handleImport");
@@ -52,31 +52,26 @@ const TopicStudent = () => {
         // console.log("handleExport");
     };
     const handleEdit = (data) => {
-        navigate(`../${pathRoutes?.R1?.updateTopic}/${data?.id}`, {
+        navigate(`../${pathRoutes.R1.updateStudent}/${data.studentId}`, {
             replace: true,
         });
     };
-    const handleStatus = (data) => {
-        // console.log(data);
-    };
-
     const handleDetail = (data) => {
-        // console.log(pathRoutes?.R1?.topicDetail);
-        navigate(`../${pathRoutes?.R1?.topicDetail}/${data?.id}`, {
+        navigate(`../${pathRoutes.R1.studentDetail}/${data.studentId}`, {
             replace: true,
         });
     };
 
-    const handleDelete = (data) => {
-        // console.log("handleDelete", data);
+    const onDelete = (data) => {
+        // console.log("onDelete", data);
         setShowModal(true);
         setResult(data);
     };
 
-    const onDelete = async () => {
+    const handleDelete = async () => {
         const id = toast.loading("Vui lòng đợi...");
-        await apiStudent
-            .apiDeleteTopic({
+        await apiLecturer
+            .apiDeleteThesis({
                 user: currentUser,
                 data: result,
                 axiosJWT: axiosJWT,
@@ -93,11 +88,10 @@ const TopicStudent = () => {
                         pauseOnFocusLoss: true,
                     });
                     // reset();
-                    apiStudent.getAllTopics({
+                    apiLecturer.getAllThesesStudent({
                         user: currentUser,
                         inputSearch: defineTable.inputSearch,
                         filterSearch: defineTable.filterSearch,
-                        majorId: information?.classData?.majorId,
                         dispatch: dispatch,
                         axiosJWT: axiosJWT,
                     });
@@ -141,19 +135,19 @@ const TopicStudent = () => {
         //     const convertedObj = {};
         //     for (const key in obj) {
         //       // console.log("key,obj", key, obj);
-        //         if (key?.includes("Data")) {
-        //             const newKey = key?.replace("Data", "Id");
+        //         if (key.includes("Data")) {
+        //             const newKey = key.replace("Data", "Id");
         //             convertedObj[newKey] = obj[key];
         //         } else {
         //             convertedObj[key] = obj[key];
         //         }
         //     }
-        //     convertImport?.push(convertedObj);
+        //     convertImport.push(convertedObj);
         // });
         // console.log("convertImport", convertImport);
         // console.log("convertImport", data);
-        await apiStudent
-            .importTopics({
+        await apiLecturer
+            .importTheses({
                 user: currentUser,
                 data: data,
                 axiosJWT: axiosJWT,
@@ -170,11 +164,10 @@ const TopicStudent = () => {
                         pauseOnFocusLoss: true,
                     });
                     // reset();
-                    apiStudent.getAllTopics({
+                    apiLecturer.getAllThesesStudent({
                         user: currentUser,
                         inputSearch: defineTable.inputSearch,
                         filterSearch: defineTable.filterSearch,
-                        majorId: information?.classData?.majorId,
                         dispatch: dispatch,
                         axiosJWT: axiosJWT,
                     });
@@ -211,10 +204,25 @@ const TopicStudent = () => {
                 });
             });
     };
-    const handleRegister = async (data) => {
+
+    // email: { type: DataTypes.STRING, unique: true },
+    //   password: DataTypes.STRING,
+    //   code: { type: DataTypes.STRING, unique: true },
+    //   fullName: DataTypes.STRING,
+    //   numberPhone: { type: DataTypes.STRING, unique: true },
+    //   birthday: DataTypes.STRING,
+    //   address: DataTypes.STRING,
+    //   genderId: DataTypes.STRING,
+    //   roleId: DataTypes.STRING,
+    //   statusId: DataTypes.STRING,
+    //   departmentId: DataTypes.INTEGER,
+    //   image: DataTypes.BLOB,
+    //   permissions: DataTypes.STRING,
+    //   refreshToken: DataTypes.STRING,
+    const handleConfirm = async (data) => {
         const id = toast.loading("Vui lòng đợi...");
-        await apiStudent
-            .apiRegisterTopic({
+        await apiLecturer
+            .apiConfirmAdvisor({
                 user: currentUser,
                 id: data?.id,
                 axiosJWT: axiosJWT,
@@ -231,15 +239,14 @@ const TopicStudent = () => {
                         pauseOnFocusLoss: true,
                     });
                     // reset();
-                    apiStudent.getAllTopics({
+                    apiLecturer.getAllThesesStudent({
                         user: currentUser,
-                        majorId: information?.classData?.majorId,
                         inputSearch: defineTable.inputSearch,
                         filterSearch: defineTable.filterSearch,
                         dispatch: dispatch,
                         axiosJWT: axiosJWT,
                     });
-                } else if (res?.errCode > 0 || res?.errCode < 0) {
+                } else if (res?.errCode > 0 || res?.errCode < 0 ) {
                     // console.log(res);
                     toast.update(id, {
                         render: res?.errMessage,
@@ -261,7 +268,67 @@ const TopicStudent = () => {
                 }
             })
             .catch((err) => {
-                // console.log(err);
+              // console.log(err);
+                toast.update(id, {
+                    render: "Đã xảy ra lỗi, vui lòng thử lại sau",
+                    type: "error",
+                    isLoading: false,
+                    closeButton: true,
+                    autoClose: 1500,
+                    pauseOnFocusLoss: true,
+                });
+            });
+    };
+    const handleCancel = async (data) => {
+        const id = toast.loading("Vui lòng đợi...");
+        await apiLecturer
+            .apiCancelAdvisor({
+                user: currentUser,
+                id: data?.id,
+                axiosJWT: axiosJWT,
+            })
+            .then((res) => {
+                if (res?.errCode == 0) {
+                    // console.log(res);
+                    toast.update(id, {
+                        render: res?.errMessage,
+                        type: "success",
+                        isLoading: false,
+                        closeButton: true,
+                        autoClose: 1500,
+                        pauseOnFocusLoss: true,
+                    });
+                    // reset();
+                    apiLecturer.getAllThesesStudent({
+                        user: currentUser,
+                        inputSearch: defineTable.inputSearch,
+                        filterSearch: defineTable.filterSearch,
+                        dispatch: dispatch,
+                        axiosJWT: axiosJWT,
+                    });
+                } else if (res?.errCode > 0 || res?.errCode < 0 ) {
+                    // console.log(res);
+                    toast.update(id, {
+                        render: res?.errMessage,
+                        type: "error",
+                        isLoading: false,
+                        closeButton: true,
+                        autoClose: 1500,
+                        pauseOnFocusLoss: true,
+                    });
+                } else if (res?.errCode < 0) {
+                    toast.update(id, {
+                        render: "Dữ liệu lỗi, vui lòng kiểm tra lại dữ liệu",
+                        type: "error",
+                        isLoading: false,
+                        closeButton: true,
+                        autoClose: 1500,
+                        pauseOnFocusLoss: true,
+                    });
+                }
+            })
+            .catch((err) => {
+              // console.log(err);
                 toast.update(id, {
                     render: "Đã xảy ra lỗi, vui lòng thử lại sau",
                     type: "error",
@@ -281,24 +348,67 @@ const TopicStudent = () => {
             column: "id",
         },
         {
-            header: "Tên đề tài",
+            header: "Mã sinh viên",
             width: "w-[250px]",
             maxWidth: "max-w-[250px]",
-            column: "name",
+            column: "studentId",
+            columnData: "studentData.code",
         },
         {
-            header: "Mô tả đề tài",
-            width: "w-[800px]",
-            maxWidth: "max-w-[800px]",
-            column: "description",
-        },
-        {
-            header: "Bộ môn",
+            header: "Tên sinh viên",
             width: "w-[300px]",
             maxWidth: "max-w-[300px]",
-            column: "departmentId",
-            columnData: "departmentData.name",
+            column: "studentId",
+            columnData: "studentData.fullName",
+        },
+        {
+            header: "Email",
+            width: "w-[300px]",
+            maxWidth: "max-w-[300px]",
+            column: "studentId",
+            columnData: "studentData.email",
+        },
+        {
+            header: "Điện thoại",
+            width: "w-[300px]",
+            maxWidth: "max-w-[300px]",
+            column: "studentId",
+            columnData: "studentData.numberPhone",
+        },
+        {
+            header: "Ngày sinh",
+            width: "w-[300px]",
+            maxWidth: "max-w-[300px]",
+            column: "studentId",
+            columnData: "studentData.birthday",
             hide: true,
+        },
+        {
+            header: "Địa chỉ",
+            width: "w-[300px]",
+            maxWidth: "max-w-[300px]",
+            column: "studentId",
+            columnData: "studentData.address",
+            hide: true,
+        },
+        {
+            header: "Giới tính",
+            width: "w-[300px]",
+            maxWidth: "max-w-[300px]",
+            columnData: "genderData.valueVi",
+            column: "studentId",
+            columnData: "studentData.genderData.valueVi",
+        },
+        {
+            header: "Lớp",
+            width: "w-[300px]",
+            maxWidth: "max-w-[300px]",
+            columnData: "classData.name",
+            column: "classId",
+            // hide: true,
+            column: "studentId",
+            columnData: "studentData.classData.name",
+            
         },
         {
             header: "Đăng ký",
@@ -309,7 +419,7 @@ const TopicStudent = () => {
             // hide: true,
             customContent: true,
             isStatus: true,
-            actions: [actionsCustom(handleRegister, "Đăng ký")],
+            actions: [actionsCustom(handleConfirm,"Xác nhận"), actionsCustom(handleCancel,"Hủy")],
         },
         {
             header: "Hành động",
@@ -320,7 +430,7 @@ const TopicStudent = () => {
                     ? [
                           actionsDetail(handleDetail),
                           actionsEdit(handleEdit),
-                          actionsRemove(handleDelete),
+                          actionsRemove(onDelete),
                       ]
                     : [
                           actionsDetail(handleDetail),
@@ -331,7 +441,7 @@ const TopicStudent = () => {
                               currentUser?.permissions
                                   ?.split(",")
                                   ?.includes("PERD")) &&
-                              actionsRemove(handleDelete),
+                              actionsRemove(onDelete),
                       ],
         },
     ];
@@ -343,9 +453,8 @@ const TopicStudent = () => {
             inputSearch: "",
             isSearched: false,
         }));
-        apiStudent.getAllTopics({
+        apiLecturer.getAllThesesStudent({
             user: currentUser,
-            majorId: information?.classData?.majorId,
             inputSearch: defineTable.inputSearch,
             filterSearch: defineTable.filterSearch,
             dispatch: dispatch,
@@ -355,9 +464,8 @@ const TopicStudent = () => {
 
     useEffect(() => {
         // console.log("inputSearch", defineTable.inputSearch);
-        apiStudent.getAllTopics({
+        apiLecturer.getAllThesesStudent({
             user: currentUser,
-            majorId: information?.classData?.majorId,
             inputSearch: defineTable.inputSearch,
             filterSearch: defineTable.filterSearch,
             dispatch: dispatch,
@@ -375,7 +483,7 @@ const TopicStudent = () => {
             ...prevState,
             currentPage: 1,
         }));
-        // apiStudent.getAllTopics(
+        // apiLecturer.getAllThesesStudent(
         //     defineTable.inputSearch,
         //     (defineTable.currentPage - 1) * defineTable.limit,
         //     defineTable.limit,
@@ -385,7 +493,7 @@ const TopicStudent = () => {
 
     // useEffect(() => {
     //   // console.log("currentpage effect");
-    //     apiStudent.getAllTopics(
+    //     apiLecturer.getAllThesesStudent(
     //         defineTable.inputSearch,
     //         (defineTable.currentPage - 1) * defineTable.limit,
     //         defineTable.limit,
@@ -409,23 +517,23 @@ const TopicStudent = () => {
     //     },
     // ];
 
-    // const gender = useSelector((state) => state?.admin?.gender);
+    // const gender = useSelector((state) => state.admin.gender);
     // const handleChangeLimit = (e) => {
     //     // console.log(e);
     //     const permissions = [];
     //     e.map((obj) => {
     //       // console.log(obj.value);
-    //         permissions?.push(obj.value);
+    //         permissions.push(obj.value);
     //     });
 
-    //     // console.log(permissions.toString(), permissions.toString()?.split(","));
+    //     // console.log(permissions.toString(), permissions.toString().split(","));
 
     //     const convert = [];
-    //     const array = permissions.toString()?.split(",");
+    //     const array = permissions.toString().split(",");
     //     gender.map((obj) => {
     //       // console.log(obj);
-    //         if (array?.includes(obj.value)) {
-    //             convert?.push(obj);
+    //         if (array.includes(obj.value)) {
+    //             convert.push(obj);
     //         }
     //     });
     //   // console.log(convert, convert);
@@ -433,7 +541,7 @@ const TopicStudent = () => {
     return (
         <>
             {/* <div>
-                <div>Hello Topic</div>
+                <div>Hello Thesis</div>
                 <Link to={"1"}>Detail 1</Link>
                 <Select placeholder="Chọn..."
                     styles={customSelectStylesMulti}
@@ -455,7 +563,7 @@ const TopicStudent = () => {
                     showModal={showModal}
                     setShowModal={setShowModal}
                     result={result}
-                    setResult={onDelete}
+                    setResult={handleDelete}
                 />
             </div>
             <div>
@@ -467,14 +575,13 @@ const TopicStudent = () => {
                     defineTable={defineTable}
                     setDefineTable={setDefineTable}
                     tableData={tableData}
-                    datas={topics}
+                    datas={theses}
                     totalRecords={totalRecords}
                     functionsModule={true}
-                    btnAdd={true}
                 />
             </div>
         </>
     );
 };
 
-export default TopicStudent;
+export default StudentAdvisor;

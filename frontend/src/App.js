@@ -56,16 +56,31 @@ function App() {
             : currentUser?.roleId == "R4"
             ? "student"
             : null;
-    const route = routes?.filter((route) => route?.role == currentUser?.roleId)[0]
+    const route = routes?.filter(
+        (route) => route?.role == currentUser?.roleId
+    )[0]
         ? routes?.filter((route) => route?.role == currentUser?.roleId)[0]
         : "";
     let axiosJWT = createAxios(currentUser, dispatch, logginSuccess);
     useEffect(() => {
-        async function fetchDataInfo(){
-            currentUser?.roleId=="R4"? await apiStudent.apiStudentGetInformation(currentUser, dispatch, axiosJWT):await apiAdmin.apiAdminGetInformation(currentUser, dispatch, axiosJWT);;
+        async function fetchDataInfo() {
+            console.log("currentUser",currentUser)
+            if (currentUser?.roleId == "R4") {
+                await apiStudent.apiStudentGetInformation(
+                    currentUser,
+                    dispatch,
+                    axiosJWT
+                );
+            } else {
+                await apiAdmin.apiAdminGetInformation(
+                    currentUser,
+                    dispatch,
+                    axiosJWT
+                );
+            }
         }
-        fetchDataInfo()
-    }, []);
+        fetchDataInfo();
+    }, [currentUser]);
     return (
         <Routes>
             <Route path="" element={<HomeLayout />}>

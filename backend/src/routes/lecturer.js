@@ -37,6 +37,38 @@ router.post("/mark-evaluation-criteria", middlewareController.verifyToken, lectu
 router.post("/mark-criteria", middlewareController.verifyToken, lecturerController.getMarkCriteria);
 router.get("/thesis/:id", middlewareController.verifyToken, lecturerController.getThesisById);
 
+
+// Không được động
+
+
+
+router.post("/theses", middlewareController.verifyToken, lecturerController.getTheses);
+router.post("/theses-topic", middlewareController.verifyToken, lecturerController.getThesesTopic);
+router.post("/theses-student", middlewareController.verifyToken, lecturerController.getThesesStudent);
+router.put("/update-thesis/:id", middlewareController.verifyTokenUpdate, lecturerController.updateThesis);
+
+router.get("/confirm-advisor/:id",middlewareController.verifyToken,lecturerController.confirmAdvisorById);
+router.get("/cancel-advisor/:id",middlewareController.verifyToken,lecturerController.cancelAdvisorById);
+
+router.get("/confirm-topic/:id",middlewareController.verifyToken,lecturerController.confirmTopicById);
+router.get("/cancel-topic/:id",middlewareController.verifyToken,lecturerController.cancelTopicById);
+
+
+// Api Topic
+router.post("/dean-topics", middlewareController.verifyToken, lecturerController.getDeanTopics);
+router.get("/dean-topic/:id", middlewareController.verifyToken, lecturerController.getDeanTopicById);
+router.post("/import-dean-topics", middlewareController.verifyTokenImport, lecturerController.importDeanTopics);
+router.post("/create-dean-topic", middlewareController.verifyTokenAdd, lecturerController.addDeanTopic);
+router.put("/update-dean-topic/:id", middlewareController.verifyTokenUpdate, lecturerController.updateDeanTopic);
+router.delete("/delete-dean-topic/:id", middlewareController.verifyTokenDelete, lecturerController.deleteDeanTopic);
+
+// Api Topic
+router.post("/dean-theses", middlewareController.verifyToken, lecturerController.getDeanTheses);
+router.get("/dean-theses/:id", middlewareController.verifyToken, lecturerController.getDeanThesisById);
+router.post("/import-dean-theses", middlewareController.verifyTokenImport, lecturerController.importDeanTheses);
+router.post("/create-dean-theses", middlewareController.verifyTokenAdd, lecturerController.addDeanThesis);
+router.put("/update-dean-theses/:id", middlewareController.verifyTokenUpdate, lecturerController.updateDeanThesis);
+router.delete("/delete-dean-theses/:id", middlewareController.verifyTokenDelete, lecturerController.deleteDeanThesis);
 // // Api Department
 // router.post("/departments", middlewareController.verifyToken, lecturerController.getDepartments);
 // router.get("/department/:id", middlewareController.verifyToken, lecturerController.getDepartmentById);

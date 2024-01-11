@@ -314,7 +314,7 @@ const AddEvaluationMethod = ({ type }, params) => {
                             }`}
                             disabled={type == "detail" ? true : false}
                             {...register("name", {
-                                required: "Name is required",
+                                required: "Không được để trống",
                             })}
                         />
                         {errors?.name?.type && (
@@ -351,7 +351,7 @@ const AddEvaluationMethod = ({ type }, params) => {
                                                 type == "detail" ? true : false
                                             }
                                             // {...register("nameCriteria", {
-                                            //     required: "Name is required",
+                                            //     required: "Không được để trống",
                                             // })}
                                             value={item.name}
                                             onChange={(e) =>
@@ -391,7 +391,7 @@ const AddEvaluationMethod = ({ type }, params) => {
                                             type == "detail" ? true : false
                                         }
                                         // {...register("weightCriteria", {
-                                        //     required: "Name is required",
+                                        //     required: "Không được để trống",
                                         // })}
                                         value={item.weight}
                                         onChange={(e) =>
