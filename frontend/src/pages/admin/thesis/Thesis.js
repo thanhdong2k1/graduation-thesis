@@ -462,7 +462,7 @@ const Thesis = () => {
                 <Table
                     handleAdd={handleAdd}
                     // handleImport={handleImport}
-                    saveDataImport={saveDataImport}
+                    // saveDataImport={saveDataImport}
                     handleExport={handleExport}
                     defineTable={defineTable}
                     searchDepartment={true}

@@ -487,8 +487,8 @@ const ThesisLecturer = () => {
             <div>
                 <Table
                     handleAdd={handleAdd}
-                    handleImport={handleImport}
-                    saveDataImport={saveDataImport}
+                    // handleImport={handleImport}
+                    // saveDataImport={saveDataImport}
                     handleExport={handleExport}
                     defineTable={defineTable}
                     setDefineTable={setDefineTable}

@@ -398,10 +398,10 @@ const CouncilLecturer = () => {
             </div>
             <div>
                 <Table
-                    handleAdd={handleAdd}
-                    handleImport={handleImport}
-                    saveDataImport={saveDataImport}
-                    handleExport={handleExport}
+                    // handleAdd={handleAdd}
+                    // handleImport={handleImport}
+                    // saveDataImport={saveDataImport}
+                    // handleExport={handleExport}
                     defineTable={defineTable}
                     setDefineTable={setDefineTable}
                     tableData={tableData}
