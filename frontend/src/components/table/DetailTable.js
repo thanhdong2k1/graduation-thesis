@@ -237,48 +237,48 @@ const DetailTable = ({ tableData, datas }) => {
                                                         } text-center overflow-hidden text-ellipsis group`}
                                                     >
                                                         <span
-                                                            className={`buttonTable ${
-                                                                data[
-                                                                    table
-                                                                        ?.column
-                                                                ] == "H1"
-                                                                    ? "bg-inputColor"
-                                                                    : data[
-                                                                          table
-                                                                              ?.column
-                                                                      ] == "H2"
-                                                                    ? "bg-amber-300"
-                                                                    : data[
-                                                                          table
-                                                                              ?.column
-                                                                      ] ==
-                                                                          "H3" ||
-                                                                      data[
-                                                                          table
-                                                                              ?.column
-                                                                      ] ==
-                                                                          "S1" ||
-                                                                      data[
-                                                                          table
-                                                                              ?.column
-                                                                      ] == "RS1"
-                                                                    ? "bg-emerald-300"
-                                                                    : data[
-                                                                          table
-                                                                              ?.column
-                                                                      ] ==
-                                                                          "H4" ||
-                                                                      data[
-                                                                          table
-                                                                              ?.column
-                                                                      ] ==
-                                                                          "S0" ||
-                                                                      data[
-                                                                          table
-                                                                              ?.column
-                                                                      ] == "RS0"
-                                                                    ? "bg-red-300"
-                                                                    : ""
+                                                            className={` ${table?.column?.split(
+                                                                "."
+                                                            ) &&
+                                                            table?.column?.split(
+                                                                "."
+                                                            ).length > 0
+                                                                ? (() => {
+                                                                      let result =
+                                                                          data;
+                                                                      for (const key of table?.column?.split(
+                                                                          "."
+                                                                      )) {
+                                                                          result =
+                                                                              result?.[
+                                                                                  key
+                                                                              ];
+                                                                          if (
+                                                                              result ===
+                                                                              undefined
+                                                                          ) {
+                                                                              break;
+                                                                          }
+                                                                      }
+                                                                      return result == "H1"
+                                                                        ? "buttonTable bg-inputColor"
+                                                                        : result == "H2"
+                                                                        ? "buttonTable bg-amber-300"
+                                                                        : result ==
+                                                                              "H3" ||
+                                                                          result ==
+                                                                              "S1" ||
+                                                                          result == "RS1"
+                                                                        ? "buttonTable bg-emerald-300"
+                                                                        : result ==
+                                                                              "H4" ||
+                                                                          result ==
+                                                                              "S0" ||
+                                                                          result == "RS0"
+                                                                        ? "buttonTable bg-red-300"
+                                                                        : "";
+                                                                  })()
+                                                                : null
                                                             }`}
                                                             onClick={() => {
                                                                 table?.actions?.handle(

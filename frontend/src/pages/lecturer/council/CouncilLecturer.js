@@ -245,7 +245,7 @@ const CouncilLecturer = () => {
         {
             header: "Trạng thái hội đồng",
 
-            column: "statusId",
+            column: "councilData.statusId",
             columnData: "councilData.statusData.valueVi",
             isStatus: true,
             // actions: actionsDetail(handleDetail),
