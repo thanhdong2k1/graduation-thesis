@@ -231,6 +231,7 @@ const LecturerAdvisor = () => {
                     // reset();
                     apiStudent.getAllLecturers({
                         user: currentUser,
+                        majorId: information?.classData?.majorId,
                         inputSearch: defineTable.inputSearch,
                         filterSearch: defineTable.filterSearch,
                         dispatch: dispatch,
@@ -476,10 +477,6 @@ const LecturerAdvisor = () => {
             </div> */}
             <div>
                 <Table
-                    handleAdd={handleAdd}
-                    handleImport={handleImport}
-                    saveDataImport={saveDataImport}
-                    handleExport={handleExport}
                     defineTable={defineTable}
                     setDefineTable={setDefineTable}
                     tableData={tableData}

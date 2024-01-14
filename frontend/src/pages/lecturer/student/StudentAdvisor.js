@@ -52,12 +52,12 @@ const StudentAdvisor = () => {
         // console.log("handleExport");
     };
     const handleEdit = (data) => {
-        navigate(`../${pathRoutes.R1.updateStudent}/${data.studentId}`, {
+        navigate(`../${pathRoutes.R3.updateStudent}/${data.studentId}`, {
             replace: true,
         });
     };
     const handleDetail = (data) => {
-        navigate(`../${pathRoutes.R1.studentDetail}/${data.studentId}`, {
+        navigate(`../${pathRoutes.R3.studentDetail}/${data.studentId}`, {
             replace: true,
         });
     };

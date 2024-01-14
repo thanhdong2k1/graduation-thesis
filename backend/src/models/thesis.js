@@ -67,10 +67,6 @@ module.exports = (sequelize, DataTypes) => {
   }
   Thesis.init(
     {
-      startDate: DataTypes.STRING,
-      complateDate: DataTypes.STRING,
-      thesisStartDate: DataTypes.STRING,
-      thesisEndDate: DataTypes.STRING,
       reportFile: DataTypes.STRING,
       totalScore: DataTypes.FLOAT,
       advisorMark: DataTypes.FLOAT,

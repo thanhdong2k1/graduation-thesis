@@ -25,13 +25,13 @@ const Sidebar = ({ isShowSidebar, setIsShowSidebar }) => {
                 !route?.name?.includes("Update")&&
                 !route?.name?.includes("Detail")
         );
-    // console.log("routesAdmin", routesAdmin,path?.pathname?.split("/") );
+    console.log("routesAdmin", routesAdmin,path?.pathname?.split("/") );
     return (
         <div
             onBlur={() => {
                 setIsShowSidebar(false);
             }}
-            className={`sidebarDiv w-60 h-full bg-whiteColor m-4 rounded-2xl overflow-auto shadow-xl shadow-greyText whitespace-nowrap ${
+            className={`sidebarDiv w-64 h-full bg-whiteColor m-4 rounded-2xl overflow-auto shadow-xl shadow-greyText whitespace-nowrap ${
                 isShowSidebar
                     ? "media-max-lg:absolute media-max-lg:z-10 media-max-lg:-left-0 media-max-lg:h-[calc(100%-2rem)]"
                     : "media-max-lg:hidden"
@@ -73,8 +73,7 @@ const Sidebar = ({ isShowSidebar, setIsShowSidebar }) => {
                             <li
                                 key={index}
                                 className={`listItem w-full relative text-greyText text-h3FontSize before:absolute before:content-[''] before:w-[5px] before:h-[0%] before:bg-PrimaryColor before:l-0 b-0 before:rounded-r-3xl group ${
-                                    path?.pathname?.split("/")?.at(-1) ==
-                                    route?.path
+                                    (path?.pathname?.split("/")?.at(1) == route?.path || path?.pathname?.split("/")?.at(2) == route?.path)
                                         ? "before:h-full before:duration-300 before:ease-in-out before:bg-PrimaryColor text-PrimaryColor"
                                         : "hover:before:h-full hover:before:duration-300 hover:before:ease-in-out hover:before:bg-HoverColor hover:text-HoverColor"
                                 }`}
@@ -82,13 +81,13 @@ const Sidebar = ({ isShowSidebar, setIsShowSidebar }) => {
                                 <Link
                                     to={route?.path}
                                     className={`flex items-center font-medium ml-4 ${
-                                        path?.pathname?.split("/")?.at(-1) ==
-                                        route?.path
+                                    (path?.pathname?.split("/")?.at(1) == route?.path || path?.pathname?.split("/")?.at(2) == route?.path)
                                             ? " text-PrimaryColor"
                                             : "group-hover:text-HoverColor"
                                     } `}
                                 >
-                                    <IoMdSpeedometer className="icon mr-2" />
+                                    {route?.icon}
+                                    {/* <IoMdSpeedometer className="icon mr-2" /> */}
                                     <span className="">{route?.name}</span>
                                 </Link>
                             </li>

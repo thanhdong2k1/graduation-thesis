@@ -27,7 +27,7 @@ const Department = () => {
     const currentUser = useSelector((state) => state?.auth?.currentUser);
     let axiosJWT = createAxios(currentUser, dispatch, logginSuccess);
 
-  // console.log("departments",departments)
+    // console.log("departments",departments)
     const [defineTable, setDefineTable] = useState({
         inputSearch: "",
         filterSearch: "",
@@ -45,10 +45,10 @@ const Department = () => {
         navigate(`../${pathRoutes?.R1?.addDepartment}`, { replace: true });
     };
     const handleImport = () => {
-      // console.log("handleImport");
+        // console.log("handleImport");
     };
     const handleExport = () => {
-      // console.log("handleExport");
+        // console.log("handleExport");
     };
     const handleEdit = (data) => {
         navigate(`../${pathRoutes?.R1?.updateDepartment}/${data?.id}`, {
@@ -62,7 +62,7 @@ const Department = () => {
     };
 
     const handleDelete = (data) => {
-      // console.log("handleDelete", data);
+        // console.log("handleDelete", data);
         setShowModal(true);
         setResult(data);
     };
@@ -94,7 +94,7 @@ const Department = () => {
                         dispatch: dispatch,
                         axiosJWT: axiosJWT,
                     });
-                } else if (res?.errCode > 0 || res?.errCode < 0 ) {
+                } else if (res?.errCode > 0 || res?.errCode < 0) {
                     // console.log(res);
                     toast.update(id, {
                         render: res?.errMessage,
@@ -116,7 +116,7 @@ const Department = () => {
                 }
             })
             .catch((err) => {
-              // console.log(err);
+                // console.log(err);
                 toast.update(id, {
                     render: "Đã xảy ra lỗi, vui lòng thử lại sau",
                     type: "error",
@@ -170,7 +170,7 @@ const Department = () => {
                         dispatch: dispatch,
                         axiosJWT: axiosJWT,
                     });
-                } else if (res?.errCode > 0 || res?.errCode < 0 ) {
+                } else if (res?.errCode > 0 || res?.errCode < 0) {
                     // console.log(res);
                     toast.update(id, {
                         render: res?.errMessage,
@@ -192,7 +192,7 @@ const Department = () => {
                 }
             })
             .catch((err) => {
-              // console.log(err);
+                // console.log(err);
                 toast.update(id, {
                     render: "Đã xảy ra lỗi, vui lòng thử lại sau",
                     type: "error",
@@ -260,118 +260,58 @@ const Department = () => {
                       ],
         },
     ];
-    // Effect
-    useEffect(() => {
-        setDefineTable((prevState) => ({
-            ...prevState,
-            currentPage: 1,
-            inputSearch: "",
-            isSearched: false,
-        }));
-        apiAdmin.getAllDepartments({
-            user: currentUser,
-            inputSearch: defineTable.inputSearch,
-            filterSearch: defineTable.filterSearch,
-            dispatch: dispatch,
-            axiosJWT: axiosJWT,
-        });
-    }, []); // Effect
+
+    const [firstLoad, setFirstLoad] = useState(true);
 
     useEffect(() => {
-        // console.log("inputSearch", defineTable.inputSearch);
-        apiAdmin.getAllDepartments({
-            user: currentUser,
-            inputSearch: defineTable.inputSearch,
-            filterSearch: defineTable.filterSearch,
-            dispatch: dispatch,
-            axiosJWT: axiosJWT,
-        });
-        setDefineTable((prevState) => ({
-            ...prevState,
-            isSearched: false,
-            currentPage: 1,
-        }));
-    }, [defineTable.isSearched == true, defineTable.filterSearch]);
+        if (firstLoad) {
+            console.log("firstLoad",firstLoad)
+            setDefineTable((prevState) => ({
+                ...prevState,
+                currentPage: 1,
+                inputSearch: "",
+                isSearched: false,
+            }));
+            apiAdmin.getAllDepartments({
+                user: currentUser,
+                inputSearch: defineTable.inputSearch,
+                filterSearch: defineTable.filterSearch,
+                dispatch: dispatch,
+                axiosJWT: axiosJWT,
+            });
+            setFirstLoad(false);
+        }
+    }, []);
 
     useEffect(() => {
-        setDefineTable((prevState) => ({
-            ...prevState,
-            currentPage: 1,
-        }));
-        // apiAdmin.getAllDepartments(
-        //     defineTable.inputSearch,
-        //     (defineTable.currentPage - 1) * defineTable.limit,
-        //     defineTable.limit,
-        //     dispatch
-        // );
+        if (!firstLoad) {
+            console.log("firstLoad",firstLoad)
+            apiAdmin.getAllDepartments({
+                user: currentUser,
+                inputSearch: defineTable.inputSearch,
+                filterSearch: defineTable.filterSearch,
+                dispatch: dispatch,
+                axiosJWT: axiosJWT,
+            });
+            setDefineTable((prevState) => ({
+                ...prevState,
+                isSearched: false,
+                currentPage: 1,
+            }));
+        }
+    }, [defineTable.isSearched, defineTable.filterSearch]);
+
+    useEffect(() => {
+        if (!firstLoad) {
+            console.log("firstLoad",firstLoad)
+            setDefineTable((prevState) => ({
+                ...prevState,
+                currentPage: 1,
+            }));
+        }
     }, [defineTable.limit]);
-
-    // useEffect(() => {
-    //   // console.log("currentpage effect");
-    //     apiAdmin.getAllDepartments(
-    //         defineTable.inputSearch,
-    //         (defineTable.currentPage - 1) * defineTable.limit,
-    //         defineTable.limit,
-    //         dispatch
-    //     );
-    // }, [defineTable.currentPage]);
-
-    // const [isRtl, setIsRtl] = useState(false);
-    // const colourOptions = [
-    //     {
-    //         value: "F",
-    //         label: "Nữ",
-    //     },
-    //     {
-    //         value: "M",
-    //         label: "Nam",
-    //     },
-    //     {
-    //         value: "O",
-    //         label: "Khác",
-    //     },
-    // ];
-
-    // const gender = useSelector((state) => state?.admin?.gender);
-    // const handleChangeLimit = (e) => {
-    //     // console.log(e);
-    //     const permissions = [];
-    //     e.map((obj) => {
-    //       // console.log(obj.value);
-    //         permissions?.push(obj.value);
-    //     });
-
-    //     // console.log(permissions.toString(), permissions.toString()?.split(","));
-
-    //     const convert = [];
-    //     const array = permissions.toString()?.split(",");
-    //     gender.map((obj) => {
-    //       // console.log(obj);
-    //         if (array?.includes(obj.value)) {
-    //             convert?.push(obj);
-    //         }
-    //     });
-    //   // console.log(convert, convert);
-    // };
     return (
         <>
-            {/* <div>
-                <div>Hello Department</div>
-                <Link to={"1"}>Detail 1</Link>
-                <Select placeholder="Chọn..."
-                    styles={customSelectStylesMulti}
-                    isRtl={isRtl}
-                    defaultValue={[colourOptions[1], colourOptions[2]]}
-                    isMulti
-                    name="colors"
-                    options={colourOptions}
-                    className="basic-multi-select"
-                    classNamePrefix="select"
-                    onChange={(e) => {
-                        handleChangeLimit(e);
-                    }}
-                />
-            </div> */}
             <div>
                 <ModalPopup
                     title={"Xác nhận xóa"}

@@ -46,6 +46,25 @@ import ThesisStudent from "../pages/student/thesis/ThesisStudent";
 import AddTopicStudent from "../pages/student/topic/AddTopicStudent";
 import TopicStudent from "../pages/student/topic/TopicStudent";
 import pathRoutes from "../utils/pathRoutes";
+import {
+    TbHome2,
+    TbUserShield,
+    TbFileCertificate,
+    TbUser,
+    TbUsersGroup,
+    TbBooks,
+    TbLayersLinked,
+    TbGridPattern,
+    TbLayoutGrid,
+    TbFileText,
+    TbCheckupList,
+    TbFlag,
+    TbUserPlus,
+    TbFilePencil,
+    TbFilePlus,
+    TbFileSearch2,
+    TbFileCode,
+} from "react-icons/tb";
 
 const icon = {
     className: "w-5 h-5 text-inherit",
@@ -57,21 +76,19 @@ export const routes = [
         pages: [
             // Trang chủ
             {
-                //   icon: <HomeIcon {...icon} />,
+                icon: <TbHome2  className="icon mr-2" />,
                 name: "Trang chủ",
                 path: pathRoutes?.R1?.home,
                 element: <AdminHomePage />,
             },
             // Đổi thông tin
             {
-                //   icon: <HomeIcon {...icon} />,
                 name: "Đổi thông tin",
                 path: pathRoutes?.R1?.changeInformation,
                 element: <AdminChangeInformation />,
             },
             // Đổi mật khẩu
             {
-                //   icon: <HomeIcon {...icon} />,
                 name: "Đổi mật khẩu",
                 path: pathRoutes?.R1?.changePassword,
                 element: <AdminChangePassword />,
@@ -80,117 +97,78 @@ export const routes = [
             // Council
             // Hội đồng
             {
-                //   icon: <HomeIcon {...icon} />,
+                icon: <TbUserShield  className="icon mr-2" />,
                 name: "Hội đồng",
                 path: pathRoutes?.R1?.council,
                 element: <Council />,
             },
             // Add Council
             {
-                //   icon: <HomeIcon {...icon} />,
                 name: "Add Council",
                 path: pathRoutes?.R1?.addCouncil,
                 element: <AddCouncil type={"add"} />,
             },
             // Update Council
             {
-                //   icon: <HomeIcon {...icon} />,
                 name: "Update Council",
                 path: pathRoutes?.R1?.updateCouncilId,
                 element: <AddCouncil type={"update"} />,
             },
             // Council Detail
             {
-                //   icon: <HomeIcon {...icon} />,
                 name: "Council Detail",
                 path: pathRoutes?.R1?.councilDetailId,
                 element: <AddCouncil type={"detail"} />,
             },
-// Thesis
+            // Thesis
             // Đồ án
             {
-                //   icon: <HomeIcon {...icon} />,
+                icon: <TbFileCertificate  className="icon mr-2" />,
                 name: "Đồ án",
                 path: pathRoutes?.R1?.thesis,
                 element: <Thesis />,
             },
             // Add Thesis
             {
-                //   icon: <HomeIcon {...icon} />,
                 name: "Add Thesis",
                 path: pathRoutes?.R1?.addThesis,
                 element: <AddThesis type={"add"} />,
             },
             // Update Thesis
             {
-                //   icon: <HomeIcon {...icon} />,
                 name: "Update Thesis",
                 path: pathRoutes?.R1?.updateThesisId,
                 element: <AddThesis type={"update"} />,
             },
             // Thesis Detail
             {
-                //   icon: <HomeIcon {...icon} />,
                 name: "Thesis Detail",
                 path: pathRoutes?.R1?.thesisDetailId,
                 element: <AddThesis type={"detail"} />,
             },
 
-            // EvaluationMethod
-            // PP đánh giá
-            {
-                //   icon: <HomeIcon {...icon} />,
-                name: "PP đánh giá",
-                path: pathRoutes?.R1?.evaluationMethod,
-                element: <EvaluationMethod />,
-            },
-            // Add Evaluation Method
-            {
-                //   icon: <HomeIcon {...icon} />,
-                name: "Add Evaluation Method",
-                path: pathRoutes?.R1?.addEvaluationMethod,
-                element: <AddEvaluationMethod type={"add"} />,
-            },
-            // Update Evaluation Method
-            {
-                //   icon: <HomeIcon {...icon} />,
-                name: "Update Evaluation Method",
-                path: pathRoutes?.R1?.updateEvaluationMethodId,
-                element: <AddEvaluationMethod type={"update"} />,
-            },
-            // Evaluation Method Detail
-            {
-                //   icon: <HomeIcon {...icon} />,
-                name: "Evaluation Method Detail",
-                path: pathRoutes?.R1?.evaluationMethodDetailId,
-                element: <AddEvaluationMethod type={"detail"} />,
-            },
-
             // Lecturer
             // Giảng viên
             {
-                //   icon: <HomeIcon {...icon} />,
+                icon: <TbUser  className="icon mr-2" />,
                 name: "Giảng viên",
                 path: pathRoutes?.R1?.lecturer,
                 element: <Lecturer />,
             },
             // Add Lecturer
             {
-                //   icon: <HomeIcon {...icon} />,
                 name: "Add Lecturer",
                 path: pathRoutes?.R1?.addLecturer,
                 element: <AddLecturer type={"add"} />,
             },
             // Update Lecturer
             {
-                //   icon: <HomeIcon {...icon} />,
                 name: "Update Lecturer",
                 path: pathRoutes?.R1?.updateLecturerId,
                 element: <AddLecturer type={"update"} />,
             },
             // Lecturer Detail
             {
-                //   icon: <HomeIcon {...icon} />,
                 name: "Lecturer Detail",
                 path: pathRoutes?.R1?.lecturerDetailId,
                 element: <AddLecturer type={"detail"} />,
@@ -199,28 +177,25 @@ export const routes = [
             // Student
             // Sinh viên
             {
-                //   icon: <HomeIcon {...icon} />,
+                icon: <TbUsersGroup  className="icon mr-2" />,
                 name: "Sinh viên",
                 path: pathRoutes?.R1?.student,
                 element: <Student />,
             },
             // Add Student
             {
-                //   icon: <HomeIcon {...icon} />,
                 name: "Add Student",
                 path: pathRoutes?.R1?.addStudent,
                 element: <AddStudent type={"add"} />,
             },
             // Update Student
             {
-                //   icon: <HomeIcon {...icon} />,
                 name: "Update Student",
                 path: pathRoutes?.R1?.updateStudentId,
                 element: <AddStudent type={"update"} />,
             },
             // Student Detail
             {
-                //   icon: <HomeIcon {...icon} />,
                 name: "Student Detail",
                 path: pathRoutes?.R1?.studentDetailId,
                 element: <AddStudent type={"detail"} />,
@@ -228,57 +203,51 @@ export const routes = [
             // Department
             // Bộ môn
             {
-                //   icon: <HomeIcon {...icon} />,
+                icon: <TbBooks  className="icon mr-2" />,
                 name: "Bộ môn",
                 path: pathRoutes?.R1?.department,
                 element: <Department />,
             },
             // Add Department
             {
-                //   icon: <HomeIcon {...icon} />,
                 name: "Add Department",
                 path: pathRoutes?.R1?.addDepartment,
                 element: <AddDepartment type={"add"} />,
             },
             // Update Department
             {
-                //   icon: <HomeIcon {...icon} />,
                 name: "Update Department",
                 path: pathRoutes?.R1?.updateDepartmentId,
                 element: <AddDepartment type={"update"} />,
             },
             // Department Detail
             {
-                //   icon: <HomeIcon {...icon} />,
                 name: "Department Detail",
                 path: pathRoutes?.R1?.departmentDetailId,
                 element: <AddDepartment type={"detail"} />,
             },
-// Major
+            // Major
             // Ngành
             {
-                //   icon: <HomeIcon {...icon} />,
+                icon: <TbLayersLinked  className="icon mr-2" />,
                 name: "Ngành",
                 path: pathRoutes?.R1?.major,
                 element: <Major />,
             },
             // Add Major
             {
-                //   icon: <HomeIcon {...icon} />,
                 name: "Add Major",
                 path: pathRoutes?.R1?.addMajor,
                 element: <AddMajor type={"add"} />,
             },
             // Update Major
             {
-                //   icon: <HomeIcon {...icon} />,
                 name: "Update Major",
                 path: pathRoutes?.R1?.updateMajorId,
                 element: <AddMajor type={"update"} />,
             },
             // Major Detail
             {
-                //   icon: <HomeIcon {...icon} />,
                 name: "Major Detail",
                 path: pathRoutes?.R1?.majorDetailId,
                 element: <AddMajor type={"detail"} />,
@@ -286,129 +255,137 @@ export const routes = [
             // Block
             // Khối
             {
-                //   icon: <HomeIcon {...icon} />,
+                icon: <TbGridPattern  className="icon mr-2" />,
                 name: "Khối",
                 path: pathRoutes?.R1?.block,
                 element: <Block />,
             },
             // Add Block
             {
-                //   icon: <HomeIcon {...icon} />,
                 name: "Add Block",
                 path: pathRoutes?.R1?.addBlock,
                 element: <AddBlock type={"add"} />,
             },
             // Update Block
             {
-                //   icon: <HomeIcon {...icon} />,
                 name: "Update Block",
                 path: pathRoutes?.R1?.updateBlockId,
                 element: <AddBlock type={"update"} />,
             },
             // Block Detail
             {
-                //   icon: <HomeIcon {...icon} />,
                 name: "Block Detail",
                 path: pathRoutes?.R1?.blockDetailId,
                 element: <AddBlock type={"detail"} />,
             },
 
-            
-
             // Class
             // Lớp
             {
-                //   icon: <HomeIcon {...icon} />,
+                icon: <TbLayoutGrid  className="icon mr-2" />,
                 name: "Lớp",
                 path: pathRoutes?.R1?.class,
                 element: <Class />,
             },
             // Add Class
             {
-                //   icon: <HomeIcon {...icon} />,
                 name: "Add Class",
                 path: pathRoutes?.R1?.addClass,
                 element: <AddClass type={"add"} />,
             },
             // Update Class
             {
-                //   icon: <HomeIcon {...icon} />,
                 name: "Update Class",
                 path: pathRoutes?.R1?.updateClassId,
                 element: <AddClass type={"update"} />,
             },
             // Class Detail
             {
-                //   icon: <HomeIcon {...icon} />,
                 name: "Class Detail",
                 path: pathRoutes?.R1?.classDetailId,
                 element: <AddClass type={"detail"} />,
             },
 
-            
-
             // Topic
             // Đề tài
             {
-                //   icon: <HomeIcon {...icon} />,
+                icon: <TbFileText  className="icon mr-2" />,
                 name: "Đề tài",
                 path: pathRoutes?.R1?.topic,
                 element: <Topic />,
             },
             // Add Topic
             {
-                //   icon: <HomeIcon {...icon} />,
                 name: "Add Topic",
                 path: pathRoutes?.R1?.addTopic,
                 element: <AddTopic type={"add"} />,
             },
             // Update Topic
             {
-                //   icon: <HomeIcon {...icon} />,
                 name: "Update Topic",
                 path: pathRoutes?.R1?.updateTopicId,
                 element: <AddTopic type={"update"} />,
             },
             // Topic Detail
             {
-                //   icon: <HomeIcon {...icon} />,
                 name: "Topic Detail",
                 path: pathRoutes?.R1?.topicDetailId,
                 element: <AddTopic type={"detail"} />,
             },
 
-            
+            // EvaluationMethod
+            // PP đánh giá
+            {
+                icon: <TbCheckupList  className="icon mr-2" />,
+                name: "PP đánh giá",
+                path: pathRoutes?.R1?.evaluationMethod,
+                element: <EvaluationMethod />,
+            },
+            // Add Evaluation Method
+            {
+                name: "Add Evaluation Method",
+                path: pathRoutes?.R1?.addEvaluationMethod,
+                element: <AddEvaluationMethod type={"add"} />,
+            },
+            // Update Evaluation Method
+            {
+                name: "Update Evaluation Method",
+                path: pathRoutes?.R1?.updateEvaluationMethodId,
+                element: <AddEvaluationMethod type={"update"} />,
+            },
+            // Evaluation Method Detail
+            {
+                name: "Evaluation Method Detail",
+                path: pathRoutes?.R1?.evaluationMethodDetailId,
+                element: <AddEvaluationMethod type={"detail"} />,
+            },
+
             // ThesisSession
             // Khóa luận
             {
-                //   icon: <HomeIcon {...icon} />,
+                icon: <TbFlag  className="icon mr-2" />,
                 name: "Khóa luận",
                 path: pathRoutes?.R1?.thesisSession,
                 element: <ThesisSession />,
             },
             // Add Thesis Session
             {
-                //   icon: <HomeIcon {...icon} />,
                 name: "Add Thesis Session",
                 path: pathRoutes?.R1?.addThesisSession,
                 element: <AddThesisSession type={"add"} />,
             },
             // Update Thesis Session
             {
-                //   icon: <HomeIcon {...icon} />,
                 name: "Update Thesis Session",
                 path: pathRoutes?.R1?.updateThesisSessionId,
                 element: <AddThesisSession type={"update"} />,
             },
             // Thesis Session Detail
             {
-                //   icon: <HomeIcon {...icon} />,
                 name: "Thesis Session Detail",
                 path: pathRoutes?.R1?.thesisSessionDetailId,
                 element: <AddThesisSession type={"detail"} />,
             },
-
-            
         ],
     },
     {
@@ -416,7 +393,7 @@ export const routes = [
         pages: [
             // Trang chủ
             {
-                //   icon: <HomeIcon {...icon} />,
+                icon: <TbHome2  className="icon mr-2" />,
                 name: "Trang chủ",
                 path: "home",
                 element: <DeanHomePage />,
@@ -424,92 +401,82 @@ export const routes = [
 
             // Đổi thông tin
             {
-                //   icon: <HomeIcon {...icon} />,
                 name: "Đổi thông tin",
                 path: pathRoutes?.R1?.changeInformation,
                 element: <AdminChangeInformation />,
             },
             // Đổi mật khẩu
             {
-                //   icon: <HomeIcon {...icon} />,
                 name: "Đổi mật khẩu",
                 path: pathRoutes?.R1?.changePassword,
                 element: <AdminChangePassword />,
             },
             // SV Đăng ký HD
             {
-                //   icon: <HomeIcon {...icon} />,
+                icon: <TbUserPlus  className="icon mr-2" />,
                 name: "SV Đăng ký HD",
                 path: pathRoutes?.R1?.student,
                 element: <StudentAdvisor />,
             },
             // Add Student
             {
-                //   icon: <HomeIcon {...icon} />,
                 name: "Add Student",
                 path: pathRoutes?.R1?.addStudent,
                 element: <AddStudentAdvisor type={"add"} />,
             },
             // Update Student
             {
-                //   icon: <HomeIcon {...icon} />,
                 name: "Update Student",
                 path: pathRoutes?.R1?.updateStudentId,
                 element: <AddStudentAdvisor type={"update"} />,
             },
             // Student Detail
             {
-                //   icon: <HomeIcon {...icon} />,
                 name: "Student Detail",
                 path: pathRoutes?.R1?.studentDetailId,
                 element: <AddStudentAdvisor type={"detail"} />,
             },
             // SV Đăng ký đề tài
             {
-                //   icon: <HomeIcon {...icon} />,
+                icon: <TbFilePlus  className="icon mr-2" />,
                 name: "SV Đăng ký đề tài",
                 path: pathRoutes?.R3?.topic,
                 element: <TopicLecturer />,
             },
             // Add Topic
             {
-                //   icon: <HomeIcon {...icon} />,
                 name: "Add Topic",
                 path: pathRoutes?.R3?.addTopic,
                 element: <AddTopicLecturer type={"add"} />,
             },
             // Update Topic
             {
-                //   icon: <HomeIcon {...icon} />,
                 name: "Update Topic",
                 path: pathRoutes?.R3?.updateTopicId,
                 element: <AddTopicLecturer type={"update"} />,
             },
             // Topic Detail
             {
-                //   icon: <HomeIcon {...icon} />,
                 name: "Topic Detail",
                 path: pathRoutes?.R3?.topicDetailId,
                 element: <AddTopicLecturer type={"detail"} />,
             },
-            
+
             // Hội đồng
             {
-                //   icon: <HomeIcon {...icon} />,
+                icon: <TbUserShield  className="icon mr-2" />,
                 name: "Hội đồng",
                 path: pathRoutes?.R3?.council,
                 element: <CouncilLecturer />,
             },
             // CouncilDetail
             {
-                //   icon: <HomeIcon {...icon} />,
                 name: "CouncilDetail",
                 path: pathRoutes?.R3?.councilDetailId,
                 element: <ThesisCouncilLecturer />,
             },
             // CouncilDetailThesis
             {
-                //   icon: <HomeIcon {...icon} />,
                 name: "CouncilDetailThesis",
                 path: pathRoutes?.R3?.councilDetailThesisId,
                 element: <MarkEvaluationCriteria />,
@@ -517,92 +484,81 @@ export const routes = [
             // Thesis
             // Đồ án
             {
-                //   icon: <HomeIcon {...icon} />,
+                icon: <TbFilePencil  className="icon mr-2" />,
                 name: "Đồ án hướng dẫn",
                 path: pathRoutes?.R3?.thesis,
                 element: <ThesisLecturer />,
             },
             // Add Thesis
             {
-                //   icon: <HomeIcon {...icon} />,
                 name: "Add Thesis",
                 path: pathRoutes?.R3?.addThesis,
                 element: <AddThesisLecturer type={"add"} />,
             },
             // Update Thesis
             {
-                //   icon: <HomeIcon {...icon} />,
                 name: "Update Thesis",
                 path: pathRoutes?.R3?.updateThesisId,
                 element: <AddThesisLecturer type={"update"} />,
             },
             // Thesis Detail
             {
-                //   icon: <HomeIcon {...icon} />,
                 name: "Thesis Detail",
                 path: pathRoutes?.R3?.thesisDetailId,
                 element: <AddThesisLecturer type={"detail"} />,
             },
 
-
             // Topic
             // Đề tài
             {
-                //   icon: <HomeIcon {...icon} />,
+                icon: <TbFileText  className="icon mr-2" />,
                 name: "Đề tài bộ môn",
                 path: pathRoutes?.R1?.topic,
                 element: <Topic />,
             },
             // Add Topic
             {
-                //   icon: <HomeIcon {...icon} />,
                 name: "Add Topic",
                 path: pathRoutes?.R1?.addTopic,
                 element: <AddTopic type={"add"} />,
             },
             // Update Topic
             {
-                //   icon: <HomeIcon {...icon} />,
                 name: "Update Topic",
                 path: pathRoutes?.R1?.updateTopicId,
                 element: <AddTopic type={"update"} />,
             },
             // Topic Detail
             {
-                //   icon: <HomeIcon {...icon} />,
                 name: "Topic Detail",
                 path: pathRoutes?.R1?.topicDetailId,
                 element: <AddTopic type={"detail"} />,
             },
             // Đồ án
             {
-                //   icon: <HomeIcon {...icon} />,
+                icon: <TbFileCertificate  className="icon mr-2" />,
                 name: "Đồ án bộ môn",
                 path: pathRoutes?.R1?.thesis,
                 element: <ThesisDean />,
             },
             // Add Thesis
             {
-                //   icon: <HomeIcon {...icon} />,
                 name: "Add Thesis",
                 path: pathRoutes?.R1?.addThesis,
                 element: <AddThesisDean type={"add"} />,
             },
             // Update Thesis
             {
-                //   icon: <HomeIcon {...icon} />,
                 name: "Update Thesis",
                 path: pathRoutes?.R1?.updateThesisId,
                 element: <AddThesisDean type={"update"} />,
             },
             // Thesis Detail
             {
-                //   icon: <HomeIcon {...icon} />,
                 name: "Thesis Detail",
                 path: pathRoutes?.R1?.thesisDetailId,
                 element: <AddThesisDean type={"detail"} />,
             },
-
         ],
     },
     {
@@ -610,99 +566,89 @@ export const routes = [
         pages: [
             // Trang chủ
             {
-                //   icon: <HomeIcon {...icon} />,
+                icon: <TbHome2  className="icon mr-2" />,
                 name: "Trang chủ",
                 path: "home",
                 element: <LecturerHomePage />,
             },
             // Đổi thông tin
             {
-                //   icon: <HomeIcon {...icon} />,
                 name: "Đổi thông tin",
                 path: pathRoutes?.R1?.changeInformation,
                 element: <AdminChangeInformation />,
             },
             // Đổi mật khẩu
             {
-                //   icon: <HomeIcon {...icon} />,
                 name: "Đổi mật khẩu",
                 path: pathRoutes?.R1?.changePassword,
                 element: <AdminChangePassword />,
             },
             // SV Đăng ký HD
             {
-                //   icon: <HomeIcon {...icon} />,
+                icon: <TbUserPlus  className="icon mr-2" />,
                 name: "SV Đăng ký HD",
                 path: pathRoutes?.R3?.student,
                 element: <StudentAdvisor />,
             },
             // Add Student
             {
-                //   icon: <HomeIcon {...icon} />,
                 name: "Add Student",
                 path: pathRoutes?.R3?.addStudent,
                 element: <AddStudentAdvisor type={"add"} />,
             },
             // Update Student
             {
-                //   icon: <HomeIcon {...icon} />,
                 name: "Update Student",
                 path: pathRoutes?.R3?.updateStudentId,
                 element: <AddStudentAdvisor type={"update"} />,
             },
             // Student Detail
             {
-                //   icon: <HomeIcon {...icon} />,
                 name: "Student Detail",
                 path: pathRoutes?.R3?.studentDetailId,
                 element: <AddStudentAdvisor type={"detail"} />,
             },
             // SV Đăng ký đề tài
             {
-                //   icon: <HomeIcon {...icon} />,
+                icon: <TbFilePlus  className="icon mr-2" />,
                 name: "SV Đăng ký đề tài",
                 path: pathRoutes?.R3?.topic,
                 element: <TopicLecturer />,
             },
             // Add Topic
             {
-                //   icon: <HomeIcon {...icon} />,
                 name: "Add Topic",
                 path: pathRoutes?.R3?.addTopic,
                 element: <AddTopicLecturer type={"add"} />,
             },
             // Update Topic
             {
-                //   icon: <HomeIcon {...icon} />,
                 name: "Update Topic",
                 path: pathRoutes?.R3?.updateTopicId,
                 element: <AddTopicLecturer type={"update"} />,
             },
             // Topic Detail
             {
-                //   icon: <HomeIcon {...icon} />,
                 name: "Topic Detail",
                 path: pathRoutes?.R3?.topicDetailId,
                 element: <AddTopicLecturer type={"detail"} />,
             },
-            
+
             // Hội đồng
             {
-                //   icon: <HomeIcon {...icon} />,
+                icon: <TbUserShield  className="icon mr-2" />,
                 name: "Hội đồng",
                 path: pathRoutes?.R3?.council,
                 element: <CouncilLecturer />,
             },
             // CouncilDetail
             {
-                //   icon: <HomeIcon {...icon} />,
                 name: "CouncilDetail",
                 path: pathRoutes?.R3?.councilDetailId,
                 element: <ThesisCouncilLecturer />,
             },
             // CouncilDetailThesis
             {
-                //   icon: <HomeIcon {...icon} />,
                 name: "CouncilDetailThesis",
                 path: pathRoutes?.R3?.councilDetailThesisId,
                 element: <MarkEvaluationCriteria />,
@@ -710,28 +656,25 @@ export const routes = [
             // Thesis
             // Đồ án
             {
-                //   icon: <HomeIcon {...icon} />,
+                icon: <TbFilePencil  className="icon mr-2" />,
                 name: "Đồ án hướng dẫn",
                 path: pathRoutes?.R3?.thesis,
                 element: <ThesisLecturer />,
             },
             // Add Thesis
             {
-                //   icon: <HomeIcon {...icon} />,
                 name: "Add Thesis",
                 path: pathRoutes?.R3?.addThesis,
                 element: <AddThesisLecturer type={"add"} />,
             },
             // Update Thesis
             {
-                //   icon: <HomeIcon {...icon} />,
                 name: "Update Thesis",
                 path: pathRoutes?.R3?.updateThesisId,
                 element: <AddThesisLecturer type={"update"} />,
             },
             // Thesis Detail
             {
-                //   icon: <HomeIcon {...icon} />,
                 name: "Thesis Detail",
                 path: pathRoutes?.R3?.thesisDetailId,
                 element: <AddThesisLecturer type={"detail"} />,
@@ -743,21 +686,19 @@ export const routes = [
         pages: [
             // Trang chủ
             {
-                //   icon: <HomeIcon {...icon} />,
+                icon: <TbHome2  className="icon mr-2" />,
                 name: "Trang chủ",
                 path: "home",
                 element: <StudentHomePage />,
             },
             // Đổi thông tin
             {
-                //   icon: <HomeIcon {...icon} />,
                 name: "Đổi thông tin",
                 path: pathRoutes?.R1?.changeInformation,
                 element: <StudentChangeInformation />,
             },
             // Đổi mật khẩu
             {
-                //   icon: <HomeIcon {...icon} />,
                 name: "Đổi mật khẩu",
                 path: pathRoutes?.R1?.changePassword,
                 element: <StudentChangePassword />,
@@ -766,37 +707,34 @@ export const routes = [
             // Topic
             // Đề tài
             {
-                //   icon: <HomeIcon {...icon} />,
+                icon: <TbFilePlus  className="icon mr-2" />,
                 name: "Đề tài",
                 path: pathRoutes?.R1?.topic,
                 element: <TopicStudent />,
             },
             // Add Topic
             {
-                //   icon: <HomeIcon {...icon} />,
                 name: "Add Topic",
                 path: pathRoutes?.R1?.addTopic,
                 element: <AddTopicStudent type={"add"} />,
             },
             // Topic Detail
             {
-                //   icon: <HomeIcon {...icon} />,
                 name: "Topic Detail",
                 path: pathRoutes?.R1?.topicDetailId,
                 element: <AddTopicStudent type={"detail"} />,
             },
-            
+
             // Topic
             // Giảng viên hướng dẫn
             {
-                //   icon: <HomeIcon {...icon} />,
+                icon: <TbUserPlus  className="icon mr-2" />,
                 name: "Giảng viên hướng dẫn",
                 path: pathRoutes?.R1?.lecturer,
                 element: <LecturerAdvisor />,
             },
             // Lecturer Detail
             {
-                //   icon: <HomeIcon {...icon} />,
                 name: "Lecturer Detail",
                 path: pathRoutes?.R1?.lecturerDetailId,
                 element: <AddLecturerAdvisor type={"detail"} />,
@@ -804,33 +742,29 @@ export const routes = [
             // Thesis
             // Đồ án
             {
-                //   icon: <HomeIcon {...icon} />,
+                icon: <TbFileCertificate  className="icon mr-2" />,
                 name: "Đồ án",
                 path: pathRoutes?.R1?.thesis,
                 element: <ThesisStudent />,
             },
             // Add Thesis
             {
-                //   icon: <HomeIcon {...icon} />,
                 name: "Add Thesis",
                 path: pathRoutes?.R1?.addThesis,
                 element: <AddThesisStudent type={"add"} />,
             },
             // Update Thesis
             {
-                //   icon: <HomeIcon {...icon} />,
                 name: "Update Thesis",
                 path: pathRoutes?.R1?.updateThesisId,
                 element: <AddThesisStudent type={"update"} />,
             },
             // Thesis Detail
             {
-                //   icon: <HomeIcon {...icon} />,
                 name: "Thesis Detail",
                 path: pathRoutes?.R1?.thesisDetailId,
                 element: <AddThesisStudent type={"detail"} />,
             },
-
         ],
     },
 ];

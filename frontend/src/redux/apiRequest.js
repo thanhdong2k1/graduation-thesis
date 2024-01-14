@@ -756,7 +756,7 @@ export const apiAdmin = {
                 {
                     name: data?.name,
                     description: data?.description,
-                    // founding: data?.founding,
+                    founding: data?.founding,
                     deanId: data?.dean
                         ? data?.dean[0]?.value
                             ? data?.dean[0]?.value
@@ -1738,6 +1738,7 @@ export const apiAdmin = {
         user,
         inputSearch,
         filterSearch,
+        filterDepartment,
         dispatch,
         axiosJWT,
     }) => {
@@ -1748,6 +1749,7 @@ export const apiAdmin = {
                 {
                     inputSearch: inputSearch,
                     filterSearch: filterSearch,
+                    filterDepartment: filterDepartment,
                 },
                 {
                     headers: {
@@ -1974,6 +1976,7 @@ export const apiAdmin = {
     getAllTopics: async ({
         user,
         classId,
+        thesisId,
         inputSearch,
         filterSearch,
         dispatch,
@@ -1986,6 +1989,7 @@ export const apiAdmin = {
                 {
                     inputSearch: inputSearch,
                     filterSearch: filterSearch,
+                    thesisId: thesisId,
                 },
                 {
                     headers: {
@@ -2221,8 +2225,8 @@ export const apiAdmin = {
                             ? data?.evaluationMethod[0]?.value
                             : data?.evaluationMethod?.value
                         : null,
-                    // startDate: data?.startDate,
-                    // endDate: data?.endDate,
+                    startDate: data?.startDate,
+                    endDate: data?.endDate,
                     validMark: data?.validMark,
                 },
                 {
@@ -3052,13 +3056,13 @@ export const apiLecturer = {
             }
         }
     },
-    importDeanTopics: async ({ user, data,departmentId, axiosJWT }) => {
+    importDeanTopics: async ({ user, data, departmentId, axiosJWT }) => {
         try {
             const res = await axiosJWT.post(
                 "/api/lecturer/import-dean-topics",
                 {
                     data: data,
-                    departmentId:departmentId
+                    departmentId: departmentId,
                 },
                 {
                     headers: {
@@ -3072,6 +3076,30 @@ export const apiLecturer = {
             if (error?.response?.status) {
                 return error?.response?.data;
             }
+        }
+    },
+    getStatisticDean: async ({ user, axiosJWT }) => {
+        try {
+            const res = await axiosJWT.get("/api/lecturer/statistic-dean", {
+                headers: {
+                    token: `Bearer ${user?.accessToken}`,
+                },
+            });
+            return res?.data;
+        } catch (error) {
+            return error?.response?.data;
+        }
+    },
+    getStatisticLecturer: async ({ user, axiosJWT }) => {
+        try {
+            const res = await axiosJWT.get("/api/lecturer/statistic-lecturer", {
+                headers: {
+                    token: `Bearer ${user?.accessToken}`,
+                },
+            });
+            return res?.data;
+        } catch (error) {
+            return error?.response?.data;
         }
     },
 };

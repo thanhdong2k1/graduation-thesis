@@ -19,9 +19,6 @@ module.exports = (sequelize, DataTypes) => {
       Student.hasMany(models.Thesis, {
         foreignKey: "studentId",
       });
-      Student.hasMany(models.Comment, {
-        foreignKey: "studentId",
-      });
 
       Student.belongsTo(models.Allcode, {
         foreignKey: "genderId",

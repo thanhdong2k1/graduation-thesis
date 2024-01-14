@@ -43,7 +43,7 @@ const ThesisLecturer = () => {
 
     // Handle
     const handleAdd = () => {
-        navigate(`../${pathRoutes.R1.addThesis}`, { replace: true });
+        navigate(`../${pathRoutes.R3.addThesis}`, { replace: true });
     };
     const handleImport = () => {
         // console.log("handleImport");
@@ -52,12 +52,12 @@ const ThesisLecturer = () => {
         // console.log("handleExport");
     };
     const handleEdit = (data) => {
-        navigate(`../${pathRoutes.R1.updateTopic}/${data.topicId}`, {
+        navigate(`../${pathRoutes.R3.updateTopic}/${data.topicId}`, {
             replace: true,
         });
     };
     const handleDetail = (data) => {
-        navigate(`../${pathRoutes.R1.topicDetail}/${data.topicId}`, {
+        navigate(`../${pathRoutes.R3.topicDetail}/${data.topicId}`, {
             replace: true,
         });
     };

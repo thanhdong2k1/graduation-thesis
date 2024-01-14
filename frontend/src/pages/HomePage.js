@@ -161,7 +161,8 @@ const HomePage = () => {
                                 </div>
                                 <div className="titleItem px-4 py-2">
                                     <span>
-                                        {`Thông báo hội đồng bảo vệ ${council?.name} (${council?.thesisSessionData?.name}) đã được kích hoạt.`}
+                                        {/* {`Thông báo hội đồng bảo vệ ${council?.name} (${council?.thesisSessionData?.name}) đã được kích hoạt.`} */}
+                                        Thông báo hội đồng bảo vệ <strong className="text-emerald-500"> {council?.name} ({council?.thesisSessionData?.name})</strong> đã được kích hoạt.
                                     </span>
                                 </div>
                             </div>

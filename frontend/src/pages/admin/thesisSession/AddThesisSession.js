@@ -22,7 +22,7 @@ import { useParams } from "react-router-dom";
 
 const AddThesisSession = ({ type }, params) => {
     let { id } = useParams();
-  // console.log("type", type, id);
+    // console.log("type", type, id);
 
     const currentUser = useSelector((state) => state?.auth?.currentUser);
     const dispatch = useDispatch();
@@ -50,18 +50,21 @@ const AddThesisSession = ({ type }, params) => {
         //     new Date(getValues("startDate")).toLocaleDateString("vi-VN")
         // );
 
-        let startDate =
-            data?.startDate && new Date(data?.startDate).toLocaleString("vi-VN");
-        let endDate =
-            data?.endDate && new Date(data?.endDate).toLocaleString("vi-VN");
+        const startDate =
+            data?.startDate &&
+            moment(data?.startDate, "DD/MM/YYYY").format("YYYY-MM-DD");
 
-      // console.log("startDate,endDate", startDate, endDate);
+        const endDate =
+            data?.endDate &&
+            moment(data?.endDate, "DD/MM/YYYY").format("YYYY-MM-DD");
+
+        // console.log("startDate,endDate", startDate, endDate);
         const datasend = {
             ...data,
             startDate: startDate,
             endDate: endDate,
         };
-      // console.log(data);
+        // console.log(data);
         type == "add"
             ? await apiAdmin
                   .apiAddThesisSession({
@@ -70,7 +73,7 @@ const AddThesisSession = ({ type }, params) => {
                       axiosJWT: axiosJWT,
                   })
                   .then((res) => {
-                      if (res?.errCode > 0 || res?.errCode < 0 ) {
+                      if (res?.errCode > 0 || res?.errCode < 0) {
                           // console.log(res);
                           toast.update(id, {
                               render: res?.errMessage,
@@ -113,7 +116,7 @@ const AddThesisSession = ({ type }, params) => {
                       axiosJWT: axiosJWT,
                   })
                   .then((res) => {
-                      if (res?.errCode > 0 || res?.errCode < 0 ) {
+                      if (res?.errCode > 0 || res?.errCode < 0) {
                           // console.log(res);
                           toast.update(id, {
                               render: res?.errMessage,
@@ -165,7 +168,7 @@ const AddThesisSession = ({ type }, params) => {
                     axiosJWT: axiosJWT,
                 })
                 .then((res) => {
-                    if (res?.errCode > 0 || res?.errCode < 0 ) {
+                    if (res?.errCode > 0 || res?.errCode < 0) {
                         toast.update(id, {
                             render: res?.errMessage,
                             type: "error",
@@ -175,12 +178,21 @@ const AddThesisSession = ({ type }, params) => {
                             pauseOnFocusLoss: true,
                         });
                     } else {
-                      // console.log(res);
+                        // console.log(res);
                         setValue("id", res?.result?.id);
                         setValue("name", res?.result?.name);
                         setValue("description", res?.result?.description);
-                        setValue("startDate", res?.result?.startDate);
-                        setValue("endDate", res?.result?.endDate);
+
+                        const formattedStartDate = res?.result?.startDate
+                            ? moment(res.result.startDate).format("DD/MM/YYYY")
+                            : "";
+                        setValue("startDate", formattedStartDate);
+                        
+                        const formattedEndDate = res?.result?.endDate
+                            ? moment(res.result.endDate).format("DD/MM/YYYY")
+                            : "";
+                        setValue("endDate", formattedEndDate);
+
                         setValue("validMark", res?.result?.validMark);
                         setValue(
                             "evaluationMethod",
@@ -190,7 +202,7 @@ const AddThesisSession = ({ type }, params) => {
                                     res?.result?.evaluationMethodId
                             )
                         );
-                      // console.log(getValues());
+                        // console.log(getValues());
                         toast.update(id, {
                             render: res?.errMessage,
                             type: "success",
@@ -219,7 +231,8 @@ const AddThesisSession = ({ type }, params) => {
     return (
         <div className="changeInformationDiv flex flex-col justify-center items-center gap-2">
             <div className=" font-semibold text-h1FontSize">
-                {type=="add"?"Thêm":type=="update"?"Sửa":"Chi tiết"} khóa luận
+                {type == "add" ? "Thêm" : type == "update" ? "Sửa" : "Chi tiết"}{" "}
+                khóa luận
             </div>
             <form
                 onSubmit={handleSubmit(onSubmit)}
@@ -294,10 +307,11 @@ const AddThesisSession = ({ type }, params) => {
                             name="evaluationMethod"
                             control={control}
                             {...register("evaluationMethod", {
-                                // required: "Full name is required",
+                                required: "Không được để trống",
                             })}
                             render={({ field }) => (
-                                <Select placeholder="Chọn..."
+                                <Select
+                                    placeholder="Chọn..."
                                     styles={customSelectStyles}
                                     {...field}
                                     options={codeEvaluationMethod}
@@ -322,7 +336,7 @@ const AddThesisSession = ({ type }, params) => {
                             step="0.1"
                             disabled={type == "detail" ? true : false}
                             {...register("validMark", {
-                                required: "Valid mark is required",
+                                required: "Không được để trống",
                             })}
                         />
                         {errors?.validMark?.type && (
@@ -340,29 +354,50 @@ const AddThesisSession = ({ type }, params) => {
                             name="startDate"
                             control={control}
                             {...register("startDate", {
-                                // required: "Full name is required",
+                                required: "Không được để trống",
                             })}
                             render={({ field: { onChange, value } }) => (
+                                // <DatePicker
+                                //     className={`input ${
+                                //         type == "detail" ? "disabled" : ""
+                                //     }`}
+                                //     disabled={type == "detail" ? true : false}
+                                //     dateFormat="H:mm dd/MM/yyyy"
+                                //     timeInputLabel="Time:"
+                                //     showTimeInput
+                                //     selected={
+                                //         value
+                                //             ? new Date(
+                                //                   moment(
+                                //                       value,
+                                //                       "H:mm DD/MM/YYYY"
+                                //                   ).toString()
+                                //               )
+                                //             : null
+                                //     }
+                                //     // closeOnScroll={true}
+                                //     onChange={onChange}
+                                // />
                                 <DatePicker
                                     className={`input ${
-                                        type == "detail" ? "disabled" : ""
+                                        type === "detail" ? "disabled" : ""
                                     }`}
-                                    disabled={type == "detail" ? true : false}
-                                    dateFormat="H:mm dd/MM/yyyy"
-                                    timeInputLabel="Time:"
-                                    showTimeInput
+                                    dateFormat="dd/MM/yyyy"
+                                    disabled={type === "detail"}
                                     selected={
                                         value
-                                            ? new Date(
-                                                  moment(
-                                                      value,
-                                                      "H:mm DD/MM/YYYY"
-                                                  ).toString()
-                                              )
+                                            ? moment(
+                                                  value,
+                                                  "DD/MM/YYYY"
+                                              ).toDate()
                                             : null
                                     }
-                                    // closeOnScroll={true}
-                                    onChange={onChange}
+                                    onChange={(date) => {
+                                        const formattedDate = date
+                                            ? moment(date).format("DD/MM/YYYY")
+                                            : "";
+                                        onChange(formattedDate);
+                                    }}
                                 />
                             )}
                         />
@@ -378,29 +413,30 @@ const AddThesisSession = ({ type }, params) => {
                             name="endDate"
                             control={control}
                             {...register("endDate", {
+                                required: "Không được để trống",
                                 // required: "Full name is required",
                             })}
                             render={({ field: { onChange, value } }) => (
                                 <DatePicker
                                     className={`input ${
-                                        type == "detail" ? "disabled" : ""
+                                        type === "detail" ? "disabled" : ""
                                     }`}
-                                    disabled={type == "detail" ? true : false}
-                                    dateFormat="H:mm dd/MM/yyyy"
-                                    timeInputLabel="Time:"
-                                    showTimeInput
+                                    dateFormat="dd/MM/yyyy"
+                                    disabled={type === "detail"}
                                     selected={
                                         value
-                                            ? new Date(
-                                                  moment(
-                                                      value,
-                                                      "H:mm DD/MM/YYYY"
-                                                  ).toString()
-                                              )
+                                            ? moment(
+                                                  value,
+                                                  "DD/MM/YYYY"
+                                              ).toDate()
                                             : null
                                     }
-                                    // closeOnScroll={true}
-                                    onChange={onChange}
+                                    onChange={(date) => {
+                                        const formattedDate = date
+                                            ? moment(date).format("DD/MM/YYYY")
+                                            : "";
+                                        onChange(formattedDate);
+                                    }}
                                 />
                             )}
                         />

@@ -921,17 +921,18 @@ const adminController = {
           where: { id: req?.params?.id },
         });
         console.log("req", req);
-        await db.Lecturer.update(
-          {
-            roleId: department?.deanId ? "R3" : "R2",
-          },
-          {
-            where: {
-              id: department?.deanId,
-              roleId: { [Op.ne]: "R1" },
+        department &&
+          (await db.Lecturer.update(
+            {
+              roleId: department?.deanId ? "R3" : "R2",
             },
-          }
-        );
+            {
+              where: {
+                id: department?.deanId,
+                roleId: { [Op.ne]: "R1" },
+              },
+            }
+          ));
         const result = await db.Department.update(
           {
             name: req?.body?.name,
@@ -942,34 +943,37 @@ const adminController = {
           { where: { id: req?.params?.id } }
         );
         if (result) {
-          const resultDean = await db.Lecturer.update(
-            {
-              roleId: req?.body?.deanId ? "R2" : "R3",
-              departmentId: req?.params?.id,
-            },
-            {
-              where: {
-                id: req?.body?.deanId,
-                roleId: { [Op.ne]: "R1" },
+          if (req?.body?.deanId) {
+            const resultDean = await db.Lecturer.update(
+              {
+                roleId: req?.body?.deanId ? "R2" : "R3",
+                departmentId: req?.params?.id,
               },
+              {
+                where: {
+                  id: req?.body?.deanId,
+                  roleId: { [Op.ne]: "R1" },
+                },
+              }
+            );
+            if (resultDean) {
+              return res.status(200).json({
+                errCode: 0,
+                errMessage:
+                  "Cập nhật dữ liệu thành công, vai trò người dùng đã thay đổi.",
+              });
+            } else {
+              return res.status(200).json({
+                errCode: 2,
+                errMessage:
+                  "Đã xảy ra lỗi trong quá trình thêm, vui lòng thử lại sau.",
+              });
             }
-          );
-          if (resultDean) {
-            return res.status(200).json({
-              errCode: 0,
-              errMessage:
-                "Cập nhật dữ liệu thành công, vai trò người dùng đã thay đổi.",
-            });
           } else {
-            return res.status(200).json({
-              errCode: 2,
-              errMessage:
-                "Đã xảy ra lỗi trong quá trình thêm, vui lòng thử lại sau.",
-            });
+            return res
+              .status(200)
+              .json({ errCode: 0, errMessage: "Cập nhật dữ liệu thành công." });
           }
-          return res
-            .status(200)
-            .json({ errCode: 0, errMessage: "Cập nhật dữ liệu thành công." });
         } else {
           return res.status(200).json({
             errCode: 2,
@@ -2796,6 +2800,12 @@ const adminController = {
         nest: true,
       };
 
+      if (req?.body?.thesisId) {
+        const topic = await db.Thesis.findOne({
+          where: { id: req?.body?.thesisId },
+        });
+        whereClause.id = topic?.topicId;
+      }
       if (Object.keys(whereClause).length > 0) {
         queryOptions.where = {
           [Op.or]: whereClause,
@@ -3203,10 +3213,28 @@ const adminController = {
           {
             model: db.Topic,
             as: "topicData",
+            include: [
+              {
+                model: db.Allcode,
+                as: "statusData",
+              },
+            ],
           },
           {
             model: db.Student,
             as: "studentData",
+            include: [
+              {
+                model: db.Class,
+                as: "classData",
+                include: [
+                  {
+                    model: db.Major,
+                    as: "majorData",
+                  },
+                ],
+              },
+            ],
           },
           {
             model: db.Council,
@@ -3226,11 +3254,34 @@ const adminController = {
         nest: true,
       };
 
+      console.log("req?.body", req?.body, whereClause);
+      let departmentSearch = req?.body?.filterDepartment
+        ? {
+            "$studentData.classData.majorData.departmentId$":
+              req?.body?.filterDepartment,
+          }
+        : null;
       if (Object.keys(whereClause).length > 0) {
+        if (!departmentSearch) {
+          queryOptions.where = {
+            [Op.or]: whereClause,
+          };
+        } else {
+          queryOptions.where = {
+            [Op.and]: {
+              [Op.or]: whereClause,
+              "$studentData.classData.majorData.departmentId$":
+                req?.body?.filterDepartment,
+            },
+          };
+        }
+      } else if (req?.body?.filterDepartment != 0) {
         queryOptions.where = {
-          [Op.or]: whereClause,
+          "$studentData.classData.majorData.departmentId$":
+            req?.body?.filterDepartment,
         };
       }
+      console.log(queryOptions);
 
       const result = await db.Thesis.findAndCountAll(queryOptions);
       // console.log(result);
@@ -3345,6 +3396,34 @@ const adminController = {
           councilStatusId: req?.body?.councilStatusId,
         });
         if (result) {
+          if (req?.body?.councilId) {
+            let councilDetails = await db.CouncilDetail.findAll({
+              where: {
+                councilId: req?.body?.councilId,
+              },
+            });
+            console.log("councilDetails", councilDetails);
+            await councilDetails?.map(async (position) => {
+              await db.Mark.bulkCreate(
+                [
+                  {
+                    councilDetailId: position?.id,
+                    thesisId: result?.dataValues?.id,
+                  },
+                ],
+                {
+                  upsertKeys: ["id"],
+                  updateOnDuplicate: ["councilDetailId", "thesisId"],
+                }
+              );
+            });
+          }
+          if (req?.body?.topicId) {
+            await db.Topic.update(
+              { statusId: "H3" },
+              { where: { id: req?.body?.topicId } }
+            );
+          }
           return res
             .status(200)
             .json({ errCode: 0, errMessage: "Thêm dữ liệu thành công." });
@@ -3395,6 +3474,34 @@ const adminController = {
           { where: { id: req?.params?.id } }
         );
         if (result) {
+          if (req?.body?.councilId) {
+            let councilDetails = await db.CouncilDetail.findAll({
+              where: {
+                councilId: req?.body?.councilId,
+              },
+            });
+            console.log("councilDetails", councilDetails);
+            await councilDetails?.map(async (position) => {
+              await db.Mark.bulkCreate(
+                [
+                  {
+                    councilDetailId: position?.id,
+                    thesisId: req?.params?.id,
+                  },
+                ],
+                {
+                  upsertKeys: ["id"],
+                  updateOnDuplicate: ["councilDetailId", "thesisId"],
+                }
+              );
+            });
+          }
+          if (req?.body?.topicId) {
+            await db.Topic.update(
+              { statusId: "H3" },
+              { where: { id: req?.body?.topicId } }
+            );
+          }
           return res
             .status(200)
             .json({ errCode: 0, errMessage: "Cập nhật dữ liệu thành công." });
@@ -3487,18 +3594,16 @@ const adminController = {
       const statisticTotalStudent = await db.Student.count();
       const statisticTotalLecturer = await db.Lecturer.count();
       // console.log(result);
-      return res
-        .status(200)
-        .json({
-          errCode: 0,
-          data: {
-            statisticTotalThesis,
-            statisticTotalStudent,
-            statisticThesisAvailabeResult,
-            statisticTotalLecturer,
-            statisticThesisSuccessResult
-          },
-        });
+      return res.status(200).json({
+        errCode: 0,
+        data: {
+          statisticTotalThesis,
+          statisticTotalStudent,
+          statisticThesisAvailabeResult,
+          statisticTotalLecturer,
+          statisticThesisSuccessResult,
+        },
+      });
     } catch (error) {
       return res.status(500).json({
         errCode: -1,

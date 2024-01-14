@@ -13,8 +13,11 @@ import { actionsRemove } from "../../utils/actionsTable";
 import { useLocation } from "react-router-dom";
 import pathRoutes from "../../utils/pathRoutes";
 import { routes } from "../../routes";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { TiWarningOutline } from "react-icons/ti";
+import { apiAdmin } from "../../redux/apiRequest";
+import { createAxios } from "../../utils/createInstance";
+import { logginSuccess } from "../../redux/authSlice";
 
 const Table = ({
     isImport,
@@ -29,10 +32,18 @@ const Table = ({
     handleExport,
     saveDataImport,
     btnAdd,
+    searchDepartment,
 }) => {
     console.log("tableData", tableData);
     // redux
     const currentUser = useSelector((state) => state?.auth?.currentUser);
+    const dispatch = useDispatch();
+    let axiosJWT = createAxios(currentUser, dispatch, logginSuccess);
+    const departments = useSelector((state) => state?.admin?.departments);
+    let codeDepartment = [{ value: 0, label: "Tất cả bộ môn" }];
+    departments?.map((v) => {
+        return codeDepartment.push({ value: v.id, label: `${v.name}` });
+    });
     const path = useLocation();
     const orderedPermissions = [
         "PERE", // Thứ tự ưu tiên PERE
@@ -199,6 +210,7 @@ const Table = ({
             )} ${new Date().toLocaleTimeString("vi-VN")}.xlsx`
         );
     }, [tableDataImport]);
+    console.log(typeof handleExport === "function");
     const exportFile = useCallback(() => {
         // console.log("export datasa", datas);
         const convertedItem = [];
@@ -253,14 +265,25 @@ const Table = ({
             }));
         }
     };
+
     const handleChangeFilter = (e) => {
         // console.log("handle limit", e);
+
         if (e) {
             setDefineTable((prevState) => ({
                 ...prevState,
                 filterSearch: e.value,
                 offset: 0,
                 currentPage: 1,
+            }));
+        }
+    };
+    const handleChangeFilterDepartment = (e) => {
+        // console.log("handle limit", e);
+        if (e) {
+            setDefineTable((prevState) => ({
+                ...prevState,
+                filterDepartment: e.value,
             }));
         }
     };
@@ -417,6 +440,13 @@ const Table = ({
 
     // Effect
     useEffect(() => {
+        if (searchDepartment) {
+            apiAdmin.getAllDepartments({
+                user: currentUser,
+                dispatch: dispatch,
+                axiosJWT: axiosJWT,
+            });
+        }
         setDefineTable((prevState) => ({
             ...prevState,
             filterSearch: filterSearch[0]?.value,
@@ -479,12 +509,6 @@ const Table = ({
             ...prevState,
             currentPage: 1,
         }));
-        // apiUser.getAllCouncils(
-        //     defineTable.inputSearch,
-        //     (defineTable.currentPage - 1) * defineTable.limit,
-        //     defineTable.limit,
-        //     dispatch
-        // );
     }, [defineTable.limit]);
 
     return (
@@ -532,42 +556,33 @@ const Table = ({
                                         }}
                                     />
                                 </div>
+                                {searchDepartment && (
+                                    <div className="w-[35%]">
+                                        <Select
+                                            placeholder="Chọn..."
+                                            styles={customSelectStyles}
+                                            className="basic-single media-max-md:text-smallFontSize h-[35px]"
+                                            classNamePrefix="select"
+                                            defaultValue={
+                                                codeDepartment &&
+                                                codeDepartment[0]
+                                            }
+                                            isRtl={isRtl}
+                                            name="color"
+                                            options={codeDepartment}
+                                            onChange={(e) => {
+                                                handleChangeFilterDepartment(e);
+                                            }}
+                                        />
+                                    </div>
+                                )}
                             </div>
 
                             <div className="rightHeaderTableDiv functionsModuleDiv flex justify-end gap-2">
                                 {currentUser?.roleId == "R1" ||
                                 currentUser?.roleId == "R2" ? (
                                     <>
-                                        <button
-                                            className="importDiv button"
-                                            onClick={exportFile}
-                                        >
-                                            <span>Xuất</span>
-                                            <TbTableExport className="icon" />
-                                        </button>
-                                        <button
-                                            className="importDiv button"
-                                            onClick={() => {
-                                                setShowModal(true);
-                                            }}
-                                        >
-                                            <span>Nhập</span>
-                                            <TbTableImport className="icon" />
-                                        </button>
-                                        <button
-                                            className="addDiv button"
-                                            onClick={handleAdd}
-                                        >
-                                            <span>Thêm</span>
-                                            <TbTablePlus className="icon" />
-                                        </button>
-                                    </>
-                                ) : currentUser?.permissions?.split(",")
-                                      ?.length > 0 ? (
-                                    currentUser?.permissions
-                                        ?.split(",")
-                                        ?.includes("PERF") ? (
-                                        <>
+                                        {handleExport && (
                                             <button
                                                 className="importDiv button"
                                                 onClick={exportFile}
@@ -575,6 +590,8 @@ const Table = ({
                                                 <span>Xuất</span>
                                                 <TbTableExport className="icon" />
                                             </button>
+                                        )}
+                                        {handleImport && (
                                             <button
                                                 className="importDiv button"
                                                 onClick={() => {
@@ -584,6 +601,8 @@ const Table = ({
                                                 <span>Nhập</span>
                                                 <TbTableImport className="icon" />
                                             </button>
+                                        )}
+                                        {handleAdd && (
                                             <button
                                                 className="addDiv button"
                                                 onClick={handleAdd}
@@ -591,6 +610,43 @@ const Table = ({
                                                 <span>Thêm</span>
                                                 <TbTablePlus className="icon" />
                                             </button>
+                                        )}
+                                    </>
+                                ) : currentUser?.permissions?.split(",")
+                                      ?.length > 0 ? (
+                                    currentUser?.permissions
+                                        ?.split(",")
+                                        ?.includes("PERF") ? (
+                                        <>
+                                            {handleExport && (
+                                                <button
+                                                    className="importDiv button"
+                                                    onClick={exportFile}
+                                                >
+                                                    <span>Xuất</span>
+                                                    <TbTableExport className="icon" />
+                                                </button>
+                                            )}
+                                            {handleImport && (
+                                                <button
+                                                    className="importDiv button"
+                                                    onClick={() => {
+                                                        setShowModal(true);
+                                                    }}
+                                                >
+                                                    <span>Nhập</span>
+                                                    <TbTableImport className="icon" />
+                                                </button>
+                                            )}
+                                            {handleAdd && (
+                                                <button
+                                                    className="addDiv button"
+                                                    onClick={handleAdd}
+                                                >
+                                                    <span>Thêm</span>
+                                                    <TbTablePlus className="icon" />
+                                                </button>
+                                            )}
                                         </>
                                     ) : (
                                         orderedPermissions?.map(
@@ -602,49 +658,55 @@ const Table = ({
                                                 ) {
                                                     if (permission === "PERE") {
                                                         return (
-                                                            <button
-                                                                className="importDiv button"
-                                                                onClick={
-                                                                    exportFile
-                                                                }
-                                                            >
-                                                                <span>
-                                                                    Xuất
-                                                                </span>
-                                                                <TbTableExport className="icon" />
-                                                            </button>
+                                                            handleExport && (
+                                                                <button
+                                                                    className="importDiv button"
+                                                                    onClick={
+                                                                        exportFile
+                                                                    }
+                                                                >
+                                                                    <span>
+                                                                        Xuất
+                                                                    </span>
+                                                                    <TbTableExport className="icon" />
+                                                                </button>
+                                                            )
                                                         );
                                                     }
                                                     if (permission === "PERI") {
                                                         return (
-                                                            <button
-                                                                className="importDiv button"
-                                                                onClick={() => {
-                                                                    setShowModal(
-                                                                        true
-                                                                    );
-                                                                }}
-                                                            >
-                                                                <span>
-                                                                    Nhập
-                                                                </span>
-                                                                <TbTableImport className="icon" />
-                                                            </button>
+                                                            handleImport && (
+                                                                <button
+                                                                    className="importDiv button"
+                                                                    onClick={() => {
+                                                                        setShowModal(
+                                                                            true
+                                                                        );
+                                                                    }}
+                                                                >
+                                                                    <span>
+                                                                        Nhập
+                                                                    </span>
+                                                                    <TbTableImport className="icon" />
+                                                                </button>
+                                                            )
                                                         );
                                                     }
                                                     if (permission === "PERC") {
                                                         return (
-                                                            <button
-                                                                className="addDiv button"
-                                                                onClick={
-                                                                    handleAdd
-                                                                }
-                                                            >
-                                                                <span>
-                                                                    Thêm
-                                                                </span>
-                                                                <TbTablePlus className="icon" />
-                                                            </button>
+                                                            handleAdd && (
+                                                                <button
+                                                                    className="addDiv button"
+                                                                    onClick={
+                                                                        handleAdd
+                                                                    }
+                                                                >
+                                                                    <span>
+                                                                        Thêm
+                                                                    </span>
+                                                                    <TbTablePlus className="icon" />
+                                                                </button>
+                                                            )
                                                         );
                                                     }
                                                 }
@@ -654,13 +716,15 @@ const Table = ({
                                         )
                                     )
                                 ) : btnAdd ? (
-                                    <button
-                                        className="addDiv button"
-                                        onClick={handleAdd}
-                                    >
-                                        <span>Thêm</span>
-                                        <TbTablePlus className="icon" />
-                                    </button>
+                                    handleAdd && (
+                                        <button
+                                            className="addDiv button"
+                                            onClick={handleAdd}
+                                        >
+                                            <span>Thêm</span>
+                                            <TbTablePlus className="icon" />
+                                        </button>
+                                    )
                                 ) : null}
                                 {/* {functionsModule && handleExport && (
                                     <button

@@ -160,7 +160,7 @@ const ThesisCouncilLecturer = () => {
                 data: data,
                 axiosJWT: axiosJWT,
             })
-            .then((res) => {
+            .then(async(res) => {
                 if (res?.errCode == 0) {
                     // console.log(res);
                     toast.update(id, {

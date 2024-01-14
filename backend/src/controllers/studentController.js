@@ -429,7 +429,7 @@ const studentController = {
 
   registerAdvisorById: async (req, res) => {
     try {
-      let result = await db.Thesis.findOne({
+      let thesisCompleted = await db.Thesis.findAll({
         where: {
           studentId: req?.user?.id,
         },
@@ -437,56 +437,99 @@ const studentController = {
         raw: true,
         nest: true,
       });
-      if (result) {
-        if (result.thesisAdvisorStatusId != "H3") {
-          result = await db.Thesis.update(
-            {
-              thesisAdvisorId: req?.params?.id,
-              thesisAdvisorStatusId: "H2",
-            },
-            { where: { studentId: req?.user?.id } }
-          );
-          if (result) {
+      let isCompleted = false;
+      thesisCompleted.map((thesis) => {
+        if (thesis.resultId == "RS1") {
+          isCompleted = true;
+        }
+      });
+      if (!isCompleted) {
+        const currentDate = new Date();
+
+        // Lấy thông tin về ngày, tháng và năm
+        const year = currentDate.getFullYear();
+        const month = String(currentDate.getMonth() + 1).padStart(2, "0");
+        const day = String(currentDate.getDate()).padStart(2, "0");
+
+        // Tạo chuỗi có định dạng "YYYY-MM-DD"
+        const formattedDate = `${year}-${month}-${day}`;
+
+        console.log(formattedDate);
+        let thesisSession = await db.ThesisSession.findOne({
+          where: {
+            startDate: { [Op.lte]: formattedDate },
+            endDate: { [Op.gte]: formattedDate },
+          },
+          order: [["createdAt", "DESC"]],
+          raw: true,
+          nest: true,
+        });
+        console.log("result", thesisSession);
+        let result = await db.Thesis.findOne({
+          where: {
+            studentId: req?.user?.id,
+            thesisSessionId: thesisSession?.id,
+          },
+        });
+        console.log("result", result);
+        if (result) {
+          if (result.thesisAdvisorStatusId != "H3") {
+            result = await db.Thesis.update(
+              {
+                thesisAdvisorId: req?.params?.id,
+                thesisAdvisorStatusId: "H2",
+              },
+              {
+                where: {
+                  studentId: req?.user?.id,
+                  thesisSessionId: thesisSession?.id,
+                },
+              }
+            );
+            if (result) {
+              return res.status(200).json({
+                errCode: 0,
+                errMessage:
+                  "Đăng ký giảng viên thành công, vui lòng chờ giảng viên xác nhận!",
+              });
+            } else {
+              return res.status(200).json({
+                errCode: 2,
+                errMessage:
+                  "Đã xảy ra lỗi trong quá trình đăng ký, vui lòng thử lại sau!",
+              });
+            }
+          } else {
             return res.status(200).json({
-              errCode: 0,
+              errCode: 1,
               errMessage:
-                "Đăng ký giảng viên thành công, vui lòng chờ giảng viên xác nhận!",
+                "Giảng viên đã xác nhận hướng dẫn, không thể đăng ký mới!",
             });
+          }
+        } else {
+          const result = await db.Thesis.create({
+            studentId: req?.user?.id,
+            thesisAdvisorId: req?.params?.id,
+            thesisAdvisorStatusId: "H2",
+            thesisSessionId: thesisSession?.id,
+          });
+          if (result) {
+            return res
+              .status(200)
+              .json({ errCode: 0, errMessage: "Thêm dữ liệu thành công!" });
           } else {
             return res.status(200).json({
               errCode: 2,
               errMessage:
-                "Đã xảy ra lỗi trong quá trình đăng ký, vui lòng thử lại sau!",
+                "Đã xảy ra lỗi trong quá trình thêm, vui lòng thử lại sau!",
             });
           }
-        } else {
-          return res.status(200).json({
-            errCode: 1,
-            errMessage:
-              "Giảng viên đã xác nhận hướng dẫn, không thể đăng ký mới!",
-          });
         }
       } else {
-        const result = await db.Thesis.create({
-          startDate: req?.body?.startDate,
-          complateDate: req?.body?.complateDate,
-          thesisStartDate: req?.body?.thesisStartDate,
-          thesisEndDate: req?.body?.thesisEndDate,
-          studentId: req?.user?.id,
-          thesisAdvisorId: req?.params?.id,
-          thesisAdvisorStatusId: "H2",
+        return res.status(200).json({
+          errCode: -1,
+          errMessage: "Sinh viên đã hoàn thành tốt nghiệp!",
         });
-        if (result) {
-          return res
-            .status(200)
-            .json({ errCode: 0, errMessage: "Thêm dữ liệu thành công!" });
-        } else {
-          return res.status(200).json({
-            errCode: 2,
-            errMessage:
-              "Đã xảy ra lỗi trong quá trình thêm, vui lòng thử lại sau!",
-          });
-        }
       }
     } catch (error) {
       return res.status(500).json({
@@ -914,26 +957,26 @@ const studentController = {
         // nest: true,
       });
       let student = await db.Student.findOne({
-            where: {
-              id: req?.user?.id,
-            },
+        where: {
+          id: req?.user?.id,
+        },
+        include: [
+          {
+            model: db.Class,
+            as: "classData",
+            // attributes: ["name"],
             include: [
               {
-                model: db.Class,
-                as: "classData",
+                model: db.Major,
+                as: "majorData",
                 // attributes: ["name"],
-                include: [
-                  {
-                    model: db.Major,
-                    as: "majorData",
-                    // attributes: ["name"],
-                  },
-                ],
               },
             ],
-            raw: true,
-            // nest: true,
-          });
+          },
+        ],
+        raw: true,
+        // nest: true,
+      });
       if (thesis) {
         if (thesis.thesisAdvisorStatusId == "H3") {
           if (thesis["topicData.statusId"] == "H3") {

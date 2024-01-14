@@ -86,7 +86,7 @@ const StudentChangePassword = () => {
             >
                 {/* <div>
                     <label className="labelInput">
-                        Old Password
+                        Mật khẩu cũ
                     </label>
                     <input
                         className="input"
@@ -102,7 +102,7 @@ const StudentChangePassword = () => {
                 </div>
                 <div>
                     <label className="labelInput">
-                        New Password
+                        Mật khẩu mới
                     </label>
                     <input
                         className="input"
@@ -118,7 +118,7 @@ const StudentChangePassword = () => {
                 </div>
                 <div>
                     <label className="labelInput">
-                        Confirm Password
+                        Nhập lại mật khẩu
                     </label>
                     <input
                         className="input"
@@ -138,7 +138,7 @@ const StudentChangePassword = () => {
                     )}
                 </div> */}
                 <div className="w-full">
-                    <label className="labelInput">Old Password</label>
+                    <label className="labelInput">Mật khẩu cũ</label>
                     <div className="input flex justify-between p-2 bg-whiteColor rounded-lg items-center w-full">
                         <input
                             type={`${showPassword1 ? "text" : "password"}`}
@@ -146,7 +146,7 @@ const StudentChangePassword = () => {
                             placeholder=""
                             className="bg-transparent outline-none border-none w-full media-max-md:w-full"
                             {...register("oldPassword", {
-                                required: "Old Password is required",
+                                required: "Mật khẩu cũ is required",
                             })}
                         />
                         {showPassword1 ? (
@@ -172,7 +172,7 @@ const StudentChangePassword = () => {
                     )}
                 </div>
                 <div className="w-full">
-                    <label className="labelInput">New Password</label>
+                    <label className="labelInput">Mật khẩu mới</label>
                     <div className="input flex justify-between p-2 bg-whiteColor rounded-lg items-center w-full">
                         <input
                             type={`${showPassword2 ? "text" : "password"}`}
@@ -180,7 +180,7 @@ const StudentChangePassword = () => {
                             placeholder=""
                             className="bg-transparent outline-none border-none w-full media-max-md:w-full"
                             {...register("newPassword", {
-                                required: "New Password is required",
+                                required: "Mật khẩu mới is required",
                             })}
                         />
                         {showPassword2 ? (
@@ -206,7 +206,7 @@ const StudentChangePassword = () => {
                     )}
                 </div>
                 <div className="w-full">
-                    <label className="labelInput">Confirm Password</label>
+                    <label className="labelInput">Nhập lại mật khẩu</label>
                     <div className="input flex justify-between p-2 bg-whiteColor rounded-lg items-center w-full">
                         <input
                             type={`${showPassword3 ? "text" : "password"}`}
@@ -214,7 +214,7 @@ const StudentChangePassword = () => {
                             placeholder=""
                             className="bg-transparent outline-none border-none w-full media-max-md:w-full"
                             {...register("confirmPassword", {
-                                required: "Confirm Password is required",
+                                required: "Nhập lại mật khẩu is required",
                                 validate: (value) => {
                                     const {newPassword} = getValues();
                                     return value == newPassword || "The password is not the same!";

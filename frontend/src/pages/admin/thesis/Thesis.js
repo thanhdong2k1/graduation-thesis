@@ -27,10 +27,11 @@ const Thesis = () => {
     const currentUser = useSelector((state) => state.auth.currentUser);
     let axiosJWT = createAxios(currentUser, dispatch, logginSuccess);
 
-  // console.log("theses", theses);
+    // console.log("theses", theses);
     const [defineTable, setDefineTable] = useState({
         inputSearch: "",
         filterSearch: "",
+        filterDepartment: "",
         isSearched: false,
         offset: 0,
         limit: 5,
@@ -45,10 +46,10 @@ const Thesis = () => {
         navigate(`../${pathRoutes.R1.addThesis}`, { replace: true });
     };
     const handleImport = () => {
-      // console.log("handleImport");
+        // console.log("handleImport");
     };
     const handleExport = () => {
-      // console.log("handleExport");
+        // console.log("handleExport");
     };
     const handleEdit = (data) => {
         navigate(`../${pathRoutes.R1.updateThesis}/${data.id}`, {
@@ -62,7 +63,7 @@ const Thesis = () => {
     };
 
     const onDelete = (data) => {
-      // console.log("onDelete", data);
+        // console.log("onDelete", data);
         setShowModal(true);
         setResult(data);
     };
@@ -91,10 +92,11 @@ const Thesis = () => {
                         user: currentUser,
                         inputSearch: defineTable.inputSearch,
                         filterSearch: defineTable.filterSearch,
+                        filterDepartment: defineTable.filterDepartment,
                         dispatch: dispatch,
                         axiosJWT: axiosJWT,
                     });
-                } else if (res?.errCode > 0 || res?.errCode < 0 ) {
+                } else if (res?.errCode > 0 || res?.errCode < 0) {
                     // console.log(res);
                     toast.update(id, {
                         render: res?.errMessage,
@@ -116,7 +118,7 @@ const Thesis = () => {
                 }
             })
             .catch((err) => {
-              // console.log(err);
+                // console.log(err);
                 toast.update(id, {
                     render: "Đã xảy ra lỗi, vui lòng thử lại sau",
                     type: "error",
@@ -167,10 +169,11 @@ const Thesis = () => {
                         user: currentUser,
                         inputSearch: defineTable.inputSearch,
                         filterSearch: defineTable.filterSearch,
+                        filterDepartment: defineTable.filterDepartment,
                         dispatch: dispatch,
                         axiosJWT: axiosJWT,
                     });
-                } else if (res?.errCode > 0 || res?.errCode < 0 ) {
+                } else if (res?.errCode > 0 || res?.errCode < 0) {
                     // console.log(res);
                     toast.update(id, {
                         render: res?.errMessage,
@@ -192,7 +195,7 @@ const Thesis = () => {
                 }
             })
             .catch((err) => {
-              // console.log(err);
+                // console.log(err);
                 toast.update(id, {
                     render: "Đã xảy ra lỗi, vui lòng thử lại sau",
                     type: "error",
@@ -241,6 +244,15 @@ const Thesis = () => {
             columnData: "thesisAdvisorData.fullName",
         },
         {
+            header: "XN hướng dẫn",
+            width: "w-[300px]",
+            maxWidth: "max-w-[300px]",
+            column: "thesisAdvisorStatusId",
+            columnData: "thesisAdvisorStatusData.valueVi",
+            isStatus: true,
+            // actions: actionsDetail(handleDetail),
+        },
+        {
             header: "Tên đề tài",
             width: "w-[300px]",
             maxWidth: "max-w-[300px]",
@@ -248,11 +260,11 @@ const Thesis = () => {
             columnData: "topicData.name",
         },
         {
-            header: "Giảng viên xác nhận",
+            header: "XN đề tài",
             width: "w-[300px]",
             maxWidth: "max-w-[300px]",
-            column: "thesisAdvisorStatusId",
-            columnData: "thesisAdvisorStatusData.valueVi",
+            column: "statusId",
+            columnData: "topicData.statusData.valueVi",
             isStatus: true,
             // actions: actionsDetail(handleDetail),
         },
@@ -280,7 +292,7 @@ const Thesis = () => {
             // actions: actionsDetail(handleDetail),
         },
         {
-            header: "Tổng điểm hội đồng",
+            header: "Điểm ĐATN",
             width: "w-[300px]",
             maxWidth: "max-w-[300px]",
             column: "totalScore",
@@ -293,34 +305,6 @@ const Thesis = () => {
             columnData: "resultData.valueVi",
             isStatus: true,
             // actions: actionsDetail(handleDetail),
-        },
-        {
-            header: "Ngày thực hiện",
-            width: "w-[300px]",
-            maxWidth: "max-w-[300px]",
-            column: "startDate",
-            hide: true,
-        },
-        {
-            header: "Hạn thực hiện",
-            width: "w-[300px]",
-            maxWidth: "max-w-[300px]",
-            column: "complateDate",
-            hide: true,
-        },
-        {
-            header: "Ngày chấm và bảo vệ",
-            width: "w-[300px]",
-            maxWidth: "max-w-[300px]",
-            column: "thesisStartDate",
-            hide: true,
-        },
-        {
-            header: "Hạn chấm và bảo vệ",
-            width: "w-[300px]",
-            maxWidth: "max-w-[300px]",
-            column: "thesisEndDate",
-            hide: true,
         },
         // startDate,
         // complateDate,
@@ -363,6 +347,7 @@ const Thesis = () => {
             user: currentUser,
             inputSearch: defineTable.inputSearch,
             filterSearch: defineTable.filterSearch,
+            filterDepartment: defineTable.filterDepartment,
             dispatch: dispatch,
             axiosJWT: axiosJWT,
         });
@@ -374,6 +359,7 @@ const Thesis = () => {
             user: currentUser,
             inputSearch: defineTable.inputSearch,
             filterSearch: defineTable.filterSearch,
+            filterDepartment: defineTable.filterDepartment,
             dispatch: dispatch,
             axiosJWT: axiosJWT,
         });
@@ -382,7 +368,7 @@ const Thesis = () => {
             isSearched: false,
             currentPage: 1,
         }));
-    }, [defineTable.isSearched == true, defineTable.filterSearch]);
+    }, [defineTable.isSearched == true, defineTable.filterSearch, defineTable.filterDepartment]);
 
     useEffect(() => {
         setDefineTable((prevState) => ({
@@ -475,10 +461,11 @@ const Thesis = () => {
             <div>
                 <Table
                     handleAdd={handleAdd}
-                    handleImport={handleImport}
+                    // handleImport={handleImport}
                     saveDataImport={saveDataImport}
                     handleExport={handleExport}
                     defineTable={defineTable}
+                    searchDepartment={true}
                     setDefineTable={setDefineTable}
                     tableData={tableData}
                     datas={theses}

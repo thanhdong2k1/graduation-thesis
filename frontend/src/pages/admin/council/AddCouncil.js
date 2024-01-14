@@ -23,7 +23,7 @@ import { MdAdd } from "react-icons/md";
 
 const AddCouncil = ({ type }, params) => {
     let { id } = useParams();
-  // console.log("type", type, id);
+    // console.log("type", type, id);
 
     const currentUser = useSelector((state) => state?.auth?.currentUser);
     const dispatch = useDispatch();
@@ -40,7 +40,10 @@ const AddCouncil = ({ type }, params) => {
         return { value: v.id, label: `${v.id} | ${v.name}` };
     });
     let codeTheses = theses?.map((v) => {
-        return { value: v.id, label: `${v.topicData.name} | SV: ${v.studentData.fullName} | GV: ${v.thesisAdvisorData.fullName}` };
+        return {
+            value: v.id,
+            label: `${v.topicData.name} | SV: ${v.studentData.fullName} | GV: ${v.thesisAdvisorData.fullName}`,
+        };
     });
     const [isRtl, setIsRtl] = useState(false);
 
@@ -54,131 +57,133 @@ const AddCouncil = ({ type }, params) => {
         reset,
     } = useForm();
     const onSubmit = async (data) => {
-        const id = toast.loading("Vui lòng đợi...");
-      // console.log(data, councilDetails, thesesDetails);
-        let councilDetailsFilter = [];
-        councilDetails?.map((item) => {
-            councilDetailsFilter?.push({
-                id: item?.id,
-                positionId: item?.positionId?.value,
-                lecturerId: item?.lecturerId?.value,
-                // positionId: item?.filter(
-                //     (value) =>
-                //         value?.value == res?.result?.positionId
-                // )
+        if (!hasDuplicateThesis && !hasDuplicatePosition) {
+            const id = toast.loading("Vui lòng đợi...");
+            // console.log(data, councilDetails, thesesDetails);
+            let councilDetailsFilter = [];
+            councilDetails?.map((item) => {
+                councilDetailsFilter?.push({
+                    id: item?.id,
+                    positionId: item?.positionId?.value,
+                    lecturerId: item?.lecturerId?.value,
+                    // positionId: item?.filter(
+                    //     (value) =>
+                    //         value?.value == res?.result?.positionId
+                    // )
+                });
             });
-        });
-        let thesesDetailsFilter = [];
+            let thesesDetailsFilter = [];
 
-        thesesDetails?.map((item) => {
-            thesesDetailsFilter?.push({
-                id: item?.id,
-                thesisId: item?.thesisId?.value,
-                // positionId: item?.filter(
-                //     (value) =>
-                //         value?.value == res?.result?.positionId
-                // )
+            thesesDetails?.map((item) => {
+                thesesDetailsFilter?.push({
+                    id: item?.id,
+                    thesisId: item?.thesisId?.value,
+                    // positionId: item?.filter(
+                    //     (value) =>
+                    //         value?.value == res?.result?.positionId
+                    // )
+                });
             });
-        });
-      // console.log("councilDetailsFilter", councilDetailsFilter);
-        type == "add"
-            ? await apiAdmin
-                  .apiAddCouncil({
-                      user: currentUser,
-                      data: data,
-                      axiosJWT: axiosJWT,
-                      councilDetails: councilDetailsFilter,
-                      thesesDetails: thesesDetailsFilter,
-                  })
-                  .then((res) => {
-                      // // console.log(res);
-                      if (res?.errCode > 0 || res?.errCode < 0) {
-                          // console.log(res);
+            // console.log("councilDetailsFilter", councilDetailsFilter);
+            type == "add"
+                ? await apiAdmin
+                      .apiAddCouncil({
+                          user: currentUser,
+                          data: data,
+                          axiosJWT: axiosJWT,
+                          councilDetails: councilDetailsFilter,
+                          thesesDetails: thesesDetailsFilter,
+                      })
+                      .then((res) => {
+                          // // console.log(res);
+                          if (res?.errCode > 0 || res?.errCode < 0) {
+                              // console.log(res);
+                              toast.update(id, {
+                                  render: res?.errMessage,
+                                  type: "error",
+                                  isLoading: false,
+                                  closeButton: true,
+                                  autoClose: 1500,
+                                  pauseOnFocusLoss: true,
+                              });
+                              fetchData();
+                          } else {
+                              toast.update(id, {
+                                  render: res?.errMessage,
+                                  type: "success",
+                                  isLoading: false,
+                                  closeButton: true,
+                                  autoClose: 1500,
+                                  pauseOnFocusLoss: true,
+                              });
+                              setValue("thesisSession", "");
+                              setValue("status", "");
+                              reset();
+                              fetchData();
+                          }
+                          //   fetchData();
+                      })
+                      .catch((error) => {
+                          // console.log(error);
                           toast.update(id, {
-                              render: res?.errMessage,
+                              render: "Đã xảy ra lỗi, vui lòng thử lại sau",
                               type: "error",
                               isLoading: false,
                               closeButton: true,
                               autoClose: 1500,
                               pauseOnFocusLoss: true,
                           });
-                          fetchData();
-                      } else {
-                          toast.update(id, {
-                              render: res?.errMessage,
-                              type: "success",
-                              isLoading: false,
-                              closeButton: true,
-                              autoClose: 1500,
-                              pauseOnFocusLoss: true,
-                          });
-                          setValue("thesisSession", "");
-                          setValue("status", "");
-                          reset();
-                          fetchData();
-                      }
-                      //   fetchData();
-                  })
-                  .catch((error) => {
-                    // console.log(error);
-                      toast.update(id, {
-                          render: "Đã xảy ra lỗi, vui lòng thử lại sau",
-                          type: "error",
-                          isLoading: false,
-                          closeButton: true,
-                          autoClose: 1500,
-                          pauseOnFocusLoss: true,
-                      });
-                  })
-            : await apiAdmin
-                  .apiUpdateCouncil({
-                      user: currentUser,
-                      data: data,
-                      axiosJWT: axiosJWT,
-                      councilDetails: councilDetailsFilter,
-                      thesesDetails: thesesDetailsFilter,
-                  })
-                  .then((res) => {
-                    // console.log(res);
-                      if (res?.errCode > 0 || res?.errCode < 0) {
+                      })
+                : await apiAdmin
+                      .apiUpdateCouncil({
+                          user: currentUser,
+                          data: data,
+                          axiosJWT: axiosJWT,
+                          councilDetails: councilDetailsFilter,
+                          thesesDetails: thesesDetailsFilter,
+                      })
+                      .then((res) => {
                           // console.log(res);
+                          if (res?.errCode > 0 || res?.errCode < 0) {
+                              // console.log(res);
+                              toast.update(id, {
+                                  render: res?.errMessage,
+                                  type: "error",
+                                  isLoading: false,
+                                  closeButton: true,
+                                  autoClose: 1500,
+                                  pauseOnFocusLoss: true,
+                              });
+                              fetchData();
+                          } else {
+                              // console.log(res);
+                              toast.update(id, {
+                                  render: res?.errMessage,
+                                  type: "success",
+                                  isLoading: false,
+                                  closeButton: true,
+                                  autoClose: 1500,
+                                  pauseOnFocusLoss: true,
+                              });
+                              //   setValue("thesisSession", "");
+                              //   setValue("status", "");
+                              //   reset();
+                              fetchData();
+                          }
+                      })
+                      .catch((error) => {
+                          // console.log(error);
                           toast.update(id, {
-                              render: res?.errMessage,
+                              render: "Đã xảy ra lỗi, vui lòng thử lại sau",
                               type: "error",
                               isLoading: false,
                               closeButton: true,
                               autoClose: 1500,
                               pauseOnFocusLoss: true,
                           });
-                          fetchData();
-                        } else {
-                          // console.log(res);
-                          toast.update(id, {
-                              render: res?.errMessage,
-                              type: "success",
-                              isLoading: false,
-                              closeButton: true,
-                              autoClose: 1500,
-                              pauseOnFocusLoss: true,
-                          });
-                          //   setValue("thesisSession", "");
-                          //   setValue("status", "");
-                          //   reset();
-                          fetchData();
-                      }
-                  })
-                  .catch((error) => {
-                    // console.log(error);
-                      toast.update(id, {
-                          render: "Đã xảy ra lỗi, vui lòng thử lại sau",
-                          type: "error",
-                          isLoading: false,
-                          closeButton: true,
-                          autoClose: 1500,
-                          pauseOnFocusLoss: true,
                       });
-                  });
-        fetchData();
+            fetchData();
+        }
     };
     async function fetchData() {
         try {
@@ -189,7 +194,7 @@ const AddCouncil = ({ type }, params) => {
                     axiosJWT: axiosJWT,
                 })
                 .then((res) => {
-                  // console.log(res);
+                    // console.log(res);
                     let filter = [];
                     res?.result?.map((item) => {
                         filter?.push({
@@ -210,7 +215,7 @@ const AddCouncil = ({ type }, params) => {
                     setCouncilDetails(filter);
                 })
                 .catch((error) => {
-                  // console.log(error);
+                    // console.log(error);
                 });
             apiAdmin
                 .getAllThesesNotDispatch({
@@ -220,7 +225,7 @@ const AddCouncil = ({ type }, params) => {
                     inputSearch: id,
                 })
                 .then((res) => {
-                  // console.log(res);
+                    // console.log(res);
                     let filterThesis = [];
                     res?.theses?.map((item) => {
                         codeTheses.push({
@@ -239,11 +244,11 @@ const AddCouncil = ({ type }, params) => {
                         });
                     });
 
-                  // console.log(filterThesis, codeTheses);
+                    // console.log(filterThesis, codeTheses);
                     setThesesDetails(filterThesis);
                 })
                 .catch((error) => {
-                  // console.log(error);
+                    // console.log(error);
                 });
         } catch (e) {
             console.error(e);
@@ -287,7 +292,7 @@ const AddCouncil = ({ type }, params) => {
                             pauseOnFocusLoss: true,
                         });
                     } else {
-                      // console.log(res);
+                        // console.log(res);
                         setValue("id", res?.result?.id);
                         setValue("name", res?.result?.name);
                         setValue("description", res?.result?.description);
@@ -342,14 +347,14 @@ const AddCouncil = ({ type }, params) => {
                 lecturerId: "",
             },
         ]);
-      // console.log(councilDetails);
+        // console.log(councilDetails);
     };
 
     const removeItemPosition = async (index, data) => {
         const updatedItems = [...councilDetails];
         updatedItems.splice(index, 1);
         if (data.hasOwnProperty("id")) {
-          // console.log(index, data);
+            // console.log(index, data);
             const id = toast.loading("Vui lòng đợi...");
             await apiAdmin
                 .apiDeleteCouncilDetail({
@@ -358,7 +363,7 @@ const AddCouncil = ({ type }, params) => {
                     axiosJWT: axiosJWT,
                 })
                 .then((res) => {
-                  // console.log(res);
+                    // console.log(res);
                     if (res?.errCode > 0 || res?.errCode < 0) {
                         // console.log(res);
                         toast.update(id, {
@@ -386,7 +391,7 @@ const AddCouncil = ({ type }, params) => {
                     fetchData();
                 })
                 .catch((error) => {
-                  // console.log(error);
+                    // console.log(error);
                     toast.update(id, {
                         render: "Đã xảy ra lỗi, vui lòng thử lại sau",
                         type: "error",
@@ -407,7 +412,9 @@ const AddCouncil = ({ type }, params) => {
 
         setCouncilDetails(updatedItems);
     };
-
+    const [hasDuplicateThesis, setHasDuplicateThesis] = useState(false);
+    const [hasThesisNotPosition, setHasThesisNotPosition] = useState(false);
+    const [hasDuplicatePosition, setHasDuplicatePosition] = useState(false);
     const addItemThesis = (level) => {
         setThesesDetails([
             ...thesesDetails,
@@ -415,13 +422,13 @@ const AddCouncil = ({ type }, params) => {
                 thesisId: "",
             },
         ]);
-      // console.log(thesesDetails);
+        // console.log(thesesDetails);
     };
 
     const removeItemThesis = (index) => {
         const updatedItems = [...thesesDetails];
         updatedItems.splice(index, 1);
-      // console.log("filterThesis", codeTheses);
+        // console.log("filterThesis", codeTheses);
         setThesesDetails(updatedItems);
     };
 
@@ -429,7 +436,7 @@ const AddCouncil = ({ type }, params) => {
         const updatedItems = [...thesesDetails];
         updatedItems[index][field] = value;
         updatedItems[index][field] = value;
-      // console.log("filterThesis", codeTheses);
+        // console.log("filterThesis", codeTheses);
         setThesesDetails(updatedItems);
     };
     // useEffect(() => {
@@ -454,6 +461,33 @@ const AddCouncil = ({ type }, params) => {
     //         ]);
     //     });
     // }, [councilDetails]);
+    useEffect(() => {
+        const isDuplicateThesis = thesesDetails.some((item, index) => {
+            const currentIndex = thesesDetails.findIndex(
+                (i) =>
+                    JSON.stringify(i.thesisId) === JSON.stringify(item.thesisId)
+            );
+            return currentIndex !== index;
+        });
+        console.log("isDuplicateThesis", isDuplicateThesis);
+        setHasDuplicateThesis(isDuplicateThesis);
+    }, [thesesDetails]);
+    useEffect(() => {
+        setHasThesisNotPosition(false);
+        const isDuplicatePosition = councilDetails.some((item, index) => {
+            if (!item.positionId && !hasThesisNotPosition) {
+                setHasThesisNotPosition(true);
+            }
+            const currentIndex = councilDetails.findIndex(
+                (i) =>
+                    JSON.stringify(i.lecturerId) ===
+                    JSON.stringify(item.lecturerId)
+            );
+            return currentIndex !== index;
+        });
+        console.log("isDuplicatePosition", isDuplicatePosition);
+        setHasDuplicatePosition(isDuplicatePosition);
+    }, [councilDetails]);
     return (
         <div className="changeInformationDiv flex flex-col justify-center items-center gap-2">
             <div className=" font-semibold text-h1FontSize">
@@ -706,15 +740,30 @@ const AddCouncil = ({ type }, params) => {
                     ))}
 
                 {type != "detail" && (
-                    <div className="flex justify-end items-center gap-2">
-                        <div
-                            className="button gap-1"
-                            onClick={() => addItemPosition(1)}
-                        >
-                            <MdAdd className="" />
-                            <span>Thêm chức vụ</span>
+                    <>
+                        {(hasDuplicatePosition || hasThesisNotPosition) && (
+                            <p className="text-normal text-red-500">
+                                {hasDuplicatePosition && hasThesisNotPosition
+                                    ? "Có thành viên đã bị trùng lặp và chưa chọn chức vụ"
+                                    : hasDuplicatePosition &&
+                                      !hasThesisNotPosition
+                                    ? "Có thành viên đã bị trùng lặp"
+                                    : !hasDuplicatePosition &&
+                                      hasThesisNotPosition
+                                    ? "Chưa chọn chức vụ"
+                                    : null}
+                            </p>
+                        )}
+                        <div className="flex justify-end items-center gap-2">
+                            <div
+                                className="button gap-1"
+                                onClick={() => addItemPosition(1)}
+                            >
+                                <MdAdd className="" />
+                                <span>Thêm chức vụ</span>
+                            </div>
                         </div>
-                    </div>
+                    </>
                 )}
 
                 {thesesDetails &&
@@ -727,7 +776,7 @@ const AddCouncil = ({ type }, params) => {
                                 {index == 0 && (
                                     <>
                                         <label className="labelInput flex justify-between">
-                                            <span>Thesis</span>
+                                            <span>Đồ án</span>
                                             {/* <span>Total: {totalScore}</span> */}
                                         </label>
                                     </>
@@ -752,24 +801,6 @@ const AddCouncil = ({ type }, params) => {
                                             )
                                         }
                                     />
-                                    {/* <div
-                                        className="button"
-                                        onClick={() => moveUpItem(index)}
-                                    >
-                                        <HiArrowUp className="hover:text-PrimaryColor" />
-                                    </div>
-                                    <div
-                                        className="button"
-                                        onClick={() => moveDownItem(index)}
-                                    >
-                                        <HiArrowDown className="hover:text-PrimaryColor" />
-                                    </div>
-                                    <div
-                                        className="button"
-                                        onClick={() => removeItemThesis(index)}
-                                    >
-                                        <FaRegTrashAlt className="hover:text-PrimaryColor" />
-                                    </div> */}
                                     {type != "detail" && (
                                         <div
                                             className="button"
@@ -782,24 +813,26 @@ const AddCouncil = ({ type }, params) => {
                                     )}
                                 </div>
                             </div>
-                            {/* {errors?.weightCriteria?.type && (
-                                <p className=" text-normal text-red-500">
-                                    {errors?.weightCriteria?.message}
-                                </p>
-                            )} */}
                         </div>
                     ))}
 
                 {type != "detail" && (
-                    <div className="flex justify-end items-center gap-2">
-                        <div
-                            className="button gap-1"
-                            onClick={() => addItemThesis(1)}
-                        >
-                            <MdAdd className="" />
-                            <span>Thêm đồ án</span>
+                    <>
+                        {hasDuplicateThesis && (
+                            <p className="text-normal text-red-500">
+                                Đồ án đã bị trùng lặp
+                            </p>
+                        )}
+                        <div className="flex justify-end items-center gap-2">
+                            <div
+                                className="button gap-1"
+                                onClick={() => addItemThesis(1)}
+                            >
+                                <MdAdd className="" />
+                                <span>Thêm đồ án</span>
+                            </div>
                         </div>
-                    </div>
+                    </>
                 )}
                 <ButtonConfirm type={type} />
             </form>

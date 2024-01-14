@@ -26,11 +26,6 @@ module.exports = (sequelize, DataTypes) => {
         onDelete: "SET NULL",
       });
 
-      Lecturer.hasMany(models.Comment, {
-        foreignKey: "lecturerId",
-        onDelete: "SET NULL",
-      });
-
       Lecturer.belongsTo(models.Allcode, {
         foreignKey: "genderId",
         targetKey: "code",

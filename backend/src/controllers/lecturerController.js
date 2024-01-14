@@ -1072,7 +1072,7 @@ const lecturerController = {
           console.log(!thesis.reportFile);
           let result = await db.Thesis.update(
             {
-              advisorMark: req?.body?.advisorMark,
+              advisorMark: req?.body?.data?.advisorMark,
             },
             { where: { id: req?.params?.id } }
           );
@@ -4973,6 +4973,202 @@ const lecturerController = {
       return res.status(500).json({
         errCode: -1,
         errMessage: "Dữ liệu không mong muốn, thử lại sau hoặc dữ liệu khác!",
+      });
+    }
+  },
+  statisticDean: async (req, res) => {
+    try {
+      const department = await db.Lecturer.findOne({
+        where: { id: req?.user?.id },
+      });
+      const statisticTotalThesisDeparment = await db.Thesis.count({
+        where: {
+          "$studentData.classData.majorData.departmentId$":
+            department.departmentId,
+        },
+        include: [
+          {
+            model: db.Student,
+            as: "studentData",
+            include: [
+              {
+                model: db.Class,
+                as: "classData",
+                include: [{ model: db.Major, as: "majorData" }],
+              },
+            ],
+          },
+        ],
+      });
+      const statisticThesisDepartmentAvailabeResult = await db.Thesis.count({
+        where: {
+          resultId: { [Op.ne]: null },
+          thesisAdvisorId: req?.user?.id,
+          "$studentData.classData.majorData.departmentId$":
+            department.departmentId,
+        },
+        include: [
+          {
+            model: db.Student,
+            as: "studentData",
+            include: [
+              {
+                model: db.Class,
+                as: "classData",
+                include: [{ model: db.Major, as: "majorData" }],
+              },
+            ],
+          },
+        ],
+      });
+      const statisticThesisDepartmentSuccessResult = await db.Thesis.count({
+        where: {
+          resultId: "RS1",
+          thesisAdvisorId: req?.user?.id,
+          "$studentData.classData.majorData.departmentId$":
+            department.departmentId,
+        },
+        include: [
+          {
+            model: db.Student,
+            as: "studentData",
+            include: [
+              {
+                model: db.Class,
+                as: "classData",
+                include: [{ model: db.Major, as: "majorData" }],
+              },
+            ],
+          },
+        ],
+      });
+      const statisticTotalStudentDepartment = await db.Student.count({
+        where: {
+          "$classData.majorData.departmentId$": department.departmentId,
+        },
+        include: [
+          {
+            model: db.Class,
+            as: "classData",
+            include: [{ model: db.Major, as: "majorData" }],
+          },
+        ],
+      });
+
+      const statisticTotalLecturerDepartment = await db.Lecturer.count({
+        where: { departmentId: department.departmentId },
+      });
+      const statisticTotalThesisAdvisor = await db.Thesis.count({
+        where: { thesisAdvisorId: req?.user?.id },
+      });
+      const statisticThesisAdvisorAvailabeResult = await db.Thesis.count({
+        where: { resultId: { [Op.ne]: null }, thesisAdvisorId: req?.user?.id },
+      });
+      const statisticThesisAdvisorSuccessResult = await db.Thesis.count({
+        where: { resultId: { [Op.eq]: "RS1" }, thesisAdvisorId: req?.user?.id },
+      });
+      const statisticCouncilJoin = await db.CouncilDetail.count({
+        where: { lecturerId: req?.user?.id },
+      });
+      const statisticCouncilMark = await db.Mark.count({
+        where: { "$councilDetailData.lecturerId$": req?.user?.id },
+        include: [
+          {
+            model: db.CouncilDetail,
+            as: "councilDetailData",
+          },
+        ],
+      });
+      const statisticCouncilMarked = await db.Mark.count({
+        where: {
+          "$councilDetailData.lecturerId$": req?.user?.id,
+          totalMark: { [Op.ne]: null },
+        },
+        include: [
+          {
+            model: db.CouncilDetail,
+            as: "councilDetailData",
+          },
+        ],
+      });
+      // console.log(result);
+      return res.status(200).json({
+        errCode: 0,
+        data: {
+          statisticTotalThesisDeparment,
+          statisticThesisDepartmentAvailabeResult,
+          statisticThesisDepartmentSuccessResult,
+          statisticTotalStudentDepartment,
+          statisticTotalLecturerDepartment,
+          statisticTotalThesisAdvisor,
+          statisticThesisAdvisorAvailabeResult,
+          statisticThesisAdvisorSuccessResult,
+          statisticCouncilJoin,
+          statisticCouncilMark,
+          statisticCouncilMarked,
+        },
+      });
+    } catch (error) {
+      return res.status(500).json({
+        errCode: -1,
+        errMessage: "Đã xảy ra lỗi, vui lòng thử lại sau!",
+      });
+    }
+  },
+  statisticLecturer: async (req, res) => {
+    try {
+      const department = await db.Lecturer.findOne({
+        where: { id: req?.user?.id },
+      });
+      const statisticTotalThesisAdvisor = await db.Thesis.count({
+        where: { thesisAdvisorId: req?.user?.id },
+      });
+      const statisticThesisAdvisorAvailabeResult = await db.Thesis.count({
+        where: { resultId: { [Op.ne]: null }, thesisAdvisorId: req?.user?.id },
+      });
+      const statisticThesisAdvisorSuccessResult = await db.Thesis.count({
+        where: { resultId: { [Op.eq]: "RS1" }, thesisAdvisorId: req?.user?.id },
+      });
+      const statisticCouncilJoin = await db.CouncilDetail.count({
+        where: { lecturerId: req?.user?.id },
+      });
+      const statisticCouncilMark = await db.Mark.count({
+        where: { "$councilDetailData.lecturerId$": req?.user?.id },
+        include: [
+          {
+            model: db.CouncilDetail,
+            as: "councilDetailData",
+          },
+        ],
+      });
+      const statisticCouncilMarked = await db.Mark.count({
+        where: {
+          "$councilDetailData.lecturerId$": req?.user?.id,
+          totalMark: { [Op.ne]: null },
+        },
+        include: [
+          {
+            model: db.CouncilDetail,
+            as: "councilDetailData",
+          },
+        ],
+      });
+      // console.log(result);
+      return res.status(200).json({
+        errCode: 0,
+        data: {
+          statisticTotalThesisAdvisor,
+          statisticThesisAdvisorAvailabeResult,
+          statisticThesisAdvisorSuccessResult,
+          statisticCouncilJoin,
+          statisticCouncilMark,
+          statisticCouncilMarked,
+        },
+      });
+    } catch (error) {
+      return res.status(500).json({
+        errCode: -1,
+        errMessage: "Đã xảy ra lỗi, vui lòng thử lại sau!",
       });
     }
   },

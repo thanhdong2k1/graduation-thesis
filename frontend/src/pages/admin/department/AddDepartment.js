@@ -22,7 +22,7 @@ import { useParams } from "react-router-dom";
 
 const AddDepartment = ({ type }, params) => {
     let { id } = useParams();
-  // console.log("type", type, id);
+    // console.log("type", type, id);
 
     const currentUser = useSelector((state) => state?.auth?.currentUser);
     const dispatch = useDispatch();
@@ -45,15 +45,17 @@ const AddDepartment = ({ type }, params) => {
     const onSubmit = async (data) => {
         const id = toast.loading("Vui lòng đợi...");
 
-        let founding = data?.founding && new Date(data?.founding).toLocaleDateString("vi-VN");
+        const founding =
+            data?.founding &&
+            moment(data?.founding, "DD/MM/YYYY").format("YYYY-MM-DD");
 
-      // console.log(founding);
+        // console.log(founding);
 
         const datasend = {
             ...data,
             founding: founding,
         };
-      // console.log(datasend);
+        // console.log(datasend);
 
         type == "add"
             ? await apiAdmin
@@ -63,7 +65,7 @@ const AddDepartment = ({ type }, params) => {
                       axiosJWT: axiosJWT,
                   })
                   .then((res) => {
-                      if (res?.errCode > 0 || res?.errCode < 0 ) {
+                      if (res?.errCode > 0 || res?.errCode < 0) {
                           // console.log(res);
                           toast.update(id, {
                               render: res?.errMessage,
@@ -105,7 +107,7 @@ const AddDepartment = ({ type }, params) => {
                       axiosJWT: axiosJWT,
                   })
                   .then((res) => {
-                      if (res?.errCode > 0 || res?.errCode < 0 ) {
+                      if (res?.errCode > 0 || res?.errCode < 0) {
                           // console.log(res);
                           toast.update(id, {
                               render: res?.errMessage,
@@ -156,7 +158,7 @@ const AddDepartment = ({ type }, params) => {
                     axiosJWT: axiosJWT,
                 })
                 .then((res) => {
-                    if (res?.errCode > 0 || res?.errCode < 0 ) {
+                    if (res?.errCode > 0 || res?.errCode < 0) {
                         toast.update(id, {
                             render: res?.errMessage,
                             type: "error",
@@ -166,12 +168,17 @@ const AddDepartment = ({ type }, params) => {
                             pauseOnFocusLoss: true,
                         });
                     } else {
-                      // console.log(res);
+                        // console.log(res);
                         setValue("id", res?.result?.id);
                         setValue("name", res?.result?.name);
                         setValue("description", res?.result?.description);
-                        setValue("founding", res?.result?.founding);
-                      // console.log(
+                        const formattedFounding = res?.result?.founding
+                            ? moment(res.result.founding).format("DD/MM/YYYY")
+                            : "";
+
+                        setValue("founding", formattedFounding);
+                        // setValue("founding", res?.result?.founding);
+                        // console.log(
                         //     "res?.result?.founding",
                         //     res?.result?.founding
                         // );
@@ -209,7 +216,8 @@ const AddDepartment = ({ type }, params) => {
     return (
         <div className="changeInformationDiv flex flex-col justify-center items-center gap-2">
             <div className=" font-semibold text-h1FontSize">
-                {type=="add"?"Thêm":type=="update"?"Sửa":"Chi tiết"} bộ môn
+                {type == "add" ? "Thêm" : type == "update" ? "Sửa" : "Chi tiết"}{" "}
+                bộ môn
             </div>
             <form
                 onSubmit={handleSubmit(onSubmit)}
@@ -289,22 +297,24 @@ const AddDepartment = ({ type }, params) => {
                             render={({ field: { onChange, value } }) => (
                                 <DatePicker
                                     className={`input ${
-                                        type == "detail" ? "disabled" : ""
+                                        type === "detail" ? "disabled" : ""
                                     }`}
                                     dateFormat="dd/MM/yyyy"
-                                    disabled={type == "detail" ? true : false}
+                                    disabled={type === "detail"}
                                     selected={
                                         value
-                                            ? new Date(
-                                                  moment(
-                                                      value,
-                                                      "DD/MM/YYYY"
-                                                  ).toString()
-                                              )
+                                            ? moment(
+                                                  value,
+                                                  "DD/MM/YYYY"
+                                              ).toDate()
                                             : null
                                     }
-                                    // closeOnScroll={true}
-                                    onChange={onChange}
+                                    onChange={(date) => {
+                                        const formattedDate = date
+                                            ? moment(date).format("DD/MM/YYYY")
+                                            : "";
+                                        onChange(formattedDate);
+                                    }}
                                 />
                             )}
                         />
@@ -323,7 +333,8 @@ const AddDepartment = ({ type }, params) => {
                                 // required: "Full name is required",
                             })}
                             render={({ field }) => (
-                                <Select placeholder="Chọn..."
+                                <Select
+                                    placeholder="Chọn..."
                                     styles={customSelectStyles}
                                     {...field}
                                     options={codeDean}

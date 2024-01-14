@@ -69,6 +69,10 @@ router.post("/import-dean-theses", middlewareController.verifyTokenImport, lectu
 router.post("/create-dean-theses", middlewareController.verifyTokenAdd, lecturerController.addDeanThesis);
 router.put("/update-dean-theses/:id", middlewareController.verifyTokenUpdate, lecturerController.updateDeanThesis);
 router.delete("/delete-dean-theses/:id", middlewareController.verifyTokenDelete, lecturerController.deleteDeanThesis);
+
+router.get("/statistic-dean", middlewareController.verifyToken, lecturerController.statisticDean);
+router.get("/statistic-lecturer", middlewareController.verifyToken, lecturerController.statisticLecturer);
+
 // // Api Department
 // router.post("/departments", middlewareController.verifyToken, lecturerController.getDepartments);
 // router.get("/department/:id", middlewareController.verifyToken, lecturerController.getDepartmentById);
