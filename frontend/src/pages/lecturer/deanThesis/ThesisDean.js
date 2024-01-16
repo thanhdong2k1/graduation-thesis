@@ -491,10 +491,10 @@ const ThesisDean = () => {
             </div>
             <div>
                 <Table
-                    handleAdd={handleAdd}
+                    // handleAdd={handleAdd}
                     // handleImport={handleImport}
                     // saveDataImport={saveDataImport}
-                    handleExport={handleExport}
+                    // handleExport={handleExport}
                     defineTable={defineTable}
                     setDefineTable={setDefineTable}
                     tableData={tableData}

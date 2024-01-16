@@ -704,6 +704,19 @@ export const routes = [
                 element: <StudentChangePassword />,
             },
 
+            // Giảng viên hướng dẫn
+            {
+                icon: <TbUserPlus  className="icon mr-2" />,
+                name: "Giảng viên hướng dẫn",
+                path: pathRoutes?.R1?.lecturer,
+                element: <LecturerAdvisor />,
+            },
+            // Lecturer Detail
+            {
+                name: "Lecturer Detail",
+                path: pathRoutes?.R1?.lecturerDetailId,
+                element: <AddLecturerAdvisor type={"detail"} />,
+            },
             // Topic
             // Đề tài
             {
@@ -726,19 +739,7 @@ export const routes = [
             },
 
             // Topic
-            // Giảng viên hướng dẫn
-            {
-                icon: <TbUserPlus  className="icon mr-2" />,
-                name: "Giảng viên hướng dẫn",
-                path: pathRoutes?.R1?.lecturer,
-                element: <LecturerAdvisor />,
-            },
-            // Lecturer Detail
-            {
-                name: "Lecturer Detail",
-                path: pathRoutes?.R1?.lecturerDetailId,
-                element: <AddLecturerAdvisor type={"detail"} />,
-            },
+            
             // Thesis
             // Đồ án
             {

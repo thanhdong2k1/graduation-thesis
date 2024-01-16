@@ -11,7 +11,7 @@ const StudentHomePage = () => {
     useEffect(() => {
         apiStudent.apiStudentGetInformation(currentUser, dispatch, axiosJWT);
     }, []);
-    return <div>StudentHomePage.js</div>;
+    return <div></div>;
 };
 
 export default StudentHomePage;

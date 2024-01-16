@@ -30,10 +30,10 @@ const AddClass = ({ type }, params) => {
     const majors = useSelector((state) => state?.admin?.majors);
     const blocks = useSelector((state) => state?.admin?.blocks);
     let codeMajor = majors?.map((v) => {
-        return { value: v.id, label: `${v.id} | ${v.name}` };
+        return { value: v.id, label: `${v.name}` };
     });
     let codeBlock = blocks?.map((v) => {
-        return { value: v.id, label: `${v.id} | ${v.name}` };
+        return { value: v.id, label: `${v.name}` };
     });
     const [isRtl, setIsRtl] = useState(false);
 

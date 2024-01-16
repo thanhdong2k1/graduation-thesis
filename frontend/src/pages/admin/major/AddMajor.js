@@ -30,7 +30,7 @@ const AddMajor = ({ type }, params) => {
     const status = useSelector((state) => state?.admin?.status);
     const departments = useSelector((state) => state?.admin?.departments);
     let codeDepartment = departments?.map((v) => {
-        return { value: v.id, label: `${v.id} | ${v.name}` };
+        return { value: v.id, label: `${v.name}` };
     });
     const [isRtl, setIsRtl] = useState(false);
 

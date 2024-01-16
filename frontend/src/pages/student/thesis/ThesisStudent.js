@@ -221,7 +221,7 @@ const ThesisStudent = () => {
     const tableData = [
         {
             header: "Hành động",
-            isRowPer: "id",
+            isRowPer: "studentId",
             isPerR: true,
             actions:
                 currentUser?.roleId == "R1"

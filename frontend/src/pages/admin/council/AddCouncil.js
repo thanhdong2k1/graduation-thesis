@@ -491,7 +491,7 @@ const AddCouncil = ({ type }, params) => {
     return (
         <div className="changeInformationDiv flex flex-col justify-center items-center gap-2">
             <div className=" font-semibold text-h1FontSize">
-                {type == "add" ? "Thêm" : "Sửa"} hội đồng
+                {type == "add" ? "Thêm" : type == "update" ? "Sửa" : "Xem"} hội đồng
             </div>
             <form
                 onSubmit={handleSubmit(onSubmit)}

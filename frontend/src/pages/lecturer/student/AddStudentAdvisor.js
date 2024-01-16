@@ -34,7 +34,7 @@ const AddStudentAdvisor = ({ type }) => {
     const permissions = useSelector((state) => state?.admin?.permissions);
     const classes = useSelector((state) => state?.admin?.classes);
     let codeClass = classes?.map((v) => {
-        return { value: v.id, label: `${v.id} | ${v.name}` };
+        return { value: v.id, label: `${v.name}` };
     });
     const [isRtl, setIsRtl] = useState(false);
     const [showModal, setShowModal] = useState(false);

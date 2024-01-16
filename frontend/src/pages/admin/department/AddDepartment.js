@@ -29,7 +29,7 @@ const AddDepartment = ({ type }, params) => {
     let axiosJWT = createAxios(currentUser, dispatch, logginSuccess);
     const deans = useSelector((state) => state?.admin?.lecturers);
     let codeDean = deans?.map((v) => {
-        return { value: v.id, label: `${v.id} | ${v.fullName}` };
+        return { value: v.id, label: `${v.fullName}` };
     });
     const [isRtl, setIsRtl] = useState(false);
 

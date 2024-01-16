@@ -1765,67 +1765,6 @@ const lecturerController = {
   },
 
   // Api Topic
-  getThesisById: async (req, res) => {
-    try {
-      const result = await db.Thesis.findOne({
-        where: {
-          id: req?.params?.id,
-        },
-        include: [
-          {
-            model: db.Allcode,
-            as: "councilStatusData",
-          },
-          {
-            model: db.Allcode,
-            as: "resultData",
-          },
-          {
-            model: db.Allcode,
-            as: "thesisAdvisorStatusData",
-          },
-          {
-            model: db.Thesis,
-            as: "topicData",
-          },
-          {
-            model: db.Student,
-            as: "studentData",
-          },
-          {
-            model: db.Council,
-            as: "councilData",
-          },
-          {
-            model: db.Lecturer,
-            as: "thesisAdvisorData",
-          },
-          {
-            model: db.ThesisSession,
-            as: "thesisSessionData",
-          },
-        ],
-        order: [["updatedAt", "DESC"]],
-        raw: true,
-        nest: true,
-      });
-      if (result) {
-        return res
-          .status(200)
-          .json({ errCode: 0, errMessage: "Tìm dữ liệu thành công.", result });
-      } else {
-        return res.status(200).json({
-          errCode: 1,
-          errMessage: "Đã xảy ra lỗi trong quá trình tìm, vui lòng thử lại sau",
-        });
-      }
-    } catch (error) {
-      return res.status(500).json({
-        errCode: -1,
-        errMessage: "Dữ liệu không mong muốn, thử lại sau hoặc dữ liệu khác!",
-      });
-    }
-  },
 
   getDeanTheses: async (req, res) => {
     try {
@@ -1850,6 +1789,12 @@ const lecturerController = {
           {
             model: db.Topic,
             as: "topicData",
+            include: [
+              {
+                model: db.Allcode,
+                as: "statusData",
+              },
+            ]
           },
           {
             model: db.Student,

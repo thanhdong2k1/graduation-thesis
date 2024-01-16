@@ -34,7 +34,7 @@ const AddStudent = ({ type }) => {
     const permissions = useSelector((state) => state?.admin?.permissions);
     const classes = useSelector((state) => state?.admin?.classes);
     let codeClass = classes?.map((v) => {
-        return { value: v.id, label: `${v.id} | ${v.name}` };
+        return { value: v.id, label: `${v.name}` };
     });
     const [isRtl, setIsRtl] = useState(false);
     const [showModal, setShowModal] = useState(false);
@@ -120,11 +120,12 @@ const AddStudent = ({ type }) => {
               // console.log(obj.value);
                 permissions?.push(obj.value);
             });
+            const birthday =
+            data?.birthday &&
+            moment(data?.birthday, "DD/MM/YYYY").format("YYYY-MM-DD");
         const datasend = {
             ...data,
-            birthday: new Date(
-                moment(data?.birthday, "DD/MM/YYYY")
-            ).toLocaleDateString("vi-VN"),
+            birthday: birthday,
             permissions: permissions?.toString(),
             //     e.map((obj) => {
             //       // console.log(obj.value);
@@ -290,7 +291,11 @@ const AddStudent = ({ type }) => {
                         setValue("email", res?.result?.email);
                         setValue("numberPhone", res?.result?.numberPhone);
                         setValue("address", res?.result?.address);
-                        setValue("birthday", res?.result?.birthday);
+                        const formattedBirthday = res?.result?.birthday
+                            ? moment(res.result.birthday).format("DD/MM/YYYY")
+                            : "";
+
+                        setValue("birthday", formattedBirthday);
                         {
                             /* code, roleId, classeId, permissions */
                         }
@@ -457,26 +462,26 @@ const AddStudent = ({ type }) => {
                                 })}
                                 render={({ field: { onChange, value } }) => (
                                     <DatePicker
-                                        className={`input ${
-                                            type == "detail" ? "disabled" : ""
-                                        }`}
-                                        disabled={
-                                            type == "detail" ? true : false
-                                        }
-                                        dateFormat="dd/MM/yyyy"
-                                        selected={
-                                            value
-                                                ? new Date(
-                                                      moment(
-                                                          value,
-                                                          "DD/MM/YYYY"
-                                                      ).toString()
-                                                  )
-                                                : null
-                                        }
-                                        // closeOnScroll={true}
-                                        onChange={onChange}
-                                    />
+                                    className={`input ${
+                                        type === "detail" ? "disabled" : ""
+                                    }`}
+                                    dateFormat="dd/MM/yyyy"
+                                    disabled={type === "detail"}
+                                    selected={
+                                        value
+                                            ? moment(
+                                                  value,
+                                                  "DD/MM/YYYY"
+                                              ).toDate()
+                                            : null
+                                    }
+                                    onChange={(date) => {
+                                        const formattedDate = date
+                                            ? moment(date).format("DD/MM/YYYY")
+                                            : "";
+                                        onChange(formattedDate);
+                                    }}
+                                />
                                 )}
                             />
                             {errors?.birthday?.type && (

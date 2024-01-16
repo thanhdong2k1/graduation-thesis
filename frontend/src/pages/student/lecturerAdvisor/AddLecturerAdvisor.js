@@ -31,7 +31,7 @@ const AddLecturerAdvisor = ({ type }, params) => {
     // const permissions = useSelector((state) => state?.admin?.permissions);
     // const departments = useSelector((state) => state?.admin?.departments);
     // let codeDepartment = departments?.map((v) => {
-    //     return { value: v.id, label: `${v.id} | ${v.name}` };
+    //     return { value: v.id, label: `${v.name}` };
     // });
     const [isRtl, setIsRtl] = useState(false);
     const [showModal, setShowModal] = useState(false);

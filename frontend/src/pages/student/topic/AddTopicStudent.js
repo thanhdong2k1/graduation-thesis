@@ -30,7 +30,7 @@ const AddTopicStudent = ({ type }, params) => {
     const status = useSelector((state) => state?.admin?.handle);
     const departments = useSelector((state) => state?.admin?.departments);
     let codeDepartments = departments?.map((v) => {
-        return { value: v.id, label: `${v.id} | ${v.name}` };
+        return { value: v.id, label: `${v.name}` };
     });
     const [isRtl, setIsRtl] = useState(false);
 

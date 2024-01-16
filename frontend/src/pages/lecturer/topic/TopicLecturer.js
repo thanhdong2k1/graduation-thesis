@@ -488,14 +488,6 @@ const ThesisLecturer = () => {
                       ]
                     : [
                           actionsDetail(handleDetail),
-                          actionsEdit(handleEdit),
-                          (currentUser?.permissions
-                              ?.split(",")
-                              ?.includes("PERF") ||
-                              currentUser?.permissions
-                                  ?.split(",")
-                                  ?.includes("PERD")) &&
-                              actionsRemove(onDelete),
                       ],
         },
     ];

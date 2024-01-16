@@ -31,7 +31,7 @@ const AddThesisSession = ({ type }, params) => {
         (state) => state?.admin?.evaluationMethods
     );
     let codeEvaluationMethod = evaluationMethods?.map((v) => {
-        return { value: v.id, label: `${v.id} | ${v.name}` };
+        return { value: v.id, label: `${v.name}` };
     });
     const [isRtl, setIsRtl] = useState(false);
 

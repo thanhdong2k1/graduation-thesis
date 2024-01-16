@@ -24,7 +24,7 @@ import pdf from "../../../assets/540cb75550adf33f281f29132dddd14fded85bfc.pdf";
 
 const AddThesisDean = ({ type }) => {
     let { id } = useParams();
-  // console.log("type", type, id);
+    // console.log("type", type, id);
 
     const currentUser = useSelector((state) => state?.auth?.currentUser);
     const dispatch = useDispatch();
@@ -38,34 +38,35 @@ const AddThesisDean = ({ type }) => {
     const councils = useSelector((state) => state?.admin?.councils);
     const councilStatus = useSelector((state) => state?.admin?.handle);
     let codeCouncil = councils?.map((v) => {
-        return { value: v.id, label: `${v.id} | ${v.name}` };
+        return { value: v.id, label: `${v.name}` };
     });
     let codeThesisSession = thesisSessions?.map((v) => {
-        return { value: v.id, label: `${v.id} | ${v.name}` };
+        return { value: v.id, label: `${v.name}` };
     });
     let codeThesisAdvisor = thesisAdvisor?.map((v) => {
-        return { value: v.id, label: `${v.id} | ${v.fullName}` };
+        return { value: v.id, label: `${v.fullName}` };
     });
     let codeStudent = students?.map((v) => {
-        return { value: v.id, label: `${v.id} | ${v.fullName}` };
+        return { value: v.id, label: `${v.fullName}` };
     });
     let codeTopic = topics?.map((v) => {
-        return { value: v.id, label: `${v.id} | ${v.name}` };
+        return { value: v.id, label: `${v.name}` };
     });
 
     const [isRtl, setIsRtl] = useState(false);
     const [showModal, setShowModal] = useState(false);
     const [result, setResult] = useState(null);
+    const [reportFile, setReportFile] = useState(null);
 
     const onResetPassword = () => {
-      // console.log(getValues("id"));
-      // console.log("handleDelete", getValues("id"));
+        // console.log(getValues("id"));
+        // console.log("handleDelete", getValues("id"));
         setShowModal(true);
         setResult(getValues("id"));
     };
 
     const handleResetPassword = async (data) => {
-      // console.log("hello", data, getValues());
+        // console.log("hello", data, getValues());
         const id = toast.loading("Vui lòng đợi...");
         await apiAdmin
             .apiResetPasswordThesis({
@@ -85,7 +86,7 @@ const AddThesisDean = ({ type }) => {
                         pauseOnFocusLoss: true,
                     });
                     // reset();
-                } else if (res?.errCode > 0 || res?.errCode < 0 ) {
+                } else if (res?.errCode > 0 || res?.errCode < 0) {
                     // console.log(res);
                     toast.update(id, {
                         render: res?.errMessage,
@@ -107,7 +108,7 @@ const AddThesisDean = ({ type }) => {
                 }
             })
             .catch((err) => {
-              // console.log(err);
+                // console.log(err);
                 toast.update(id, {
                     render: "Đã xảy ra lỗi, vui lòng thử lại sau",
                     type: "error",
@@ -134,7 +135,7 @@ const AddThesisDean = ({ type }) => {
         data?.permissions
             ?.filter((value) => !value.isFixed)
             ?.map((obj) => {
-              // console.log(obj.value);
+                // console.log(obj.value);
                 permissions?.push(obj.value);
             });
         const datasend = {
@@ -155,7 +156,7 @@ const AddThesisDean = ({ type }) => {
             //         permissions?.push(obj.value);
             //     });,
         };
-      // console.log(datasend);
+        // console.log(datasend);
         type == "add"
             ? await apiAdmin
                   .apiAddThesis({
@@ -164,7 +165,7 @@ const AddThesisDean = ({ type }) => {
                       axiosJWT: axiosJWT,
                   })
                   .then((res) => {
-                      if (res?.errCode > 0 || res?.errCode < 0 ) {
+                      if (res?.errCode > 0 || res?.errCode < 0) {
                           // console.log(res);
                           toast.update(id, {
                               render: res?.errMessage,
@@ -206,7 +207,7 @@ const AddThesisDean = ({ type }) => {
                       axiosJWT: axiosJWT,
                   })
                   .then((res) => {
-                      if (res?.errCode > 0 || res?.errCode < 0 ) {
+                      if (res?.errCode > 0 || res?.errCode < 0) {
                           // console.log(res);
                           toast.update(id, {
                               render: res?.errMessage,
@@ -250,6 +251,7 @@ const AddThesisDean = ({ type }) => {
             user: currentUser,
             dispatch: dispatch,
             axiosJWT: axiosJWT,
+            topicId: id,
             filterSearch: "statusId",
             inputSearch: "H1",
         });
@@ -281,7 +283,7 @@ const AddThesisDean = ({ type }) => {
                     axiosJWT: axiosJWT,
                 })
                 .then((res) => {
-                    if (res?.errCode > 0 || res?.errCode < 0 ) {
+                    if (res?.errCode > 0 || res?.errCode < 0) {
                         toast.update(id, {
                             render: res?.errMessage,
                             type: "error",
@@ -291,10 +293,15 @@ const AddThesisDean = ({ type }) => {
                             pauseOnFocusLoss: true,
                         });
                     } else {
-                      // console.log(res);
+                        // console.log(res);
                         let convert = [];
 
                         setValue("id", res?.result?.id);
+                        setValue("reportFile", res?.result?.reportFile);
+
+                        setReportFile(res?.result?.reportFile);
+
+                        console.log(getValues("reportFile"));
                         setValue(
                             "result",
                             results?.filter(
@@ -352,12 +359,7 @@ const AddThesisDean = ({ type }) => {
                         );
 
                         setValue("startDate", res?.result?.startDate);
-                        setValue("complateDate", res?.result?.complateDate);
-                        setValue(
-                            "thesisStartDate",
-                            res?.result?.thesisStartDate
-                        );
-                        setValue("thesisEndDate", res?.result?.thesisEndDate);
+                        setValue("endDate", res?.result?.endDate);
                         setValue("totalScore", res?.result?.totalScore);
 
                         toast.update(id, {
@@ -389,84 +391,38 @@ const AddThesisDean = ({ type }) => {
         <>
             <div className="changeInformationDiv flex flex-col justify-center items-center gap-2">
                 <div className=" font-semibold text-h1FontSize">
-                    {type=="add"?"Thêm":type=="update"?"Sửa":"Chi tiết"} đồ án
+                    {type == "add"
+                        ? "Thêm"
+                        : type == "update"
+                        ? "Sửa"
+                        : "Chi tiết"}{" "}
+                    đồ án
                 </div>
                 <form
                     onSubmit={handleSubmit(onSubmit)}
                     className="formDiv flex flex-col gap-2  media-min-md:w-[80%]"
                 >
-                    {/* 
-                    <div className="row flex justify-center items-center gap-2">
+                    {type!="add"&&<div className="row flex justify-center items-center gap-2">
                         <div className="col w-full">
-                            <label className="labelInput">Họ tên</label>
-                            <input
-                                className={`input ${
-                                    type == "detail" ? "disabled" : ""
-                                }`}
-                                disabled={type == "detail" ? true : false}
-                                {...register("fullName", {
-                                    required: "Full name is required",
-                                })}
-                            />
-                            {errors?.fullName?.type && (
-                                <p className=" text-normal text-red-500">
-                                    {errors?.fullName?.message}
-                                </p>
-                            )}
-                        </div>
-                        <div className="col w-full">
-                            <label className="labelInput">Điện thoại</label>
-                            <input
-                                className={`input ${
-                                    type == "detail" ? "disabled" : ""
-                                }`}
-                                disabled={type == "detail" ? true : false}
-                                {...register("numberPhone", {
-                                    required: "Number phone is required",
-                                })}
-                            />
-                            {errors?.numberPhone?.type && (
-                                <p className=" text-normal text-red-500">
-                                    {errors?.numberPhone?.message}
-                                </p>
-                            )}
-                        </div>
-                    </div>
-                    <div className="row flex justify-center items-center gap-2">
-                        <div className="col w-full">
-                            <label className="labelInput">Địa chỉ</label>
-                            <textarea
-                                className={`resize-none input ${
-                                    type == "detail" ? "disabled" : ""
-                                }`}
-                                disabled={type == "detail" ? true : false}
-                                {...register("address", {
+                            <label className="labelInput">Kết quả</label>
+                            <Controller
+                                name="result"
+                                control={control}
+                                {...register("result", {
                                     // required: "Full name is required",
                                 })}
+                                render={({ field }) => (
+                                    <Select
+                                        placeholder="Chọn..."
+                                        styles={customSelectStyles}
+                                        {...field}
+                                        options={results}
+                                        isClearable={true}
+                                        isDisabled={true}
+                                    />
+                                )}
                             />
-                            {errors?.address?.type && (
-                                <p className=" text-normal text-red-500">
-                                    {errors?.address?.message}
-                                </p>
-                            )}
                         </div>
-                    </div> */}
-                    <div className="row flex justify-center items-center gap-2">
-                        {/* <div className="col w-1/5">
-                            <label className="labelInput">ID</label>
-                            <input
-                                className="input disabled"
-                                disabled
-                                {...register("id", {
-                                    // required: "Full name is required",
-                                })}
-                            />
-                            {errors?.id?.type && (
-                                <p className=" text-normal text-red-500">
-                                    {errors?.id?.message}
-                                </p>
-                            )}
-                        </div> */}
                         <div className="col w-3/5">
                             <label className="labelInput">Tổng điểm</label>
                             <input
@@ -479,7 +435,7 @@ const AddThesisDean = ({ type }) => {
                                 // disabled={type == "detail" ? true : false}
                                 disabled={true}
                                 {...register("totalScore", {
-                                    // required: "Full name is required",
+                                    // required: "Không được bỏ trống",
                                 })}
                             />
                             {errors?.totalScore?.type && (
@@ -488,26 +444,7 @@ const AddThesisDean = ({ type }) => {
                                 </p>
                             )}
                         </div>
-                        <div className="col w-full">
-                            <label className="labelInput">Kết quả</label>
-                            <Controller
-                                name="result"
-                                control={control}
-                                {...register("result", {
-                                    // required: "Full name is required",
-                                })}
-                                render={({ field }) => (
-                                    <Select placeholder="Chọn..."
-                                        styles={customSelectStyles}
-                                        {...field}
-                                        options={results}
-                                        isClearable={true}
-                                        isDisabled={true}
-                                    />
-                                )}
-                            />
-                        </div>
-                    </div>
+                    </div>}
                     <div className="row flex justify-center items-center gap-2">
                         <div className="col w-full">
                             <label className="labelInput">Sinh viên</label>
@@ -515,10 +452,11 @@ const AddThesisDean = ({ type }) => {
                                 name="student"
                                 control={control}
                                 {...register("student", {
-                                    // required: "Full name is required",
+                                    required: "Không được để trống",
                                 })}
                                 render={({ field }) => (
-                                    <Select placeholder="Chọn..."
+                                    <Select
+                                        placeholder="Chọn..."
                                         styles={customSelectStyles}
                                         {...field}
                                         options={codeStudent}
@@ -535,16 +473,48 @@ const AddThesisDean = ({ type }) => {
                                 </p>
                             )}
                         </div>
+                        {type!="add"&&<div className="col w-full">
+                            <label className="labelInput" for="file_input">
+                                Báo cáo:{" "}
+                                {reportFile ? (
+                                    <span className="text-emerald-500">
+                                        Đã nộp
+                                    </span>
+                                ) : (
+                                    <span className="text-red-500">
+                                        Chưa nộp
+                                    </span>
+                                )}
+                            </label>
+                            {reportFile ? (
+                                <div className="flex w-full gap-2">
+                                    <a
+                                        className="button w-full"
+                                        href={`http://localhost:8000/upload/${getValues(
+                                            "reportFile"
+                                        )}`}
+                                        target="_blank"
+                                        underline="none"
+                                    >
+                                        Tải xuống báo cáo
+                                    </a>
+                                </div>
+                            ) : null}
+                        </div>}
+                    </div>
+
+                    <div className="row flex justify-center items-center gap-2">
                         <div className="col w-full">
                             <label className="labelInput">Đề tài</label>
                             <Controller
                                 name="topic"
                                 control={control}
                                 {...register("topic", {
-                                    // required: "Full name is required",
+                                    required: "Không được để trống",
                                 })}
                                 render={({ field }) => (
-                                    <Select placeholder="Chọn..."
+                                    <Select
+                                        placeholder="Chọn..."
                                         styles={customSelectStyles}
                                         {...field}
                                         options={codeTopic}
@@ -561,97 +531,17 @@ const AddThesisDean = ({ type }) => {
                                 </p>
                             )}
                         </div>
-                    </div>
-                    <div className="row flex justify-center items-center gap-2">
-                        <div className="col w-full">
-                            <label className="labelInput">Người hướng dẫn</label>
-                            <Controller
-                                name="thesisAdvisor"
-                                control={control}
-                                {...register("thesisAdvisor", {
-                                    // required: "Full name is required",
-                                })}
-                                render={({ field }) => (
-                                    <Select placeholder="Chọn..."
-                                        styles={customSelectStyles}
-                                        {...field}
-                                        options={codeThesisAdvisor}
-                                        isClearable={true}
-                                        isDisabled={
-                                            type == "detail" ? true : false
-                                        }
-                                    />
-                                )}
-                            />
-                            {errors?.thesisAdvisor?.type && (
-                                <p className=" text-normal text-red-500">
-                                    {errors?.thesisAdvisor?.message}
-                                </p>
-                            )}
-                        </div>
-                        <div className="col w-full">
-                            <label className="labelInput">Xác nhận hướng dẫn</label>
-                            <Controller
-                                name="thesisAdvisorStatus"
-                                control={control}
-                                {...register("thesisAdvisorStatus", {
-                                    // required: "Full name is required",
-                                })}
-                                render={({ field }) => (
-                                    <Select placeholder="Chọn..."
-                                        styles={customSelectStyles}
-                                        {...field}
-                                        options={thesisAdvisorStatus}
-                                        isClearable={true}
-                                        isDisabled={
-                                            type == "detail" ? true : false
-                                        }
-                                    />
-                                )}
-                            />
-                            {errors?.thesisAdvisorStatus?.type && (
-                                <p className=" text-normal text-red-500">
-                                    {errors?.thesisAdvisorStatus?.message}
-                                </p>
-                            )}
-                        </div>
-                    </div>
-                    <div className="row flex justify-center items-center gap-2">
-                        <div className="col w-full">
-                            {/* <label className="labelInput" for="file_input">
-                                Upload file Report
-                            </label>
-                            <input
-                                className="inputFile"
-                                id="file_input"
-                                type="file"
-                                accept=".xls,.xlsx"
-                                // onChange={importFile}
-                            /> */}
-                            <label className="labelInput" for="file_input">
-                                Báo cáo
-                            </label>
-                            <a
-                                className="button"
-                                href="https://tlus.edu.vn/wp-content/uploads/2023/09/TB-80-HKP-K2-23-24_Web.pdf"
-                                target="_blank"
-                                underline="none"
-                                // download
-                            >
-                                Tải xuống báo cáo
-                            </a>
-                            {/* <iframe src="https://tlus.edu.vn/wp-content/uploads/2023/09/TB-80-HKP-K2-23-24_Web.pdf#toolbar=0" width="100%" height="500px"></iframe> */}
-                        </div>
                         <div className="col w-full">
                             <label className="labelInput">Khóa luận</label>
                             <Controller
                                 name="thesisSession"
                                 control={control}
                                 {...register("thesisSession", {
-                                    // required: "Full name is required",
+                                    required: "Không được để trống",
                                 })}
                                 render={({ field }) => (
-                                    <Select placeholder="Chọn..."
+                                    <Select
+                                        placeholder="Chọn..."
                                         styles={customSelectStyles}
                                         {...field}
                                         options={codeThesisSession}
@@ -671,15 +561,76 @@ const AddThesisDean = ({ type }) => {
                     </div>
                     <div className="row flex justify-center items-center gap-2">
                         <div className="col w-full">
+                            <label className="labelInput">
+                                Người hướng dẫn
+                            </label>
+                            <Controller
+                                name="thesisAdvisor"
+                                control={control}
+                                {...register("thesisAdvisor", {
+                                    required: "Không được để trống",
+                                })}
+                                render={({ field }) => (
+                                    <Select
+                                        placeholder="Chọn..."
+                                        styles={customSelectStyles}
+                                        {...field}
+                                        options={codeThesisAdvisor}
+                                        isClearable={true}
+                                        isDisabled={
+                                            type == "detail" ? true : false
+                                        }
+                                    />
+                                )}
+                            />
+                            {errors?.thesisAdvisor?.type && (
+                                <p className=" text-normal text-red-500">
+                                    {errors?.thesisAdvisor?.message}
+                                </p>
+                            )}
+                        </div>
+                        <div className="col w-full">
+                            <label className="labelInput">
+                                Xác nhận hướng dẫn
+                            </label>
+                            <Controller
+                                name="thesisAdvisorStatus"
+                                control={control}
+                                {...register("thesisAdvisorStatus", {
+                                    // required: "Không được để trống",
+                                })}
+                                render={({ field }) => (
+                                    <Select
+                                        placeholder="Chọn..."
+                                        styles={customSelectStyles}
+                                        {...field}
+                                        options={thesisAdvisorStatus}
+                                        isClearable={true}
+                                        isDisabled={
+                                            type == "detail" ? true : false
+                                        }
+                                    />
+                                )}
+                            />
+                            {errors?.thesisAdvisorStatus?.type && (
+                                <p className=" text-normal text-red-500">
+                                    {errors?.thesisAdvisorStatus?.message}
+                                </p>
+                            )}
+                        </div>
+                    </div>
+                    <div className="row flex justify-center items-center gap-2">
+                        <div className="col w-full">
                             <label className="labelInput">Hội đồng</label>
                             <Controller
                                 name="council"
                                 control={control}
                                 {...register("council", {
-                                    // required: "Full name is required",
+                                    // required: "Không được để trống",
                                 })}
                                 render={({ field }) => (
-                                    <Select placeholder="Chọn..."
+                                    <Select
+                                        placeholder="Chọn..."
                                         styles={customSelectStyles}
                                         {...field}
                                         options={codeCouncil}
@@ -697,15 +648,18 @@ const AddThesisDean = ({ type }) => {
                             )}
                         </div>
                         <div className="col w-full">
-                            <label className="labelInput">Trạng thái chấm</label>
+                            <label className="labelInput">
+                                Trạng thái chấm
+                            </label>
                             <Controller
                                 name="councilStatus"
                                 control={control}
                                 {...register("councilStatus", {
-                                    // required: "Full name is required",
+                                    // required: "Không được để trống",
                                 })}
                                 render={({ field }) => (
-                                    <Select placeholder="Chọn..."
+                                    <Select
+                                        placeholder="Chọn..."
                                         styles={customSelectStyles}
                                         {...field}
                                         options={councilStatus}
@@ -723,6 +677,7 @@ const AddThesisDean = ({ type }) => {
                             )}
                         </div>
                     </div>
+
                     <ButtonConfirm type={type} />
                     {/* <div>
                         <iframe

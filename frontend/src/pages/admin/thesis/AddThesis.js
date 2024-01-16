@@ -38,19 +38,19 @@ const AddThesis = ({ type }) => {
     const councils = useSelector((state) => state?.admin?.councils);
     const councilStatus = useSelector((state) => state?.admin?.handle);
     let codeCouncil = councils?.map((v) => {
-        return { value: v.id, label: `${v.id} | ${v.name}` };
+        return { value: v.id, label: `${v.name}` };
     });
     let codeThesisSession = thesisSessions?.map((v) => {
-        return { value: v.id, label: `${v.id} | ${v.name}` };
+        return { value: v.id, label: `${v.name}` };
     });
     let codeThesisAdvisor = thesisAdvisor?.map((v) => {
-        return { value: v.id, label: `${v.id} | ${v.fullName}` };
+        return { value: v.id, label: `${v.fullName}` };
     });
     let codeStudent = students?.map((v) => {
-        return { value: v.id, label: `${v.id} | ${v.fullName}` };
+        return { value: v.id, label: `${v.fullName}` };
     });
     let codeTopic = topics?.map((v) => {
-        return { value: v.id, label: `${v.id} | ${v.name}` };
+        return { value: v.id, label: `${v.name}` };
     });
 
     const [isRtl, setIsRtl] = useState(false);

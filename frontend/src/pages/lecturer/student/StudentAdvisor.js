@@ -361,13 +361,13 @@ const StudentAdvisor = () => {
             column: "studentId",
             columnData: "studentData.fullName",
         },
-        {
-            header: "Email",
-            width: "w-[300px]",
-            maxWidth: "max-w-[300px]",
-            column: "studentId",
-            columnData: "studentData.email",
-        },
+        // {
+        //     header: "Email",
+        //     width: "w-[300px]",
+        //     maxWidth: "max-w-[300px]",
+        //     column: "studentId",
+        //     columnData: "studentData.email",
+        // },
         {
             header: "Điện thoại",
             width: "w-[300px]",
@@ -396,18 +396,24 @@ const StudentAdvisor = () => {
             width: "w-[300px]",
             maxWidth: "max-w-[300px]",
             columnData: "genderData.valueVi",
-            column: "studentId",
+            column: "studentData.genderId",
             columnData: "studentData.genderData.valueVi",
         },
         {
             header: "Lớp",
             width: "w-[300px]",
             maxWidth: "max-w-[300px]",
-            columnData: "classData.name",
-            column: "classId",
             // hide: true,
-            column: "studentId",
+            column: "studentData.classId",
             columnData: "studentData.classData.name",
+            
+        },
+        {
+            header: "Khóa luận",
+            width: "w-[300px]",
+            maxWidth: "max-w-[300px]",
+            column: "thesisId",
+            columnData: "thesisSessionData.name",
             
         },
         {
@@ -434,14 +440,6 @@ const StudentAdvisor = () => {
                       ]
                     : [
                           actionsDetail(handleDetail),
-                          actionsEdit(handleEdit),
-                          (currentUser?.permissions
-                              ?.split(",")
-                              ?.includes("PERF") ||
-                              currentUser?.permissions
-                                  ?.split(",")
-                                  ?.includes("PERD")) &&
-                              actionsRemove(onDelete),
                       ],
         },
     ];

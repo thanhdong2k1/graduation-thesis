@@ -41,7 +41,7 @@ const MarkEvaluationCriteria = ({ type }) => {
     const status = useSelector((state) => state?.admin?.status);
     const thesisSessions = useSelector((state) => state?.admin?.thesisSessions);
     let codeThesisSessions = thesisSessions?.map((v) => {
-        return { value: v.id, label: `${v.id} | ${v.name}` };
+        return { value: v.id, label: `${v.name}` };
     });
     const [isRtl, setIsRtl] = useState(false);
 

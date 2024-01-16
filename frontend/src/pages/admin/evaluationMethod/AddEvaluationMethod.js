@@ -33,7 +33,7 @@ const AddEvaluationMethod = ({ type }, params) => {
     const status = useSelector((state) => state?.admin?.status);
     const thesisSessions = useSelector((state) => state?.admin?.thesisSessions);
     let codeThesisSessions = thesisSessions?.map((v) => {
-        return { value: v.id, label: `${v.id} | ${v.name}` };
+        return { value: v.id, label: `${v.name}` };
     });
     const [isRtl, setIsRtl] = useState(false);
 
@@ -284,7 +284,7 @@ const AddEvaluationMethod = ({ type }, params) => {
     return (
         <div className="changeInformationDiv flex flex-col justify-center items-center gap-2">
             <div className=" font-semibold text-h1FontSize">
-                {type == "add" ? "Thêm" : "Sửa"} phương pháp đánh giá
+                {type == "add" ? "Thêm" : type == "update" ? "Sửa" : "Xem"} phương pháp đánh giá
             </div>
             <form
                 onSubmit={handleSubmit(onSubmit)}

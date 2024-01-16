@@ -263,7 +263,7 @@ const Thesis = () => {
             header: "XN đề tài",
             width: "w-[300px]",
             maxWidth: "max-w-[300px]",
-            column: "statusId",
+            column: "topicData.statusId",
             columnData: "topicData.statusData.valueVi",
             isStatus: true,
             // actions: actionsDetail(handleDetail),
