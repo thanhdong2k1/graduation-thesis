@@ -414,7 +414,7 @@ export const routes = [
             // SV Đăng ký HD
             {
                 icon: <TbUserPlus  className="icon mr-2" />,
-                name: "SV Đăng ký HD",
+                name: "Xác nhận hướng dẫn",
                 path: pathRoutes?.R1?.student,
                 element: <StudentAdvisor />,
             },
@@ -439,7 +439,7 @@ export const routes = [
             // SV Đăng ký đề tài
             {
                 icon: <TbFilePlus  className="icon mr-2" />,
-                name: "SV Đăng ký đề tài",
+                name: "Xác nhận đề tài",
                 path: pathRoutes?.R3?.topic,
                 element: <TopicLecturer />,
             },
@@ -465,7 +465,7 @@ export const routes = [
             // Hội đồng
             {
                 icon: <TbUserShield  className="icon mr-2" />,
-                name: "Hội đồng",
+                name: "Hội đồng tham gia",
                 path: pathRoutes?.R3?.council,
                 element: <CouncilLecturer />,
             },
@@ -586,7 +586,7 @@ export const routes = [
             // SV Đăng ký HD
             {
                 icon: <TbUserPlus  className="icon mr-2" />,
-                name: "SV Đăng ký HD",
+                name: "Xác nhận hướng dẫn",
                 path: pathRoutes?.R3?.student,
                 element: <StudentAdvisor />,
             },
@@ -611,7 +611,7 @@ export const routes = [
             // SV Đăng ký đề tài
             {
                 icon: <TbFilePlus  className="icon mr-2" />,
-                name: "SV Đăng ký đề tài",
+                name: "Xác nhận đề tài",
                 path: pathRoutes?.R3?.topic,
                 element: <TopicLecturer />,
             },
@@ -637,7 +637,7 @@ export const routes = [
             // Hội đồng
             {
                 icon: <TbUserShield  className="icon mr-2" />,
-                name: "Hội đồng",
+                name: "Hội đồng tham gia",
                 path: pathRoutes?.R3?.council,
                 element: <CouncilLecturer />,
             },
@@ -707,7 +707,7 @@ export const routes = [
             // Giảng viên hướng dẫn
             {
                 icon: <TbUserPlus  className="icon mr-2" />,
-                name: "Giảng viên hướng dẫn",
+                name: "Đăng ký hướng dẫn",
                 path: pathRoutes?.R1?.lecturer,
                 element: <LecturerAdvisor />,
             },
@@ -721,7 +721,7 @@ export const routes = [
             // Đề tài
             {
                 icon: <TbFilePlus  className="icon mr-2" />,
-                name: "Đề tài",
+                name: "Đăng ký đề tài",
                 path: pathRoutes?.R1?.topic,
                 element: <TopicStudent />,
             },
@@ -744,7 +744,7 @@ export const routes = [
             // Đồ án
             {
                 icon: <TbFileCertificate  className="icon mr-2" />,
-                name: "Đồ án",
+                name: "Đồ án thực hiện",
                 path: pathRoutes?.R1?.thesis,
                 element: <ThesisStudent />,
             },
