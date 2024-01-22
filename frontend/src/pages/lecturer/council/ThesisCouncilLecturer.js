@@ -37,7 +37,7 @@ const ThesisCouncilLecturer = () => {
         filterSearch: "",
         isSearched: false,
         offset: 0,
-        limit: 5,
+        limit: 10,
         pages: 0,
         currentPage: 1,
     });
@@ -51,13 +51,11 @@ const ThesisCouncilLecturer = () => {
     const handleImport = () => {
       // console.log("handleImport");
     };
-    const handleExport = () => {
-      // console.log("handleExport");
-    };
+    const handleExport = async() => {};
     const handleEdit = (data) => {
       // console.log(
             navigate(
-                `../council/${thesisSessionId}/detail-council/${councilDetailId}/${id}/mark/${data?.id}`,
+                `../council-lecturer/${thesisSessionId}/detail-council/${councilDetailId}/${id}/mark/${data?.id}`,
                 {
                     replace: true,
                 }

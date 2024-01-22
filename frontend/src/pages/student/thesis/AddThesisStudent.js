@@ -46,9 +46,9 @@ const AddThesisStudent = ({ type }) => {
     const [reportFile, setReportFile] = useState(null);
     const importFile = async (e) => {
         /* get data as an ArrayBuffer */
-        console.log(e.target.files);
-        setFile(e.target.files[0]);
-        setFileName(e.target.files[0].name);
+        console.log(e?.target?.files);
+        setFile(e?.target?.files[0]);
+        setFileName(e?.target?.files[0]?.name);
     };
 
     const {

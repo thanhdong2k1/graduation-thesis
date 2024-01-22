@@ -212,6 +212,12 @@ const MarkEvaluationCriteria = ({ type }) => {
                     } else {
                         setCriterias(responseCriteria?.result);
                     }
+                    if(responseMarkCriteria?.result?.totalMark){
+                        setValue(
+                            "totalMark",
+                            responseMarkCriteria?.result?.totalMark
+                        );
+                    }
                 } catch (e) {
                     console.log(e);
                 }

@@ -106,6 +106,7 @@ router.delete("/delete-thesis-session/:id", middlewareController.verifyTokenDele
 
 // Api Thesis
 router.post("/theses", middlewareController.verifyToken, adminController.getTheses);
+router.post("/export-theses", middlewareController.verifyToken, adminController.getThesesExport);
 router.get("/thesis/:id", middlewareController.verifyToken, adminController.getThesisById);
 router.post("/import-theses", middlewareController.verifyTokenImport, adminController.importTheses);
 router.post("/create-thesis", middlewareController.verifyTokenAdd, adminController.addThesis);

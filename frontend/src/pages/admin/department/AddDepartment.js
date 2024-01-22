@@ -147,6 +147,7 @@ const AddDepartment = ({ type }, params) => {
     useEffect(() => {
         apiAdmin.getAllLecturers({
             user: currentUser,
+            filterDepartment: id,
             dispatch: dispatch,
             axiosJWT: axiosJWT,
         });

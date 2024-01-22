@@ -32,7 +32,7 @@ const CouncilLecturer = () => {
         filterSearch: "",
         isSearched: false,
         offset: 0,
-        limit: 5,
+        limit: 10,
         pages: 0,
         currentPage: 1,
     });
@@ -46,9 +46,7 @@ const CouncilLecturer = () => {
     const handleImport = () => {
       // console.log("handleImport");
     };
-    const handleExport = () => {
-      // console.log("handleExport");
-    };
+    const handleExport = async() => {};
     const handleEdit = (data) => {
         navigate(`../${pathRoutes?.R1?.updateCouncil}/${data?.id}`, {
             replace: true,
@@ -56,7 +54,7 @@ const CouncilLecturer = () => {
     };
     const handleDetail = (data) => {
       // console.log(pathRoutes?.R1?.councilDetail,data);
-        navigate(`../council/${data?.councilData.thesisSessionId}/detail-council/${data?.id}/${data?.councilId}`, {
+        navigate(`../council-lecturer/${data?.councilData.thesisSessionId}/detail-council/${data?.id}/${data?.councilId}`, {
             replace: true,
         });
     };

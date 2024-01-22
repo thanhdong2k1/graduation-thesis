@@ -20,7 +20,7 @@ import {
 import ButtonConfirm from "../../../components/button/ButtonConfirm";
 import { useParams } from "react-router-dom";
 
-const AddTopicLecturer = ({ type }, params) => {
+const AddDeanTopic = ({ type }, params) => {
     let { id } = useParams();
   // console.log("type", type, id);
 
@@ -330,4 +330,4 @@ const AddTopicLecturer = ({ type }, params) => {
     );
 };
 
-export default AddTopicLecturer;
+export default AddDeanTopic;

@@ -33,7 +33,7 @@ const ThesisStudent = () => {
         filterSearch: "",
         isSearched: false,
         offset: 0,
-        limit: 5,
+        limit: 10,
         pages: 0,
         currentPage: 1,
     });
@@ -47,9 +47,7 @@ const ThesisStudent = () => {
     const handleImport = () => {
         // console.log("handleImport");
     };
-    const handleExport = () => {
-        // console.log("handleExport");
-    };
+    const handleExport = async() => {};
     const handleEdit = (data) => {
         navigate(`../${pathRoutes?.R1?.updateThesis}/${data?.id}`, {
             replace: true,
@@ -283,7 +281,7 @@ const ThesisStudent = () => {
             header: "XN đề tài",
             width: "w-[300px]",
             maxWidth: "max-w-[300px]",
-            column: "topicId",
+            column: "topicData.statusId",
             columnData: "topicData.statusData.valueVi",
             isStatus: true,
         },

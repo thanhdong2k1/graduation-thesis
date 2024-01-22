@@ -33,7 +33,7 @@ const Department = () => {
         filterSearch: "",
         isSearched: false,
         offset: 0,
-        limit: 5,
+        limit: 10,
         pages: 0,
         currentPage: 1,
     });
@@ -47,9 +47,7 @@ const Department = () => {
     const handleImport = () => {
         // console.log("handleImport");
     };
-    const handleExport = () => {
-        // console.log("handleExport");
-    };
+    const handleExport = async() => {};
     const handleEdit = (data) => {
         navigate(`../${pathRoutes?.R1?.updateDepartment}/${data?.id}`, {
             replace: true,

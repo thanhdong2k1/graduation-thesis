@@ -321,7 +321,35 @@ const DetailTable = ({ tableData, datas }) => {
                                                             <span
                                                                 className={`hidden no-underline group-hover:block group-hover:absolute -translate-y-[200%] text-whiteColor bg-textColor shadow-lg p-1 z-10 rounded-lg text-smallestFontSize whitespace-break-spaces`}
                                                             >
-                                                                {/* {data[table?.column]} */}
+                                                                {table?.columnData?.split(
+                                                                "."
+                                                            ) &&
+                                                            table?.columnData?.split(
+                                                                "."
+                                                            ).length > 0
+                                                                ? (() => {
+                                                                      let result =
+                                                                          data;
+                                                                      for (const key of table?.columnData?.split(
+                                                                          "."
+                                                                      )) {
+                                                                          result =
+                                                                              result?.[
+                                                                                  key
+                                                                              ];
+                                                                          if (
+                                                                              result ===
+                                                                              undefined
+                                                                          ) {
+                                                                              break;
+                                                                          }
+                                                                      }
+                                                                      return result;
+                                                                  })()
+                                                                : data?.[
+                                                                      table
+                                                                          ?.column
+                                                                  ]}
                                                             </span>
                                                         )}
                                                     </td>
@@ -386,7 +414,35 @@ const DetailTable = ({ tableData, datas }) => {
                                                             <span
                                                                 className={`hidden no-underline group-hover:block group-hover:absolute -translate-y-[200%] text-whiteColor bg-textColor shadow-lg p-1 z-10 rounded-lg text-smallestFontSize whitespace-break-spaces`}
                                                             >
-                                                                {/* {data[table?.column]} */}
+                                                                {/* {table?.columnData?.split(
+                                                                "."
+                                                            ) &&
+                                                            table?.columnData?.split(
+                                                                "."
+                                                            ).length > 0
+                                                                ? (() => {
+                                                                      let result =
+                                                                          data;
+                                                                      for (const key of table?.columnData?.split(
+                                                                          "."
+                                                                      )) {
+                                                                          result =
+                                                                              result?.[
+                                                                                  key
+                                                                              ];
+                                                                          if (
+                                                                              result ===
+                                                                              undefined
+                                                                          ) {
+                                                                              break;
+                                                                          }
+                                                                      }
+                                                                      return result;
+                                                                  })()
+                                                                : data?.[
+                                                                      table
+                                                                          ?.column
+                                                                  ]} */}
                                                             </span>
                                                         )}
                                                     </td>

@@ -70,6 +70,11 @@ router.post("/create-dean-theses", middlewareController.verifyTokenAdd, lecturer
 router.put("/update-dean-theses/:id", middlewareController.verifyTokenUpdate, lecturerController.updateDeanThesis);
 router.delete("/delete-dean-theses/:id", middlewareController.verifyTokenDelete, lecturerController.deleteDeanThesis);
 
+router.post("/dean-councils", middlewareController.verifyToken, lecturerController.getDeanCouncils);
+router.get("/dean-council/:id", middlewareController.verifyToken, lecturerController.getDeanCouncilById);
+router.post("/create-dean-council", middlewareController.verifyTokenAdd, lecturerController.addDeanCouncil);
+router.put("/update-dean-council/:id", middlewareController.verifyTokenUpdate, lecturerController.updateDeanCouncil);
+
 router.get("/statistic-dean", middlewareController.verifyToken, lecturerController.statisticDean);
 router.get("/statistic-lecturer", middlewareController.verifyToken, lecturerController.statisticLecturer);
 

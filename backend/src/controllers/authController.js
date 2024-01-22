@@ -74,6 +74,7 @@ const authController = {
             code: {
               [Op.like]: req?.body?.email,
             },
+            statusId:"RS1"
           },
         },
       });
@@ -98,6 +99,7 @@ const authController = {
               code: {
                 [Op.like]: req?.body?.email,
               },
+              statusId:"RS1"
             },
           },
         });
@@ -136,7 +138,7 @@ const authController = {
                     },
                     {
                       where: {
-                        id: userDB.id,
+                        id: userDB?.id,
                       },
                     }
                   );
@@ -189,7 +191,7 @@ const authController = {
               },
               {
                 where: {
-                  id: userDB.id,
+                  id: userDB?.id,
                 },
               }
             );
@@ -253,8 +255,8 @@ const authController = {
       isRole = "Student";
     }
  // console.log("userDB", userDB);
- // console.log("đã tới", userDB.refreshToken, refreshToken);
-    if (userDB && userDB.refreshToken != refreshToken) {
+ // console.log("đã tới", userDB?.refreshToken, refreshToken);
+    if (userDB && userDB?.refreshToken != refreshToken) {
       return res.status(403).json("Mã thông báo làm mới không hợp lệ!");
     }
     // console.log(2, refreshTokens.includes(refreshToken));
@@ -266,7 +268,7 @@ const authController = {
       delete user.iat;
    // console.log("user check refresh", user);
       const newAccessToken = authController.generateAccessToken(user);
-      res.cookie("refreshToken", userDB.refreshToken, {
+      res.cookie("refreshToken", userDB?.refreshToken, {
         httpOnly: true,
         secure: false,
         path: "/",

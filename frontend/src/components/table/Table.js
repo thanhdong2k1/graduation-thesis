@@ -34,7 +34,7 @@ const Table = ({
     btnAdd,
     searchDepartment,
 }) => {
-    console.log("tableData", tableData);
+    // console.log("tableData", tableData);
     // redux
     const currentUser = useSelector((state) => state?.auth?.currentUser);
     const dispatch = useDispatch();
@@ -59,7 +59,7 @@ const Table = ({
         inputSearch: "",
         isSearched: false,
         offset: 0,
-        limit: 5,
+        limit: 10,
         pages: 0,
         currentPage: 1,
     });
@@ -173,7 +173,7 @@ const Table = ({
                     inputSearch: "",
                     isSearched: false,
                     offset: 0,
-                    limit: 5,
+                    limit: 10,
                     pages: 0,
                     currentPage: 1,
                 }));
@@ -210,7 +210,8 @@ const Table = ({
             )} ${new Date().toLocaleTimeString("vi-VN")}.xlsx`
         );
     }, [tableDataImport]);
-    console.log(typeof handleExport === "function");
+    const exportFunction = typeof handleExport === "function" && handleExport.toString().trim() !== "async () => {}";
+    // console.log("exportFunction",exportFunction);
     const exportFile = useCallback(() => {
         // console.log("export datasa", datas);
         const convertedItem = [];
@@ -316,8 +317,8 @@ const Table = ({
         ?.pages?.filter((page) => page?.path == arrPath[1])[0]?.name;
 
     const limitRecord = [
-        { label: "5 rows", value: 5 },
         { label: "10 rows", value: 10 },
+        { label: "15 rows", value: 15 },
         { label: "20 rows", value: 20 },
     ];
     const filterSearch = [];
@@ -585,7 +586,7 @@ const Table = ({
                                         {handleExport && (
                                             <button
                                                 className="importDiv button"
-                                                onClick={exportFile}
+                                                onClick={exportFunction?handleExport:exportFile}
                                             >
                                                 <span>Xuất</span>
                                                 <TbTableExport className="icon" />
@@ -621,7 +622,7 @@ const Table = ({
                                             {handleExport && (
                                                 <button
                                                     className="importDiv button"
-                                                    onClick={exportFile}
+                                                    onClick={exportFunction?handleExport:exportFile}
                                                 >
                                                     <span>Xuất</span>
                                                     <TbTableExport className="icon" />
@@ -662,7 +663,7 @@ const Table = ({
                                                                 <button
                                                                     className="importDiv button"
                                                                     onClick={
-                                                                        exportFile
+                                                                        exportFunction?handleExport:exportFile
                                                                     }
                                                                 >
                                                                     <span>
@@ -729,7 +730,7 @@ const Table = ({
                                 {/* {functionsModule && handleExport && (
                                     <button
                                         className="importDiv button"
-                                        onClick={exportFile}
+                                        onClick={exportFunction?handleExport:exportFile}
                                     >
                                         <span>Xuất</span>
                                         <TbTableExport className="icon" />
@@ -765,7 +766,7 @@ const Table = ({
                         <tfoot>
                             <td colSpan={2}>
                                 <input type="file" onChange={importFile} />
-                                <button onClick={exportFile}>
+                                <button onClick={exportFunction?handleExport:exportFile}>
                                     Export XLSX
                                 </button>
                             </td>

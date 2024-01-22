@@ -34,7 +34,7 @@ const TopicStudent = () => {
         filterSearch: "",
         isSearched: false,
         offset: 0,
-        limit: 5,
+        limit: 10,
         pages: 0,
         currentPage: 1,
     });
@@ -48,9 +48,7 @@ const TopicStudent = () => {
     const handleImport = () => {
         // console.log("handleImport");
     };
-    const handleExport = () => {
-        // console.log("handleExport");
-    };
+    const handleExport = async() => {};
     const handleEdit = (data) => {
         navigate(`../${pathRoutes?.R1?.updateTopic}/${data?.id}`, {
             replace: true,

@@ -12,9 +12,12 @@ import "react-datepicker/dist/react-datepicker.css";
 import moment from "moment/moment";
 import { createAxios } from "../../utils/createInstance";
 import { logginSuccess } from "../../redux/authSlice";
-import {  apiStudent } from "../../redux/apiRequest";
+import { apiStudent } from "../../redux/apiRequest";
 import ModalPopup from "../../components/ModelPopup/ModalPopup";
-import { customSelectStyles, customSelectStylesMulti } from "../../utils/customStyleReactSelect";
+import {
+    customSelectStyles,
+    customSelectStylesMulti,
+} from "../../utils/customStyleReactSelect";
 import ButtonConfirm from "../../components/button/ButtonConfirm";
 
 const StudentChangeInformation = () => {
@@ -49,7 +52,7 @@ const StudentChangeInformation = () => {
         await apiStudent
             .apiStudentChangeInformation(currentUser, datasend, axiosJWT)
             .then((res) => {
-                if (res?.errCode > 0 || res?.errCode < 0 ) {
+                if (res?.errCode > 0 || res?.errCode < 0) {
                     // console.log(res);
                     toast.update(id, {
                         render: res?.errMessage,
@@ -70,7 +73,11 @@ const StudentChangeInformation = () => {
                         pauseOnFocusLoss: true,
                     });
                     // reset();
-                    apiStudent.apiStudentGetInformation(currentUser, dispatch, axiosJWT);
+                    apiStudent.apiStudentGetInformation(
+                        currentUser,
+                        dispatch,
+                        axiosJWT
+                    );
                 }
             })
             .catch((error) => {
@@ -87,18 +94,26 @@ const StudentChangeInformation = () => {
     };
     const onSubmit = async (data) => {
         const id = toast.loading("Vui lòng đợi...");
+        const birthday =
+            data?.birthday &&
+            moment(data?.birthday, "DD/MM/YYYY").format("YYYY-MM-DD");
+
+        // console.log(birthday);
+
         const datasend = {
             ...data,
-            birthday: new Date(
-                moment(data?.birthday, "DD/MM/YYYY")
-            ).toLocaleDateString("vi-VN"),
+            birthday: birthday,
+            //     e.map((obj) => {
+            //       // console.log(obj.value);
+            //         permissions?.push(obj.value);
+            //     });,
         };
         const { role, permissions, clases, code, ...dataFilter } = datasend;
-      // console.log(datasend, dataFilter);
+        // console.log(datasend, dataFilter);
         await apiStudent
             .apiStudentChangeInformation(currentUser, dataFilter, axiosJWT)
             .then((res) => {
-                if (res?.errCode > 0 || res?.errCode < 0 ) {
+                if (res?.errCode > 0 || res?.errCode < 0) {
                     // console.log(res);
                     toast.update(id, {
                         render: res?.errMessage,
@@ -188,7 +203,11 @@ const StudentChangeInformation = () => {
         setValue("fullName", informationUser?.fullName);
         setValue("numberPhone", informationUser?.numberPhone);
         setValue("address", informationUser?.address);
-        setValue("birthday", informationUser?.birthday);
+        const formattedBirthday = informationUser?.birthday
+            ? moment(informationUser?.birthday).format("DD/MM/YYYY")
+            : "";
+
+        setValue("birthday", formattedBirthday);
         setValue("code", informationUser?.code);
         setValue("role", informationUser?.roleData?.valueVi);
         setValue("class", informationUser?.classData?.name);
@@ -322,21 +341,25 @@ const StudentChangeInformation = () => {
                             })}
                             render={({ field: { onChange, value } }) => (
                                 <DatePicker
-                                    className="input"
-                                    dateFormat="dd/MM/yyyy"
-                                    selected={
-                                        value
-                                            ? new Date(
-                                                  moment(
+                                        className={`input`}
+                                        dateFormat="dd/MM/yyyy"
+                                        selected={
+                                            value
+                                                ? moment(
                                                       value,
                                                       "DD/MM/YYYY"
-                                                  ).toString()
-                                              )
-                                            : null
-                                    }
-                                    // closeOnScroll={true}
-                                    onChange={onChange}
-                                />
+                                                  ).toDate()
+                                                : null
+                                        }
+                                        onChange={(date) => {
+                                            const formattedDate = date
+                                                ? moment(date).format(
+                                                      "DD/MM/YYYY"
+                                                  )
+                                                : "";
+                                            onChange(formattedDate);
+                                        }}
+                                    />
                             )}
                         />
                         {errors?.birthday?.type && (
@@ -354,7 +377,8 @@ const StudentChangeInformation = () => {
                                 // required: "Full name is required",
                             })}
                             render={({ field }) => (
-                                <Select placeholder="Chọn..."
+                                <Select
+                                    placeholder="Chọn..."
                                     styles={customSelectStyles}
                                     {...field}
                                     options={gender}
@@ -410,7 +434,8 @@ const StudentChangeInformation = () => {
                                 // required: "Full name is required",
                             })}
                             render={({ field }) => (
-                                <Select placeholder="Chọn..."
+                                <Select
+                                    placeholder="Chọn..."
                                     styles={customSelectStylesMulti}
                                     {...field}
                                     isRtl={isRtl}

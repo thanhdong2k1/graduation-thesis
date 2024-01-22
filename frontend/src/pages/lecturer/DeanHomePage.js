@@ -123,7 +123,7 @@ const DeanHomePage = () => {
                             Tỷ lệ thông qua của bộ môn
                         </p>
                         <h4 class="block antialiased tracking-normal font-sans text-2xl font-semibold leading-snug text-blue-gray-900">
-                            {(+statistic?.statisticThesisDepartmentSuccessResult/+statistic?.statisticThesisDepartmentAvailabeResult)?(+statistic?.statisticThesisDepartmentSuccessResult/+statistic?.statisticThesisDepartmentAvailabeResult)*100 : "???"}%
+                            {(+statistic?.statisticThesisDepartmentSuccessResult/+statistic?.statisticThesisDepartmentAvailabeResult)?(+statistic?.statisticThesisDepartmentSuccessResult/+statistic?.statisticThesisDepartmentAvailabeResult).toFixed(4)*100 : "???"}%
                         </h4>
                     </div>
                     <div class="border-t border-blue-gray-50 p-4">
@@ -234,7 +234,7 @@ const DeanHomePage = () => {
                             Tỷ lệ thông qua
                         </p>
                         <h4 class="block antialiased tracking-normal font-sans text-2xl font-semibold leading-snug text-blue-gray-900">
-                            {(+statistic?.statisticThesisAdvisorSuccessResult/+statistic?.statisticThesisAdvisorAvailabeResult)?(+statistic?.statisticThesisAdvisorSuccessResult/+statistic?.statisticThesisAdvisorAvailabeResult)*100 : "???"}%
+                            {(+statistic?.statisticThesisAdvisorSuccessResult/+statistic?.statisticThesisAdvisorAvailabeResult)?(+statistic?.statisticThesisAdvisorSuccessResult/+statistic?.statisticThesisAdvisorAvailabeResult).toFixed(4)*100 : "???"}%
                         </h4>
                     </div>
                     <div class="border-t border-blue-gray-50 p-4">

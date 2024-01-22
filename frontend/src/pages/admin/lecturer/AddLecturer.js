@@ -20,7 +20,7 @@ import ModalPopup from "../../../components/ModelPopup/ModalPopup";
 
 const AddLecturer = ({ type }, params) => {
     let { id } = useParams();
-  // console.log("type", type, id);
+    // console.log("type", type, id);
 
     const currentUser = useSelector((state) => state?.auth?.currentUser);
     const dispatch = useDispatch();
@@ -38,14 +38,14 @@ const AddLecturer = ({ type }, params) => {
     const [result, setResult] = useState(null);
 
     const onResetPassword = () => {
-      // console.log(getValues("id"));
-      // console.log("handleDelete", getValues("id"));
+        // console.log(getValues("id"));
+        // console.log("handleDelete", getValues("id"));
         setShowModal(true);
         setResult(getValues("id"));
     };
 
     const handleResetPassword = async (data) => {
-      // console.log("hello", data, getValues());
+        // console.log("hello", data, getValues());
         const id = toast.loading("Vui lòng đợi...");
         await apiAdmin
             .apiResetPasswordLecturer({
@@ -65,7 +65,7 @@ const AddLecturer = ({ type }, params) => {
                         pauseOnFocusLoss: true,
                     });
                     // reset();
-                } else if (res?.errCode > 0 || res?.errCode < 0 ) {
+                } else if (res?.errCode > 0 || res?.errCode < 0) {
                     // console.log(res);
                     toast.update(id, {
                         render: res?.errMessage,
@@ -87,7 +87,7 @@ const AddLecturer = ({ type }, params) => {
                 }
             })
             .catch((err) => {
-              // console.log(err);
+                // console.log(err);
                 toast.update(id, {
                     render: "Đã xảy ra lỗi, vui lòng thử lại sau",
                     type: "error",
@@ -114,21 +114,25 @@ const AddLecturer = ({ type }, params) => {
         data?.permissions
             ?.filter((value) => !value.isFixed)
             ?.map((obj) => {
-              // console.log(obj?.value);
+                // console.log(obj?.value);
                 permissions?.push(obj?.value);
             });
+        const birthday =
+            data?.birthday &&
+            moment(data?.birthday, "DD/MM/YYYY").format("YYYY-MM-DD");
+
+        // console.log(birthday);
+
         const datasend = {
             ...data,
-            birthday: new Date(
-                moment(data?.birthday, "DD/MM/YYYY")
-            ).toLocaleDateString("vi-VN"),
+            birthday: birthday,
             permissions: permissions.toString(),
             //     e.map((obj) => {
             //       // console.log(obj.value);
             //         permissions?.push(obj.value);
             //     });,
         };
-      // console.log(datasend);
+        // console.log(datasend);
         type == "add"
             ? await apiAdmin
                   .apiAddLecturer({
@@ -137,7 +141,7 @@ const AddLecturer = ({ type }, params) => {
                       axiosJWT: axiosJWT,
                   })
                   .then((res) => {
-                      if (res?.errCode > 0 || res?.errCode < 0 ) {
+                      if (res?.errCode > 0 || res?.errCode < 0) {
                           // console.log(res);
                           toast.update(id, {
                               render: res?.errMessage,
@@ -179,7 +183,7 @@ const AddLecturer = ({ type }, params) => {
                       axiosJWT: axiosJWT,
                   })
                   .then((res) => {
-                      if (res?.errCode > 0 || res?.errCode < 0 ) {
+                      if (res?.errCode > 0 || res?.errCode < 0) {
                           // console.log(res);
                           toast.update(id, {
                               render: res?.errMessage,
@@ -235,7 +239,7 @@ const AddLecturer = ({ type }, params) => {
                         axiosJWT: axiosJWT,
                     })
                     .then((res) => {
-                        if (res?.errCode > 0 || res?.errCode < 0 ) {
+                        if (res?.errCode > 0 || res?.errCode < 0) {
                             toast.update(id, {
                                 render: res?.errMessage,
                                 type: "error",
@@ -245,12 +249,15 @@ const AddLecturer = ({ type }, params) => {
                                 pauseOnFocusLoss: true,
                             });
                         } else {
-                          // console.log(res);
+                            // console.log(res);
                             let convert = [];
                             if (res?.result?.roleId === "R1") {
                                 permissions.forEach((obj) => {
                                     if (obj.value === "PERF") {
-                                        convert?.push({ ...obj, isFixed: true });
+                                        convert?.push({
+                                            ...obj,
+                                            isFixed: true,
+                                        });
                                     }
                                 });
                             } else if (res?.result?.roleId === "R2") {
@@ -259,7 +266,10 @@ const AddLecturer = ({ type }, params) => {
                                         obj.value !== "PERD" &&
                                         obj.value !== "PERF"
                                     ) {
-                                        convert?.push({ ...obj, isFixed: true });
+                                        convert?.push({
+                                            ...obj,
+                                            isFixed: true,
+                                        });
                                     }
                                 });
                             } else {
@@ -268,12 +278,16 @@ const AddLecturer = ({ type }, params) => {
                                         obj.value === "PERU" ||
                                         obj.value === "PERR"
                                     ) {
-                                        convert?.push({ ...obj, isFixed: true });
+                                        convert?.push({
+                                            ...obj,
+                                            isFixed: true,
+                                        });
                                     }
                                 });
                             }
                             const array = res?.result?.permissions
-                                ?.toString()?.split(",");
+                                ?.toString()
+                                ?.split(",");
                             permissions.forEach((obj) => {
                                 if (array?.includes(obj.value)) {
                                     convert?.push(obj);
@@ -284,7 +298,13 @@ const AddLecturer = ({ type }, params) => {
                             setValue("email", res?.result?.email);
                             setValue("numberPhone", res?.result?.numberPhone);
                             setValue("address", res?.result?.address);
-                            setValue("birthday", res?.result?.birthday);
+                            const formattedBirthday = res?.result?.birthday
+                                ? moment(res?.result?.birthday).format(
+                                      "DD/MM/YYYY"
+                                  )
+                                : "";
+
+                            setValue("birthday", formattedBirthday);
 
                             {
                                 /* code, roleId, departmentId, permissions */
@@ -346,14 +366,19 @@ const AddLecturer = ({ type }, params) => {
                     });
             }
         }
-        fetchData()
+        fetchData();
     }, [currentUser]);
 
     return (
         <>
             <div className="changeInformationDiv flex flex-col justify-center items-center gap-2">
                 <div className=" font-semibold text-h1FontSize">
-                    {type=="add"?"Thêm":type=="update"?"Sửa":"Chi tiết"} giảng viên
+                    {type == "add"
+                        ? "Thêm"
+                        : type == "update"
+                        ? "Sửa"
+                        : "Chi tiết"}{" "}
+                    giảng viên
                 </div>
                 <form
                     onSubmit={handleSubmit(onSubmit)}
@@ -461,24 +486,26 @@ const AddLecturer = ({ type }, params) => {
                                 render={({ field: { onChange, value } }) => (
                                     <DatePicker
                                         className={`input ${
-                                            type == "detail" ? "disabled" : ""
+                                            type === "detail" ? "disabled" : ""
                                         }`}
-                                        disabled={
-                                            type == "detail" ? true : false
-                                        }
                                         dateFormat="dd/MM/yyyy"
+                                        disabled={type === "detail"}
                                         selected={
                                             value
-                                                ? new Date(
-                                                      moment(
-                                                          value,
-                                                          "DD/MM/YYYY"
-                                                      ).toString()
-                                                  )
+                                                ? moment(
+                                                      value,
+                                                      "DD/MM/YYYY"
+                                                  ).toDate()
                                                 : null
                                         }
-                                        // closeOnScroll={true}
-                                        onChange={onChange}
+                                        onChange={(date) => {
+                                            const formattedDate = date
+                                                ? moment(date).format(
+                                                      "DD/MM/YYYY"
+                                                  )
+                                                : "";
+                                            onChange(formattedDate);
+                                        }}
                                     />
                                 )}
                             />
@@ -497,7 +524,8 @@ const AddLecturer = ({ type }, params) => {
                                     // required: "Full name is required",
                                 })}
                                 render={({ field }) => (
-                                    <Select placeholder="Chọn..."
+                                    <Select
+                                        placeholder="Chọn..."
                                         styles={customSelectStyles}
                                         {...field}
                                         options={gender}
@@ -555,7 +583,8 @@ const AddLecturer = ({ type }, params) => {
                                     // required: "Full name is required",
                                 })}
                                 render={({ field }) => (
-                                    <Select placeholder="Chọn..."
+                                    <Select
+                                        placeholder="Chọn..."
                                         styles={customSelectStyles}
                                         {...field}
                                         options={role}
@@ -584,7 +613,8 @@ const AddLecturer = ({ type }, params) => {
                                     // required: "Full name is required",
                                 })}
                                 render={({ field }) => (
-                                    <Select placeholder="Chọn..."
+                                    <Select
+                                        placeholder="Chọn..."
                                         styles={customSelectStyles}
                                         {...field}
                                         options={codeDepartment}
@@ -610,7 +640,8 @@ const AddLecturer = ({ type }, params) => {
                                     // required: "Full name is required",
                                 })}
                                 render={({ field }) => (
-                                    <Select placeholder="Chọn..."
+                                    <Select
+                                        placeholder="Chọn..."
                                         styles={customSelectStyles}
                                         {...field}
                                         options={status}
@@ -638,7 +669,8 @@ const AddLecturer = ({ type }, params) => {
                                     // required: "Full name is required",
                                 })}
                                 render={({ field }) => (
-                                    <Select placeholder="Chọn..."
+                                    <Select
+                                        placeholder="Chọn..."
                                         styles={customSelectStylesMulti}
                                         {...field}
                                         isRtl={isRtl}

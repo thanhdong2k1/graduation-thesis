@@ -868,10 +868,8 @@ const adminController = {
                 },
                 {
                   where: {
-                    ["id"]: req?.body?.deanId,
-                    [Op.ne]: {
-                      ["roleId"]: "R1",
-                    },
+                    id: req?.body?.deanId,
+                    roleId: { [Op.ne]: "R1" },
                   },
                 }
               );
@@ -917,10 +915,11 @@ const adminController = {
     try {
       if (req?.params?.id) {
         // console.log(req.body);
+        // tìm department theo id   => update tất cả lecturer có role R2 khi department theo id
         const department = await db.Department.findOne({
           where: { id: req?.params?.id },
         });
-        console.log("req", req);
+        console.log("req", department);
         department &&
           (await db.Lecturer.update(
             {
@@ -928,8 +927,8 @@ const adminController = {
             },
             {
               where: {
-                id: department?.deanId,
-                roleId: { [Op.ne]: "R1" },
+                departmentId: req?.params?.id,
+                roleId: "R2",
               },
             }
           ));
@@ -2104,7 +2103,7 @@ const adminController = {
     try {
       const whereClause = userController.whereClause(req?.body);
 
-      // console.log("whereClause", whereClause);
+      console.log("whereClause", whereClause);
 
       const queryOptions = {
         attributes: { exclude: ["password", "refreshToken", "image"] },
@@ -2136,10 +2135,30 @@ const adminController = {
       };
 
       if (Object.keys(whereClause).length > 0) {
+        if (!req?.body?.filterDepartment) {
+          queryOptions.where = {
+            [Op.or]: whereClause,
+          };
+        } else {
+          queryOptions.where = {
+            [Op.and]: {
+              [Op.or]: whereClause,
+              departmentId: req?.body?.filterDepartment,
+            },
+          };
+        }
+      } else if (
+        req.body?.filterDepartment &&
+        req?.body?.filterDepartment != 0
+      ) {
         queryOptions.where = {
-          [Op.or]: whereClause,
+          departmentId: req?.body?.filterDepartment,
         };
       }
+      console.log(
+        "aaạdặkdonkankđạnnbădbưadbặdnăkdmalkmdklưamd mđamlamđamka",
+        queryOptions
+      );
 
       const result = await db.Lecturer.findAndCountAll(queryOptions);
       // console.log(result);
@@ -2804,8 +2823,11 @@ const adminController = {
         const topic = await db.Thesis.findOne({
           where: { id: req?.body?.thesisId },
         });
+        console.log(topic);
         whereClause.id = topic?.topicId;
       }
+
+      console.log("whereClause", whereClause);
       if (Object.keys(whereClause).length > 0) {
         queryOptions.where = {
           [Op.or]: whereClause,
@@ -3255,14 +3277,8 @@ const adminController = {
       };
 
       console.log("req?.body", req?.body, whereClause);
-      let departmentSearch = req?.body?.filterDepartment
-        ? {
-            "$studentData.classData.majorData.departmentId$":
-              req?.body?.filterDepartment,
-          }
-        : null;
       if (Object.keys(whereClause).length > 0) {
-        if (!departmentSearch) {
+        if (!req?.body?.filterDepartment) {
           queryOptions.where = {
             [Op.or]: whereClause,
           };
@@ -3294,9 +3310,230 @@ const adminController = {
       });
     }
   },
+
+  getThesesExport: async (req, res) => {
+    try {
+      const whereClause = userController.whereClause(req?.body);
+
+      // console.log("whereClause", whereClause);
+
+      const queryOptions = {
+        include: [
+          {
+            model: db.Allcode,
+            as: "councilStatusData",
+          },
+          {
+            model: db.Allcode,
+            as: "resultData",
+          },
+          {
+            model: db.Allcode,
+            as: "thesisAdvisorStatusData",
+          },
+          {
+            model: db.Topic,
+            as: "topicData",
+            include: [
+              {
+                model: db.Allcode,
+                as: "statusData",
+              },
+            ],
+          },
+          {
+            model: db.Student,
+            as: "studentData",
+            include: [
+              {
+                model: db.Class,
+                as: "classData",
+                include: [
+                  {
+                    model: db.Major,
+                    as: "majorData",
+                  },
+                ],
+              },
+            ],
+          },
+          {
+            model: db.Council,
+            as: "councilData",
+          },
+          {
+            model: db.Lecturer,
+            as: "thesisAdvisorData",
+          },
+          {
+            model: db.ThesisSession,
+            as: "thesisSessionData",
+          },
+        ],
+        order: [["id", "ASC"]],
+        raw: true,
+        nest: true,
+      };
+
+      if (Object.keys(whereClause).length > 0) {
+        if (!req?.body?.filterDepartment) {
+          queryOptions.where = {
+            [Op.or]: whereClause,
+          };
+        } else {
+          queryOptions.where = {
+            [Op.and]: {
+              [Op.or]: whereClause,
+              "$studentData.classData.majorData.departmentId$":
+                req?.body?.filterDepartment,
+            },
+          };
+        }
+      } else if (req?.body?.filterDepartment != 0) {
+        queryOptions.where = {
+          "$studentData.classData.majorData.departmentId$":
+            req?.body?.filterDepartment,
+        };
+      }
+      console.log(queryOptions);
+
+      const marksExport = [];
+      const result = await db.Thesis.findAll(queryOptions);
+      async function processResults() {
+        let length = 0;
+        for (const res of result) {
+          const object = {};
+          length++;
+          object.id = length || "";
+          object.code = res?.studentData?.code || "";
+          object.fullName = res?.studentData?.fullName || "";
+          object.class = res?.studentData?.classData?.name || "";
+          object.topic = res?.topicData?.name || "";
+          object.thesisAdvisor = res?.thesisAdvisorData?.fullName || "";
+          object["(1)"] = +res?.advisorMark || "";
+          object["(12)"] = +res?.totalScore || "";
+
+          let marks = await db.Mark.findAndCountAll({
+            where: {
+              thesisId: res?.id,
+            },
+            include: [
+              {
+                model: db.CouncilDetail,
+                as: "councilDetailData",
+                include: [
+                  {
+                    model: db.Lecturer,
+                    as: "lecturerData",
+                  },
+                ],
+              },
+              
+            ],
+            order: [["councilDetailId", "ASC"]],
+            raw: true,
+          });
+          console.log("marks", marks);
+          let thesisSession = await db.ThesisSession.findOne({
+            where: {
+              id: res?.thesisSessionId,
+            },
+          });
+          if (thesisSession.validMark) {
+            console.log("Đã chấm full điểm");
+            // Điểm trung bình chưa lọc
+            function averageScoreUnfiltered(scores) {
+              const totalScore = scores.reduce(
+                (sum, score) => +sum + +score,
+                0
+              );
+              const averageScore = (+totalScore / scores?.length).toFixed(1);
+              return averageScore;
+            }
+            // Điểm trung bình đã lọc
+            function averageScoreFiltered(
+              scores,
+              validMark,
+              councilAverageScoreUnfiltered
+            ) {
+              const validScores = scores.filter(
+                (score) =>
+                  Math.abs(+score - +councilAverageScoreUnfiltered) < +validMark
+              );
+              console.log("validScores", validScores, scores);
+              const totalScore = validScores?.reduce(
+                (sum, score) => +sum + +score,
+                0
+              );
+              const averageScore = (+totalScore / validScores?.length)?.toFixed(
+                1
+              );
+              return { averageScore, validScores };
+            }
+
+            const validMark = thesisSession.validMark; // Điểm hợp lệ
+
+            const councilScores = marks?.rows
+              ?.filter((mark) => mark["councilDetailData.positionId"] !== "P3")
+              .map((mark) => mark.totalMark);
+
+            let countP3 = 0;
+            let countP4 = 0;
+            marks?.rows?.map((mark) => {
+              if(mark["councilDetailData.positionId"]){
+                if (mark["councilDetailData.positionId"] == "P1") {
+                  object["(4)"] = +mark.totalMark||"";
+                } else if (mark["councilDetailData.positionId"] == "P2") {
+                  object["(5)"] = +mark.totalMark||"";
+                } else if (mark["councilDetailData.positionId"] == "P3") {
+                  if (countP3 < 2) {
+                    object[`(${2 + countP3})`] = +mark.totalMark||"";
+                    object[`fullNameP3${countP3+1}`] = mark["councilDetailData.lecturerData.fullName"];
+                    countP3++;
+                  }
+                } else if (mark["councilDetailData.positionId"] == "P4") {
+                  if (countP4 < 5) {
+                    object[`(${6 + countP4})`] = +mark.totalMark||"";
+                    countP4++;
+                  }
+                }
+              }
+            });
+            
+            const councilAverageScoreUnfiltered =
+              averageScoreUnfiltered(councilScores); //Điểm trung bình chưa lọc
+
+            const councilAverageScoreFiltered = averageScoreFiltered(
+              councilScores,
+              validMark,
+              councilAverageScoreUnfiltered
+            ); //Điểm hội đồng đã lọc
+
+            console.log(
+              "councilAverageScoreFiltered",
+              councilAverageScoreFiltered
+            );
+            object["(11)"] = +councilAverageScoreFiltered.averageScore || "";
+          }
+          marksExport.push(object);
+          // console.log("marksExport", marksExport);
+        }
+      }
+
+      // Gọi hàm processResults
+      await processResults();
+      // console.log(result);
+      return res.status(200).json({ errCode: 0, marksExport });
+    } catch (error) {
+      return res.status(500).json({
+        errCode: -1,
+        errMessage: "Dữ liệu không mong muốn, thử lại sau hoặc dữ liệu khác!",
+      });
+    }
+  },
   getThesisById: async (req, res) => {
     try {
-      const result = await db.Thesis.findOne({
+      const thesis = await db.Thesis.findOne({
         where: {
           id: req?.params?.id,
         },
@@ -3338,10 +3575,38 @@ const adminController = {
         raw: true,
         nest: true,
       });
-      if (result) {
-        return res
-          .status(200)
-          .json({ errCode: 0, errMessage: "Tìm dữ liệu thành công.", result });
+
+      if (thesis) {
+        const mark = await db.Mark.findAll({
+          where: {
+            thesisId: req?.params?.id,
+          },
+          include: [
+            {
+              model: db.CouncilDetail,
+              as: "councilDetailData",
+              include: [
+                {
+                  model: db.Allcode,
+                  as: "positionData",
+                },
+                {
+                  model: db.Lecturer,
+                  as: "lecturerData",
+                },
+              ],
+              order: [["positionId", "DESC"]],
+            },
+          ],
+          raw: true,
+          nest: true,
+        });
+        console.log("mark", mark);
+        return res.status(200).json({
+          errCode: 0,
+          errMessage: "Tìm dữ liệu thành công.",
+          result: { thesis, mark },
+        });
       } else {
         return res.status(200).json({
           errCode: 1,
@@ -3375,6 +3640,27 @@ const adminController = {
   addThesis: async (req, res) => {
     try {
       if (req?.body) {
+        const currentDate = new Date();
+
+        // Lấy thông tin về ngày, tháng và năm
+        const year = currentDate.getFullYear();
+        const month = String(currentDate.getMonth() + 1).padStart(2, "0");
+        const day = String(currentDate.getDate()).padStart(2, "0");
+
+        // Tạo chuỗi có định dạng "YYYY-MM-DD"
+        const formattedDate = `${year}-${month}-${day}`;
+
+        console.log(formattedDate);
+        let thesisSession = await db.ThesisSession.findOne({
+          where: {
+            startDate: { [Op.lte]: formattedDate },
+            endDate: { [Op.gte]: formattedDate },
+          },
+          order: [["createdAt", "DESC"]],
+          raw: true,
+          nest: true,
+        });
+        console.log("result", thesisSession);
         const result = await db.Thesis.create({
           startDate: req?.body?.startDate,
           complateDate: req?.body?.complateDate,
@@ -3391,7 +3677,9 @@ const adminController = {
           studentId: req?.body?.studentId,
           thesisAdvisorId: req?.body?.thesisAdvisorId,
           thesisAdvisorStatusId: req?.body?.thesisAdvisorStatusId,
-          thesisSessionId: req?.body?.thesisSessionId,
+          thesisSessionId: req?.body?.thesisSessionId
+            ? req?.body?.thesisSessionId
+            : thesisSession?.id,
           councilId: req?.body?.councilId,
           councilStatusId: req?.body?.councilStatusId,
         });
@@ -3450,6 +3738,27 @@ const adminController = {
     try {
       if (req?.params?.id) {
         // console.log(req.body);
+        const currentDate = new Date();
+
+        // Lấy thông tin về ngày, tháng và năm
+        const year = currentDate.getFullYear();
+        const month = String(currentDate.getMonth() + 1).padStart(2, "0");
+        const day = String(currentDate.getDate()).padStart(2, "0");
+
+        // Tạo chuỗi có định dạng "YYYY-MM-DD"
+        const formattedDate = `${year}-${month}-${day}`;
+
+        console.log(formattedDate);
+        let thesisSession = await db.ThesisSession.findOne({
+          where: {
+            startDate: { [Op.lte]: formattedDate },
+            endDate: { [Op.gte]: formattedDate },
+          },
+          order: [["createdAt", "DESC"]],
+          raw: true,
+          nest: true,
+        });
+        console.log("result", thesisSession);
         const result = await db.Thesis.update(
           {
             startDate: req?.body?.startDate,
@@ -3467,7 +3776,9 @@ const adminController = {
             studentId: req?.body?.studentId,
             thesisAdvisorId: req?.body?.thesisAdvisorId,
             thesisAdvisorStatusId: req?.body?.thesisAdvisorStatusId,
-            thesisSessionId: req?.body?.thesisSessionId,
+            thesisSessionId: req?.body?.thesisSessionId
+              ? req?.body?.thesisSessionId
+              : thesisSession?.id,
             councilId: req?.body?.councilId,
             councilStatusId: req?.body?.councilStatusId,
           },

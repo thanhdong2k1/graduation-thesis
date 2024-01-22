@@ -541,9 +541,31 @@ const studentController = {
 
   registerTopicById: async (req, res) => {
     try {
+      const currentDate = new Date();
+
+        // Lấy thông tin về ngày, tháng và năm
+        const year = currentDate.getFullYear();
+        const month = String(currentDate.getMonth() + 1).padStart(2, "0");
+        const day = String(currentDate.getDate()).padStart(2, "0");
+
+        // Tạo chuỗi có định dạng "YYYY-MM-DD"
+        const formattedDate = `${year}-${month}-${day}`;
+
+        console.log(formattedDate);
+        let thesisSession = await db.ThesisSession.findOne({
+          where: {
+            startDate: { [Op.lte]: formattedDate },
+            endDate: { [Op.gte]: formattedDate },
+          },
+          order: [["createdAt", "DESC"]],
+          raw: true,
+          nest: true,
+        });
+        console.log("result", thesisSession);
       let thesis = await db.Thesis.findOne({
         where: {
           studentId: req?.user?.id,
+          thesisSessionId: thesisSession?.id,
           thesisAdvisorId: { [Op.ne]: null },
         },
         include: [
@@ -585,7 +607,7 @@ const studentController = {
                 {
                   topicId: req?.params?.id,
                 },
-                { where: { studentId: req?.user?.id } }
+                { where: { studentId: req?.user?.id, thesisSessionId: thesisSession?.id } }
               );
               await db.Topic.update(
                 {

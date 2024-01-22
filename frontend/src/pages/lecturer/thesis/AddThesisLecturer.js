@@ -59,8 +59,8 @@ const AddThesisLecturer = ({ type }) => {
     const importFile = async (e) => {
         /* get data as an ArrayBuffer */
         console.log(e.target.files);
-        setFile(e.target.files[0]);
-        setFileName(e.target.files[0].name);
+        setFile(e?.target?.files[0]);
+        setFileName(e?.target?.files[0].name);
     };
     const [isRtl, setIsRtl] = useState(false);
     const [showModal, setShowModal] = useState(false);
@@ -184,7 +184,6 @@ const AddThesisLecturer = ({ type }) => {
             });
     };
     useEffect(() => {
-        const toastId = toast.loading("Vui lòng đợi...");
         apiAdmin.apiGetResult(currentUser, dispatch, axiosJWT);
         apiAdmin.apiGetHandle(currentUser, dispatch, axiosJWT);
         apiAdmin.getAllTopics({
@@ -222,81 +221,44 @@ const AddThesisLecturer = ({ type }) => {
                     axiosJWT: axiosJWT,
                 })
                 .then((res) => {
-                    if (res?.errCode > 0 || res?.errCode < 0) {
-                        toast.update(id, {
-                            render: res?.errMessage,
-                            type: "error",
-                            isLoading: false,
-                            closeButton: true,
-                            autoClose: 1500,
-                            pauseOnFocusLoss: true,
-                        });
-                    } else {
-                        // console.log(res);
-                        let convert = [];
+                    setValue("id", res?.result?.thesis?.id);
+                    setValue("result", res?.result?.thesis?.resultData?.valueVi);
+                    setValue("student", res?.result?.thesis?.studentData?.fullName);
+                    setValue("studentId", res?.result?.thesis?.studentId);
+                    setValue("topic", res?.result?.thesis?.topicData?.name);
+                    setValue(
+                        "thesisAdvisor",
+                        res?.result?.thesis?.thesisAdvisorData?.fullName
+                    );
+                    setValue("thesisAdvisorId", res?.result?.thesis?.thesisAdvisorId);
+                    setValue(
+                        "thesisAdvisorStatus",
+                        res?.result?.thesis?.thesisAdvisorStatusData?.valueVi
+                    );
+                    setValue(
+                        "thesisSession",
+                        res?.result?.thesis?.thesisSessionData?.name
+                    );
+                    setValue("council", res?.result?.thesis?.councilData?.name);
+                    setValue(
+                        "councilStatus",
+                        res?.result?.thesis?.councilStatusData?.valueVi
+                    );
 
-                        setValue("id", res?.result?.id);
-                        setValue("result", res?.result?.resultData.valueVi);
-                        setValue("student", res?.result?.studentData.fullName);
-                        setValue("studentId", res?.result?.studentId);
-                        setValue("topic", res?.result?.topicData.name);
-                        setValue(
-                            "thesisAdvisor",
-                            res?.result?.thesisAdvisorData.fullName
-                        );
-                        setValue(
-                            "thesisAdvisorId",
-                            res?.result?.thesisAdvisorId
-                        );
-                        setValue(
-                            "thesisAdvisorStatus",
-                            res?.result?.thesisAdvisorStatusData.valueVi
-                        );
-                        setValue(
-                            "thesisSession",
-                            res?.result?.thesisSessionData.name
-                        );
-                        setValue("council", res?.result?.councilData.name);
-                        setValue(
-                            "councilStatus",
-                            res?.result?.councilStatusData.valueVi
-                        );
+                    setValue("startDate", res?.result?.thesis?.startDate);
+                    setValue("complateDate", res?.result?.thesis?.complateDate);
+                    setValue("thesisStartDate", res?.result?.thesis?.thesisStartDate);
+                    setValue("thesisEndDate", res?.result?.thesis?.thesisEndDate);
+                    setValue("totalScore", res?.result?.thesis?.totalScore);
+                    setValue("advisorMark", res?.result?.thesis?.advisorMark);
+                    setValue("reportFile", res?.result?.thesis?.reportFile);
 
-                        setValue("startDate", res?.result?.startDate);
-                        setValue("complateDate", res?.result?.complateDate);
-                        setValue(
-                            "thesisStartDate",
-                            res?.result?.thesisStartDate
-                        );
-                        setValue("thesisEndDate", res?.result?.thesisEndDate);
-                        setValue("totalScore", res?.result?.totalScore);
-                        setValue("advisorMark", res?.result?.advisorMark);
-                        setValue("reportFile", res?.result?.reportFile);
+                    setReportFile(res?.result?.thesis?.reportFile);
 
-                        setReportFile(res?.result?.reportFile);
-
-                        console.log(getValues("reportFile"));
-                        toast.update(toastId, {
-                            render: res?.errMessage,
-                            type: "success",
-                            isLoading: false,
-                            closeButton: true,
-                            autoClose: 1500,
-                            pauseOnFocusLoss: true,
-                        });
-                        // reset();
-                    }
+                    console.log(getValues("reportFile"));
                 })
                 .catch((error) => {
                     // console.log(error);
-                    toast.update(id, {
-                        render: "Đã xảy ra lỗi, vui lòng thử lại sau",
-                        type: "error",
-                        isLoading: false,
-                        closeButton: true,
-                        autoClose: 1500,
-                        pauseOnFocusLoss: true,
-                    });
                 });
         }
     }, []);

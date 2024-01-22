@@ -145,6 +145,7 @@ export const apiUser = {
                 filterSearch: filterSearch,
             });
             dispatch(getTopicsSuccess(res?.data));
+            return res?.data;
         } catch (error) {
             // console.log(error);
             dispatch(getTopicsFailed());
@@ -158,6 +159,7 @@ export const apiUser = {
                 filterSearch: filterSearch,
             });
             dispatch(getCouncilsSuccess(res?.data));
+            return res?.data;
         } catch (error) {
             // console.log(error);
             dispatch(getCouncilsFailed());
@@ -262,6 +264,7 @@ export const apiAdmin = {
             );
             // console.log(res);
             dispatch(getInformationSuccess(res?.data));
+            return res?.data;
         } catch (error) {
             // console.log(error);
             if (error?.response?.status) {
@@ -343,7 +346,7 @@ export const apiAdmin = {
             code = res?.data?.code?.map((v) => {
                 return { value: v.code, label: `${v.valueVi}` };
             });
-            // console.log(res);
+            console.log("res", res);
             dispatch(getPositionSuccess({ code }));
         } catch (error) {
             // console.log(error);
@@ -505,6 +508,7 @@ export const apiAdmin = {
                 }
             );
             dispatch(getAdminCouncilsSuccess(res?.data));
+            return res?.data;
         } catch (error) {
             toast.error(error?.response?.data?.errMessage);
             dispatch(getAdminCouncilsFailed());
@@ -683,6 +687,7 @@ export const apiAdmin = {
                 }
             );
             dispatch(getAdminDepartmentsSuccess(res?.data));
+            return res?.data;
         } catch (error) {
             toast.error(error?.response?.data?.errMessage);
             dispatch(getAdminDepartmentsFailed());
@@ -801,7 +806,7 @@ export const apiAdmin = {
         user,
         inputSearch,
         filterSearch,
-        dispatch,
+        dispatch,filterDepartment,
         axiosJWT,
     }) => {
         try {
@@ -811,6 +816,7 @@ export const apiAdmin = {
                 {
                     inputSearch: inputSearch,
                     filterSearch: filterSearch,
+                    filterDepartment: filterDepartment,
                 },
                 {
                     headers: {
@@ -819,6 +825,7 @@ export const apiAdmin = {
                 }
             );
             dispatch(getAdminLecturersSuccess(res?.data));
+            return res?.data;
         } catch (error) {
             toast.error(error?.response?.data?.errMessage);
             dispatch(getAdminLecturersFailed());
@@ -993,6 +1000,7 @@ export const apiAdmin = {
                 }
             );
             dispatch(getAdminBlocksSuccess(res?.data));
+            return res?.data;
         } catch (error) {
             toast.error(error?.response?.data?.errMessage);
             dispatch(getAdminBlocksFailed());
@@ -1136,6 +1144,7 @@ export const apiAdmin = {
                 }
             );
             dispatch(getAdminEvaluationMethodsSuccess(res?.data));
+            return res?.data;
         } catch (error) {
             toast.error(error?.response?.data?.errMessage);
             dispatch(getAdminEvaluationMethodsFailed());
@@ -1265,6 +1274,7 @@ export const apiAdmin = {
                 }
             );
             dispatch(getAdminMajorsSuccess(res?.data));
+            return res?.data;
         } catch (error) {
             toast.error(error?.response?.data?.errMessage);
             dispatch(getAdminMajorsFailed());
@@ -1399,6 +1409,7 @@ export const apiAdmin = {
                 }
             );
             dispatch(getAdminClassesSuccess(res?.data));
+            return res?.data;
         } catch (error) {
             toast.error(error?.response?.data?.errMessage);
             dispatch(getAdminClassesFailed());
@@ -1543,6 +1554,7 @@ export const apiAdmin = {
                 }
             );
             dispatch(getAdminStudentsSuccess(res?.data));
+            return res?.data;
         } catch (error) {
             toast.error(error?.response?.data?.errMessage);
             dispatch(getAdminStudentsFailed());
@@ -1719,7 +1731,7 @@ export const apiAdmin = {
     },
     apiDeleteStudent: async ({ user, data, axiosJWT }) => {
         try {
-            const res = await axiosJWT.delete(`/api/admin/delete/${data?.id}`, {
+            const res = await axiosJWT.delete(`/api/admin/delete-student/${data?.id}`, {
                 headers: {
                     token: `Bearer ${user?.accessToken}`,
                 },
@@ -1758,9 +1770,37 @@ export const apiAdmin = {
                 }
             );
             dispatch(getAdminThesesSuccess(res?.data));
+            return res?.data;
         } catch (error) {
             toast.error(error?.response?.data?.errMessage);
             dispatch(getAdminThesesFailed());
+        }
+    },
+    exportTheses: async ({
+        user,
+        inputSearch,
+        filterSearch,
+        filterDepartment,
+        dispatch,
+        axiosJWT,
+    }) => {
+        try {
+            const res = await axiosJWT.post(
+                "/api/admin/export-theses",
+                {
+                    inputSearch: inputSearch,
+                    filterSearch: filterSearch,
+                    filterDepartment: filterDepartment,
+                },
+                {
+                    headers: {
+                        token: `Bearer ${user?.accessToken}`,
+                    },
+                }
+            );
+            return res?.data;
+        } catch (error) {
+            toast.error(error?.response?.data?.errMessage);
         }
     },
     getAllThesesNotDispatch: async ({
@@ -1856,7 +1896,7 @@ export const apiAdmin = {
                         ? data?.thesisAdvisorStatus[0]?.value
                             ? data?.thesisAdvisorStatus[0]?.value
                             : data?.thesisAdvisorStatus.value
-                        : null,
+                        : data?.thesisAdvisor?"H3":null,
                     thesisSessionId: data?.thesisSession
                         ? data?.thesisSession[0]?.value
                             ? data?.thesisSession[0]?.value
@@ -1922,7 +1962,7 @@ export const apiAdmin = {
                         ? data?.thesisAdvisorStatus[0]?.value
                             ? data?.thesisAdvisorStatus[0]?.value
                             : data?.thesisAdvisorStatus.value
-                        : null,
+                        : data?.thesisAdvisor?"H3":null,
                     thesisSessionId: data?.thesisSession
                         ? data?.thesisSession[0]?.value
                             ? data?.thesisSession[0]?.value
@@ -1979,6 +2019,7 @@ export const apiAdmin = {
         thesisId,
         inputSearch,
         filterSearch,
+        topicId,
         dispatch,
         axiosJWT,
     }) => {
@@ -1998,6 +2039,7 @@ export const apiAdmin = {
                 }
             );
             dispatch(getAdminTopicsSuccess(res?.data));
+            return res?.data;
         } catch (error) {
             toast.error(error?.response?.data?.errMessage);
             dispatch(getAdminTopicsFailed());
@@ -2145,6 +2187,7 @@ export const apiAdmin = {
             // console.log(res);
             // dispatch(getStatusSuccess({ code }));
             dispatch(getAdminThesisSessionsSuccess(res?.data));
+            return res?.data;
         } catch (error) {
             toast.error(error?.response?.data?.errMessage);
             dispatch(getAdminThesisSessionsFailed());
@@ -2351,6 +2394,7 @@ export const apiLecturer = {
             );
             // console.log(res);
             dispatch(getInformationSuccess(res?.data));
+            return res?.data;
         } catch (error) {
             // console.log(error);
             if (error?.response?.status) {
@@ -2556,6 +2600,185 @@ export const apiLecturer = {
     },
 
     // Api Council
+    getAllDeanCouncils: async ({
+        user,
+        inputSearch,
+        filterSearch,
+        dispatch,
+        axiosJWT,
+    }) => {
+        try {
+            dispatch(getAdminCouncilsStart());
+            const res = await axiosJWT.post(
+                "/api/lecturer/dean-councils",
+                {
+                    inputSearch: inputSearch,
+                    filterSearch: filterSearch,
+                },
+                {
+                    headers: {
+                        token: `Bearer ${user?.accessToken}`,
+                    },
+                }
+            );
+            dispatch(getAdminCouncilsSuccess(res?.data));
+            return res?.data;
+        } catch (error) {
+            toast.error(error?.response?.data?.errMessage);
+            dispatch(getAdminCouncilsFailed());
+        }
+    },
+    getDeanCouncilById: async ({ user, id, axiosJWT }) => {
+        try {
+            const res = await axiosJWT.get(`/api/admin/council/${id}`, {
+                headers: {
+                    token: `Bearer ${user?.accessToken}`,
+                },
+            });
+            return res?.data;
+        } catch (error) {
+            return error?.response?.data;
+        }
+    },
+    importDeanCouncils: async ({ user, data, axiosJWT }) => {
+        try {
+            const res = await axiosJWT.post(
+                "/api/lecturer/import-dean-councils",
+                {
+                    data: data,
+                },
+                {
+                    headers: {
+                        token: `Bearer ${user?.accessToken}`,
+                    },
+                }
+            );
+            return res?.data;
+        } catch (error) {
+            // console.log(error?.response?.data);
+            if (error?.response?.status) {
+                return error?.response?.data;
+            }
+        }
+    },
+    apiAddDeanCouncil: async ({
+        user,
+        data,
+        councilDetails,
+        thesesDetails,
+        axiosJWT,
+    }) => {
+        try {
+            const res = await axiosJWT.post(
+                "/api/lecturer/create-dean-council",
+                {
+                    name: data?.name,
+                    description: data?.description,
+                    statusId: data?.status
+                        ? data?.status[0]?.value
+                            ? data?.status[0]?.value
+                            : data?.status?.value
+                        : null,
+                    thesisSessionId: data?.thesisSession
+                        ? data?.thesisSession[0]?.value
+                            ? data?.thesisSession[0]?.value
+                            : data?.thesisSession?.value
+                        : null,
+                    councilDetails: councilDetails,
+                    thesesDetails: thesesDetails,
+                },
+                {
+                    headers: {
+                        token: `Bearer ${user?.accessToken}`,
+                    },
+                }
+            );
+            return res?.data;
+        } catch (error) {
+            // console.log(error);
+            if (error?.response?.status) {
+                return error?.response?.data;
+            }
+        }
+    },
+    apiUpdateDeanCouncil: async ({
+        user,
+        data,
+        councilDetails,
+        thesesDetails,
+        axiosJWT,
+    }) => {
+        try {
+            const res = await axiosJWT.put(
+                `/api/lecturer/update-dean-council/${data?.id}`,
+                {
+                    name: data?.name,
+                    description: data?.description,
+                    statusId: data?.status
+                        ? data?.status[0]?.value
+                            ? data?.status[0]?.value
+                            : data?.status?.value
+                        : null,
+                    thesisSessionId: data?.thesisSession
+                        ? data?.thesisSession[0]?.value
+                            ? data?.thesisSession[0]?.value
+                            : data?.thesisSession?.value
+                        : null,
+                    councilDetails: councilDetails,
+                    thesesDetails: thesesDetails,
+                },
+                {
+                    headers: {
+                        token: `Bearer ${user?.accessToken}`,
+                    },
+                }
+            );
+            return res?.data;
+        } catch (error) {
+            // console.log(error);
+            if (error?.response?.status) {
+                return error?.response?.data;
+            }
+        }
+    },
+    apiDeleteDeanCouncilDetail: async ({ user, data, axiosJWT }) => {
+        try {
+            const res = await axiosJWT.delete(
+                `/api/lecturer/delete-dean-council-detail/${data?.id}`,
+                {
+                    headers: {
+                        token: `Bearer ${user?.accessToken}`,
+                    },
+                }
+            );
+            return res?.data;
+        } catch (error) {
+            // console.log(error);
+            if (error?.response?.status) {
+                return error?.response?.data;
+            }
+        }
+    },
+    apiDeleteDeanCouncil: async ({ user, data, axiosJWT }) => {
+        try {
+            const res = await axiosJWT.delete(
+                `/api/lecturer/delete-dean-council/${data?.id}`,
+                {
+                    headers: {
+                        token: `Bearer ${user?.accessToken}`,
+                    },
+                }
+            );
+            return res?.data;
+        } catch (error) {
+            // console.log(error);
+            if (error?.response?.status) {
+                return error?.response?.data;
+            }
+        }
+    },
+
+    // Api Council
     getAllCouncils: async ({
         user,
         inputSearch,
@@ -2578,6 +2801,7 @@ export const apiLecturer = {
                 }
             );
             dispatch(getAdminCouncilsSuccess(res?.data));
+            return res?.data;
         } catch (error) {
             toast.error(error?.response?.data?.errMessage);
             dispatch(getAdminCouncilsFailed());
@@ -2724,6 +2948,7 @@ export const apiLecturer = {
                 }
             );
             dispatch(getAdminThesesSuccess(res?.data));
+            return res?.data;
         } catch (error) {
             toast.error(error?.response?.data?.errMessage);
             dispatch(getAdminThesesFailed());
@@ -2766,6 +2991,7 @@ export const apiLecturer = {
                 }
             );
             dispatch(getAdminThesesSuccess(res?.data));
+            return res?.data;
         } catch (error) {
             toast.error(error?.response?.data?.errMessage);
             dispatch(getAdminThesesFailed());
@@ -2817,6 +3043,7 @@ export const apiLecturer = {
                 }
             );
             dispatch(getAdminThesesSuccess(res?.data));
+            return res?.data;
         } catch (error) {
             toast.error(error?.response?.data?.errMessage);
             dispatch(getAdminThesesFailed());
@@ -2844,6 +3071,7 @@ export const apiLecturer = {
                 }
             );
             dispatch(getAdminThesesSuccess(res?.data));
+            return res?.data;
         } catch (error) {
             toast.error(error?.response?.data?.errMessage);
             dispatch(getAdminThesesFailed());
@@ -2973,7 +3201,7 @@ export const apiLecturer = {
         axiosJWT,
     }) => {
         try {
-            dispatch(getTopicsStart());
+            dispatch(getAdminTopicsStart());
             const res = await axiosJWT.post(
                 "/api/lecturer/dean-topics",
                 {
@@ -2987,10 +3215,11 @@ export const apiLecturer = {
                     },
                 }
             );
-            dispatch(getTopicsSuccess(res?.data));
+            dispatch(getAdminTopicsSuccess(res?.data));
+            return res?.data;
         } catch (error) {
             toast.error(error?.response?.data?.errMessage);
-            dispatch(getTopicsFailed());
+            dispatch(getAdminTopicsFailed());
         }
     },
     getAllDeanTheses: async ({
@@ -3017,6 +3246,7 @@ export const apiLecturer = {
                 }
             );
             dispatch(getAdminThesesSuccess(res?.data));
+            return res?.data;
         } catch (error) {
             toast.error(error?.response?.data?.errMessage);
             dispatch(getAdminThesesFailed());
@@ -3180,6 +3410,7 @@ export const apiStudent = {
             );
             // console.log(res);
             dispatch(getInformationStudentSuccess(res?.data));
+            return res?.data;
         } catch (error) {
             // console.log(error);
             if (error?.response?.status) {
@@ -3409,6 +3640,7 @@ export const apiStudent = {
                 }
             );
             dispatch(getStudentTopicsSuccess(res?.data));
+            return res?.data;
         } catch (error) {
             toast.error(error?.response?.data?.errMessage);
             dispatch(getStudentTopicsFailed());
@@ -3473,6 +3705,7 @@ export const apiStudent = {
                 }
             );
             dispatch(getStudentLecturersSuccess(res?.data));
+            return res?.data;
         } catch (error) {
             toast.error(error?.response?.data?.errMessage);
             dispatch(getStudentLecturersFailed());
@@ -3544,6 +3777,7 @@ export const apiStudent = {
                 }
             );
             dispatch(getStudentThesesSuccess(res?.data));
+            return res?.data;
         } catch (error) {
             toast.error(error?.response?.data?.errMessage);
             dispatch(getStudentThesesFailed([]));

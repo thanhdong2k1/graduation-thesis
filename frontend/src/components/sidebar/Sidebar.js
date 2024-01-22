@@ -25,7 +25,7 @@ const Sidebar = ({ isShowSidebar, setIsShowSidebar }) => {
                 !route?.name?.includes("Update")&&
                 !route?.name?.includes("Detail")
         );
-    console.log("routesAdmin", routesAdmin,path?.pathname?.split("/") );
+    // console.log("routesAdmin", routesAdmin,path?.pathname?.split("/") );
     return (
         <div
             onBlur={() => {

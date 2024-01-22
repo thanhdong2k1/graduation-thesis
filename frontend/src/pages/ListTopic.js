@@ -28,7 +28,7 @@ const ListTopic = () => {
         isSearched: false,
         filterSearch: "",
         offset: 0,
-        limit: 5,
+        limit: 10,
         pages: 0,
         currentPage: 1,
     });

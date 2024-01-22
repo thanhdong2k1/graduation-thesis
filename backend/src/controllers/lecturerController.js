@@ -448,6 +448,415 @@ const lecturerController = {
       });
     }
   },
+
+  // Api Council
+  getDeanCouncils: async (req, res) => {
+    try {
+      const whereClause = userController.whereClause(req?.body);
+
+      let department = await db.Lecturer.findOne({
+        where: { id: req?.user?.id },
+      });
+      console.log("whereClause này", department);
+
+      const queryOptions = {
+        include: [
+          {
+            model: db.Council,
+            as: "councilData",
+            // attributes: ["name"],
+            include: [
+              {
+                model: db.Allcode,
+                as: "statusData",
+                // attributes: ["name"],
+              },
+              {
+                model: db.ThesisSession,
+                as: "thesisSessionData",
+              },
+            ],
+          },
+          {
+            model: db.Lecturer,
+            as: "lecturerData",
+            // attributes: ["name"],
+          },
+        ],
+        order: [["updatedAt", "DESC"]],
+        raw: true,
+        nest: true,
+        // group: ["councilData.id"]
+      };
+
+      if (Object.keys(whereClause).length > 0) {
+        queryOptions.where = {
+          [Op.and]: {
+            [Op.or]: whereClause,
+            positionId: "P1",
+            "$lecturerData.departmentId$": department.departmentId,
+          },
+        };
+      }
+
+      const result = await db.CouncilDetail.findAndCountAll(queryOptions);
+      // console.log(result);
+      const { rows: councils, count: totalRecords } = result;
+      return res.status(200).json({ errCode: 0, councils, totalRecords });
+    } catch (error) {
+      return res.status(500).json({
+        errCode: -1,
+        errMessage: "Dữ liệu không mong muốn, thử lại sau hoặc dữ liệu khác!",
+      });
+    }
+  },
+  getDeanCouncilById: async (req, res) => {
+    try {
+      const result = await db.Council.findOne({
+        where: {
+          id: req?.params?.id,
+        },
+        include: [
+          {
+            model: db.Allcode,
+            as: "statusData",
+            // attributes: ["name"],
+          },
+          {
+            model: db.ThesisSession,
+            as: "thesisSessionData",
+          },
+        ],
+        order: [["updatedAt", "DESC"]],
+        raw: true,
+        nest: true,
+      });
+      if (result) {
+        return res
+          .status(200)
+          .json({ errCode: 0, errMessage: "Tìm dữ liệu thành công.", result });
+      } else {
+        return res.status(200).json({
+          errCode: 1,
+          errMessage: "Đã xảy ra lỗi trong quá trình tìm, vui lòng thử lại sau",
+        });
+      }
+    } catch (error) {
+      return res.status(500).json({
+        errCode: -1,
+        errMessage: "Dữ liệu không mong muốn, thử lại sau hoặc dữ liệu khác!",
+      });
+    }
+  },
+  addDeanCouncil: async (req, res) => {
+    try {
+      if (req?.body) {
+        let result = await db.Council.create({
+          name: req?.body?.name,
+          description: req?.body?.description,
+          statusId: req?.body?.statusId,
+          thesisSessionId: req?.body?.thesisSessionId,
+        });
+        if (result) {
+          let councilDetails = [];
+          req?.body?.councilDetails.map((criteria) => {
+            councilDetails.push({
+              councilId: result?.dataValues?.id,
+              ...criteria,
+            });
+          });
+          req?.body?.thesesDetails.map(async (thesis) => {
+            await db.Thesis.update(
+              {
+                councilId: result?.dataValues?.id,
+              },
+              { where: { id: thesis.thesisId } }
+            );
+          });
+          console.log("councilDetails", councilDetails);
+          result = null;
+          result = councilDetails.map(async (position) => {
+            console.log("position", position);
+            console.log("req?.body?.thesesDetails", req?.body?.thesesDetails);
+            let res = await db.CouncilDetail.create(position);
+            req?.body?.thesesDetails.map(async (thesis) => {
+              await db.Mark.create({
+                councilDetailId: res?.dataValues?.id,
+                thesisId: thesis?.thesisId,
+              });
+            });
+          });
+          console.log(result);
+          // result = await db.CouncilDetail.bulkCreate(councilDetails);
+          // req?.body?.thesesDetails.map(async (thesis) => {
+          //   await db.Mark.update(
+          //     {
+          //       councilId: result?.dataValues?.id,
+          //     },
+          //     { where: { id: thesis.id } }
+          //   );
+          // });
+          if (result) {
+            return res
+              .status(200)
+              .json({ errCode: 0, errMessage: "Thêm dữ liệu thành công." });
+          } else {
+            return res.status(200).json({
+              errCode: 2,
+              errMessage:
+                "Đã xảy ra lỗi trong quá trình thêm, vui lòng thử lại sau.",
+            });
+          }
+        } else {
+          return res.status(200).json({
+            errCode: 2,
+            errMessage:
+              "Đã xảy ra lỗi trong quá trình thêm, vui lòng thử lại sau.",
+          });
+        }
+      } else {
+        return res
+          .status(404)
+          .json({ errCode: 1, errMessage: "Dữ liệu không được tìm thấy!" });
+      }
+    } catch (error) {
+      return res.status(500).json({
+        errCode: -1,
+        errMessage: "Dữ liệu không mong muốn, thử lại sau hoặc dữ liệu khác!",
+      });
+    }
+  },
+  updateDeanCouncil: async (req, res) => {
+    try {
+      if (req?.params?.id) {
+        console.log(req.body);
+        let result = await db.Council.update(
+          {
+            name: req?.body?.name,
+            description: req?.body?.description,
+            statusId: req?.body?.statusId,
+            thesisSessionId: req?.body?.thesisSessionId,
+          },
+          { where: { id: req?.params?.id } }
+        );
+        if (result) {
+          // Thêm councilId vào chi tiết
+          let councilDetails = [];
+          req?.body?.councilDetails.map((position) => {
+            councilDetails.push({
+              councilId: req?.params?.id,
+              ...position,
+            });
+          });
+          let countThesisDuplicate = 0;
+          await db.Thesis.update(
+            {
+              councilId: null,
+            },
+            {
+              where: {
+                councilId: req?.params?.id,
+              },
+            }
+          );
+          // Cập nhật hội đồng chấm
+          req?.body?.thesesDetails.map(async (thesis) => {
+            // console.log(thesis);
+            let update = await db.Thesis.update(
+              {
+                councilId: req?.params?.id,
+              },
+              {
+                where: {
+                  [Op.and]: {
+                    id: thesis.thesisId,
+                    councilId: { [Op.is]: null },
+                  },
+                },
+              }
+            );
+            update ? (countThesisDuplicate += 1) : "";
+          });
+          result = null;
+          let ids = councilDetails?.map((position) => position.id);
+          let resultDelete = await db.CouncilDetail.findAll({
+            where: {
+              id: {
+                [Op.notIn]: ids,
+              },
+              councilId: req?.params?.id,
+            },
+          });
+          // xóa tất cả chi tiết không nằm trong danh sách gửi lên
+          ids = resultDelete?.map((position) => position.id);
+          result = await db.CouncilDetail.destroy({
+            where: { id: ids },
+          });
+
+          // console.log("resultDelete", result, ids);
+
+          result = await db.CouncilDetail.bulkCreate(councilDetails, {
+            upsertKeys: ["id"],
+            updateOnDuplicate: ["positionId", "councilId", "lecturerId"],
+          });
+
+          councilDetails = await db.CouncilDetail.findAll({
+            where: {
+              councilId: req?.params?.id,
+            },
+          });
+          console.log("councilDetails", councilDetails);
+          result = await Promise.all(
+            councilDetails?.map(async (position) => {
+              console.log("position", position);
+              console.log("req?.body?.thesesDetails", req?.body?.thesesDetails);
+              await Promise.all(
+                req?.body?.thesesDetails.map(async (thesis) => {
+                  await db.Mark.bulkCreate(
+                    [
+                      {
+                        councilDetailId: position?.id,
+                        thesisId: thesis?.thesisId,
+                      },
+                    ],
+                    {
+                      upsertKeys: ["id"],
+                      updateOnDuplicate: ["councilDetailId", "thesisId"],
+                    }
+                  );
+                })
+              );
+              return res;
+            })
+          );
+          // console.log("result", result);
+
+          if (result) {
+            if (countThesisDuplicate) {
+              return res.status(200).json({
+                errCode: 0,
+                errMessage: `Cập nhật dữ liệu thành công. Có ${countThesisDuplicate} đồ án đã thuộc hội đồng khác.`,
+              });
+            }
+
+            return res
+              .status(200)
+              .json({ errCode: 0, errMessage: "Cập nhật dữ liệu thành công." });
+          } else {
+            return res.status(200).json({
+              errCode: 2,
+              errMessage:
+                "Đã xảy ra lỗi trong quá trình thêm, vui lòng thử lại sau.",
+            });
+          }
+        } else {
+          return res.status(200).json({
+            errCode: 2,
+            errMessage:
+              "Đã xảy ra lỗi trong quá trình thêm, vui lòng thử lại sau.",
+          });
+        }
+      } else {
+        return res
+          .status(404)
+          .json({ errCode: 1, errMessage: "Dữ liệu không được tìm thấy!" });
+      }
+    } catch (error) {
+      return res.status(500).json({
+        errCode: -1,
+        errMessage: "Dữ liệu không mong muốn, thử lại sau hoặc dữ liệu khác!",
+      });
+    }
+  },
+  deleteDeanCouncil: async (req, res) => {
+    try {
+      if (req?.params?.id) {
+        // console.log(req.body);
+        const result = await db.Council.destroy({
+          where: { id: req?.params?.id },
+        });
+        if (result) {
+          return res
+            .status(200)
+            .json({ errCode: 0, errMessage: "Xóa dữ liệu thành công." });
+        } else {
+          return res.status(200).json({
+            errCode: 2,
+            errMessage:
+              "Đã xảy ra lỗi trong quá trình xóa, vui lòng thử lại sau.",
+          });
+        }
+      } else {
+        return res
+          .status(404)
+          .json({ errCode: 1, errMessage: "Dữ liệu không được tìm thấy!" });
+      }
+    } catch (error) {
+      return res.status(500).json({
+        errCode: -1,
+        errMessage: "Dữ liệu không mong muốn, thử lại sau hoặc dữ liệu khác!",
+      });
+    }
+  },
+  importDeanCouncils: async (req, res) => {
+    try {
+      if (req?.body?.data) {
+        // console.log(req?.body?.data);
+        const result = await db.Council.bulkCreate(req?.body?.data);
+        if (result) {
+          return res
+            .status(200)
+            .json({ errCode: 0, errMessage: "Import dữ liệu thành công." });
+        } else {
+          return res.status(200).json({
+            errCode: 2,
+            errMessage:
+              "Đã xảy ra lỗi trong quá trình import, vui lòng thử lại sau.",
+          });
+        }
+      } else {
+        return res
+          .status(404)
+          .json({ errCode: 1, errMessage: "Dữ liệu không được tìm thấy!" });
+      }
+    } catch (error) {
+      return res.status(500).json({
+        errCode: -1,
+        errMessage: "Dữ liệu không mong muốn, thử lại sau hoặc dữ liệu khác!",
+      });
+    }
+  },
+  deleteDeanCouncilDetail: async (req, res) => {
+    try {
+      if (req?.params?.id) {
+        // console.log(req.body);
+        const result = await db.CouncilDetail.destroy({
+          where: { id: req?.params?.id },
+        });
+        if (result) {
+          return res
+            .status(200)
+            .json({ errCode: 0, errMessage: "Xóa dữ liệu thành công." });
+        } else {
+          return res.status(200).json({
+            errCode: 2,
+            errMessage:
+              "Đã xảy ra lỗi trong quá trình xóa, vui lòng thử lại sau.",
+          });
+        }
+      } else {
+        return res
+          .status(404)
+          .json({ errCode: 1, errMessage: "Dữ liệu không được tìm thấy!" });
+      }
+    } catch (error) {
+      return res.status(500).json({
+        errCode: -1,
+        errMessage: "Dữ liệu không mong muốn, thử lại sau hoặc dữ liệu khác!",
+      });
+    }
+  },
+
   // Api Thesis
   getThesisCouncils: async (req, res) => {
     try {
@@ -579,6 +988,7 @@ const lecturerController = {
       });
     }
   },
+
   // id,
   // startDate,
   // complateDate,
@@ -833,7 +1243,7 @@ const lecturerController = {
             // Điểm TB Hội đồng + Bảo vệ = trung bình tất cả trừ điểm người hướng dẫn
             // Điểm hướng dẫn = Điểm TB Hội đồng + Bảo vệ +- điểm hợp lệ
 
-            const validMark = 1.5; // Điểm hợp lệ
+            const validMark = thesisSession.validMark; // Điểm hợp lệ
 
             const councilScores = marks?.rows
               ?.filter((mark) => mark["councilDetailData.positionId"] !== "P3")
@@ -1073,6 +1483,7 @@ const lecturerController = {
           let result = await db.Thesis.update(
             {
               advisorMark: req?.body?.data?.advisorMark,
+              resultId: req?.body?.data?.advisorMark < 5 ? "RS0" : null,
             },
             { where: { id: req?.params?.id } }
           );
@@ -1794,7 +2205,7 @@ const lecturerController = {
                 model: db.Allcode,
                 as: "statusData",
               },
-            ]
+            ],
           },
           {
             model: db.Student,

@@ -4,18 +4,18 @@ const { Op } = require("sequelize");
 const userController = {
   whereClause: (body) => {
     if (Object.keys(body).length > 0) {
-      // console.log("đã vào whereClause", body);
-      const searchTerms = `%${
-        body?.inputSearch ? body?.inputSearch?.trim() : ""
-      }%`
-        ?.replace(/\s/g, "%")
-        .toLowerCase();
+      console.log("đã vào whereClause", body);
       const whereClause = {};
       // console.log(body?.inputSearch?.toLowerCase());
       // console.log("body?.length", Object.keys(body).length);
-      const [modelName, fieldName, deepSearch] = body?.filterSearch?.split(".");
       // console.log("modelName, fieldName",modelName, fieldName)
-      if (Object.keys(body).length > 0 && body?.filterSearch != "") {
+      if (Object.keys(body).length > 0 && body?.filterSearch != "" && body.filterSearch ) {
+        const searchTerms = `%${
+          body?.inputSearch ? body?.inputSearch?.trim() : ""
+        }%`
+          ?.replace(/\s/g, "%")?.toLowerCase();
+        const [modelName, fieldName, deepSearch] =
+          body?.filterSearch?.split(".");
         if (!body?.filterSearch?.includes("Data")) {
           if (searchTerms != "%null%") {
             // console.log('if (searchTerms != "%null%") {if (!body?.filterSearch?.includes("Data")) {')
@@ -71,7 +71,7 @@ const userController = {
           }
         }
       }
-      // console.log(whereClause);
+      console.log(whereClause, "whereClausewhereClause");
       return whereClause;
     }
     return body;

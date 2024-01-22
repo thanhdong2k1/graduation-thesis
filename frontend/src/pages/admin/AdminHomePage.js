@@ -135,7 +135,7 @@ const AdminHomePage = () => {
                             Tỷ lệ thông qua
                         </p>
                         <h4 class="block antialiased tracking-normal font-sans text-2xl font-semibold leading-snug text-blue-gray-900">
-                            {(+statistic?.statisticThesisSuccessResult/+statistic?.statisticThesisAvailabeResult)?(+statistic?.statisticThesisSuccessResult/+statistic?.statisticThesisAvailabeResult)*100 : "???"}%
+                            {(+statistic?.statisticThesisSuccessResult/+statistic?.statisticThesisAvailabeResult)?(+statistic?.statisticThesisSuccessResult/+statistic?.statisticThesisAvailabeResult).toFixed(4)*100 : "???"}%
                         </h4>
                     </div>
                     <div class="border-t border-blue-gray-50 p-4">

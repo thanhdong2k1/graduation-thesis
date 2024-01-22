@@ -18,6 +18,7 @@ import {
 import { createAxios } from "../../../utils/createInstance";
 import { logginSuccess } from "../../../redux/authSlice";
 import ModalPopup from "../../../components/ModelPopup/ModalPopup";
+import { utils, writeFileXLSX } from "xlsx";
 
 const Thesis = () => {
     const dispatch = useDispatch();
@@ -34,7 +35,7 @@ const Thesis = () => {
         filterDepartment: "",
         isSearched: false,
         offset: 0,
-        limit: 5,
+        limit: 10,
         pages: 0,
         currentPage: 1,
     });
@@ -48,8 +49,284 @@ const Thesis = () => {
     const handleImport = () => {
         // console.log("handleImport");
     };
-    const handleExport = () => {
-        // console.log("handleExport");
+    const handleExport = async () => {
+        // const id = toast.loading("Vui lòng đợi...");
+        await apiAdmin
+            .exportTheses({
+                user: currentUser,
+                inputSearch: defineTable.inputSearch,
+                filterSearch: defineTable.filterSearch,
+                filterDepartment: defineTable.filterDepartment,
+                dispatch: dispatch,
+                axiosJWT: axiosJWT,
+            })
+            .then((res) => {
+                console.log(res);
+                const workbook = utils?.book_new();
+
+                // Convert the data to a worksheet
+                const worksheet = utils.json_to_sheet([]);
+
+                // Add the worksheet to the workbook
+                utils.book_append_sheet(workbook, worksheet, "Data");
+
+                // Define the header row data
+                const headerRow1 = [
+                    "TT",
+                    "Mã sv",
+                    "Họ tên sv",
+                    "Lớp",
+                    "Tên đề tài",
+                    "Giảng viên hướng dẫn",
+                    "Giảng viên phản biện 1",
+                    "Giảng viên phản biện 2",
+                    "KẾT QUẢ ĐÁNH GIÁ HỌC PHẦN TỐT NGHIỆP",
+                ];
+                const headerRow2 = [
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "HD",
+                    "PB1",
+                    "PB2",
+                    "THÀNH VIÊN HỘI ĐỒNG ĐÁNH GIÁ",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "ĐIỂM HPTN",
+                ];
+                const headerRow3 = [
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "(1)",
+                    "(2)",
+                    "(3)",
+                    "(4)",
+                    "(5)",
+                    "(6)",
+                    "(7)",
+                    "(8)",
+                    "(9)",
+                    "(10)",
+                    "ĐTBHĐ (11)",
+                    "(12)",
+                ];
+
+                // Merge cells for the first row
+                worksheet["!merges"] = [
+                    { s: { r: 0, c: 0 }, e: { r: 2, c: 0 } }, // Merge KẾT QUẢ ĐÁNH GIÁ HỌC PHẦN TỐT NGHIỆP cells
+                    { s: { r: 0, c: 1 }, e: { r: 2, c: 1 } }, // Merge KẾT QUẢ ĐÁNH GIÁ HỌC PHẦN TỐT NGHIỆP cells
+                    { s: { r: 0, c: 2 }, e: { r: 2, c: 2 } }, // Merge KẾT QUẢ ĐÁNH GIÁ HỌC PHẦN TỐT NGHIỆP cells
+                    { s: { r: 0, c: 3 }, e: { r: 2, c: 3 } }, // Merge KẾT QUẢ ĐÁNH GIÁ HỌC PHẦN TỐT NGHIỆP cells
+                    { s: { r: 0, c: 4 }, e: { r: 2, c: 4 } }, // Merge KẾT QUẢ ĐÁNH GIÁ HỌC PHẦN TỐT NGHIỆP cells
+                    { s: { r: 0, c: 5 }, e: { r: 2, c: 5 } }, // Merge KẾT QUẢ ĐÁNH GIÁ HỌC PHẦN TỐT NGHIỆP cells
+                    { s: { r: 0, c: 6 }, e: { r: 2, c: 6 } }, // Merge KẾT QUẢ ĐÁNH GIÁ HỌC PHẦN TỐT NGHIỆP cells
+                    { s: { r: 0, c: 7 }, e: { r: 2, c: 7 } }, // Merge KẾT QUẢ ĐÁNH GIÁ HỌC PHẦN TỐT NGHIỆP cells
+                    { s: { r: 0, c: 8 }, e: { r: 0, c: 19 } }, // Merge KẾT QUẢ ĐÁNH GIÁ HỌC PHẦN TỐT NGHIỆP cells
+                    { s: { r: 1, c: 11 }, e: { r: 1, c: 18 } }, // Merge KẾT QUẢ ĐÁNH GIÁ HỌC PHẦN TỐT NGHIỆP cells
+                ];
+
+                // Add the first and second rows to the worksheet
+                const headerArray = [headerRow1, headerRow2, headerRow3].map(
+                    (row) => row.map((cell) => ({ t: "s", v: cell }))
+                );
+                const range = { s: { r: 0, c: 0 }, e: { r: 2, c: 17 } };
+
+                utils.sheet_add_aoa(worksheet, headerArray, range);
+
+                const data = [
+                    "id",
+                    "code",
+                    "fullName",
+                    "class",
+                    "topic",
+                    "thesisAdvisor",
+                    "fullNameP31",
+                    "fullNameP32",
+                    "(1)",
+                    "(2)",
+                    "(3)",
+                    "(4)",
+                    "(5)",
+                    "(6)",
+                    "(7)",
+                    "(8)",
+                    "(9)",
+                    "(10)",
+                    "(11)",
+                    "(12)",
+                ];
+                // Thêm dữ liệu từ object `res` vào đây
+
+                const convertedItem = [];
+                res.marksExport?.map((item) => {
+                    const obj = {};
+                    data?.forEach((value) => {
+                        obj[value] = item[value];
+                    });
+                    convertedItem?.push(obj);
+                    // console.log(convertedItem);
+                });
+                console.log(convertedItem);
+
+                // Thêm dữ liệu vào bảng tính
+                utils.sheet_add_json(worksheet, convertedItem, {
+                    skipHeader: true,
+                    origin: "A4",
+                });
+
+                // Lưu hoặc xuất bảng tính từ workbook
+                console.log(worksheet);
+
+                // Save the workbook to a file
+                writeFileXLSX(
+                    workbook,
+                    `Export Result Thesis ${new Date().toLocaleDateString(
+                        "vi-VN"
+                    )} ${new Date().toLocaleTimeString("vi-VN")}.xlsx`
+                );
+                // const tableData = [
+                //     {
+                //         header: "TT",
+                //         column: "id",
+                //     },
+                //     {
+                //         header: "Mã sv",
+                //         column: "studentId",
+                //         columnData: "studentData.code",
+                //     },
+                //     {
+                //         header: "Họ tên sv",
+                //         column: "studentId",
+                //         columnData: "studentData.fullName",
+                //     },
+
+                //     {
+                //         header: "Tên đề tài",
+                //         column: "topicId",
+                //         columnData: "topicData.name",
+                //     },
+                //     {
+                //         header: "Giảng viên hướng dẫn",
+                //         column: "thesisAdvisorId",
+                //         columnData: "thesisAdvisorData.fullName",
+                //     },
+                //     {
+                //         header: "Giảng viên phản biện 1",
+                //         column: "councilId",
+                //         columnData: "councilData.name",
+                //     },
+                //     {
+                //         header: "Giảng viên phản biện 2",
+                //         column: "councilStatusId",
+                //         columnData: "councilStatusData.valueVi",
+                //     },
+                //     {
+                //         header: "Điểm ĐATN",
+                //         width: "w-[300px]",
+                //         maxWidth: "max-w-[300px]",
+                //         column: "totalScore",
+                //     },
+                //     {
+                //         header: "Kết quả",
+                //         width: "w-[300px]",
+                //         maxWidth: "max-w-[300px]",
+                //         column: "resultId",
+                //         columnData: "resultData.valueVi",
+                //         isStatus: true,
+                //         // actions: actionsDetail(handleDetail),
+                //     },
+                // ];
+                // if (res?.errCode == 0) {
+                //     console.log(res);
+                //     toast.update(id, {
+                //         render: res?.errMessage,
+                //         type: "success",
+                //         isLoading: false,
+                //         closeButton: true,
+                //         autoClose: 1500,
+                //         pauseOnFocusLoss: true,
+                //     });
+                //     // reset();
+                //     const convertedItem = [];
+                //     res?.theses?.map((item) => {
+                //         const obj = {};
+                //         tableData?.forEach((headerData) => {
+                //             if (!headerData?.actions) {
+                //                 const { header, column,columnData } = headerData;
+                //                 // console.log("header, item[column]", header, item[column]);
+                //                 if (typeof item[column] === "object") {
+                //                     // console.log(typeof item[column] === "object",item[column])
+                //                     item[column]?.id
+                //                         ? (obj[header] = item[column]?.id)
+                //                         : (obj[header] = item[column]?.code);
+                //                 } else {
+                //                     // console.log(typeof item[column] === "object",item[column])
+                //                     obj[header] = item[column];
+                //                 }
+                //             }
+                //         });
+                //         convertedItem?.push(obj);
+                //     });
+                //     console.log(convertedItem);
+
+                //     const ws = utils?.json_to_sheet(convertedItem);
+                //     // console.log("wordsheet", ws);
+                //     const wb = utils?.book_new();
+                //     utils?.book_append_sheet(wb, ws, "Data");
+                //     writeFileXLSX(
+                //         wb,
+                //         `Export Result Thesis ${new Date().toLocaleDateString(
+                //             "vi-VN"
+                //         )} ${new Date().toLocaleTimeString("vi-VN")}.xlsx`
+                //     );
+                // } else if (res?.errCode > 0 || res?.errCode < 0) {
+                //     // console.log(res);
+                //     toast.update(id, {
+                //         render: res?.errMessage,
+                //         type: "error",
+                //         isLoading: false,
+                //         closeButton: true,
+                //         autoClose: 1500,
+                //         pauseOnFocusLoss: true,
+                //     });
+                // } else if (res?.errCode < 0) {
+                //     toast.update(id, {
+                //         render: "Dữ liệu lỗi, vui lòng kiểm tra lại dữ liệu",
+                //         type: "error",
+                //         isLoading: false,
+                //         closeButton: true,
+                //         autoClose: 1500,
+                //         pauseOnFocusLoss: true,
+                //     });
+                // }
+            })
+            .catch((err) => {
+                // console.log(err);
+                // toast.update(id, {
+                //     render: "Đã xảy ra lỗi, vui lòng thử lại sau",
+                //     type: "error",
+                //     isLoading: false,
+                //     closeButton: true,
+                //     autoClose: 1500,
+                //     pauseOnFocusLoss: true,
+                // });
+            });
     };
     const handleEdit = (data) => {
         navigate(`../${pathRoutes.R1.updateThesis}/${data.id}`, {
@@ -57,7 +334,7 @@ const Thesis = () => {
         });
     };
     const handleDetail = (data) => {
-        navigate(`../${pathRoutes.R1.theseDetail}/${data.id}`, {
+        navigate(`../${pathRoutes.R1.thesisDetail}/${data.id}`, {
             replace: true,
         });
     };
@@ -223,6 +500,29 @@ const Thesis = () => {
     //   refreshToken: DataTypes.STRING,
     const tableData = [
         {
+            header: "Hành động",
+            // isRowPer: "thesisSessionId",
+            isPerR: true,
+            actions:
+                currentUser?.roleId == "R1"
+                    ? [
+                          actionsDetail(handleDetail),
+                          actionsEdit(handleEdit),
+                          actionsRemove(onDelete),
+                      ]
+                    : [
+                          actionsDetail(handleDetail),
+                          actionsEdit(handleEdit),
+                          (currentUser?.permissions
+                              ?.split(",")
+                              ?.includes("PERF") ||
+                              currentUser?.permissions
+                                  ?.split(",")
+                                  ?.includes("PERD")) &&
+                              actionsRemove(onDelete),
+                      ],
+        },
+        {
             header: "#",
             hide: true,
             // width: "w-[10px]",
@@ -311,29 +611,6 @@ const Thesis = () => {
         // thesisStartDate,
         // thesisEndDate,
         // reportFile,
-        {
-            header: "Hành động",
-            // isRowPer: "thesisSessionId",
-            isPerR: true,
-            actions:
-                currentUser?.roleId == "R1"
-                    ? [
-                          actionsDetail(handleDetail),
-                          actionsEdit(handleEdit),
-                          actionsRemove(onDelete),
-                      ]
-                    : [
-                          actionsDetail(handleDetail),
-                          actionsEdit(handleEdit),
-                          (currentUser?.permissions
-                              ?.split(",")
-                              ?.includes("PERF") ||
-                              currentUser?.permissions
-                                  ?.split(",")
-                                  ?.includes("PERD")) &&
-                              actionsRemove(onDelete),
-                      ],
-        },
     ];
     // Effect
     useEffect(() => {
@@ -368,7 +645,11 @@ const Thesis = () => {
             isSearched: false,
             currentPage: 1,
         }));
-    }, [defineTable.isSearched == true, defineTable.filterSearch, defineTable.filterDepartment]);
+    }, [
+        defineTable.isSearched == true,
+        defineTable.filterSearch,
+        defineTable.filterDepartment,
+    ]);
 
     useEffect(() => {
         setDefineTable((prevState) => ({

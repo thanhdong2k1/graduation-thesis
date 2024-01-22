@@ -34,15 +34,16 @@ const AddCouncil = ({ type }, params) => {
     const lecturers = useSelector((state) => state?.admin?.lecturers);
     const theses = useSelector((state) => state?.admin?.theses);
     let codeLecturers = lecturers?.map((v) => {
-        return { value: v.id, label: `${v.id} | ${v.fullName}` };
+        return { value: v.id, label: `${v.fullName}` };
     });
+    console.log("position",position);
     let codeThesisSessions = thesisSessions?.map((v) => {
-        return { value: v.id, label: `${v.id} | ${v.name}` };
+        return { value: v.id, label: `${v.name}` };
     });
     let codeTheses = theses?.map((v) => {
         return {
             value: v.id,
-            label: `${v.topicData.name} | SV: ${v.studentData.fullName} | GV: ${v.thesisAdvisorData.fullName}`,
+            label: `${v.topicData?.name} | SV: ${v.studentData?.fullName} | GV: ${v.thesisAdvisorData?.fullName}`,
         };
     });
     const [isRtl, setIsRtl] = useState(false);
@@ -187,16 +188,16 @@ const AddCouncil = ({ type }, params) => {
     };
     async function fetchData() {
         try {
-            apiAdmin
+            await apiAdmin
                 .getAllCouncilDetails({
                     user: currentUser,
                     id: id,
                     axiosJWT: axiosJWT,
                 })
                 .then((res) => {
-                    // console.log(res);
+                    console.log(res,position,codeLecturers);
                     let filter = [];
-                    res?.result?.map((item) => {
+                    position && res?.result?.map((item) => {
                         filter?.push({
                             id: item?.id,
                             positionId: position?.filter(
@@ -211,13 +212,13 @@ const AddCouncil = ({ type }, params) => {
                             // )
                         });
                     });
-
+                    console.log(filter)
                     setCouncilDetails(filter);
                 })
                 .catch((error) => {
                     // console.log(error);
                 });
-            apiAdmin
+            await apiAdmin
                 .getAllThesesNotDispatch({
                     user: currentUser,
                     axiosJWT: axiosJWT,
@@ -439,28 +440,6 @@ const AddCouncil = ({ type }, params) => {
         // console.log("filterThesis", codeTheses);
         setThesesDetails(updatedItems);
     };
-    // useEffect(() => {
-    //   // console.log(councilDetails);
-    //     councilDetails?.map((item) => {
-    //       // console.log(item);
-    //         setCouncilDetailsFilter((prev) => [
-    //             ...prev,
-    //             {
-    //                 id: item?.id,
-    //                 positionId: position?.filter(
-    //                     (value) => value?.value == item?.positionId
-    //                 )[0],
-    //                 lecturerId: codeLecturers?.filter(
-    //                     (value) => value?.value == item?.lecturerId
-    //                 )[0],
-    //                 // positionId: item?.filter(
-    //                 //     (value) =>
-    //                 //         value?.value == res?.result?.positionId
-    //                 // )
-    //             },
-    //         ]);
-    //     });
-    // }, [councilDetails]);
     useEffect(() => {
         const isDuplicateThesis = thesesDetails.some((item, index) => {
             const currentIndex = thesesDetails.findIndex(
@@ -488,6 +467,7 @@ const AddCouncil = ({ type }, params) => {
         console.log("isDuplicatePosition", isDuplicatePosition);
         setHasDuplicatePosition(isDuplicatePosition);
     }, [councilDetails]);
+
     return (
         <div className="changeInformationDiv flex flex-col justify-center items-center gap-2">
             <div className=" font-semibold text-h1FontSize">
@@ -613,36 +593,12 @@ const AddCouncil = ({ type }, params) => {
                     </div>
                 </div>
                 {/* code, roleId, departmentId, permissions */}
-                {councilDetails &&
+                {(position&&councilDetails&&codeLecturers) &&
                     councilDetails?.map((item, index) => (
                         <div
                             className="row flex justify-center items-center gap-2"
                             key={index}
                         >
-                            {/* <div className="col w-1/4">
-                                <div className="row flex justify-center items-center gap-2">
-                                    <div className="col w-full">
-                                        {index == 0 && (
-                                            <label className="labelInput">
-                                                ID
-                                            </label>
-                                        )}
-                                        <input
-                                            className="input disabled"
-                                            disabled
-                                            value={item?.id}
-                                            // {...register("idCriteria", {
-                                            //     // required: "Full name is required",
-                                            // })}
-                                        />
-                                    </div>
-                                    {errors?.idCriteria?.type && (
-                                    <p className=" text-normal text-red-500">
-                                        {errors?.idCriteria?.message}
-                                    </p>
-                                )}
-                                </div>
-                            </div> */}
                             <div className="col w-full">
                                 {index == 0 && (
                                     <label className="labelInput">
@@ -666,11 +622,6 @@ const AddCouncil = ({ type }, params) => {
                                         )
                                     }
                                 />
-                                {/* {errors?.nameCriteria?.type && (
-                                <p className=" text-normal text-red-500">
-                                    {errors?.nameCriteria?.message}
-                                </p>
-                            )} */}
                             </div>
                             <div className="col w-full">
                                 {index == 0 && (
@@ -701,24 +652,6 @@ const AddCouncil = ({ type }, params) => {
                                             )
                                         }
                                     />
-                                    {/* <div
-                                        className="button"
-                                        onClick={() => moveUpItem(index)}
-                                    >
-                                        <HiArrowUp className="hover:text-PrimaryColor" />
-                                    </div>
-                                    <div
-                                        className="button"
-                                        onClick={() => moveDownItem(index)}
-                                    >
-                                        <HiArrowDown className="hover:text-PrimaryColor" />
-                                    </div>
-                                    <div
-                                        className="button"
-                                        onClick={() => removeItemPosition(index)}
-                                    >
-                                        <FaRegTrashAlt className="hover:text-PrimaryColor" />
-                                    </div> */}
                                     {type != "detail" && (
                                         <div
                                             className="button"

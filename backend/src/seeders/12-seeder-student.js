@@ -10,7 +10,7 @@ module.exports = {
         code: "1951065418",
         fullName: "Huỳnh Thanh Đông",
         numberPhone: "0866956654",
-        birthday: "05/10/2001",
+        birthday: "2001/10/05",
         address: "Địa chỉ của Huỳnh Thanh Đông",
         genderId: "M",
         statusId: "S1",

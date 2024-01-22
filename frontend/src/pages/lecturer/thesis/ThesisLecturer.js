@@ -34,7 +34,7 @@ const ThesisLecturer = () => {
         filterSearch: "",
         isSearched: false,
         offset: 0,
-        limit: 5,
+        limit: 10,
         pages: 0,
         currentPage: 1,
     });
@@ -48,9 +48,7 @@ const ThesisLecturer = () => {
     const handleImport = () => {
         // console.log("handleImport");
     };
-    const handleExport = () => {
-        // console.log("handleExport");
-    };
+    const handleExport = async() => {};
     const handleEdit = (data) => {
         navigate(`../${pathRoutes?.R3?.updateThesis}/${data.id}`, {
             replace: true,
@@ -223,6 +221,29 @@ const ThesisLecturer = () => {
     
     const tableData = [
         {
+            header: "Hành động",
+            isRowPer: "thesisAdvisorId",
+            isPerR: true,
+            actions:
+                currentUser?.roleId == "R1"
+                    ? [
+                          actionsDetail(handleDetail),
+                          actionsEdit(handleEdit),
+                          actionsRemove(onDelete),
+                      ]
+                    : [
+                          actionsDetail(handleDetail),
+                          actionsEdit(handleEdit),
+                          (currentUser?.permissions
+                              ?.split(",")
+                              ?.includes("PERF") ||
+                              currentUser?.permissions
+                                  ?.split(",")
+                                  ?.includes("PERD")) &&
+                              actionsRemove(onDelete),
+                      ],
+        },
+        {
             header: "#",
             hide: true,
             // width: "w-[10px]",
@@ -339,29 +360,7 @@ const ThesisLecturer = () => {
         // thesisStartDate,
         // thesisEndDate,
         // reportFile,
-        {
-            header: "Hành động",
-            isRowPer: "thesisAdvisorId",
-            isPerR: true,
-            actions:
-                currentUser?.roleId == "R1"
-                    ? [
-                          actionsDetail(handleDetail),
-                          actionsEdit(handleEdit),
-                          actionsRemove(onDelete),
-                      ]
-                    : [
-                          actionsDetail(handleDetail),
-                          actionsEdit(handleEdit),
-                          (currentUser?.permissions
-                              ?.split(",")
-                              ?.includes("PERF") ||
-                              currentUser?.permissions
-                                  ?.split(",")
-                                  ?.includes("PERD")) &&
-                              actionsRemove(onDelete),
-                      ],
-        },
+        
     ];
     // Effect
     useEffect(() => {

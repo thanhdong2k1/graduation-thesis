@@ -251,7 +251,7 @@ const AddThesisDean = ({ type }) => {
             user: currentUser,
             dispatch: dispatch,
             axiosJWT: axiosJWT,
-            topicId: id,
+            thesisId: id,
             filterSearch: "statusId",
             inputSearch: "H1",
         });
@@ -296,36 +296,34 @@ const AddThesisDean = ({ type }) => {
                         // console.log(res);
                         let convert = [];
 
-                        setValue("id", res?.result?.id);
-                        setValue("reportFile", res?.result?.reportFile);
+                        setValue("id", res?.result?.thesis?.id);
+                        setValue("reportFile", res?.result?.thesis?.reportFile);
 
-                        setReportFile(res?.result?.reportFile);
+                        setReportFile(res?.result?.thesis?.reportFile);
 
                         console.log(getValues("reportFile"));
                         setValue(
-                            "result",
-                            results?.filter(
-                                (value) => value?.value == res?.result?.resultId
-                            )
+                            "result",res?.result?.thesis?.resultData.valueVi
+
                         );
                         setValue(
                             "student",
                             codeStudent?.filter(
                                 (value) =>
-                                    value?.value == res?.result?.studentId
+                                    value?.value == res?.result?.thesis?.studentId
                             )
                         );
                         setValue(
                             "topic",
                             codeTopic?.filter(
-                                (value) => value?.value == res?.result?.topicId
+                                (value) => value?.value == res?.result?.thesis?.topicId
                             )
                         );
                         setValue(
                             "thesisAdvisor",
                             codeThesisAdvisor?.filter(
                                 (value) =>
-                                    value?.value == res?.result?.thesisAdvisorId
+                                    value?.value == res?.result?.thesis?.thesisAdvisorId
                             )
                         );
                         setValue(
@@ -333,34 +331,52 @@ const AddThesisDean = ({ type }) => {
                             thesisAdvisorStatus?.filter(
                                 (value) =>
                                     value?.value ==
-                                    res?.result?.thesisAdvisorStatusId
+                                    res?.result?.thesis?.thesisAdvisorStatusId
                             )
                         );
                         setValue(
                             "thesisSession",
                             codeThesisSession?.filter(
                                 (value) =>
-                                    value?.value == res?.result?.thesisSessionId
+                                    value?.value == res?.result?.thesis?.thesisSessionId
                             )
                         );
                         setValue(
                             "council",
                             codeCouncil?.filter(
                                 (value) =>
-                                    value?.value == res?.result?.councilId
+                                    value?.value == res?.result?.thesis?.councilId
                             )
                         );
                         setValue(
                             "councilStatus",
                             councilStatus?.filter(
                                 (value) =>
-                                    value?.value == res?.result?.councilStatusId
+                                    value?.value == res?.result?.thesis?.councilStatusId
                             )
                         );
 
-                        setValue("startDate", res?.result?.startDate);
-                        setValue("endDate", res?.result?.endDate);
-                        setValue("totalScore", res?.result?.totalScore);
+                        setValue("startDate", res?.result?.thesis?.startDate);
+                        setValue("endDate", res?.result?.thesis?.endDate);
+                        setValue("totalScore", res?.result?.thesis?.totalScore);
+
+                        let filter = [];
+                        res?.result.mark?.map((item) => {
+                            filter?.push({
+                                id: item?.id,
+                                position: item?.councilDetailData?.positionData?.valueVi,
+                                lecturer: item?.councilDetailData?.lecturerData?.fullName,
+                                totalMark: item?.totalMark,
+                                // positionId: item?.filter(
+                                //     (value) =>
+                                //         value?.value == res?.result?.positionId
+                                // )
+                            });
+
+                        });
+                        console.log(filter);
+
+                        setCouncilDetails(filter);
 
                         toast.update(id, {
                             render: res?.errMessage,
@@ -386,6 +402,7 @@ const AddThesisDean = ({ type }) => {
                 });
         }
     }, []);
+    const [councilDetails, setCouncilDetails] = useState([]);
 
     return (
         <>
@@ -405,22 +422,17 @@ const AddThesisDean = ({ type }) => {
                     {type!="add"&&<div className="row flex justify-center items-center gap-2">
                         <div className="col w-full">
                             <label className="labelInput">Kết quả</label>
-                            <Controller
-                                name="result"
-                                control={control}
+                            <input
+                                // className={`input ${
+                                //     type == "detail" ? "disabled" : ""
+                                // }`}
+                                className={`input disabled`}
+                                type="text"
+                                // disabled={type == "detail" ? true : false}
+                                disabled={true}
                                 {...register("result", {
-                                    // required: "Full name is required",
+                                    // required: "Không được bỏ trống",
                                 })}
-                                render={({ field }) => (
-                                    <Select
-                                        placeholder="Chọn..."
-                                        styles={customSelectStyles}
-                                        {...field}
-                                        options={results}
-                                        isClearable={true}
-                                        isDisabled={true}
-                                    />
-                                )}
                             />
                         </div>
                         <div className="col w-3/5">
@@ -677,7 +689,79 @@ const AddThesisDean = ({ type }) => {
                             )}
                         </div>
                     </div>
-
+                    {councilDetails &&
+                            councilDetails?.map((item, index) => (
+                                <div
+                                    className="row flex justify-center items-center gap-2"
+                                    key={index}
+                                >
+                                    <div className="col w-1/4 media-max-md:w-1/2">
+                                        {index == 0 && (
+                                            <label className="labelInput">
+                                                Chức vụ
+                                            </label>
+                                        )}
+                                        <input
+                                            // className={`input ${
+                                            //     type == "detail" ? "disabled" : ""
+                                            // }`}
+                                            className={`input disabled !bg-transparent`}
+                                            type="text"
+                                            // disabled={type == "detail" ? true : false}
+                                            disabled={true}
+                                            value={item?.position}
+                                        />
+                                        {/* {errors?.nameCriteria?.type && (
+                                    <p className=" text-normal text-red-500">
+                                        {errors?.nameCriteria?.message}
+                                    </p>
+                                )} */}
+                                    </div>
+                                    <div className="col w-full">
+                                        {index == 0 && (
+                                            <>
+                                                <label className="labelInput flex justify-between">
+                                                    <span>Giảng viên</span>
+                                                    {/* <span>Total: {totalScore}</span> */}
+                                                </label>
+                                            </>
+                                        )}
+                                        <input
+                                            // className={`input ${
+                                            //     type == "detail" ? "disabled" : ""
+                                            // }`}
+                                            className={`input disabled !bg-transparent`}
+                                            type="text"
+                                            // disabled={type == "detail" ? true : false}
+                                            disabled={true}
+                                            value={item?.lecturer}
+                                        />
+                                    </div>
+                                    <div className="col w-3/5">
+                                        {index == 0 && (
+                                            <label className="labelInput">
+                                                Điểm
+                                            </label>
+                                        )}
+                                        <input
+                                            // className={`input ${
+                                            //     type == "detail" ? "disabled" : ""
+                                            // }`}
+                                            className={`input disabled !bg-transparent`}
+                                            type="number"
+                                            step="0.1"
+                                            // disabled={type == "detail" ? true : false}
+                                            disabled={true}
+                                            value={item?.totalMark}
+                                        />
+                                    </div>
+                                    {/* {errors?.weightCriteria?.type && (
+                                    <p className=" text-normal text-red-500">
+                                        {errors?.weightCriteria?.message}
+                                    </p>
+                                )} */}
+                                </div>
+                            ))}
                     <ButtonConfirm type={type} />
                     {/* <div>
                         <iframe

@@ -28,8 +28,12 @@ import LecturerHomePage from "../pages/lecturer/LecturerHomePage";
 import CouncilLecturer from "../pages/lecturer/council/CouncilLecturer";
 import MarkEvaluationCriteria from "../pages/lecturer/council/MarkEvaluationCriteria";
 import ThesisCouncilLecturer from "../pages/lecturer/council/ThesisCouncilLecturer";
+import AddDeanCouncil from "../pages/lecturer/deanCouncil/AddDeanCouncil";
+import DeanCouncil from "../pages/lecturer/deanCouncil/DeanCouncil";
 import AddThesisDean from "../pages/lecturer/deanThesis/AddThesisDean";
 import ThesisDean from "../pages/lecturer/deanThesis/ThesisDean";
+import AddDeanTopic from "../pages/lecturer/deanTopic/AddTopicLecturer";
+import DeanTopic from "../pages/lecturer/deanTopic/DeanTopic";
 import AddStudentAdvisor from "../pages/lecturer/student/AddStudentAdvisor";
 import StudentAdvisor from "../pages/lecturer/student/StudentAdvisor";
 import AddThesisLecturer from "../pages/lecturer/thesis/AddThesisLecturer";
@@ -514,25 +518,25 @@ export const routes = [
                 icon: <TbFileText  className="icon mr-2" />,
                 name: "Đề tài bộ môn",
                 path: pathRoutes?.R1?.topic,
-                element: <Topic />,
+                element: <DeanTopic />,
             },
             // Add Topic
             {
                 name: "Add Topic",
                 path: pathRoutes?.R1?.addTopic,
-                element: <AddTopic type={"add"} />,
+                element: <AddDeanTopic type={"add"} />,
             },
             // Update Topic
             {
                 name: "Update Topic",
                 path: pathRoutes?.R1?.updateTopicId,
-                element: <AddTopic type={"update"} />,
+                element: <AddDeanTopic type={"update"} />,
             },
             // Topic Detail
             {
                 name: "Topic Detail",
                 path: pathRoutes?.R1?.topicDetailId,
-                element: <AddTopic type={"detail"} />,
+                element: <AddDeanTopic type={"detail"} />,
             },
             // Đồ án
             {
@@ -558,6 +562,32 @@ export const routes = [
                 name: "Thesis Detail",
                 path: pathRoutes?.R1?.thesisDetailId,
                 element: <AddThesisDean type={"detail"} />,
+            },
+            // Council
+            // Hội đồng
+            {
+                icon: <TbUserShield  className="icon mr-2" />,
+                name: "Hội đồng bộ môn",
+                path: pathRoutes?.R1?.council,
+                element: <DeanCouncil />,
+            },
+            // Add Council
+            {
+                name: "Add Council",
+                path: pathRoutes?.R1?.addCouncil,
+                element: <AddDeanCouncil type={"add"} />,
+            },
+            // Update Council
+            {
+                name: "Update Council",
+                path: pathRoutes?.R1?.updateCouncilId,
+                element: <AddDeanCouncil type={"update"} />,
+            },
+            // Council Detail
+            {
+                name: "Council Detail",
+                path: pathRoutes?.R1?.councilDetailId,
+                element: <AddDeanCouncil type={"detail"} />,
             },
         ],
     },

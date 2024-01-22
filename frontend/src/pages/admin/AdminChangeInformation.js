@@ -95,11 +95,19 @@ const AdminChangeInformation = () => {
     };
     const onSubmit = async (data) => {
         const id = toast.loading("Vui lòng đợi...");
+        const birthday =
+            data?.birthday &&
+            moment(data?.birthday, "DD/MM/YYYY").format("YYYY-MM-DD");
+
+        // console.log(birthday);
+
         const datasend = {
             ...data,
-            birthday: new Date(
-                moment(data?.birthday, "DD/MM/YYYY")
-            ).toLocaleDateString("vi-VN"),
+            birthday: birthday,
+            //     e.map((obj) => {
+            //       // console.log(obj.value);
+            //         permissions?.push(obj.value);
+            //     });,
         };
         const { role, permissions, department, code, ...dataFilter } = datasend;
       // console.log(datasend, dataFilter);
@@ -196,7 +204,13 @@ const AdminChangeInformation = () => {
         setValue("fullName", informationUser?.fullName);
         setValue("numberPhone", informationUser?.numberPhone);
         setValue("address", informationUser?.address);
-        setValue("birthday", informationUser?.birthday);
+        const formattedBirthday = informationUser?.birthday
+                                ? moment(informationUser?.birthday).format(
+                                      "DD/MM/YYYY"
+                                  )
+                                : "";
+
+                            setValue("birthday", formattedBirthday);
         setValue("code", informationUser?.code);
         setValue("role", informationUser?.roleData?.valueVi);
         setValue("department", informationUser?.departmentData?.name);

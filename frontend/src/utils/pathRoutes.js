@@ -10,9 +10,6 @@ const pathRoutes = {
         updateCouncil: "council/update-council",
         councilDetail: "council/detail-council",
         councilDetailId: "council/detail-council/:id",
-        councilDetailThesis: "council/detail-council/:coundilId/mark",
-        councilDetailThesisId:
-            "council/detail-council/:coundilId/mark/:thesisId",
 
         department: "department",
         addDepartment: "department/add-department",
@@ -132,15 +129,15 @@ const pathRoutes = {
         changeInformation: "change-information",
         changePassword: "change-password",
 
-        council: "council",
-        addCouncil: "council/add-council",
-        updateCouncilId: "council/update-council/:id",
-        updateCouncil: "council/update-council",
-        councilDetail: "council/detail-council",
-        councilDetailId: "council/:thesisSessionId/detail-council/:councilDetailId/:id/",
-        councilDetailThesis: "council/:thesisSessionId/detail-council/:councilDetailId/:coundilId/mark",
+        council: "council-lecturer",
+        addCouncil: "council-lecturer/add-council",
+        updateCouncilId: "council-lecturer/update-council/:id",
+        updateCouncil: "council-lecturer/update-council",
+        councilDetail: "council-lecturer/detail-council",
+        councilDetailId: "council-lecturer/:thesisSessionId/detail-council/:councilDetailId/:id/",
+        councilDetailThesis: "council-lecturer/:thesisSessionId/detail-council/:councilDetailId/:coundilId/mark",
         councilDetailThesisId:
-            "council/:thesisSessionId/detail-council/:councilDetailId/:councilId/mark/:thesisId",
+            "council-lecturer/:thesisSessionId/detail-council/:councilDetailId/:councilId/mark/:thesisId",
 
         department: "department",
         addDepartment: "department/add-department",
